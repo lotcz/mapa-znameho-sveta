@@ -1,0 +1,29 @@
+{
+  "short_name": "Mapa Sveta",
+  "name": "Mapa Znameho Sveta",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+	{
+      "src": "/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#fff",
+  "display": "fullscreen",
+  "scope": "/",
+  "theme_color": "#3367D6",
+  "description": "",
+  "screenshots": [
+    {
+      "src": "screenshot.png",
+      "type": "image/png",
+      "sizes": "540x720"
+    }
+  ]
+}

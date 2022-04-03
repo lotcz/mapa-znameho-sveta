@@ -1,0 +1,155 @@
+.menu, svg {
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+}
+
+html, body {
+	background: #000;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	font-family: 'Lobster', Arial, sans-serif;
+	color: yellow;
+	font-size: 170%;
+}
+
+.map svg {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.hidden {
+	display: none !important;
+}
+
+.menu {
+	position: fixed;
+	z-index: 1000;
+}
+
+.menu a:hover {
+	color: white;
+	cursor: pointer;
+}
+
+.menu ul,
+.menu ul li {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.menu.main {
+	top: 15%;
+	left: 15%;
+}
+
+.menu.main ul {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+}
+
+.menu.main ul li {
+	flex: 1 1 auto;
+}
+
+.menu.list ul {
+	max-height: 600px;
+}
+
+.menu.list ul li {
+	padding-right: 25px;
+}
+
+.menu.play {
+	top: 10px;
+	left: 100px;
+}
+
+.menu.status-bar {
+	top: 20px;
+	left: 50%;
+	margin-left: -150px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.menu .text {
+	padding-bottom: 1rem;
+	margin-bottom: 1rem;
+	border-bottom: 1px solid yellow;
+}
+
+.centered,
+.loading {
+	position: fixed;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.loading {
+	z-index: 2000;
+	pointer-events: none;
+	animation: fadeIn 1s ease-in;
+}
+
+.text {
+	font-size: 80%;
+}
+
+@keyframes fadeIn {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+body.cursor-hidden,
+body.cursor-hidden * {
+	cursor: none;
+}
+
+.json-editor {
+	bottom: 0;
+	left: 40%;
+	background-color: #303030;
+	color: #a0a0a0;
+	font-family: monospace;
+	padding: 10px;
+}
+
+.json-editor textarea {
+	height: 150px;
+	width: 400px;
+	margin: 0;
+	padding: 5px;
+	display: block;
+	background-color: #303030;
+	color: #a0a0a0;
+}
+
+.json-editor button {
+	background-color: #303030;
+	color: #a0a0a0;
+	border: solid 1px #a0a0a0;
+	padding: 5px;
+	display: inline-block;
+	float: left;
+	margin-right:10px;
+	margin-top:10px;
+}
