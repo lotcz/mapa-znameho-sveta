@@ -18,6 +18,7 @@ export default class GameController extends ControllerNode {
 		this.model = model;
 		this.controlsController = this.addChild(new ControlsController(this.game, this.model.controls));
 		this.dragging = false;
+		this.scrolling = false;
 		this.onResizeHandler = () => this.onResize();
 
 		this.game.addEventListener('helperMouseOver', (point) => this.model.focusedHelper.set(point));
@@ -32,6 +33,7 @@ export default class GameController extends ControllerNode {
 		this.onResize();
 		window.addEventListener('resize', this.onResizeHandler);
 		this.model.controls.mouseCoordinates.addOnChangeListener(() => this.onMouseMove());
+		this.model.controls.addEventListener('zoom', (param) => this.onZoom(param));
 	}
 
 	deactivateInternal() {
@@ -70,15 +72,32 @@ export default class GameController extends ControllerNode {
 	onMouseMove() {
 		if (this.dragging) {
 			if (this.model.controls.mouseDownLeft.get()) {
-				this.dragging.set(this.model.controls.mouseCoordinates);
+				const mapCoords = this.model.map.coordinates.add(this.model.controls.mouseCoordinates.multiply(this.model.map.zoom.get()));
+				this.dragging.set(mapCoords);
 			} else {
 				this.dragging = false;
 			}
-		} else {
-			if (this.model.controls.mouseDownLeft.get() && this.model.focusedHelper.isSet()) {
+		} else if (this.scrolling) {
+			if (this.model.controls.mouseDownLeft.get()) {
+				const offset = this.model.controls.mouseCoordinates.subtract(this.scrolling);
+				//console.log(offset);
+				const mapCoords = this.model.map.coordinates.subtract(offset.multiply(this.model.map.zoom.get()));
+				this.model.map.coordinates.set(mapCoords);
+				this.scrolling = this.model.controls.mouseCoordinates.clone();
+			} else {
+				this.scrolling = false;
+			}
+		} else if (this.model.controls.mouseDownLeft.get()) {
+			if (this.model.focusedHelper.isSet()) {
 				this.dragging = this.model.focusedHelper.get();
+			} else {
+				this.scrolling = this.model.controls.mouseCoordinates.clone();
 			}
 		}
+	}
+
+	onZoom(param) {
+		this.model.map.zoom.set(this.model.map.zoom.get() + (param * 0.1));
 	}
 
 }

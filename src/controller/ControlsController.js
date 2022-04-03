@@ -87,7 +87,7 @@ export default class ControlsController extends ControllerNode {
 	}
 
 	onZoom(e) {
-		//this.model.zoom.set(e.deltaY > 0 ? 1 : -1);
+		this.model.triggerEvent('zoom', e.deltaY > 0 ? 1 : -1);
 	}
 
 }
