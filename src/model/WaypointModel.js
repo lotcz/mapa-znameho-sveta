@@ -3,6 +3,10 @@ import Vector2 from "../node/Vector2";
 import DirtyValue from "../node/DirtyValue";
 import Rotation from "../node/Rotation";
 
+export const WAYPOINT_TYPE_START = 0;
+export const WAYPOINT_TYPE_MIDDLE = 1;
+export const WAYPOINT_TYPE_END = 2;
+
 export default class WaypointModel extends ModelNode {
 
 	/**
@@ -20,12 +24,18 @@ export default class WaypointModel extends ModelNode {
 	 */
 	b;
 
+	/**
+	 * @type DirtyValue
+	 */
+	type;
+
 	constructor() {
 		super();
 
 		this.coordinates = this.addProperty('position', new Vector2());
 		this.a = this.addProperty('a', new Vector2());
 		this.b = this.addProperty('b', new Vector2());
+		this.type = this.addProperty('type', new DirtyValue(WAYPOINT_TYPE_MIDDLE));
 
 		// move control points together with main point
 		this.coordinates.addOnChangeListener((param) => {

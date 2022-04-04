@@ -1,7 +1,7 @@
 import ModelNode from "../node/ModelNode";
 import Collection from "../class/Collection";
 
-export default class ModelCollectionNode extends ModelNode {
+export default class ModelNodeCollection extends ModelNode {
 
 	/**
 	 * @type Collection
@@ -31,8 +31,16 @@ export default class ModelCollectionNode extends ModelNode {
 		return this.children.remove(child);
 	}
 
-	getChildrenArray() {
-		return this.children.items;
+	first() {
+		return this.children.first();
+	}
+
+	last() {
+		return this.children.last();
+	}
+
+	get(i) {
+		return this.children.items[i];
 	}
 
 	count() {
@@ -44,6 +52,22 @@ export default class ModelCollectionNode extends ModelNode {
 			super.clean();
 			this.children.forEach((child) => child.clean());
 		}
+	}
+
+	addOnAddListener(handler) {
+		this.children.addOnAddListener(handler);
+	}
+
+	removeOnAddListener(handler) {
+		this.children.removeOnAddListener(handler);
+	}
+
+	addOnRemoveListener(handler) {
+		this.children.addOnRemoveListener(handler);
+	}
+
+	removeOnRemoveListener(handler) {
+		this.children.removeOnRemoveListener(handler);
 	}
 
 	/**

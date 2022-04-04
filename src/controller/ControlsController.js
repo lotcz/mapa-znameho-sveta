@@ -64,12 +64,11 @@ export default class ControlsController extends ControllerNode {
 		this.model.isMouseOver.set(true);
 	}
 
-	onMouseEnter(e) {
+	onMouseEnter() {
 		this.model.isMouseOver.set(true);
-		this.updateMouseButtons(e);
 	}
 
-	onMouseLeave(e) {
+	onMouseLeave() {
 		this.model.isMouseOver.set(false);
 	}
 

@@ -26,11 +26,6 @@ export default class GameModel extends ModelNode {
 	 */
 	isInEditMode;
 
-	/**
-	 * @type DirtyValue
-	 */
-	focusedHelper;
-
 	constructor() {
 		super();
 
@@ -38,7 +33,6 @@ export default class GameModel extends ModelNode {
 		this.map = this.addProperty('map', new MapModel());
 		this.viewBoxSize = this.addProperty('viewBoxSize', new Vector2());
 		this.isInEditMode = this.addProperty('isInEditMode', new DirtyValue(true));
-		this.focusedHelper = this.addProperty('focusedHelper', new DirtyValue(null));
 
 	}
 

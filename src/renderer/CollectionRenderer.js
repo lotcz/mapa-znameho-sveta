@@ -3,7 +3,7 @@ import RendererNode from "../node/RendererNode";
 export default class CollectionRenderer extends RendererNode {
 
 	/**
-	 * @type ModelCollectionNode
+	 * @type ModelNodeCollection
 	 */
 	model;
 
@@ -12,13 +12,26 @@ export default class CollectionRenderer extends RendererNode {
 		this.model = model;
 
 		this.rendererFactory = rendererFactory;
+	}
+
+	activateInternal() {
+		this.resetChildren();
+
+		this.model.children.forEach((model) => this.createRenderer(model));
 
 		this.model.children.addOnAddListener((model) => this.createRenderer(model));
 		this.model.children.addOnRemoveListener((model) => this.removeRenderer(model));
 	}
 
+	deactivateInternal() {
+		this.model.children.removeOnAddListener((model) => this.createRenderer(model));
+		this.model.children.removeOnRemoveListener((model) => this.removeRenderer(model));
+		this.resetChildren();
+	}
+
 	createRenderer(model) {
-		this.addChild(this.rendererFactory(model));
+		const renderer = this.addChild(this.rendererFactory(model));
+		return renderer;
 	}
 
 	removeRenderer(model) {

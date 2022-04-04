@@ -2,6 +2,9 @@ import DomRenderer from "./DomRenderer";
 import {SVG} from "@svgdotjs/svg.js";
 import PathRenderer from "./PathRenderer";
 import MapImage from "../../res/img/map.jpg";
+import CollectionRenderer from "./CollectionRenderer";
+import LocationRenderer from "./LocationRenderer";
+import Pixies from "../class/Pixies";
 
 export default class MapRenderer extends DomRenderer {
 
@@ -24,25 +27,36 @@ export default class MapRenderer extends DomRenderer {
 		super(game, model, dom);
 
 		this.model = model;
+		this.onViewBoxChangeHandler = () => this.updateSize();
 
+	}
+
+	activateInternal() {
 		this.canvas = this.addElement('canvas');
 		this.context2d = this.canvas.getContext("2d");
 		this.mapImage = new Image();
 		this.mapImage.src = MapImage;
 
 		this.draw = SVG().addTo(this.dom);
-		this.pathRenderer = this.addChild(new PathRenderer(this.game, this.model.path, this.draw));
 
-		this.onViewBoxChangeHandler = () => this.updateSize();
-	}
+		this.pathsGroup = this.draw.group();
+		this.pathsRenderer = this.addChild(new CollectionRenderer(this.game, this.model.paths, (model) => new PathRenderer(this.game, model, this.pathsGroup)));
+		this.pathsRenderer.activate();
 
-	activateInternal() {
+		this.locationsGroup = this.draw.group();
+		this.locationsRenderer = this.addChild(new CollectionRenderer(this.game, this.model.locations, (model) => new LocationRenderer(this.game, model, this.locationsGroup)));
+		this.locationsRenderer.activate();
+
 		this.updateSize();
 		this.game.viewBoxSize.addOnChangeListener(this.onViewBoxChangeHandler);
 	}
 
 	deactivateInternal() {
 		this.game.viewBoxSize.removeOnChangeListener(this.onViewBoxChangeHandler);
+		this.draw.remove();
+		this.draw = null;
+		Pixies.destroyElement(this.canvas);
+		this.canvas = null;
 	}
 
 	renderInternal() {

@@ -69,6 +69,10 @@ export default class Collection extends Node {
 		return this.items.filter(func);
 	}
 
+	find(func) {
+		return this.items.find(func);
+	}
+
 	addOnRemoveListener(listener) {
 		this.addEventListener('remove', listener);
 	}

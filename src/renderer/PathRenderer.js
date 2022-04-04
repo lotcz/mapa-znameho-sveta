@@ -1,6 +1,7 @@
 import SvgRenderer from "./SvgRenderer";
 import CollectionRenderer from "./CollectionRenderer";
 import WaypointRenderer from "./WaypointRenderer";
+import MarkerImage from "../../res/img/marker.svg";
 
 export default class PathRenderer extends SvgRenderer {
 	group;
@@ -17,6 +18,12 @@ export default class PathRenderer extends SvgRenderer {
 	constructor(game, model, svg) {
 		super(game, model, svg);
 		this.model = model;
+
+		const token = 'marker';
+		if (!this.getRef(token)) {
+			const marker = this.getDefs().image(MarkerImage);
+			this.setRef(token, marker);
+		}
 	}
 
 	activateInternal() {
@@ -48,7 +55,7 @@ export default class PathRenderer extends SvgRenderer {
 		if (this.model.waypoints.count() < 2) {
 			return;
 		}
-		const waypoints = this.model.waypoints.getChildrenArray();
+		const waypoints = this.model.waypoints.children.items;
 		const first = waypoints[0];
 		let path = `M ${first.coordinates.x} ${first.coordinates.y} `;
 		let prev = first;
@@ -58,7 +65,8 @@ export default class PathRenderer extends SvgRenderer {
 			prev = wp;
 		}
 
-		this.path = this.groupBg.path(path).stroke({color: 'white', width: '10px'}).fill('transparent');
+		this.path = this.groupBg.path(path).stroke({color: 'rgba(255, 255, 255, 0.8)', width: '5px', linecap: 'round', linejoin: 'round'}).fill('transparent');
+		this.model.length.set(this.path.length());
 	}
 
 	renderMarker() {
@@ -66,13 +74,11 @@ export default class PathRenderer extends SvgRenderer {
 			return;
 		}
 		if (!this.marker) {
-			this.marker = this.groupFg.circle(15).fill('purple');
+			this.marker = this.groupFg.group();
+			this.marker.use(this.getRef('marker'));
 		}
-		const length = this.path.length();
-		const pos = this.path.pointAt(length * this.model.pathProgress.get());
-
+		const pos = this.path.pointAt(this.model.pathProgress.get());
 		this.marker.center(pos.x, pos.y);
-
 	}
 
 }

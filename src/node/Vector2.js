@@ -52,6 +52,7 @@ export default class Vector2 extends ModelNode {
 			const ratio = size / currentSize;
 			this.set(this.x * ratio, this.y * ratio);
 		}
+		return this;
 	}
 
 	add(v) {

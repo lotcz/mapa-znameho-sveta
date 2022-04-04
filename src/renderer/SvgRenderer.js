@@ -15,8 +15,7 @@ export default class SvgRenderer extends RendererNode {
 
 	getRef(uri) {
 		const token = Pixies.token(uri);
-		const defs = this.draw.root().defs();
-		let ref = defs.findOne('#' + token);
+		let ref = this.getDefs().findOne('#' + token);
 		if (!ref) {
 			console.error(`Resource ${uri} (token: ${token}) not found!`)
 		}
@@ -24,11 +23,10 @@ export default class SvgRenderer extends RendererNode {
 	}
 
 	setRef(uri, ref) {
-		const defs = this.draw.root().defs();
 		const token = Pixies.token(uri);
-		const resource = defs.findOne('#' + token);
+		const resource = this.getDefs().findOne('#' + token);
 		if (!resource) {
-			defs.add(ref);
+			this.getDefs().add(ref);
 			ref.attr({id:token});
 		} else {
 			console.log(`Resource ${uri} already loaded.`);
