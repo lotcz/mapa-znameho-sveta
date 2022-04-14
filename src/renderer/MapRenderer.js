@@ -83,6 +83,7 @@ export default class MapRenderer extends DomRenderer {
 	}
 
 	updateMapImage() {
+		this.context2d.clearRect(0, 0, this.context2d.canvas.width, this.context2d.canvas.height);
 		this.context2d.drawImage(
 			this.mapImage,
 			this.model.coordinates.x,

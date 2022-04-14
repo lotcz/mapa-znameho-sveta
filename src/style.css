@@ -16,10 +16,17 @@ html, body {
 	font-size: 170%;
 }
 
-.map svg {
+.map svg, .three {
 	position: absolute;
 	top: 0;
 	left: 0;
+}
+
+.three {
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-image: url('../res/img/paper.png');
+	padding: 25px;
 }
 
 .hidden {

@@ -24,19 +24,26 @@ export default class PathRenderer extends SvgRenderer {
 			const marker = this.getDefs().image(MarkerImage);
 			this.setRef(token, marker);
 		}
+
+		this.onDebugModeUpdatedHandler = () => this.onDebugModeUpdated();
 	}
 
 	activateInternal() {
 		this.groupBg = this.draw.group();
 		this.groupFg = this.draw.group();
+
 		this.waypointsRenderer = this.addChild(new CollectionRenderer(this.game, this.model.waypoints, (model) => new WaypointRenderer(this.game, model, this.groupFg)));
-		this.waypointsRenderer.activate();
+		if (this.game.isInDebugMode.get()) {
+			this.waypointsRenderer.activate();
+		}
+		this.game.isInDebugMode.addOnChangeListener(this.onDebugModeUpdatedHandler);
 	}
 
 	deactivateInternal() {
 		this.removeChild(this.waypointsRenderer);
 		this.groupBg.remove();
 		this.groupFg.remove();
+		this.game.isInDebugMode.removeOnChangeListener(this.onDebugModeUpdatedHandler);
 	}
 
 	renderInternal() {
@@ -79,6 +86,14 @@ export default class PathRenderer extends SvgRenderer {
 		}
 		const pos = this.path.pointAt(this.model.pathProgress.get());
 		this.marker.center(pos.x, pos.y);
+	}
+
+	onDebugModeUpdated() {
+		if (this.game.isInDebugMode.get() && this.isActivated) {
+			this.waypointsRenderer.activate();
+		} else {
+			this.waypointsRenderer.deactivate();
+		}
 	}
 
 }

@@ -3,6 +3,7 @@ import MapModel from "./MapModel";
 import Vector2 from "../node/Vector2";
 import DirtyValue from "../node/DirtyValue";
 import ControlsModel from "./ControlsModel";
+import ThreeModel from "./ThreeModel";
 
 export default class GameModel extends ModelNode {
 
@@ -24,7 +25,12 @@ export default class GameModel extends ModelNode {
 	/**
 	 * @type DirtyValue
 	 */
-	isInEditMode;
+	isInDebugMode;
+
+	/**
+	 * @type ThreeModel
+	 */
+	three;
 
 	constructor() {
 		super();
@@ -32,7 +38,8 @@ export default class GameModel extends ModelNode {
 		this.controls = this.addProperty('controls', new ControlsModel());
 		this.map = this.addProperty('map', new MapModel());
 		this.viewBoxSize = this.addProperty('viewBoxSize', new Vector2());
-		this.isInEditMode = this.addProperty('isInEditMode', new DirtyValue(true));
+		this.isInDebugMode = this.addProperty('isInDebugMode', new DirtyValue(true));
+		this.three = this.addProperty('three', new ThreeModel());
 
 	}
 

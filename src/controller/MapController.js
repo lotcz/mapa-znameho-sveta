@@ -42,7 +42,7 @@ export default class MapController extends ControllerNode {
 		this.game.controls.mouseCoordinates.addOnChangeListener(this.mouseMoveHandler);
 		this.game.controls.addEventListener('zoom', this.zoomHandler);
 
-		this.model.locations.children.forEach((location) => this.onLocationAdded(location));
+		this.model.locations.children.forEach(this.locationAddedHandler);
 		this.model.locations.children.addOnAddListener(this.locationAddedHandler);
 		this.model.locations.children.addOnRemoveListener(this.locationRemovedHandler);
 	}
@@ -79,12 +79,7 @@ export default class MapController extends ControllerNode {
 
 		// dragging and scrolling
 		if (!this.game.controls.mouseDownLeft.get()) {
-			if (this.dragging) {
-				this.dragging = false;
-			}
-			if (this.scrolling) {
-				this.scrolling = false;
-			}
+			this.dragging = this.scrolling = false;
 		}
 	}
 

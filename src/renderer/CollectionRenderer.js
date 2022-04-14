@@ -12,20 +12,22 @@ export default class CollectionRenderer extends RendererNode {
 		this.model = model;
 
 		this.rendererFactory = rendererFactory;
+		this.onModelAddedHandler = (model) => this.createRenderer(model);
+		this.onModelRemovedHandler = (model) => this.removeRenderer(model);
 	}
 
 	activateInternal() {
 		this.resetChildren();
 
-		this.model.children.forEach((model) => this.createRenderer(model));
+		this.model.children.forEach((model) => this.createRenderer(model).activate());
 
-		this.model.children.addOnAddListener((model) => this.createRenderer(model));
-		this.model.children.addOnRemoveListener((model) => this.removeRenderer(model));
+		this.model.children.addOnAddListener(this.onModelAddedHandler);
+		this.model.children.addOnRemoveListener(this.onModelRemovedHandler);
 	}
 
 	deactivateInternal() {
-		this.model.children.removeOnAddListener((model) => this.createRenderer(model));
-		this.model.children.removeOnRemoveListener((model) => this.removeRenderer(model));
+		this.model.children.removeOnAddListener(this.onModelAddedHandler);
+		this.model.children.removeOnRemoveListener(this.onModelRemovedHandler);
 		this.resetChildren();
 	}
 

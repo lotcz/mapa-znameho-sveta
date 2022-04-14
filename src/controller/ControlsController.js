@@ -41,7 +41,7 @@ export default class ControlsController extends ControllerNode {
 				//this.model.interacting.set(true);
 				break;
 			case 27: /*Ecs*/ //this.model.menuRequested.set(true); break;
-			case 192: /*~*/ //this.model.editModeRequested.set(true); break;
+			case 192: /*~*/ //this.model.triggerEvent('debug-key'); break;
 		}
 	}
 
@@ -53,6 +53,7 @@ export default class ControlsController extends ControllerNode {
 			case 13: /*Enter*/
 				//this.model.interacting.set(false);
 				break;
+			case 192: /*~*/ this.model.triggerEvent('debug-key'); break;
 		}
 		//this.makeDirty();
 
@@ -70,6 +71,8 @@ export default class ControlsController extends ControllerNode {
 
 	onMouseLeave() {
 		this.model.isMouseOver.set(false);
+		this.model.mouseDownLeft.set(false);
+		this.model.mouseDownRight.set(false);
 	}
 
 	onContextMenu(e) {
