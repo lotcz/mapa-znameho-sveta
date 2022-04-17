@@ -1,7 +1,6 @@
 import DomRenderer from "./DomRenderer";
 import {SVG} from "@svgdotjs/svg.js";
 import PathRenderer from "./PathRenderer";
-import MapImage from "../../res/img/map.jpg";
 import CollectionRenderer from "./CollectionRenderer";
 import LocationRenderer from "./LocationRenderer";
 import Pixies from "../class/Pixies";
@@ -34,21 +33,24 @@ export default class MapRenderer extends DomRenderer {
 	activateInternal() {
 		this.canvas = this.addElement('canvas');
 		this.context2d = this.canvas.getContext("2d");
-		this.mapImage = new Image();
-		this.mapImage.src = MapImage;
+
+		this.mapImage = null;
+		this.game.assets.getAsset(
+			'img/map.jpg',
+			(img) => {
+				this.mapImage = img;
+				this.updateSize();
+				this.game.viewBoxSize.addOnChangeListener(this.onViewBoxChangeHandler);
+			}
+		);
 
 		this.draw = SVG().addTo(this.dom);
-
 		this.pathsGroup = this.draw.group();
 		this.pathsRenderer = this.addChild(new CollectionRenderer(this.game, this.model.paths, (model) => new PathRenderer(this.game, model, this.pathsGroup)));
 		this.pathsRenderer.activate();
-
 		this.locationsGroup = this.draw.group();
 		this.locationsRenderer = this.addChild(new CollectionRenderer(this.game, this.model.locations, (model) => new LocationRenderer(this.game, model, this.locationsGroup)));
 		this.locationsRenderer.activate();
-
-		this.updateSize();
-		this.game.viewBoxSize.addOnChangeListener(this.onViewBoxChangeHandler);
 	}
 
 	deactivateInternal() {
@@ -83,6 +85,10 @@ export default class MapRenderer extends DomRenderer {
 	}
 
 	updateMapImage() {
+		if (!this.mapImage) {
+			console.warn('Map image not loaded!');
+			return;
+		}
 		this.context2d.clearRect(0, 0, this.context2d.canvas.width, this.context2d.canvas.height);
 		this.context2d.drawImage(
 			this.mapImage,

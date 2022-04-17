@@ -1,3 +1,6 @@
+/**
+	Base for controller and renderer nodes.
+ */
 export default class ActivatedTreeNode {
 	children;
 	parent;

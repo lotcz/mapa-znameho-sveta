@@ -1,5 +1,8 @@
 import ModelNodeCollection from "./ModelNodeCollection";
 
+/**
+ * Collection of IdentifiedModelNode that allows search by ID.
+ */
 export default class ModelNodeTable extends ModelNodeCollection {
 
 	getById(id) {

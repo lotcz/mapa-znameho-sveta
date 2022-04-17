@@ -1,7 +1,6 @@
 import SvgRenderer from "./SvgRenderer";
 import CollectionRenderer from "./CollectionRenderer";
 import WaypointRenderer from "./WaypointRenderer";
-import MarkerImage from "../../res/img/marker.svg";
 
 export default class PathRenderer extends SvgRenderer {
 	group;
@@ -19,18 +18,25 @@ export default class PathRenderer extends SvgRenderer {
 		super(game, model, svg);
 		this.model = model;
 
-		const token = 'marker';
-		if (!this.getRef(token)) {
-			const marker = this.getDefs().image(MarkerImage);
-			this.setRef(token, marker);
-		}
-
 		this.onDebugModeUpdatedHandler = () => this.onDebugModeUpdated();
 	}
 
 	activateInternal() {
 		this.groupBg = this.draw.group();
 		this.groupFg = this.draw.group();
+
+		const token = 'marker';
+		if (!this.refExists(token)) {
+			this.game.assets.getAsset(
+				'img/marker.svg',
+				(img) => {
+					if (!this.refExists(token)) {
+						const marker = this.getDefs().image(img.src);
+						this.setRef(token, marker);
+					}
+				}
+			);
+		}
 
 		this.waypointsRenderer = this.addChild(new CollectionRenderer(this.game, this.model.waypoints, (model) => new WaypointRenderer(this.game, model, this.groupFg)));
 		if (this.game.isInDebugMode.get()) {

@@ -78,8 +78,10 @@ const updateLoop = function () {
 
 	if (delta < MAX_DELTA)
 	{
-		controller.update(delta);
-		renderer.render();
+		if (!game.assets.isLoading.get()) {
+			controller.update(delta);
+			renderer.render();
+		}
 	} else {
 		console.log('skipped frame');
 	}

@@ -13,6 +13,7 @@ module.exports = {
 	devtool: 'inline-source-map',
 	devServer: {
 		contentBase: './dist',
+		port: 8081
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
@@ -28,13 +29,7 @@ module.exports = {
 			patterns: [
 				{ from: 'pwa.webmanifest', to: '' },
 				{ from: 'res/favicon.ico', to: '' },
-				{ from: 'res/icon.png', to: '' },
-				{ from: 'res/icon-512.png', to: '' },
-				{ from: 'res/screenshot.png', to: '' },
-				{ from: 'res/character.glb', to: '' },
-				{ from: 'res/sword.glb', to: '' },
-				{ from: 'res/helmet.glb', to: '' },
-				{ from: 'res/img/paper-texture.jpg', to: '' }
+				{ from: 'res/**', to: '' }
 			]
 		})
 

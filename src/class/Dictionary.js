@@ -24,18 +24,18 @@ export default class Dictionary extends Node {
 			return;
 		}
 		this.keyValues[key] = value;
-		this.eventManager.triggerEvent('add', {key: key, value: value});
+		this.triggerEvent('add', {key: key, value: value});
 		return value;
 	}
 
 	set(key, value = null) {
 		if (!this.exists(key)) {
-			console.error(`Key ${key} already exists in dictionary.`);
+			console.error(`Key ${key} doesn't exist in dictionary.`);
 			return;
 		}
 		const old = this.get(key);
 		this.keyValues[key] = value;
-		this.eventManager.triggerEvent('set', {key: key, oldValue: old, newValue: value});
+		this.triggerEvent('set', {key: key, oldValue: old, newValue: value});
 		return value;
 	}
 
@@ -46,7 +46,7 @@ export default class Dictionary extends Node {
 		}
 		const element = this.get(key);
 		delete this.keyValues[key];
-		this.eventManager.triggerEvent('remove', {key: key, value: value});
+		this.triggerEvent('remove', {key: key, value: value});
 		return element;
 	}
 

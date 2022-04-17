@@ -42,6 +42,10 @@ export default class Collection extends Node {
 		}
 	}
 
+	isEmpty() {
+		return this.count() <= 0;
+	}
+
 	count() {
 		return this.items.length;
 	}

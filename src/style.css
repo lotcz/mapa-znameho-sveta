@@ -1,3 +1,13 @@
+@font-face {
+	font-family: "Vollkorn";
+	src: url("../res/Vollkorn-SemiBold.ttf") format('truetype');
+}
+
+.history .section-header {
+	text-align: center;
+	line-height: 150%;
+}
+
 .menu, svg {
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -7,13 +17,13 @@
 }
 
 html, body {
+	font-family: "Vollkorn", "Georgia", serif;
+	color: black;
+	font-size: 120%;
 	background: #000;
 	margin: 0;
 	padding: 0;
 	overflow: hidden;
-	font-family: 'Lobster', Arial, sans-serif;
-	color: yellow;
-	font-size: 170%;
 }
 
 .map svg, .three {
@@ -73,90 +83,25 @@ html, body {
 	padding-right: 25px;
 }
 
-.menu.play {
-	top: 10px;
-	left: 100px;
-}
-
-.menu.status-bar {
-	top: 20px;
-	left: 50%;
-	margin-left: -150px;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-}
-
-.menu .text {
-	padding-bottom: 1rem;
-	margin-bottom: 1rem;
-	border-bottom: 1px solid yellow;
-}
-
-.centered,
 .loading {
 	position: fixed;
 	left: 0;
 	top: 0;
 	right: 0;
 	bottom: 0;
-	background-color: #000;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-}
-
-.loading {
 	z-index: 2000;
 	pointer-events: none;
-	animation: fadeIn 1s ease-in;
 }
 
-.text {
-	font-size: 80%;
-}
-
-@keyframes fadeIn {
-	0% {
-		opacity: 0;
-	}
-	100% {
-		opacity: 1;
-	}
-}
-
-body.cursor-hidden,
-body.cursor-hidden * {
-	cursor: none;
-}
-
-.json-editor {
-	bottom: 0;
-	left: 40%;
-	background-color: #303030;
-	color: #a0a0a0;
-	font-family: monospace;
-	padding: 10px;
-}
-
-.json-editor textarea {
+.loading div {
+	width: 250px;
 	height: 150px;
-	width: 400px;
-	margin: 0;
-	padding: 5px;
-	display: block;
-	background-color: #303030;
-	color: #a0a0a0;
-}
-
-.json-editor button {
-	background-color: #303030;
-	color: #a0a0a0;
-	border: solid 1px #a0a0a0;
-	padding: 5px;
-	display: inline-block;
-	float: left;
-	margin-right:10px;
-	margin-top:10px;
+	text-align: center;
+	line-height: 150px;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-image: url('../res/img/paper.png');
 }

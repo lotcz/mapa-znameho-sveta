@@ -8,10 +8,19 @@ export default class ModelNode extends Node {
 	 */
 	properties;
 
+	/**
+	 * @type boolean
+	 */
 	isDirty;
+
+	/**
+	 * @type boolean
+	 */
+	isLoading;
 
 	constructor() {
 		super();
+		this.isDirty = true;
 		this.isDirty = true;
 		this.properties = new Dictionary();
 		this.properties.addOnAddListener((param) => this.propertyAdded(param.key, param.value));
@@ -79,8 +88,7 @@ export default class ModelNode extends Node {
 	}
 
 	addProperty(name, property) {
-		this.properties.add(name, property);
-		return property;
+		return this.properties.add(name, property);
 	}
 
 	propertyAdded(name, property) {

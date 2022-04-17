@@ -20,6 +20,11 @@ export default class ModelNodeCollection extends ModelNode {
 		this.childDirtyHandler = (ch) => this.onChildDirty(ch);
 	}
 
+	/**
+	 *
+	 * @param {ModelNode | null} child
+	 * @returns {ModelNode}
+	 */
 	add(child = null) {
 		if (!child) {
 			child = this.nodeFactory();

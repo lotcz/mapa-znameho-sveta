@@ -30,9 +30,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "start": "webpack && http-server dist",
-    "serve": "webpack serve --open",
-    "watch": "webpack --watch"
+    "debug": "webpack serve --open"
   },
   "author": "",
   "license": "ISC"

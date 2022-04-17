@@ -38,7 +38,7 @@ export default class GameController extends ControllerNode {
 	}
 
 	updateInternal(delta) {
-		this.model.three.rotation.set(this.model.three.rotation.get()+1);
+		//this.model.three.rotation.set(this.model.three.rotation.get()+1);
 	}
 
 	onResize() {

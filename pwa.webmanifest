@@ -3,12 +3,12 @@
   "name": "Mapa Znameho Sveta",
   "icons": [
     {
-      "src": "/icon.png",
+      "src": "res/icon.png",
       "type": "image/png",
       "sizes": "192x192"
     },
 	{
-      "src": "/icon-512.png",
+      "src": "res/icon-512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
@@ -21,7 +21,7 @@
   "description": "",
   "screenshots": [
     {
-      "src": "screenshot.png",
+      "src": "res/screenshot.png",
       "type": "image/png",
       "sizes": "540x720"
     }
