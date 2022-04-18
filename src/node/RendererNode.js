@@ -13,6 +13,11 @@ export default class RendererNode extends ActivatedTreeNode {
 	model;
 
 	/**
+	 * @type boolean
+	 */
+	alwaysRender;
+
+	/**
 	 * @param {GameModel} game
 	 * @param {ModelNode} model
 	 */
@@ -20,13 +25,14 @@ export default class RendererNode extends ActivatedTreeNode {
 		super();
 		this.game = game;
 		this.model = model;
+		this.alwaysRender = false;
 	}
 
 	render() {
 		if (!this.isActivated) {
 			return;
 		}
-		if (!this.model.isDirty) {
+		if (!(this.model.isDirty || this.alwaysRender)) {
 			return;
 		}
 		this.renderInternal();

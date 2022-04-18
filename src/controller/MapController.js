@@ -1,29 +1,44 @@
 import ControllerNode from "../node/ControllerNode";
+import DirtyValue from "../node/DirtyValue";
 
 const TRAVEL_SPEED = 10; // px per second
 
 export default class MapController extends ControllerNode {
 
 	/**
+	 * @type SaveGameModel
+	 */
+	saveGame;
+
+	/**
 	 * @type MapModel
 	 */
-	model;
+	map;
 
 	dragging;
 
 	scrolling;
 
+	/**
+	 * @type DirtyValue
+	 */
+	focusedHelper;
+
 	constructor(game, model) {
 		super(game, model);
 
-		this.model = model;
+		this.saveGame = model;
+		this.map = game.resources.map;
+
 		this.dragging = false;
 		this.scrolling = false;
 
-		this.helperMouseOverHandler = (point) => this.model.focusedHelper.set(point);
+		this.focusedHelper = new DirtyValue(null);
+
+		this.helperMouseOverHandler = (point) => this.focusedHelper.set(point);
 		this.helperMouseOutHandler = (point) => {
-			if (this.model.focusedHelper.equalsTo(point))
-				this.model.focusedHelper.set(null);
+			if (this.focusedHelper.equalsTo(point))
+				this.focusedHelper.set(null);
 		};
 
 		this.mouseMoveHandler = () => this.onMouseMove();
@@ -42,9 +57,9 @@ export default class MapController extends ControllerNode {
 		this.game.controls.mouseCoordinates.addOnChangeListener(this.mouseMoveHandler);
 		this.game.controls.addEventListener('zoom', this.zoomHandler);
 
-		this.model.locations.children.forEach(this.locationAddedHandler);
-		this.model.locations.children.addOnAddListener(this.locationAddedHandler);
-		this.model.locations.children.addOnRemoveListener(this.locationRemovedHandler);
+		this.map.locations.children.forEach(this.locationAddedHandler);
+		this.map.locations.children.addOnAddListener(this.locationAddedHandler);
+		this.map.locations.children.addOnRemoveListener(this.locationRemovedHandler);
 	}
 
 	deactivateInternal() {
@@ -54,28 +69,28 @@ export default class MapController extends ControllerNode {
 		this.game.controls.mouseCoordinates.removeOnChangeListener(this.mouseMoveHandler);
 		this.game.controls.removeEventListener('zoom', this.zoomHandler);
 
-		this.model.locations.children.removeOnAddListener(this.locationAddedHandler);
-		this.model.locations.children.removeOnRemoveListener(this.locationRemovedHandler);
+		this.map.locations.children.removeOnAddListener(this.locationAddedHandler);
+		this.map.locations.children.removeOnRemoveListener(this.locationRemovedHandler);
 	}
 
 	updateInternal(delta) {
 		super.updateInternal(delta);
 
 		// move marker
-		const path = this.game.map.paths.first();
-		let progress = path.pathProgress.get() + ((delta / 1000) * TRAVEL_SPEED * (path.forward.get() ? 1 : -1));
+		const path = this.map.paths.first();
+		let progress = this.saveGame.pathProgress.get() + ((delta / 1000) * TRAVEL_SPEED * (this.saveGame.forward.get() ? 1 : -1));
 
 		if (progress > path.length.get()) {
 			progress = (2 * path.length.get()) - progress;
-			path.forward.set(!path.forward.get());
+			this.saveGame.forward.set(!this.saveGame.forward.get());
 		}
 
 		if (progress < 0) {
 			progress = -progress;
-			path.forward.set(!path.forward.get());
+			this.saveGame.forward.set(!this.saveGame.forward.get());
 		}
 
-		path.pathProgress.set(progress);
+		this.saveGame.pathProgress.set(progress);
 
 		// dragging and scrolling
 		if (!this.game.controls.mouseDownLeft.get()) {
@@ -94,8 +109,8 @@ export default class MapController extends ControllerNode {
 				this.model.coordinates.set(mapCoords);
 				this.scrolling = this.game.controls.mouseCoordinates.clone();
 			} else {
-				if (this.model.focusedHelper.isSet()) {
-					this.dragging = this.model.focusedHelper.get();
+				if (this.focusedHelper.isSet()) {
+					this.dragging = this.focusedHelper.get();
 				} else {
 					this.scrolling = this.game.controls.mouseCoordinates.clone();
 				}

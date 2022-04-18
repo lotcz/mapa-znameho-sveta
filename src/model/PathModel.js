@@ -25,16 +25,6 @@ export default class PathModel extends IdentifiedModelNode {
 	 */
 	length;
 
-	/**
-	 * @type DirtyValue
-	 */
-	pathProgress;
-
-	/**
-	 * @type DirtyValue
-	 */
-	forward;
-
 	constructor(id) {
 		super(id);
 
@@ -42,8 +32,6 @@ export default class PathModel extends IdentifiedModelNode {
 		this.waypoints.addOnAddListener(() => this.updateWaypoints());
 		this.waypoints.addOnRemoveListener(() => this.updateWaypoints());
 		this.length = this.addProperty('length', new DirtyValue(0));
-		this.pathProgress = this.addProperty('pathProgress', new DirtyValue(0));
-		this.forward = this.addProperty('forward', new DirtyValue(true));
 		this.startLocationId = this.addProperty('startLocationId', new DirtyValue(0));
 		this.endLocationId = this.addProperty('endLocationId', new DirtyValue(0));
 	}

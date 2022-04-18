@@ -8,31 +8,46 @@ import Pixies from "../class/Pixies";
 export default class MapRenderer extends DomRenderer {
 
 	/**
-	 * @type MapModel
+	 * @type SaveGameModel
 	 */
-	model;
+	saveGame;
 
 	/**
-	 * @type any
+	 * @type MapModel
 	 */
-	draw;
+	map;
 
 	/**
 	 * @type any
 	 */
 	canvas;
 
+	/**
+	 * @type any
+	 */
+	draw;
+
 	constructor(game, model, dom) {
 		super(game, model, dom);
 
-		this.model = model;
+		this.saveGame = model;
+		this.map = game.resources.map;
 		this.onViewBoxChangeHandler = () => this.updateSize();
 
 	}
 
 	activateInternal() {
-		this.canvas = this.addElement('canvas');
+		this.container = this.addElement('div', 'map');
+		this.canvas = Pixies.createElement(this.container, 'canvas');
 		this.context2d = this.canvas.getContext("2d");
+
+		this.draw = SVG().addTo(this.container);
+		this.pathsGroup = this.draw.group();
+		this.pathsRenderer = this.addChild(new CollectionRenderer(this.game, this.map.paths, (model) => new PathRenderer(this.game, model, this.pathsGroup)));
+		this.pathsRenderer.activate();
+		this.locationsGroup = this.draw.group();
+		this.locationsRenderer = this.addChild(new CollectionRenderer(this.game, this.map.locations, (model) => new LocationRenderer(this.game, model, this.locationsGroup)));
+		this.locationsRenderer.activate();
 
 		this.mapImage = null;
 		this.game.assets.getAsset(
@@ -43,14 +58,6 @@ export default class MapRenderer extends DomRenderer {
 				this.game.viewBoxSize.addOnChangeListener(this.onViewBoxChangeHandler);
 			}
 		);
-
-		this.draw = SVG().addTo(this.dom);
-		this.pathsGroup = this.draw.group();
-		this.pathsRenderer = this.addChild(new CollectionRenderer(this.game, this.model.paths, (model) => new PathRenderer(this.game, model, this.pathsGroup)));
-		this.pathsRenderer.activate();
-		this.locationsGroup = this.draw.group();
-		this.locationsRenderer = this.addChild(new CollectionRenderer(this.game, this.model.locations, (model) => new LocationRenderer(this.game, model, this.locationsGroup)));
-		this.locationsRenderer.activate();
 	}
 
 	deactivateInternal() {
@@ -59,10 +66,11 @@ export default class MapRenderer extends DomRenderer {
 		this.draw = null;
 		Pixies.destroyElement(this.canvas);
 		this.canvas = null;
+		Pixies.destroyElement(this.container);
 	}
 
 	renderInternal() {
-		if (this.model.zoom.isDirty || this.model.coordinates.isDirty) {
+		if (this.saveGame.zoom.isDirty || this.saveGame.coordinates.isDirty) {
 			this.updateZoom();
 		}
 	}
@@ -76,10 +84,10 @@ export default class MapRenderer extends DomRenderer {
 
 	updateZoom() {
 		this.draw.viewbox(
-			this.model.coordinates.x,
-			this.model.coordinates.y,
-			this.game.viewBoxSize.x * this.model.zoom.get(),
-			this.game.viewBoxSize.y * this.model.zoom.get()
+			this.saveGame.coordinates.x,
+			this.saveGame.coordinates.y,
+			this.game.viewBoxSize.x * this.saveGame.zoom.get(),
+			this.game.viewBoxSize.y * this.saveGame.zoom.get()
 		);
 		this.updateMapImage();
 	}
@@ -92,10 +100,10 @@ export default class MapRenderer extends DomRenderer {
 		this.context2d.clearRect(0, 0, this.context2d.canvas.width, this.context2d.canvas.height);
 		this.context2d.drawImage(
 			this.mapImage,
-			this.model.coordinates.x,
-			this.model.coordinates.y,
-			this.game.viewBoxSize.x * this.model.zoom.get(),
-			this.game.viewBoxSize.y * this.model.zoom.get(),
+			this.saveGame.coordinates.x,
+			this.saveGame.coordinates.y,
+			this.game.viewBoxSize.x * this.saveGame.zoom.get(),
+			this.game.viewBoxSize.y * this.saveGame.zoom.get(),
 			0,
 			0,
 			this.game.viewBoxSize.x,

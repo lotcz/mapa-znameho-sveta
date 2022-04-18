@@ -3,27 +3,14 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 export default class AnimationHelper {
 
-	constructor(path) {
-		this.path = path;
-		this.model = null;
+	constructor(gltf) {
+		this.mesh = gltf.scene;
 		this.actions = [];
 		this.currentAction = null;
 		this.speed = 1;
 		this.loaded = false;
-	}
 
-	async load() {
-		const path = this.path;
-		const promise = new Promise(function(resolve, reject) {
-			const loader = new GLTFLoader();
-			loader.load(path, (gltf) => resolve(gltf), null, (err) => reject(err));
-		});
-		const gltf = await promise;
-
-		this.model = gltf.scene;
-		//this.player.scene.add(this.model);
-
-		this.model.traverse( function ( object ) {
+		this.mesh.traverse( function (object ) {
 			if (object.isMesh) {
 				object.castShadow = true;
 				object.receiveShadow = true;
@@ -33,7 +20,7 @@ export default class AnimationHelper {
 
 		const animations = gltf.animations;
 
-		this.mixer = new THREE.AnimationMixer(this.model);
+		this.mixer = new THREE.AnimationMixer(this.mesh);
 
 		for (let i = 0; i < animations.length; i++) {
 			let animation = animations[i];
@@ -49,13 +36,10 @@ export default class AnimationHelper {
 		}
 
 		//console.log(this.actions);
-
-		this.loaded = true;
-		return this.model;
 	}
 
 	update(event) {
-		if (this.loaded && this.mixer) {
+		if (this.mixer) {
 			this.mixer.update(this.speed * (event.delta / 1000));
 		}
 	}

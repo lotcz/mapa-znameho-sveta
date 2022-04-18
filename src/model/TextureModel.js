@@ -1,8 +1,8 @@
 import DirtyValue from "../node/DirtyValue";
-import ResourceModel from "./ResourceModel";
 import * as THREE from "three";
+import ModelNode from "../node/ModelNode";
 
-export default class TextureModel extends ResourceModel {
+export default class TextureModel extends ModelNode {
 
 	/**
 	 * @type DirtyValue
@@ -29,8 +29,8 @@ export default class TextureModel extends ResourceModel {
 	 */
 	repeatY;
 
-	constructor(id, name) {
-		super(id, name);
+	constructor() {
+		super();
 
 		this.uri = this.addProperty('uri', new DirtyValue());
 		this.wrapS = this.addProperty('wrapS', new DirtyValue(THREE.RepeatWrapping));

@@ -42,6 +42,7 @@ export default class ActivatedTreeNode {
 		const index = this.children.indexOf(node);
 		if (index >= 0) {
 			this.children.splice(index, 1);
+			node.deactivate();
 			return node;
 		}
 		for (let i = 0, max = this.children.length; i < max; i++) {
@@ -88,11 +89,6 @@ export default class ActivatedTreeNode {
 
 	deactivateInternal() {
 
-	}
-
-	removeChild(node) {
-		node.deactivate();
-		return super.removeChild(node);
 	}
 
 }
