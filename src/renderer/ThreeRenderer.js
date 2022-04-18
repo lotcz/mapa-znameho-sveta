@@ -35,9 +35,11 @@ export default class ThreeRenderer extends DomRenderer {
 
 		//this.dom.style.backgroundImage = `url('${PaperImage}')`;
 
-		this.camera = new THREE.PerspectiveCamera( 45, this.model.size.x / this.model.size.y, 0.01, 1000 );
-		this.camera.position.z = 0.7;
-		this.camera.position.y = 0.2;
+		this.camera = new THREE.OrthographicCamera(-10,10, 10, -10, 0.01, 100 );
+
+		//this.camera = new THREE.PerspectiveCamera( 45, this.model.size.x / this.model.size.y, 0.01, 100 );
+		this.camera.position.z = 10;
+		this.camera.position.y = 5;
 
 		this.scene = new THREE.Scene();
 
@@ -51,7 +53,7 @@ export default class ThreeRenderer extends DomRenderer {
 		this.renderer.setSize(this.model.size.x, this.model.size.y);
 		this.dom.appendChild(this.renderer.domElement);
 
-		this.material = new THREE.MeshLambertMaterial({color:this.model.skinColor.get()});
+		this.material = new THREE.MeshPhongMaterial({color:this.model.skinColor.get()});
 
 		this.orbitControls = new OrbitControls( this.camera, this.renderer.domElement );
 
@@ -91,6 +93,8 @@ export default class ThreeRenderer extends DomRenderer {
 		this.gui.addColor(this.model.skinColor, 'value' ).name('color')
 			.onChange(() => this.model.skinColor.makeDirty());
 
+		GUIHelper.addVector3(this.gui, this.model, 'scale', 0, 1, 0.1, () => this.model.scale.makeDirty());
+
 		const outlineFolder = this.gui.addFolder('Outline');
 
 		outlineFolder.add( this.params, 'edgeStrength', 0.1, 30 ).onChange((value) => this.outlinePass2.edgeStrength = Number(value));
@@ -113,7 +117,6 @@ export default class ThreeRenderer extends DomRenderer {
 
 	renderInternal() {
 
-
 		if (this.model.sex.isDirty) {
 			this.updateCharacter();
 		}
@@ -122,6 +125,10 @@ export default class ThreeRenderer extends DomRenderer {
 
 		if (this.params.rotate) {
 			this.group.rotation.y = this.model.rotation.get() * 0.005;
+		}
+
+		if (this.model.scale.isDirty) {
+			this.group.scale.set(this.model.scale.x, this.model.scale.y, this.model.scale.z);
 		}
 
 		if (this.model.coordinates.isDirty) {
@@ -133,8 +140,7 @@ export default class ThreeRenderer extends DomRenderer {
 		//this.effect.renderOutline( this.scene, this.camera );
 
 		if (this.params.animate && this.animation) {
-			console.log('animating');
-			this.animation.update({delta: 25})
+			this.animation.update();
 			//this.animation2.update({delta: 25})
 		}
 

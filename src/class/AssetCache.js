@@ -1,7 +1,8 @@
 import Dictionary from "./Dictionary";
 import DirtyValue from "../node/DirtyValue";
-import AssetLoader from "./AssetLoader";
 import Collection from "./Collection";
+import AnimationLoader from "./loaders/AnimationLoader";
+import ImageLoader from "./loaders/ImageLoader";
 
 /**
  * Keeps cached raw resources like images, sounds and three models
@@ -39,14 +40,16 @@ export default class AssetCache {
 		if (this.cache.exists(uri)) {
 			onLoaded(this.cache.get(uri));
 		} else {
+			const url = 'res/' + uri;
 
-			const existingLoader = this.loaders.find((l) => l.uri === uri);
+			const existingLoader = this.loaders.find((l) => l.url === url);
 			if (existingLoader) {
 				existingLoader.addLoaderEventsListeners(onLoaded,null);
 				return;
 			}
 
-			const loader = new AssetLoader(uri);
+			const loaderType = this.detectLoaderTypeFromUri(uri);
+			const loader = new loaderType(url);
 			this.loaders.add(loader);
 			loader.load(
 				(resource) => {
@@ -65,6 +68,13 @@ export default class AssetCache {
 				}
 			);
 		}
+	}
+
+	detectLoaderTypeFromUri(uri) {
+		if (uri.startsWith('img/')) return ImageLoader;
+		if (uri.startsWith('glb/')) return 0;
+		if (uri.startsWith('animation/')) return AnimationLoader;
+		console.warn(`Resource type could not be inferred from URI ${uri}`);
 	}
 
 }

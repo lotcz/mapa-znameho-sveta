@@ -1,6 +1,7 @@
 import DirtyValue from "../node/DirtyValue";
 import ModelNode from "../node/ModelNode";
 import Vector2 from "../node/Vector2";
+import Vector3 from "../node/Vector3";
 
 export const SEX_MALE = 'male';
 export const SEX_FEMALE = 'female';
@@ -32,6 +33,11 @@ export default class CharacterPreviewModel extends ModelNode {
 	 */
 	size;
 
+	/**
+	 * @type Vector3
+	 */
+	scale;
+
 	constructor(id, name) {
 		super(id, name);
 
@@ -40,6 +46,7 @@ export default class CharacterPreviewModel extends ModelNode {
 		this.rotation = this.addProperty('rotation', new DirtyValue(0));
 		this.coordinates = this.addProperty('coordinates', new Vector2(25, 25));
 		this.size = this.addProperty('size', new Vector2(850, 550));
+		this.scale = this.addProperty('scale', new Vector3(1, 1, 1));
 	}
 
 }

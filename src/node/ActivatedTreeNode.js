@@ -69,8 +69,8 @@ export default class ActivatedTreeNode {
 
 	activate() {
 		if (!this.isActivated) {
-			this.children.forEach((c) => c.activate());
 			this.activateInternal();
+			this.children.forEach((c) => c.activate());
 			this.isActivated = true;
 		}
 	}

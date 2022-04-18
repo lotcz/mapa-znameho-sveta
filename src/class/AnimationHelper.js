@@ -9,6 +9,7 @@ export default class AnimationHelper {
 		this.currentAction = null;
 		this.speed = 1;
 		this.loaded = false;
+		this.lastUpdated = null;
 
 		this.mesh.traverse( function (object ) {
 			if (object.isMesh) {
@@ -38,9 +39,12 @@ export default class AnimationHelper {
 		//console.log(this.actions);
 	}
 
-	update(event) {
-		if (this.mixer) {
-			this.mixer.update(this.speed * (event.delta / 1000));
+	update() {
+		if (this.mixer && this.currentAction) {
+			const now = performance.now();
+			const delta = (this.lastUpdated) ? (now - this.lastUpdated) : 25;
+			this.lastUpdated = now;
+			this.mixer.update(this.speed * delta / 1000);
 		}
 	}
 

@@ -1,6 +1,6 @@
 import DirtyValue from "../node/DirtyValue";
 import Collection from "./Collection";
-import MaterialLoader from "./MaterialLoader";
+import MaterialLoader from "./loaders/MaterialLoader";
 
 /**
  * Keeps cached three materials

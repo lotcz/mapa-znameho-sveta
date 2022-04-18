@@ -20,46 +20,37 @@ export default class GameRenderer extends DomRenderer {
 		super(model, model, dom);
 
 		this.model = model;
+		this.alwaysRender = true;
 		this.loading = null;
 		this.debugMenu = null;
 		this.addClass('game');
 
+		this.updateLoadingHandler = () => this.updateLoading();
+		this.updateGameModeHandler = () => this.updateGameMode();
+		this.updateDebugMenuHandler = () => this.updateDebugMenu();
+	}
+
+	activateInternal() {
+		const initLoading = document.getElementById('initial_loading');
+		if (initLoading) Pixies.destroyElement(initLoading);
+
 		this.mainLayer = this.addElement('div', 'main');
 
-		//this.threeLayer = this.addElement('div', 'three');
-		//this.threeRenderer = this.addChild(new ThreeRenderer(this.game, this.model.three, this.threeLayer));
-
-		Pixies.destroyElement(document.getElementById('initial_loading'));
-
-		this.model.assets.isLoading.addOnChangeListener(() => {
-			if (this.model.assets.isLoading.get()) {
-				this.showLoading();
-			} else {
-				this.hideLoading();
-			}
-		});
-
-		if (this.model.assets.isLoading.get()) {
-			this.showLoading();
-		}
-
-		this.model.isInDebugMode.addOnChangeListener(() => {
-			if (this.model.isInDebugMode.get()) {
-				this.showDebugMenu();
-			} else {
-				this.hideDebugMenu();
-			}
-		});
-
-		if (this.model.isInDebugMode.get()) {
-			this.showDebugMenu();
-		}
-
-		this.model.saveGame.mode.addOnChangeListener(() => {
-			this.updateGameMode();
-		});
+		this.updateLoading();
+		this.model.assets.isLoading.addOnChangeListener(this.updateLoadingHandler);
 
 		this.updateGameMode();
+		this.model.saveGame.mode.addOnChangeListener(this.updateGameModeHandler);
+
+		this.updateDebugMenu();
+		this.model.isInDebugMode.addOnChangeListener(this.updateDebugMenuHandler);
+	}
+
+	deactivateInternal() {
+		this.model.assets.isLoading.removeOnChangeListener(this.updateLoadingHandler);
+		this.model.saveGame.mode.removeOnChangeListener(this.updateGameModeHandler);
+		this.model.isInDebugMode.removeOnChangeListener(this.updateDebugMenuHandler);
+		this.removeElement(this.mainLayer);
 	}
 
 	updateGameMode() {
@@ -74,8 +65,17 @@ export default class GameRenderer extends DomRenderer {
 			case GAME_MODE_THREE:
 				this.mainRenderer = this.addChild(new ThreeRenderer(this.game, this.model.characterPreview, this.mainLayer));
 				break;
+			default:
+				console.warn(`Unknown game mode ${mode}`);
 		}
+	}
 
+	updateLoading() {
+		if (this.model.assets.isLoading.get()) {
+			this.showLoading();
+		} else {
+			this.hideLoading();
+		}
 	}
 
 	showLoading() {
@@ -90,6 +90,14 @@ export default class GameRenderer extends DomRenderer {
 		if (this.loading) {
 			this.removeElement(this.loading);
 			this.loading = null;
+		}
+	}
+
+	updateDebugMenu() {
+		if (this.model.isInDebugMode.get()) {
+			this.showDebugMenu();
+		} else {
+			this.hideDebugMenu();
 		}
 	}
 

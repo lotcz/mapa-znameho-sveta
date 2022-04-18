@@ -6,12 +6,12 @@ export default class GUIHelper {
 		return new dat.GUI();
 	}
 
-	static addVector3(gui, object, property, min, max, step) {
+	static addVector3(gui, object, property, min, max, step, onChange = null) {
 		const folder = gui.addFolder(property);
 		const vector = object[property];
-		GUIHelper.addScale(folder, vector, 'x', min, max, step);
-		GUIHelper.addScale(folder, vector, 'y', min, max, step);
-		GUIHelper.addScale(folder, vector, 'z', min, max, step);
+		GUIHelper.addScaler(folder, vector, 'x', min, max, step, onChange);
+		GUIHelper.addScaler(folder, vector, 'y', min, max, step, onChange);
+		GUIHelper.addScaler(folder, vector, 'z', min, max, step, onChange);
 		return folder;
 	}
 
@@ -23,7 +23,9 @@ export default class GUIHelper {
 		return GUIHelper.addVector3(gui, object, property, 0, 25, 0.1);
 	}
 
-	static addScale(gui, object, property, min, max, step) {
-		return gui.add(object, property, min, max, step);
+	static addScaler(gui, object, property, min, max, step, onChange = null) {
+		const item = gui.add(object, property, min, max, step);
+		if (onChange) item.onChange(onChange);
+		return item;
 	}
 }
