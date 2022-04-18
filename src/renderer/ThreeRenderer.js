@@ -34,29 +34,29 @@ export default class ThreeRenderer extends DomRenderer {
 
 	activateInternal() {
 
-		//this.dom.style.backgroundImage = `url('${PaperImage}')`;
+		this.dom.style.backgroundImage = `url('res/img/camp.jpg')`;
+		this.dom.style.backgroundSize = '100%';
 
 		this.camera = new THREE.OrthographicCamera(-10,10, 10, -10, 0.01, 100 );
-
 		//this.camera = new THREE.PerspectiveCamera( 45, this.model.size.x / this.model.size.y, 0.01, 100 );
-		this.camera.position.z = 10;
-		this.camera.position.y = 5;
+		this.camera.position.set(0, 0, 10);
 
 		this.scene = new THREE.Scene();
 
 		this.group = new THREE.Group();
 		this.scene.add( this.group );
 
-		this.scene.add(new THREE.AmbientLight());
+		this.scene.add(new THREE.AmbientLight({color:'yellow'}));
 		this.scene.add(new THREE.DirectionalLight());
 
 		this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 		this.renderer.setSize(this.model.size.x, this.model.size.y);
 		this.dom.appendChild(this.renderer.domElement);
 
-		this.material = new THREE.MeshPhongMaterial({color:this.model.skinColor.get()});
+		this.material = new THREE.MeshLambertMaterial({color:this.model.skinColor.get()});
 
 		this.orbitControls = new OrbitControls( this.camera, this.renderer.domElement );
+		//this.orbitControls.update();
 
 		this.composer = new EffectComposer( this.renderer );
 
@@ -64,8 +64,8 @@ export default class ThreeRenderer extends DomRenderer {
 		this.composer.addPass( renderPass );
 
 		this.params = {
-			edgeStrength: 5,
-			edgeGlow: 0,
+			edgeStrength: 1.6,
+			edgeGlow: 1,
 			edgeThickness: 0.1,
 			pulsePeriod: 0,
 			rotate: false,
@@ -75,15 +75,14 @@ export default class ThreeRenderer extends DomRenderer {
 			hiddenEdgeColor: '#000000'
 		};
 
-		this.outlinePass2 = new OutlinePass( new THREE.Vector2(this.model.size.x, this.model.size.y), this.scene, this.camera );
-		this.outlinePass2.edgeStrength = Number( this.params.edgeStrength );
-		this.outlinePass2.edgeThickness = Number( this.params.edgeThickness );
-		this.outlinePass2.edgeGlow = Number( this.params.edgeGlow );
-		this.outlinePass2.visibleEdgeColor.set(this.params.visibleEdgeColor);
-		this.outlinePass2.hiddenEdgeColor.set(this.params.hiddenEdgeColor);
-		//this.outlinePass2.patternTexture = texture;
-		this.outlinePass2.selectedObjects = [];
-		this.composer.addPass( this.outlinePass2 );
+		this.outlinePass = new OutlinePass( new THREE.Vector2(this.model.size.x, this.model.size.y), this.scene, this.camera );
+		this.outlinePass.edgeStrength = Number( this.params.edgeStrength );
+		this.outlinePass.edgeThickness = Number( this.params.edgeThickness );
+		this.outlinePass.edgeGlow = Number( this.params.edgeGlow );
+		this.outlinePass.visibleEdgeColor.set(this.params.visibleEdgeColor);
+		this.outlinePass.hiddenEdgeColor.set(this.params.hiddenEdgeColor);
+		this.outlinePass.selectedObjects = [];
+		//this.composer.addPass( this.outlinePass );
 
 		this.gui = GUIHelper.createGUI();
 
@@ -95,7 +94,7 @@ export default class ThreeRenderer extends DomRenderer {
 			.onChange(() => this.model.skinColor.makeDirty());
 
 		GUIHelper.addScaleVector3(this.gui, this.model.scale, 'scale');
-		GUIHelper.addScaleVector3(this.gui, this.model.itemScale, 'itemScale');
+		GUIHelper.addVector3(this.gui, this.model.itemScale, 'itemScale', 50, 200, 1);
 		GUIHelper.addVector3(this.gui, this.model.itemPosition, 'itemPosition', -100, 100, 1);
 		GUIHelper.addRotationVector3(this.gui, this.model.itemRotation, 'itemRotation');
 
@@ -109,15 +108,19 @@ export default class ThreeRenderer extends DomRenderer {
 
 		const outlineFolder = this.gui.addFolder('Outline');
 
-		outlineFolder.add( this.params, 'edgeStrength', 0.1, 30 ).onChange((value) => this.outlinePass2.edgeStrength = Number(value));
-		outlineFolder.add( this.params, 'edgeGlow', 0.0, 5 ).onChange((value) => this.outlinePass2.edgeGlow = Number(value));
-		outlineFolder.add( this.params, 'edgeThickness', 0.1, 5 ).onChange((value) => this.outlinePass2.edgeThickness = Number( value ));
-		outlineFolder.add( this.params, 'pulsePeriod', 0.0, 5 ).onChange((value) => this.outlinePass2.pulsePeriod = Number( value ));
+		outlineFolder.add( this.params, 'edgeStrength', 0, 30 ).onChange((value) => this.outlinePass.edgeStrength = Number(value));
+		outlineFolder.add( this.params, 'edgeGlow', 0.0, 5 ).onChange((value) => this.outlinePass.edgeGlow = Number(value));
+		outlineFolder.add( this.params, 'edgeThickness', 0.0, 5 ).onChange((value) => this.outlinePass.edgeThickness = Number( value ));
+		outlineFolder.add( this.params, 'pulsePeriod', 0.0, 5 ).onChange((value) => this.outlinePass.pulsePeriod = Number( value ));
 		outlineFolder.add( this.params, 'rotate' );
 		outlineFolder.add( this.params, 'animate' );
-		outlineFolder.add( this.params, 'usePatternTexture' ).onChange((value) => this.outlinePass2.usePatternTexture = value);
-		outlineFolder.addColor( this.params, 'visibleEdgeColor' ).onChange((value) => this.outlinePass2.visibleEdgeColor.set(value));
-		outlineFolder.addColor( this.params, 'hiddenEdgeColor' ).onChange((value) => this.outlinePass2.hiddenEdgeColor.set(value));
+		outlineFolder.add( this.params, 'usePatternTexture' ).onChange((value) => this.outlinePass.usePatternTexture = value);
+		outlineFolder.addColor( this.params, 'visibleEdgeColor' ).onChange((value) => this.outlinePass.visibleEdgeColor.set(value));
+		outlineFolder.addColor( this.params, 'hiddenEdgeColor' ).onChange((value) => this.outlinePass.hiddenEdgeColor.set(value));
+
+		const effectFXAA = new ShaderPass( FXAAShader );
+		effectFXAA.uniforms[ 'resolution' ].value.set( 1 / window.innerWidth, 1 / window.innerHeight );
+		this.composer.addPass( effectFXAA );
 
 		this.updateCharacter();
 	}
@@ -138,7 +141,7 @@ export default class ThreeRenderer extends DomRenderer {
 			this.updateCharacter();
 		}
 
-		this.orbitControls.update();
+		//this.orbitControls.update();
 
 		if (this.params.rotate) {
 			this.group.rotation.y = this.model.rotation.get() * 0.005;
@@ -178,7 +181,7 @@ export default class ThreeRenderer extends DomRenderer {
 	updateCharacter() {
 		if (this.animation) {
 			this.group.remove(this.animation.mesh);
-			this.outlinePass2.selectedObjects = [];
+			this.outlinePass.selectedObjects = [];
 		}
 		const uri = this.model.sex.equalsTo(SEX_MALE) ? 'animation/male.glb' : 'animation/female.glb';
 		this.game.assets.getAsset(
@@ -193,7 +196,7 @@ export default class ThreeRenderer extends DomRenderer {
 						}
 					});
 					this.group.add(this.animation.mesh);
-					this.outlinePass2.selectedObjects = [this.animation.mesh];
+					this.outlinePass.selectedObjects = [this.animation.mesh];
 
 					this.game.assets.getAsset(
 						'glb/axe.glb',
@@ -202,7 +205,21 @@ export default class ThreeRenderer extends DomRenderer {
 								const sword = asset;
 								const hand = this.animation.mesh.getObjectByName('mixamorigRightHand');
 								hand.add(sword);
-								this.item = sword;
+								//this.item = sword;
+								this.model.itemPosition.makeDirty();
+							}
+						}
+					);
+
+					this.game.assets.getAsset(
+						'glb/hair.glb',
+						(asset) => {
+							if (this.animation) {
+								const hair = asset;
+								const head = this.animation.mesh.getObjectByName('mixamorigHead');
+								head.add(hair);
+								this.item = hair;
+								this.model.itemScale.makeDirty();
 							}
 						}
 					);

@@ -57,15 +57,15 @@ export default class CharacterPreviewModel extends ModelNode {
 		super(id, name);
 
 		this.sex = this.addProperty('sex', new DirtyValue(SEX_MALE));
-		this.skinColor = this.addProperty('skinColor', new DirtyValue('#FF0000'));
+		this.skinColor = this.addProperty('skinColor', new DirtyValue('#694242'));
 		this.rotation = this.addProperty('rotation', new DirtyValue(0));
 		this.coordinates = this.addProperty('coordinates', new Vector2(25, 25));
 		this.size = this.addProperty('size', new Vector2(850, 550));
 		this.scale = this.addProperty('scale', new Vector3(1, 1, 1));
 
-		this.itemPosition = this.addProperty('itemPosition', new Vector3());
-		this.itemScale = this.addProperty('itemScale', new Vector3(1, 1, 1));
-		this.itemRotation = this.addProperty('itemRotation', new Vector3());
+		this.itemPosition = this.addProperty('itemPosition', new Vector3(-18, 2, 0));
+		this.itemScale = this.addProperty('itemScale', new Vector3(2,2,2));
+		this.itemRotation = this.addProperty('itemRotation', new Vector3(-1.24, -0.7, -1.6));
 	}
 
 }
