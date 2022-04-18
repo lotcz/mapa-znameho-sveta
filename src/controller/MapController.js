@@ -94,7 +94,10 @@ export default class MapController extends ControllerNode {
 
 		// dragging and scrolling
 		if (!this.game.controls.mouseDownLeft.get()) {
-			this.dragging = this.scrolling = false;
+			this.dragging = false;
+		}
+		if (!this.game.controls.mouseDownRight.get()) {
+			this.scrolling = false;
 		}
 	}
 
@@ -103,17 +106,19 @@ export default class MapController extends ControllerNode {
 			if (this.dragging) {
 				const mapCoords = this.model.coordinates.add(this.game.controls.mouseCoordinates.multiply(this.model.zoom.get()));
 				this.dragging.set(mapCoords);
-			} else if (this.scrolling) {
+			} else if (this.focusedHelper.isSet()) {
+				this.dragging = this.focusedHelper.get();
+			}
+		}
+
+		if (this.game.controls.mouseDownRight.get()) {
+			if (this.scrolling) {
 				const offset = this.game.controls.mouseCoordinates.subtract(this.scrolling);
 				const mapCoords = this.model.coordinates.subtract(offset.multiply(this.model.zoom.get()));
 				this.model.coordinates.set(mapCoords);
 				this.scrolling = this.game.controls.mouseCoordinates.clone();
 			} else {
-				if (this.focusedHelper.isSet()) {
-					this.dragging = this.focusedHelper.get();
-				} else {
-					this.scrolling = this.game.controls.mouseCoordinates.clone();
-				}
+				this.scrolling = this.game.controls.mouseCoordinates.clone();
 			}
 		}
 	}
@@ -131,7 +136,7 @@ export default class MapController extends ControllerNode {
 	}
 
 	updatePoint(location, conn) {
-		const path = this.model.paths.getById(conn.pathId.get());
+		const path = this.game.resources.map.paths.getById(conn.pathId.get());
 		const point = conn.forward.get() ? path.waypoints.first().coordinates : path.waypoints.last().coordinates;
 		point.set(location.coordinates);
 	}

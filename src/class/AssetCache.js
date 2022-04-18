@@ -3,6 +3,7 @@ import DirtyValue from "../node/DirtyValue";
 import Collection from "./Collection";
 import AnimationLoader from "./loaders/AnimationLoader";
 import ImageLoader from "./loaders/ImageLoader";
+import GlbLoader from "./loaders/GlbLoader";
 
 /**
  * Keeps cached raw resources like images, sounds and three models
@@ -72,7 +73,7 @@ export default class AssetCache {
 
 	detectLoaderTypeFromUri(uri) {
 		if (uri.startsWith('img/')) return ImageLoader;
-		if (uri.startsWith('glb/')) return 0;
+		if (uri.startsWith('glb/')) return GlbLoader;
 		if (uri.startsWith('animation/')) return AnimationLoader;
 		console.warn(`Resource type could not be inferred from URI ${uri}`);
 	}

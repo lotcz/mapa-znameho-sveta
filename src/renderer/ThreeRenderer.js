@@ -29,6 +29,7 @@ export default class ThreeRenderer extends DomRenderer {
 		this.model = model;
 		this.alwaysRender = true;
 		this.animation = null;
+		this.item = null;
 	}
 
 	activateInternal() {
@@ -93,7 +94,18 @@ export default class ThreeRenderer extends DomRenderer {
 		this.gui.addColor(this.model.skinColor, 'value' ).name('color')
 			.onChange(() => this.model.skinColor.makeDirty());
 
-		GUIHelper.addVector3(this.gui, this.model, 'scale', 0, 1, 0.1, () => this.model.scale.makeDirty());
+		GUIHelper.addScaleVector3(this.gui, this.model.scale, 'scale');
+		GUIHelper.addScaleVector3(this.gui, this.model.itemScale, 'itemScale');
+		GUIHelper.addVector3(this.gui, this.model.itemPosition, 'itemPosition', -100, 100, 1);
+		GUIHelper.addRotationVector3(this.gui, this.model.itemRotation, 'itemRotation');
+
+		this.commands = {
+			idle: () => this.switchAnimation('Idle'),
+			sword: () => this.switchAnimation('Sword')
+		}
+
+		this.gui.add(this.commands, 'idle');
+		this.gui.add(this.commands, 'sword');
 
 		const outlineFolder = this.gui.addFolder('Outline');
 
@@ -110,6 +122,11 @@ export default class ThreeRenderer extends DomRenderer {
 		this.updateCharacter();
 	}
 
+	switchAnimation(name) {
+		if (this.animation) {
+			this.animation.activateAction(name, 1000, false);
+		}
+	}
 	deactivateInternal() {
 		Pixies.destroyElement(this.renderer.domElement);
 		this.gui.destroy();
@@ -144,6 +161,12 @@ export default class ThreeRenderer extends DomRenderer {
 			//this.animation2.update({delta: 25})
 		}
 
+		if (this.item && (this.model.itemPosition.isDirty || this.model.itemScale.isDirty || this.model.itemRotation.isDirty)) {
+			this.item.position.set(this.model.itemPosition.x, this.model.itemPosition.y, this.model.itemPosition.z);
+			this.item.scale.set(this.model.itemScale.x, this.model.itemScale.y, this.model.itemScale.z);
+			this.item.rotation.set(this.model.itemRotation.x, this.model.itemRotation.y, this.model.itemRotation.z);
+		}
+
 		if (this.model.skinColor.isDirty) {
 			this.material.color = new THREE.Color(this.model.skinColor.get());
 		}
@@ -163,7 +186,7 @@ export default class ThreeRenderer extends DomRenderer {
 			(asset) => {
 				if (this.group) {
 					this.animation = asset;
-					this.animation.activateAction('Idle', 1000, false);
+					this.switchAnimation('Idle');
 					this.animation.mesh.traverse((mesh) => {
 						if (mesh.material && mesh.geometry) {
 							mesh.material = this.material;
@@ -171,7 +194,19 @@ export default class ThreeRenderer extends DomRenderer {
 					});
 					this.group.add(this.animation.mesh);
 					this.outlinePass2.selectedObjects = [this.animation.mesh];
-					//this.render();
+
+					this.game.assets.getAsset(
+						'glb/axe.glb',
+						(asset) => {
+							if (this.animation) {
+								const sword = asset;
+								const hand = this.animation.mesh.getObjectByName('mixamorigRightHand');
+								hand.add(sword);
+								this.item = sword;
+							}
+						}
+					);
+
 				}
 			}
 		);

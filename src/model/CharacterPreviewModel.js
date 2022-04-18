@@ -38,6 +38,21 @@ export default class CharacterPreviewModel extends ModelNode {
 	 */
 	scale;
 
+	/**
+	 * @type Vector3
+	 */
+	itemPosition;
+
+	/**
+	 * @type Vector3
+	 */
+	itemScale;
+
+	/**
+	 * @type Vector3
+	 */
+	itemRotation;
+
 	constructor(id, name) {
 		super(id, name);
 
@@ -47,6 +62,10 @@ export default class CharacterPreviewModel extends ModelNode {
 		this.coordinates = this.addProperty('coordinates', new Vector2(25, 25));
 		this.size = this.addProperty('size', new Vector2(850, 550));
 		this.scale = this.addProperty('scale', new Vector3(1, 1, 1));
+
+		this.itemPosition = this.addProperty('itemPosition', new Vector3());
+		this.itemScale = this.addProperty('itemScale', new Vector3(1, 1, 1));
+		this.itemRotation = this.addProperty('itemRotation', new Vector3());
 	}
 
 }
