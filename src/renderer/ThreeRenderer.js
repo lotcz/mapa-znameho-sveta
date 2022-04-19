@@ -11,6 +11,7 @@ import Pixies from "../class/Pixies";
 import GUIHelper from "../class/GUIHelper";
 import {SEX_FEMALE, SEX_MALE} from "../model/CharacterPreviewModel";
 import AnimationHelper from "../class/AnimationHelper";
+import * as SkeletonUtils from "three/examples/jsm/utils/SkeletonUtils";
 
 export default class ThreeRenderer extends DomRenderer {
 
@@ -36,8 +37,9 @@ export default class ThreeRenderer extends DomRenderer {
 
 	activateInternal() {
 
-		this.dom.style.backgroundImage = `url('res/img/camp.jpg')`;
-		this.dom.style.backgroundSize = '100%';
+		this.container = this.addElement('div', 'three');
+		this.container.style.backgroundImage = `url('res/img/camp.jpg')`;
+		this.container.style.backgroundSize = '100%';
 
 		this.camera = new THREE.OrthographicCamera(-10,10, 10, -10, 0.01, 100 );
 		//this.camera = new THREE.PerspectiveCamera( 45, this.model.size.x / this.model.size.y, 0.01, 100 );
@@ -48,7 +50,7 @@ export default class ThreeRenderer extends DomRenderer {
 		this.renderer.shadowMap.enabled = true;
 		//this.renderer.shadowMap.type = THREE.BasicShadowMap;
 		this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-		this.dom.appendChild(this.renderer.domElement);
+		this.container.appendChild(this.renderer.domElement);
 
 		this.scene = new THREE.Scene();
 		this.group = new THREE.Group();
@@ -176,14 +178,9 @@ export default class ThreeRenderer extends DomRenderer {
 		this.updateCharacter();
 	}
 
-	switchAnimation(name) {
-		if (this.animation) {
-			this.animation.activateAction(name, 1000, false);
-		}
-	}
-
 	deactivateInternal() {
-		Pixies.destroyElement(this.renderer.domElement);
+		Pixies.destroyElement(this.container);
+		this.container = null;
 		this.gui.destroy();
 	}
 
@@ -202,14 +199,6 @@ export default class ThreeRenderer extends DomRenderer {
 		if (this.model.scale.isDirty) {
 			this.group.scale.set(this.model.scale.x, this.model.scale.y, this.model.scale.z);
 		}
-
-		if (this.model.coordinates.isDirty) {
-			this.dom.style.top = this.model.coordinates.x + 'px';
-			this.dom.style.left = this.model.coordinates.y + 'px';
-		}
-		//this.renderer.render( this.scene, this.camera );
-		//this.effect.render( this.scene, this.camera );
-		//this.effect.renderOutline( this.scene, this.camera );
 
 		if (this.params.animate && this.animation) {
 			this.animation.update();
@@ -240,8 +229,8 @@ export default class ThreeRenderer extends DomRenderer {
 			uri,
 			(asset) => {
 				if (this.group) {
-					this.animation = new AnimationHelper(asset.scene, asset.animations);
-					this.switchAnimation('Idle');
+					this.animation = new AnimationHelper(SkeletonUtils.clone(asset.scene), asset.animations);
+					this.switchAnimation(Pixies.randomElement(['Idle', 'Run', 'Sword']));
 					this.animation.mesh.traverse((mesh) => {
 						if (mesh.material && mesh.geometry) {
 							mesh.material = this.skinMaterial;
@@ -285,5 +274,10 @@ export default class ThreeRenderer extends DomRenderer {
 		);
 	}
 
+	switchAnimation(name) {
+		if (this.animation) {
+			this.animation.activateAction(name, 1000, false);
+		}
+	}
 
 }

@@ -26,6 +26,12 @@ html, body {
 	overflow: hidden;
 }
 
+.container > * {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
 .main .map svg,
 .main .three,
 .debug-menu {

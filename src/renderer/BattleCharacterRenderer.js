@@ -3,6 +3,7 @@ import {SEX_MALE} from "../model/CharacterPreviewModel";
 import RendererNode from "../node/RendererNode";
 import AnimationHelper from "../class/AnimationHelper";
 import * as SkeletonUtils from "three/examples/jsm/utils/SkeletonUtils.js";
+import Pixies from "../class/Pixies";
 
 export default class BattleCharacterRenderer extends RendererNode {
 
@@ -38,7 +39,17 @@ export default class BattleCharacterRenderer extends RendererNode {
 	}
 
 	deactivateInternal() {
+		this.skinMaterial.dispose();
+		this.skinMaterial = null;
+		if (this.animation) {
+			this.animation.mesh.traverse((mesh) => {
+				if (mesh.geometry) {
+					mesh.geometry.dispose();
+				}
+			})
+		}
 		this.scene.remove(this.group);
+		this.group = null;
 	}
 
 	renderInternal() {
@@ -90,11 +101,12 @@ export default class BattleCharacterRenderer extends RendererNode {
 			uri,
 			(asset) => {
 				if (this.group) {
-					console.log(asset);
+					//console.log(asset);
 					this.animation = new AnimationHelper(SkeletonUtils.clone(asset.scene), asset.animations);
-					this.switchAnimation('Idle');
+					this.switchAnimation(Pixies.randomElement(['Idle', 'Run', 'Sword']));
 					this.animation.mesh.traverse((mesh) => {
 						if (mesh.material && mesh.geometry) {
+							mesh.material.dispose();
 							mesh.material = this.skinMaterial;
 							mesh.castShadow = true;
 							mesh.receiveShadow = false;
