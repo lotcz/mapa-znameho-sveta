@@ -3,12 +3,11 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 export default class AnimationHelper {
 
-	constructor(gltf) {
-		this.mesh = gltf.scene;
+	constructor(mesh, animations) {
+		this.mesh = mesh;
 		this.actions = [];
 		this.currentAction = null;
 		this.speed = 1;
-		this.loaded = false;
 		this.lastUpdated = null;
 
 		this.mesh.traverse( function (object ) {
@@ -18,8 +17,6 @@ export default class AnimationHelper {
 				object.frustumCulled = false;
 			 }
 		});
-
-		const animations = gltf.animations;
 
 		this.mixer = new THREE.AnimationMixer(this.mesh);
 

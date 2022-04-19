@@ -4,6 +4,7 @@ import Vector2 from "../node/Vector2";
 
 export const GAME_MODE_MAP = 'map';
 export const GAME_MODE_THREE = 'three';
+export const GAME_MODE_BATTLE = 'battle';
 
 export default class SaveGameModel extends ModelNode {
 

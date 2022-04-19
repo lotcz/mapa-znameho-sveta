@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
+import {TransformControls} from "three/examples/jsm/controls/TransformControls.js";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
@@ -9,6 +10,7 @@ import DomRenderer from "./DomRenderer";
 import Pixies from "../class/Pixies";
 import GUIHelper from "../class/GUIHelper";
 import {SEX_FEMALE, SEX_MALE} from "../model/CharacterPreviewModel";
+import AnimationHelper from "../class/AnimationHelper";
 
 export default class ThreeRenderer extends DomRenderer {
 
@@ -41,22 +43,69 @@ export default class ThreeRenderer extends DomRenderer {
 		//this.camera = new THREE.PerspectiveCamera( 45, this.model.size.x / this.model.size.y, 0.01, 100 );
 		this.camera.position.set(0, 0, 10);
 
-		this.scene = new THREE.Scene();
+		this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+		this.renderer.setSize(this.model.size.x, this.model.size.y);
+		this.renderer.shadowMap.enabled = true;
+		//this.renderer.shadowMap.type = THREE.BasicShadowMap;
+		this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+		this.dom.appendChild(this.renderer.domElement);
 
+		this.scene = new THREE.Scene();
 		this.group = new THREE.Group();
 		this.scene.add( this.group );
 
 		this.scene.add(new THREE.AmbientLight({color:'yellow'}));
-		this.scene.add(new THREE.DirectionalLight());
 
-		this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-		this.renderer.setSize(this.model.size.x, this.model.size.y);
-		this.dom.appendChild(this.renderer.domElement);
+		const light = new THREE.DirectionalLight( 0xffffff, 1);
+		light.position.set( 0, 10, 0 );
+		light.castShadow = true;
+		light.shadow.camera.near = 0.5;
+		light.shadow.camera.far = 25;
+		light.shadow.camera.right = 15;
+		light.shadow.camera.left = -15;
+		light.shadow.camera.top	= 15;
+		light.shadow.camera.bottom = - 15;
+		light.shadow.mapSize.width = 1024;
+		light.shadow.mapSize.height = 1024;
 
-		this.material = new THREE.MeshLambertMaterial({color:this.model.skinColor.get()});
+		this.scene.add(light);
+
+		this.scene.add( new THREE.CameraHelper( light.shadow.camera ) );
+
+		const box = new THREE.Mesh(new THREE.BoxGeometry(10, 1, 10), new THREE.MeshPhongMaterial({color: '#a5a08a'}));
+		box.position.set(-5, -0.5, 0);
+		box.castShadow = false;
+		box.receiveShadow = true;
+		this.scene.add(box);
+
+		const floor = new THREE.Mesh(new THREE.BoxGeometry(10, 1, 10), new THREE.ShadowMaterial({color:'#505050'}));
+		floor.receiveShadow = true;
+		floor.position.set(5, -0.5, 0);
+		this.scene.add(floor);
+
+		const ball = new THREE.Mesh(new THREE.SphereGeometry(0.5, 8, 8), new THREE.MeshPhongMaterial({color: '#05a08a'}));
+		ball.position.set(0, 1, -2);
+		ball.castShadow = true;
+		ball.receiveShadow = true;
+		this.scene.add(ball);
+
+		const wall = new THREE.Mesh(new THREE.BoxGeometry(2, 2, 1), new THREE.MeshPhongMaterial({color: '#a5a08a'}));
+		wall.position.set(0, 1, -4);
+		wall.castShadow = true;
+		wall.receiveShadow = true;
+		this.scene.add(wall);
+
+		this.skinMaterial = new THREE.MeshLambertMaterial({color:this.model.skinColor.get()});
 
 		this.orbitControls = new OrbitControls( this.camera, this.renderer.domElement );
 		//this.orbitControls.update();
+
+		this.transformControls = new TransformControls( this.camera, this.renderer.domElement );
+		//this.transformControls.addEventListener( 'change', () => this.render() );
+		this.transformControls.addEventListener( 'dragging-changed', (event) => {
+			this.orbitControls.enabled = ! event.value;
+		});
+		//this.scene.add(this.transformControls);
 
 		this.composer = new EffectComposer( this.renderer );
 
@@ -100,11 +149,13 @@ export default class ThreeRenderer extends DomRenderer {
 
 		this.commands = {
 			idle: () => this.switchAnimation('Idle'),
-			sword: () => this.switchAnimation('Sword')
+			sword: () => this.switchAnimation('Sword'),
+			run: () => this.switchAnimation('Run')
 		}
 
 		this.gui.add(this.commands, 'idle');
 		this.gui.add(this.commands, 'sword');
+		this.gui.add(this.commands, 'run');
 
 		const outlineFolder = this.gui.addFolder('Outline');
 
@@ -119,7 +170,7 @@ export default class ThreeRenderer extends DomRenderer {
 		outlineFolder.addColor( this.params, 'hiddenEdgeColor' ).onChange((value) => this.outlinePass.hiddenEdgeColor.set(value));
 
 		const effectFXAA = new ShaderPass( FXAAShader );
-		effectFXAA.uniforms[ 'resolution' ].value.set( 1 / window.innerWidth, 1 / window.innerHeight );
+		effectFXAA.uniforms[ 'resolution' ].value.set(1 / this.model.size.x,1 / this.model.size.y);
 		this.composer.addPass( effectFXAA );
 
 		this.updateCharacter();
@@ -130,6 +181,7 @@ export default class ThreeRenderer extends DomRenderer {
 			this.animation.activateAction(name, 1000, false);
 		}
 	}
+
 	deactivateInternal() {
 		Pixies.destroyElement(this.renderer.domElement);
 		this.gui.destroy();
@@ -171,11 +223,11 @@ export default class ThreeRenderer extends DomRenderer {
 		}
 
 		if (this.model.skinColor.isDirty) {
-			this.material.color = new THREE.Color(this.model.skinColor.get());
+			this.skinMaterial.color = new THREE.Color(this.model.skinColor.get());
 		}
 
 		this.composer.render();
-
+		//this.renderer.render(this.scene, this.camera);
 	}
 
 	updateCharacter() {
@@ -188,11 +240,13 @@ export default class ThreeRenderer extends DomRenderer {
 			uri,
 			(asset) => {
 				if (this.group) {
-					this.animation = asset;
+					this.animation = new AnimationHelper(asset.scene, asset.animations);
 					this.switchAnimation('Idle');
 					this.animation.mesh.traverse((mesh) => {
 						if (mesh.material && mesh.geometry) {
-							mesh.material = this.material;
+							mesh.material = this.skinMaterial;
+							mesh.castShadow = true;
+							mesh.receiveShadow = false;
 						}
 					});
 					this.group.add(this.animation.mesh);
@@ -206,7 +260,7 @@ export default class ThreeRenderer extends DomRenderer {
 								const hand = this.animation.mesh.getObjectByName('mixamorigRightHand');
 								hand.add(sword);
 								//this.item = sword;
-								this.model.itemPosition.makeDirty();
+								//this.model.itemPosition.makeDirty();
 							}
 						}
 					);
@@ -215,10 +269,12 @@ export default class ThreeRenderer extends DomRenderer {
 						'glb/hair.glb',
 						(asset) => {
 							if (this.animation) {
-								const hair = asset;
+								const hair = asset.clone();
 								const head = this.animation.mesh.getObjectByName('mixamorigHead');
 								head.add(hair);
 								this.item = hair;
+
+								//this.transformControls.attach(hair);
 								this.model.itemScale.makeDirty();
 							}
 						}

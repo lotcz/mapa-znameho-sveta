@@ -2,7 +2,8 @@ import DomRenderer from "./DomRenderer";
 import Pixies from "../class/Pixies";
 import MapRenderer from "./MapRenderer";
 import ThreeRenderer from "./ThreeRenderer";
-import {GAME_MODE_MAP, GAME_MODE_THREE} from "../model/SaveGameModel";
+import {GAME_MODE_BATTLE, GAME_MODE_MAP, GAME_MODE_THREE} from "../model/SaveGameModel";
+import BattleRenderer from "./BattleRenderer";
 
 export default class GameRenderer extends DomRenderer {
 
@@ -65,6 +66,9 @@ export default class GameRenderer extends DomRenderer {
 			case GAME_MODE_THREE:
 				this.mainRenderer = this.addChild(new ThreeRenderer(this.game, this.model.characterPreview, this.mainLayer));
 				break;
+			case GAME_MODE_BATTLE:
+				this.mainRenderer = this.addChild(new BattleRenderer(this.game, this.model.battle, this.mainLayer));
+				break;
 			default:
 				console.warn(`Unknown game mode ${mode}`);
 		}
@@ -110,6 +114,9 @@ export default class GameRenderer extends DomRenderer {
 			const characterButton = Pixies.createElement(this.debugMenu, 'button');
 			characterButton.innerText = 'THREE';
 			characterButton.addEventListener('click', () => this.model.saveGame.mode.set(GAME_MODE_THREE));
+			const battleButton = Pixies.createElement(this.debugMenu, 'button');
+			battleButton.innerText = 'BATTLE';
+			battleButton.addEventListener('click', () => this.model.saveGame.mode.set(GAME_MODE_BATTLE));
 		}
 	}
 

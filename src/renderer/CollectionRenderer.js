@@ -32,8 +32,7 @@ export default class CollectionRenderer extends RendererNode {
 	}
 
 	createRenderer(model) {
-		const renderer = this.addChild(this.rendererFactory(model));
-		return renderer;
+		return this.addChild(this.rendererFactory(model));
 	}
 
 	removeRenderer(model) {
