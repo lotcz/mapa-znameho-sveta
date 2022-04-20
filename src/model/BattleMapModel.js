@@ -17,18 +17,11 @@ export default class BattleMapModel extends ModelNode {
 	 */
 	tileSize;
 
-	/**
-	 * @type Vector3
-	 * this must be applied to orto camera in order to make 3D world fit with 2D background
-	 */
-	cameraOffset;
-
 	constructor() {
 		super();
 
 		this.backgroundImage = this.addProperty('backgroundImage', new DirtyValue('img/desert.jpg'));
 		this.tileSize = this.addProperty('tileSize', new DirtyValue(62.77));
-		this.cameraOffset = this.addProperty('cameraOffset', new Vector3(-10, 10, -10));
 
 	}
 

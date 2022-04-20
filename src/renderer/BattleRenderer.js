@@ -142,15 +142,14 @@ export default class BattleRenderer extends DomRenderer {
 				texture.repeat.set(1, 1);
 				const sprite = new THREE.Mesh(new THREE.PlaneGeometry(5, 5), new THREE.MeshBasicMaterial({transparent: true, map:texture}));
 				sprite.position.set(-27, 2.5, -5);
-				sprite.rotation.set(0, - Math.PI * 0.75, 0);
+				const target = sprite.position.clone().add(new THREE.Vector3(-1,1, -1));
+				sprite.lookAt(target.x, target.y, target.z);
 
 				GUIHelper.addRotationVector3(this.gui, sprite.rotation, 'sprite rotation');
 
 				this.scene.add(sprite);
 			}
 		);
-
-
 
 	}
 
@@ -242,7 +241,7 @@ export default class BattleRenderer extends DomRenderer {
 		const xz = this.model.battleMap.screenCoordsToPosition(this.model.coordinates);
 		const center = new Vector3(xz.x, 0, xz.y);
 		//console.log(Math.floor(xz.x), Math.floor(xz.y));
-		const position = center.add(this.model.battleMap.cameraOffset);
+		const position = center.add(new Vector3(-10, 10, -10));
 		this.camera.position.set(position.x, position.y, position.z);
 		this.camera.lookAt(center.x, center.y, center.z);
 		this.camera.updateProjectionMatrix();

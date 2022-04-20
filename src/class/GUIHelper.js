@@ -8,16 +8,16 @@ export default class GUIHelper {
 
 	static addVector2(gui, vector, name, min, max, step) {
 		const folder = gui.addFolder(name);
-		GUIHelper.addScaler(folder, vector, 'x', min, max, step, () => vector.makeDirty());
-		GUIHelper.addScaler(folder, vector, 'y', min, max, step, () => vector.makeDirty());
+		GUIHelper.addScaler(folder, vector, 'x', min, max, step);
+		GUIHelper.addScaler(folder, vector, 'y', min, max, step);
 		return folder;
 	}
 
 	static addVector3(gui, vector, name, min, max, step) {
 		const folder = gui.addFolder(name);
-		GUIHelper.addScaler(folder, vector, 'x', min, max, step, () => vector.makeDirty());
-		GUIHelper.addScaler(folder, vector, 'y', min, max, step, () => vector.makeDirty());
-		GUIHelper.addScaler(folder, vector, 'z', min, max, step, () => vector.makeDirty());
+		GUIHelper.addScaler(folder, vector, 'x', min, max, step);
+		GUIHelper.addScaler(folder, vector, 'y', min, max, step);
+		GUIHelper.addScaler(folder, vector, 'z', min, max, step);
 		return folder;
 	}
 
@@ -31,7 +31,10 @@ export default class GUIHelper {
 
 	static addScaler(gui, object, property, min, max, step, onChange = null) {
 		const item = gui.add(object, property, min, max, step).listen();
-		if (onChange) item.onChange(onChange);
+		item.onChange(() => {
+			if (onChange) onChange();
+			if (object.makeDirty) object.makeDirty();
+		});
 		return item;
 	}
 
