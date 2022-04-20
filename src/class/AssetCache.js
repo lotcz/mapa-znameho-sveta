@@ -4,6 +4,15 @@ import Collection from "./Collection";
 import AnimationLoader from "./loaders/AnimationLoader";
 import ImageLoader from "./loaders/ImageLoader";
 import GlbLoader from "./loaders/GlbLoader";
+import MaterialLoader from "./loaders/MaterialLoader";
+import Pixies from "./Pixies";
+
+const ASSET_TYPE_LOADERS = {
+	'img': ImageLoader,
+	'glb': GlbLoader,
+	'ani': AnimationLoader,
+	'mat': MaterialLoader
+}
 
 /**
  * Keeps cached raw resources like images, sounds and three models
@@ -25,7 +34,8 @@ export default class AssetCache {
 	 */
 	isLoading;
 
-	constructor() {
+	constructor(resources) {
+		this.resources = resources;
 		this.cache = new Dictionary();
 		this.loaders = new Collection();
 		this.loaders.addOnAddListener(() => this.updateLoadingState());
@@ -41,16 +51,20 @@ export default class AssetCache {
 		if (this.cache.exists(uri)) {
 			onLoaded(this.cache.get(uri));
 		} else {
-			const url = 'res/' + uri;
 
-			const existingLoader = this.loaders.find((l) => l.url === url);
+			const existingLoader = this.loaders.find((l) => l.uri === uri);
 			if (existingLoader) {
 				existingLoader.addLoaderEventsListeners(onLoaded,null);
 				return;
 			}
 
-			const loaderType = this.detectLoaderTypeFromUri(uri);
-			const loader = new loaderType(url);
+			const assetType = Pixies.extractId(uri, 0);
+			if (ASSET_TYPE_LOADERS[assetType] === undefined) {
+				console.error(`Valid resource type could not be inferred from URI ${uri}`);
+			}
+
+			const loaderType = ASSET_TYPE_LOADERS[assetType];
+			const loader = new loaderType(this, uri);
 			this.loaders.add(loader);
 			loader.load(
 				(resource) => {
@@ -69,13 +83,6 @@ export default class AssetCache {
 				}
 			);
 		}
-	}
-
-	detectLoaderTypeFromUri(uri) {
-		if (uri.startsWith('img/')) return ImageLoader;
-		if (uri.startsWith('glb/')) return GlbLoader;
-		if (uri.startsWith('animation/')) return AnimationLoader;
-		console.warn(`Resource type could not be inferred from URI ${uri}`);
 	}
 
 }

@@ -28,8 +28,8 @@ module.exports = {
 		new CopyWebpackPlugin({
 			patterns: [
 				{ from: 'pwa.webmanifest', to: '' },
-				{ from: 'res/favicon.ico', to: '' },
-				{ from: 'res/**', to: '' }
+				{ from: 'assets/favicon.ico', to: '' },
+				{ from: 'assets/**', to: '' }
 			]
 		})
 

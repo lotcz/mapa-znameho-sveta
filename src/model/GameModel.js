@@ -4,9 +4,8 @@ import DirtyValue from "../node/DirtyValue";
 import ControlsModel from "./ControlsModel";
 import AssetCache from "../class/AssetCache";
 import ResourcesModel from "./ResourcesModel";
-import MaterialCache from "../class/MaterialCache";
 import SaveGameModel from "./SaveGameModel";
-import CharacterPreviewModel, {SEX_MALE} from "./CharacterPreviewModel";
+import CharacterPreviewModel from "./CharacterPreviewModel";
 import BattleModel from "./BattleModel";
 import WaypointModel from "./WaypointModel";
 import TextureModel from "./TextureModel";
@@ -23,11 +22,6 @@ export default class GameModel extends ModelNode {
 	 * @type ResourcesModel
 	 */
 	resources;
-
-	/**
-	 * @type MaterialCache
-	 */
-	materials;
 
 	/**
 	 * @type ControlsModel
@@ -62,9 +56,8 @@ export default class GameModel extends ModelNode {
 	constructor() {
 		super();
 
-		this.assets = new AssetCache();
 		this.resources = this.addProperty('resources', new ResourcesModel());
-		this.materials = new MaterialCache(this.resources, this.assets);
+		this.assets = new AssetCache(this.resources);
 		this.controls = this.addProperty('controls', new ControlsModel());
 		this.viewBoxSize = this.addProperty('viewBoxSize', new Vector2());
 		this.isInDebugMode = this.addProperty('isInDebugMode', new DirtyValue(true));

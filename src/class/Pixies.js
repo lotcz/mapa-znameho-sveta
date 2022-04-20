@@ -1,5 +1,11 @@
 export default class Pixies {
 
+	static extractId(str, pos = 1) {
+		const words = str.split('/');
+		if (words.length > pos) return words[pos];
+		return null;
+	}
+
 	static random(min, max) {
 		const diff = max - min;
 		return min + (diff * Math.random());

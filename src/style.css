@@ -1,6 +1,6 @@
 @font-face {
 	font-family: "Vollkorn";
-	src: url("../res/Vollkorn-SemiBold.ttf") format('truetype');
+	src: url("../assets/Vollkorn-SemiBold.ttf") format('truetype');
 }
 
 .history .section-header {
@@ -43,7 +43,7 @@ html, body {
 .three {
 	background-size: contain;
 	background-repeat: no-repeat;
-	background-image: url('../res/img/paper.png');
+	background-image: url('../assets/img/paper.png');
 	padding: 25px;
 }
 
@@ -111,5 +111,5 @@ html, body {
 	line-height: 150px;
 	background-size: contain;
 	background-repeat: no-repeat;
-	background-image: url('../res/img/paper.png');
+	background-image: url('../assets/img/paper.png');
 }

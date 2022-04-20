@@ -8,7 +8,7 @@ export default class MaterialModel extends IdentifiedModelNode {
 	/**
 	 * @type DirtyValue
 	 */
-	type;
+	threeType;
 
 	/**
 	 * @type DirtyValue
@@ -23,7 +23,7 @@ export default class MaterialModel extends IdentifiedModelNode {
 	constructor(id, name) {
 		super(id, name);
 
-		this.type = this.addProperty('type', new DirtyValue('MeshBasicMaterial'));
+		this.threeType = this.addProperty('threeType', new DirtyValue('MeshBasicMaterial'));
 		this.color = this.addProperty('color', new DirtyValue('#700000'));
 		this.texture = this.addProperty('texture', new NullableNode(() => new TextureModel()));
 	}

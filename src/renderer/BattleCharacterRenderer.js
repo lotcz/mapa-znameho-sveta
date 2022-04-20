@@ -96,7 +96,7 @@ export default class BattleCharacterRenderer extends RendererNode {
 		if (this.animation) {
 			this.group.remove(this.animation.mesh);
 		}
-		const uri = this.model.sex.equalsTo(SEX_MALE) ? 'animation/male.glb' : 'animation/female.glb';
+		const uri = this.model.sex.equalsTo(SEX_MALE) ? 'ani/male.glb' : 'ani/female.glb';
 		this.game.assets.getAsset(
 			uri,
 			(asset) => {

@@ -3,9 +3,6 @@ import "./style.css";
 import GameController from "./controller/GameController";
 import GameModel from "./model/GameModel";
 import GameRenderer from "./renderer/GameRenderer";
-import WaypointModel from "./model/WaypointModel";
-import MaterialModel from "./model/MaterialModel";
-import TextureModel from "./model/TextureModel";
 
 const MAX_DELTA = 500;
 const DEBUG_MASTER = true;
@@ -37,7 +34,7 @@ const updateLoop = function () {
 			renderer.render();
 		}
 	} else {
-		console.log('skipped frame');
+		console.log(`Waited for ${Math.round(delta/500)/2} s and skipped frame rendering.`);
 	}
 	requestAnimationFrame(updateLoop);
 }

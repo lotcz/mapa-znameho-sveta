@@ -3,13 +3,16 @@ import Node from "../Node";
 /**
  * Loads a single raw resource.
  */
-export default class GenericLoader extends Node {
+export default class AssetLoader extends Node {
 
-	url;
+	uri;
 
-	constructor(url) {
+	assets;
+
+	constructor(assets, uri) {
 		super();
-		this.url = url;
+		this.assets = assets;
+		this.uri = uri;
 	}
 
 	load(onLoaded, onError = null) {
@@ -36,6 +39,10 @@ export default class GenericLoader extends Node {
 	addLoaderEventsListeners(onLoaded = null, onError = null) {
 		if (onLoaded) this.addEventListener('load', onLoaded);
 		if (onError) this.addEventListener('error', onError);
+	}
+
+	url() {
+		return 'assets/' + this.uri;
 	}
 
 }

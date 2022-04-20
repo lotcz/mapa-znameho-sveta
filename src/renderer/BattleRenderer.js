@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
@@ -10,6 +9,7 @@ import CollectionRenderer from "./CollectionRenderer";
 import BattleCharacterRenderer from "./BattleCharacterRenderer";
 import Vector3 from "../node/Vector3";
 import Vector2 from "../node/Vector2";
+import GUIHelper from "../class/GUIHelper";
 
 export default class BattleRenderer extends DomRenderer {
 
@@ -52,10 +52,10 @@ export default class BattleRenderer extends DomRenderer {
 
 		this.camera = new THREE.OrthographicCamera(-10,10, 10, -10, 1, 30);
 
-		this.ambientLight = new THREE.AmbientLight();
+		this.ambientLight = new THREE.AmbientLight(0xe0e0e0);
 		this.scene.add(this.ambientLight);
 
-		this.directLight = new THREE.DirectionalLight( 0xffffff, 1);
+		this.directLight = new THREE.DirectionalLight( 0xe0e0e0, 1);
 		this.directLight.position.set( 0, 10, 0 );
 		this.directLight.castShadow = true;
 		this.directLight.shadow.bias = 0;
@@ -83,7 +83,7 @@ export default class BattleRenderer extends DomRenderer {
 
 		this.box = new THREE.Mesh(new THREE.PlaneGeometry(1, 1, 1), new THREE.MeshLambertMaterial({color: '#a080b0', opacity: 0.5, transparent: true}));
 		this.box.rotation.set(-Math.PI / 2, 0, 0);
-		this.box.position.y = 0.01;
+		this.box.position.y = 0.0001;
 		this.scene.add(this.box);
 
 		//this.orbitControls = new OrbitControls( this.camera, this.renderer.domElement );
@@ -109,10 +109,55 @@ export default class BattleRenderer extends DomRenderer {
 			}
 		);
 
+		this.game.assets.getAsset(
+			'img/texture/dirt.png',
+			(img) => {
+				const texture = new THREE.Texture();
+				texture.image = img;
+				texture.needsUpdate = true;
+				texture.wrapS = THREE.RepeatWrapping;
+				texture.wrapT = THREE.RepeatWrapping;
+				texture.repeat.set(1, 1);
+				const matTest = new THREE.MeshLambertMaterial({color: '#90a090', map:texture});
+				const mt = new THREE.Mesh(new THREE.SphereGeometry(1, 8, 8), matTest);
+				mt.position.set(-26, 0.5, -1);
+				this.scene.add(mt);
+			}
+		);
+
+		this.gui = GUIHelper.createGUI();
+		const coord = GUIHelper.addVector2(this.gui, this.model.coordinates, 'screen coords');
+		this.currentTile = new Vector2();
+		const til = GUIHelper.addVector2(this.gui, this.currentTile, 'tile');
+
+
+		this.game.assets.getAsset(
+			'img/palm-tree.png',
+			(img) => {
+				const texture = new THREE.Texture();
+				texture.image = img;
+				texture.needsUpdate = true;
+				texture.wrapS = THREE.RepeatWrapping;
+				texture.wrapT = THREE.RepeatWrapping;
+				texture.repeat.set(1, 1);
+				const sprite = new THREE.Mesh(new THREE.PlaneGeometry(5, 5), new THREE.MeshBasicMaterial({transparent: true, map:texture}));
+				sprite.position.set(-27, 2.5, -5);
+				sprite.rotation.set(0, - Math.PI * 0.75, 0);
+
+				GUIHelper.addRotationVector3(this.gui, sprite.rotation, 'sprite rotation');
+
+				this.scene.add(sprite);
+			}
+		);
+
+
+
 	}
 
 	deactivateInternal() {
 		this.game.viewBoxSize.removeOnChangeListener(this.onViewBoxChangeHandler);
+		this.gui.destroy();
+		this.gui = null;
 		this.ambientLight.dispose();
 		this.ambientLight = null;
 		this.directLight.dispose();
@@ -143,6 +188,7 @@ export default class BattleRenderer extends DomRenderer {
 		const tile = this.model.battleMap.screenCoordsToTile(coords);
 		this.box.position.x = tile.x;
 		this.box.position.z = tile.y;
+		this.currentTile.set(tile);
 
 		this.composer.render();
 	}
