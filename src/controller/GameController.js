@@ -1,9 +1,10 @@
 import ControllerNode from "../node/ControllerNode";
 import ControlsController from "./ControlsController";
 import MapController from "./MapController";
-import {GAME_MODE_MAP, GAME_MODE_THREE} from "../model/SaveGameModel";
+import {GAME_MODE_BATTLE, GAME_MODE_MAP, GAME_MODE_THREE} from "../model/SaveGameModel";
 import MapRenderer from "../renderer/MapRenderer";
 import ThreeRenderer from "../renderer/ThreeRenderer";
+import BattleController from "./BattleController";
 
 const DEBUG_MODE_ENABLED = true;
 
@@ -60,6 +61,9 @@ export default class GameController extends ControllerNode {
 				break;
 			case GAME_MODE_THREE:
 				//this.mainController = this.addChild(new MapController(this.game, this.model.saveGame));
+				break;
+			case GAME_MODE_BATTLE:
+				this.mainController = this.addChild(new BattleController(this.game, this.model.battle));
 				break;
 		}
 

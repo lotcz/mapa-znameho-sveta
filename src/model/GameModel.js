@@ -133,15 +133,16 @@ export default class GameModel extends ModelNode {
 		this.resources.materials.add(material);
 
 		const character = this.battle.characters.add();
+		character.coordinates.set(700, 700);
 
 		const character2 = this.battle.characters.add();
 		//character2.sex.set(SEX_MALE);
-		character2.coordinates.set(5, 3);
+		character2.coordinates.set(800, 500);
 		character2.skinColor.set('#5050a0');
 
 		const character3 = this.battle.characters.add();
 		//character3.sex.set(SEX_MALE);
-		character3.coordinates.set(3, 3);
+		character3.coordinates.set(700, 400);
 		character3.skinColor.set('#905020');
 
 	}

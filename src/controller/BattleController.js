@@ -2,8 +2,9 @@ import ControllerNode from "../node/ControllerNode";
 import DirtyValue from "../node/DirtyValue";
 import CollectionController from "./CollectionController";
 import BattleCharacterController from "./BattleCharacterController";
+import Pixies from "../class/Pixies";
 
-const TRAVEL_SPEED = 1; // coordinates per second
+const TRAVEL_SPEED = 1; // tiles per second
 
 export default class BattleController extends ControllerNode {
 
@@ -16,6 +17,8 @@ export default class BattleController extends ControllerNode {
 		super(game, model);
 
 		this.model = model;
+		this.dragging = false;
+		this.scrolling = false;
 
 		this.charactersController = this.addChild(
 			new CollectionController(this.game, this.model.characters, (model) => new BattleCharacterController(game, model))
@@ -27,21 +30,23 @@ export default class BattleController extends ControllerNode {
 			if (this.focusedHelper.equalsTo(point))
 				this.focusedHelper.set(null);
 		};
-
+	*/
 		this.mouseMoveHandler = () => this.onMouseMove();
 		this.zoomHandler = (param) => this.onZoom(param);
-		*/
+		this.clickHandler = (param) => this.onClick(param);
 
 	}
 
 	activateInternal() {
+		this.model.coordinates.makeDirty();
 		/*
 		this.game.addEventListener('helperMouseOver', this.helperMouseOverHandler);
 		this.game.addEventListener('helperMouseOut', this.helperMouseOutHandler);
-
+*/
 		this.game.controls.mouseCoordinates.addOnChangeListener(this.mouseMoveHandler);
 		this.game.controls.addEventListener('zoom', this.zoomHandler);
-*/
+		this.game.controls.addOnLeftClickListener(this.clickHandler);
+
 
 	}
 
@@ -49,16 +54,14 @@ export default class BattleController extends ControllerNode {
 		/*
 		this.game.removeEventListener('helperMouseOver', this.helperMouseOverHandler);
 		this.game.removeEventListener('helperMouseOut', this.helperMouseOutHandler);
-
+*/
 		this.game.controls.mouseCoordinates.removeOnChangeListener(this.mouseMoveHandler);
 		this.game.controls.removeEventListener('zoom', this.zoomHandler);
-*/
 
+		this.game.controls.removeOnLeftClickListener(this.clickHandler);
 	}
 
 	updateInternal(delta) {
-
-
 		// dragging and scrolling
 		if (!this.game.controls.mouseDownLeft.get()) {
 			this.dragging = false;
@@ -78,22 +81,26 @@ export default class BattleController extends ControllerNode {
 				this.dragging = this.focusedHelper.get();
 			}
 		}
-
+*/
 		if (this.game.controls.mouseDownRight.get()) {
 			if (this.scrolling) {
 				const offset = this.game.controls.mouseCoordinates.subtract(this.scrolling);
-				const mapCoords = this.model.coordinates.subtract(offset.multiply(this.model.zoom.get()));
+				const mapCoords = this.model.coordinates.subtract(offset.multiply(1/this.model.zoom.get()));
 				this.model.coordinates.set(mapCoords);
-				this.scrolling = this.game.controls.mouseCoordinates.clone();
-			} else {
-				this.scrolling = this.game.controls.mouseCoordinates.clone();
 			}
+			this.scrolling = this.game.controls.mouseCoordinates.clone();
 		}
-		*/
+
 	}
 
 	onZoom(param) {
-		//this.model.zoom.set(this.model.zoom.get() + (param * 0.1));
+		this.model.zoom.set(Math.max(this.model.zoom.get() + (param * -0.1), 0.05));
 	}
 
+	onClick() {
+		//const xz = this.model.battleMap.screenCoordsToPosition(this.game.controls.mouseCoordinates);
+		const corner = this.model.coordinates.subtract(this.game.viewBoxSize.multiply(0.5 / this.model.zoom.get()));
+		const coords = corner.add(this.game.controls.mouseCoordinates.multiply(1/this.model.zoom.get()));
+		Pixies.randomElement(this.model.characters.children.items).coordinates.set(coords);
+	}
 }

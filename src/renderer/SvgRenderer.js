@@ -31,7 +31,6 @@ export default class SvgRenderer extends RendererNode {
 	}
 
 	setRef(uri, ref) {
-		console.log(uri);
 		const token = Pixies.token(uri);
 		const resource = this.getDefs().findOne('#' + token);
 		if (!resource) {

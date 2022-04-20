@@ -8,6 +8,8 @@ import DomRenderer from "./DomRenderer";
 import Pixies from "../class/Pixies";
 import CollectionRenderer from "./CollectionRenderer";
 import BattleCharacterRenderer from "./BattleCharacterRenderer";
+import Vector3 from "../node/Vector3";
+import Vector2 from "../node/Vector2";
 
 export default class BattleRenderer extends DomRenderer {
 
@@ -34,7 +36,7 @@ export default class BattleRenderer extends DomRenderer {
 		this.charactersRenderer = this.addChild(new CollectionRenderer(this.game, this.model.characters, (m) => new BattleCharacterRenderer(this.game, m, this.scene)));
 		this.charactersRenderer.alwaysRender = true;
 
-		this.onViewBoxChangeHandler = () => this.updateViewBoxSize();
+		this.onViewBoxChangeHandler = () => this.onViewBoxSizeChanged();
 	}
 
 	activateInternal() {
@@ -44,22 +46,11 @@ export default class BattleRenderer extends DomRenderer {
 
 		this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 		this.container.appendChild(this.renderer.domElement);
-		//this.renderer.autoClear = false;
 		this.renderer.setSize(this.game.viewBoxSize.x, this.game.viewBoxSize.y);
 		this.renderer.shadowMap.enabled = true;
 		this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-		this.camera = new THREE.OrthographicCamera(-10,10, 10, -10, 0.01, 100 );
-		this.camera.position.set(0, 0, 10);
-
-		this.game.assets.getAsset(
-			'img/camp.jpg',
-			(img) => {
-				this.bgImage = img;
-				this.updateViewBoxSize();
-				this.game.viewBoxSize.addOnChangeListener(this.onViewBoxChangeHandler);
-			}
-		);
+		this.camera = new THREE.OrthographicCamera(-10,10, 10, -10, 1, 30);
 
 		this.ambientLight = new THREE.AmbientLight();
 		this.scene.add(this.ambientLight);
@@ -67,6 +58,7 @@ export default class BattleRenderer extends DomRenderer {
 		this.directLight = new THREE.DirectionalLight( 0xffffff, 1);
 		this.directLight.position.set( 0, 10, 0 );
 		this.directLight.castShadow = true;
+		this.directLight.shadow.bias = 0;
 		this.directLight.shadow.camera.near = 0.5;
 		this.directLight.shadow.camera.far = 25;
 		this.directLight.shadow.camera.right = 15;
@@ -77,14 +69,24 @@ export default class BattleRenderer extends DomRenderer {
 		this.directLight.shadow.mapSize.height = 1024;
 		this.scene.add(this.directLight);
 
+		//this.scene.add(new THREE.CameraHelper(this.directLight.shadow.camera));
+
 		const shadowMaterial = new THREE.ShadowMaterial({color:'#000000'})
 		shadowMaterial.opacity = 0.5;
-		this.floor = new THREE.Mesh(new THREE.BoxGeometry(15, 1, 15), shadowMaterial);
+		shadowMaterial.side = THREE.FrontSide;
+		shadowMaterial.shadowSide = THREE.FrontSide;
+		this.floor = new THREE.Mesh(new THREE.PlaneGeometry(35, 35), shadowMaterial);
 		this.floor.receiveShadow = true;
-		this.floor.position.set(0, -0.5, 0);
+		this.floor.position.set(0, 0, 0);
+		this.floor.rotation.set(-Math.PI / 2, 0, 0);
 		this.scene.add(this.floor);
 
-		this.orbitControls = new OrbitControls( this.camera, this.renderer.domElement );
+		this.box = new THREE.Mesh(new THREE.PlaneGeometry(1, 1, 1), new THREE.MeshLambertMaterial({color: '#a080b0', opacity: 0.5, transparent: true}));
+		this.box.rotation.set(-Math.PI / 2, 0, 0);
+		this.box.position.y = 0.01;
+		this.scene.add(this.box);
+
+		//this.orbitControls = new OrbitControls( this.camera, this.renderer.domElement );
 		//this.orbitControls.update();
 
 		this.composer = new EffectComposer( this.renderer );
@@ -95,6 +97,17 @@ export default class BattleRenderer extends DomRenderer {
 		this.effectFXAA = new ShaderPass( FXAAShader );
 		this.effectFXAA.uniforms[ 'resolution' ].value.set(1 / this.game.viewBoxSize.x,1 / this.game.viewBoxSize.y);
 		this.composer.addPass( this.effectFXAA );
+
+		this.updateCanvasSize();
+		this.updateRendererSize();
+		this.game.viewBoxSize.addOnChangeListener(this.onViewBoxChangeHandler);
+
+		this.game.assets.getAsset(
+			this.model.battleMap.backgroundImage.get(),
+			(img) => {
+				this.bgImage = img;
+			}
+		);
 
 	}
 
@@ -120,39 +133,74 @@ export default class BattleRenderer extends DomRenderer {
 	}
 
 	renderInternal() {
-		this.renderBgImage();
+		if (this.model.coordinates.isDirty || this.model.zoom.isDirty) {
+			this.renderBgImage();
+			this.updateCamera();
+		}
+
+		const corner = this.model.coordinates.subtract(this.game.viewBoxSize.multiply(0.5 / this.model.zoom.get()));
+		const coords = corner.add(this.game.controls.mouseCoordinates.multiply(1/this.model.zoom.get()));
+		const tile = this.model.battleMap.screenCoordsToTile(coords);
+		this.box.position.x = tile.x;
+		this.box.position.z = tile.y;
+
 		this.composer.render();
 	}
 
-	updateViewBoxSize() {
+	renderBgImage() {
+		this.context2d.clearRect(0, 0, this.context2d.canvas.width, this.context2d.canvas.height);
+		this.context2d.drawImage(
+			this.bgImage,
+			this.model.coordinates.x - (0.5 * this.game.viewBoxSize.x / this.model.zoom.get()),
+			this.model.coordinates.y - (0.5 * this.game.viewBoxSize.y / this.model.zoom.get()),
+			this.game.viewBoxSize.x / this.model.zoom.get(),
+			this.game.viewBoxSize.y / this.model.zoom.get(),
+			0,
+			0,
+			this.game.viewBoxSize.x,
+			this.game.viewBoxSize.y
+		);
+	}
+
+	onViewBoxSizeChanged() {
+		this.updateCanvasSize();
+		this.renderBgImage();
+		this.updateRendererSize();
+	}
+
+	updateCanvasSize() {
 		this.bgCanvas.width = this.game.viewBoxSize.x;
 		this.bgCanvas.height = this.game.viewBoxSize.y;
+	}
+
+	updateRendererSize() {
 		this.renderer.setSize(this.game.viewBoxSize.x, this.game.viewBoxSize.y);
 		this.composer.setSize(this.game.viewBoxSize.x, this.game.viewBoxSize.y);
 
 		const pixelRatio = this.renderer.getPixelRatio();
 		this.effectFXAA.material.uniforms[ 'resolution' ].value.x = 1 / (  this.game.viewBoxSize.x * pixelRatio );
 		this.effectFXAA.material.uniforms[ 'resolution' ].value.y = 1 / (  this.game.viewBoxSize.y * pixelRatio );
-		//this.effectFXAA.uniforms[ 'resolution' ].value.set(1 / this.game.viewBoxSize.x,1 / this.game.viewBoxSize.y);
+
+		this.updateCamera();
 	}
 
-	renderBgImage() {
-		if (!this.bgImage) {
-			console.warn('bg image not loaded!');
-			return;
-		}
-		this.context2d.clearRect(0, 0, this.context2d.canvas.width, this.context2d.canvas.height);
-		this.context2d.drawImage(
-			this.bgImage,
-			this.model.coordinates.x,
-			this.model.coordinates.y,
-			this.game.viewBoxSize.x,
-			this.game.viewBoxSize.y,
-			0,
-			0,
-			this.game.viewBoxSize.x,
-			this.game.viewBoxSize.y
-		);
+	updateCamera() {
+		const pxPerUnit = this.model.zoom.get() * this.model.battleMap.tileSize.get();
+		const horizontal = (this.game.viewBoxSize.x / 2) / pxPerUnit;
+		const vertical = (this.game.viewBoxSize.y / 2) / pxPerUnit;
+		this.camera.left = - horizontal;
+		this.camera.right = horizontal;
+		this.camera.bottom = - vertical;
+		this.camera.top = vertical;
+
+		const xz = this.model.battleMap.screenCoordsToPosition(this.model.coordinates);
+		const center = new Vector3(xz.x, 0, xz.y);
+		//console.log(Math.floor(xz.x), Math.floor(xz.y));
+		const position = center.add(this.model.battleMap.cameraOffset);
+		this.camera.position.set(position.x, position.y, position.z);
+		this.camera.lookAt(center.x, center.y, center.z);
+		this.camera.updateProjectionMatrix();
+
 	}
 
 }

@@ -59,8 +59,8 @@ export default class BattleCharacterRenderer extends RendererNode {
 		}
 
 		if (this.model.coordinates.isDirty) {
-			console.log(`moving ${this.model.sex.get()}`);
-			this.group.position.set(this.model.coordinates.x, 0, this.model.coordinates.y);
+			const tile = this.game.battle.battleMap.screenCoordsToTile(this.model.coordinates);
+			this.group.position.set(tile.x, 0, tile.y);
 		}
 
 		if (this.model.rotation.isDirty) {
