@@ -1,13 +1,10 @@
 import ControllerNode from "../node/ControllerNode";
 import AnimatedVector2 from "../class/animating/AnimatedVector2";
 import {CHARACTER_STATE_IDLE, CHARACTER_STATE_RUN} from "../model/BattleCharacterModel";
-import AnimatedVector3 from "../class/animating/AnimatedVector3";
-import Vector3 from "../node/Vector3";
-import * as THREE from "three";
-import AnimatedValue from "../class/animating/AnimatedValue";
 import AnimatedRotation from "../class/animating/AnimatedRotation";
 
-const TRAVEL_SPEED = 5; // position units per second
+const TRAVEL_SPEED = 3.25 / 1000; // position units per milisecond
+const ROTATION_SPEED = (Math.PI * 4) / 1000; // radians per milisecond
 
 export default class BattleCharacterController extends ControllerNode {
 
@@ -57,10 +54,15 @@ export default class BattleCharacterController extends ControllerNode {
 
 	goTo(position) {
 		this.model.state.set(CHARACTER_STATE_RUN);
-		this.positionAnimation = new AnimatedVector2(this.model.position, position, 1000);
+
+		const distance = this.model.position.distanceTo(position);
+		const time = distance / TRAVEL_SPEED;
+		this.positionAnimation = new AnimatedVector2(this.model.position, position, time);
 
 		const rotation = this.model.position.getRotationFromYAxis(position);
-		this.rotationAnimation = new AnimatedRotation(this.model.rotation.get(), rotation.get(), 100);
+		const diff = this.model.rotation.subtract(rotation.get());
+		const duration = Math.abs(diff.get()) / ROTATION_SPEED;
+		this.rotationAnimation = new AnimatedRotation(this.model.rotation.get(), rotation.get(), duration);
 	}
 
 	arrived() {

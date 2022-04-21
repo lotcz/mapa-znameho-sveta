@@ -50,7 +50,7 @@ export default class BattleRenderer extends DomRenderer {
 		this.renderer.shadowMap.enabled = true;
 		this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-		this.camera = new THREE.OrthographicCamera(-10,10, 10, -10, 1, 30);
+		this.camera = new THREE.OrthographicCamera(-10,10, 10, -10);
 
 		this.ambientLight = new THREE.AmbientLight(0xe0e0e0);
 		this.scene.add(this.ambientLight);
@@ -255,7 +255,7 @@ export default class BattleRenderer extends DomRenderer {
 		const xz = this.model.battleMap.screenCoordsToPosition(this.model.coordinates);
 		const center = new Vector3(xz.x, 0, xz.y);
 		//console.log(Math.floor(xz.x), Math.floor(xz.y));
-		const position = center.add(new Vector3(-10, 10, -10));
+		const position = center.add(new Vector3(-100, 100, -100));
 		this.camera.position.set(position.x, position.y, position.z);
 		this.camera.lookAt(center.x, center.y, center.z);
 	}

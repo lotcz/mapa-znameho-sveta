@@ -12,7 +12,7 @@ export default class Rotation extends DirtyValue {
 		if (result > (ROTATION_RANGE / 2)) {
 			result = result - ROTATION_RANGE;
 		}
-		if (result < (- ROTATION_RANGE / 2)) {
+		if (result <= (- ROTATION_RANGE / 2)) {
 			result = result + ROTATION_RANGE;
 		}
 		return result;

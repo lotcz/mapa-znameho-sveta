@@ -3,7 +3,6 @@ import {SEX_FEMALE, SEX_MALE} from "../model/CharacterPreviewModel";
 import RendererNode from "../node/RendererNode";
 import AnimationHelper from "../class/AnimationHelper";
 import * as SkeletonUtils from "three/examples/jsm/utils/SkeletonUtils.js";
-import Pixies from "../class/Pixies";
 
 export default class BattleCharacterRenderer extends RendererNode {
 
@@ -94,7 +93,7 @@ export default class BattleCharacterRenderer extends RendererNode {
 
 	switchAnimation(name) {
 		if (this.animation) {
-			this.animation.activateAction(name, 500, false);
+			this.animation.activateAction(name, 250, false);
 		}
 	}
 
