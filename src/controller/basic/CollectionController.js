@@ -1,4 +1,4 @@
-import ControllerNode from "../node/ControllerNode";
+import ControllerNode from "./ControllerNode";
 
 export default class CollectionController extends ControllerNode {
 

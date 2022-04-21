@@ -1,5 +1,5 @@
-import ModelNode from "../node/ModelNode";
-import Collection from "../class/Collection";
+import ModelNode from "./ModelNode";
+import Collection from "../../class/basic/Collection";
 
 export default class ModelNodeCollection extends ModelNode {
 

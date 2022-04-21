@@ -1,5 +1,5 @@
-import SvgRenderer from "./SvgRenderer";
-import CollectionRenderer from "./CollectionRenderer";
+import SvgRenderer from "./basic/SvgRenderer";
+import CollectionRenderer from "./basic/CollectionRenderer";
 import WaypointRenderer from "./WaypointRenderer";
 
 export default class PathRenderer extends SvgRenderer {

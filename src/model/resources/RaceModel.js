@@ -1,5 +1,5 @@
-import DirtyValue from "../node/DirtyValue";
-import IdentifiedModelNode from "../node/IdentifiedModelNode";
+import DirtyValue from "../basic/DirtyValue";
+import IdentifiedModelNode from "../basic/IdentifiedModelNode";
 
 export default class RaceModel extends IdentifiedModelNode {
 

@@ -1,7 +1,6 @@
-import ModelNode from "../node/ModelNode";
-import Vector2 from "../node/Vector2";
-import DirtyValue from "../node/DirtyValue";
-import Rotation from "../node/Rotation";
+import ModelNode from "../basic/ModelNode";
+import Vector2 from "../basic/Vector2";
+import DirtyValue from "../basic/DirtyValue";
 
 export const WAYPOINT_TYPE_START = 0;
 export const WAYPOINT_TYPE_MIDDLE = 1;

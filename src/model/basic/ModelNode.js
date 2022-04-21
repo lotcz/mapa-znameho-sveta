@@ -1,5 +1,5 @@
-import Node from "../class/Node";
-import Dictionary from "../class/Dictionary";
+import Node from "../../class/basic/Node";
+import Dictionary from "../../class/basic/Dictionary";
 
 export default class ModelNode extends Node {
 

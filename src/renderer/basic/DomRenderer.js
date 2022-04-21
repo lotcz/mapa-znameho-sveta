@@ -1,5 +1,5 @@
-import Pixies from "../class/Pixies";
-import RendererNode from "../node/RendererNode";
+import Pixies from "../../class/basic/Pixies";
+import RendererNode from "./RendererNode";
 
 export default class DomRenderer extends RendererNode {
 	dom;

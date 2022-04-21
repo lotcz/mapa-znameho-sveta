@@ -1,5 +1,5 @@
 import ProgressValue from "./ProgressValue";
-import Pixies from "../Pixies";
+import Pixies from "../basic/Pixies";
 
 export default class AnimatedValue {
 	progressValue;

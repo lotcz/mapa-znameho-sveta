@@ -1,5 +1,5 @@
-import DirtyValue from "../node/DirtyValue";
-import ModelNode from "../node/ModelNode";
+import DirtyValue from "../basic/DirtyValue";
+import ModelNode from "../basic/ModelNode";
 
 export const DIRECTION_NORTH = 'north';
 export const DIRECTION_SOUTH = 'south';

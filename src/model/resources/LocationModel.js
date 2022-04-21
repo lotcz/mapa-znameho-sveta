@@ -1,7 +1,7 @@
-import DirtyValue from "../node/DirtyValue";
-import IdentifiedModelNode from "../node/IdentifiedModelNode";
-import Vector2 from "../node/Vector2";
-import ModelNodeCollection from "../node/ModelNodeCollection";
+import DirtyValue from "../basic/DirtyValue";
+import IdentifiedModelNode from "../basic/IdentifiedModelNode";
+import Vector2 from "../basic/Vector2";
+import ModelNodeCollection from "../basic/ModelNodeCollection";
 import ConnectionModel from "./ConnectionModel";
 
 export default class LocationModel extends IdentifiedModelNode {

@@ -1,6 +1,6 @@
-import ModelNode from "../node/ModelNode";
+import ModelNode from "../basic/ModelNode";
 import PathModel from "./PathModel";
-import ModelNodeTable from "../node/ModelNodeTable";
+import ModelNodeTable from "../basic/ModelNodeTable";
 import LocationModel from "./LocationModel";
 
 export default class MapModel extends ModelNode {

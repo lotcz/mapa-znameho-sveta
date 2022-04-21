@@ -1,4 +1,4 @@
-import Pixies from "../Pixies";
+import Pixies from "../basic/Pixies";
 import ProgressVector3 from "./ProgressVector3";
 
 export default class AnimatedVector3 {

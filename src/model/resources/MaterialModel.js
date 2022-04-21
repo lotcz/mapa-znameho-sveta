@@ -1,6 +1,6 @@
-import DirtyValue from "../node/DirtyValue";
-import IdentifiedModelNode from "../node/IdentifiedModelNode";
-import NullableNode from "../node/NullableNode";
+import DirtyValue from "../basic/DirtyValue";
+import IdentifiedModelNode from "../basic/IdentifiedModelNode";
+import NullableNode from "../basic/NullableNode";
 import TextureModel from "./TextureModel";
 
 export default class MaterialModel extends IdentifiedModelNode {

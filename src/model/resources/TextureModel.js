@@ -1,6 +1,6 @@
-import DirtyValue from "../node/DirtyValue";
+import DirtyValue from "../basic/DirtyValue";
 import * as THREE from "three";
-import ModelNode from "../node/ModelNode";
+import ModelNode from "../basic/ModelNode";
 
 export default class TextureModel extends ModelNode {
 

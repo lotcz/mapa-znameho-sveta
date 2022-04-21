@@ -1,15 +1,15 @@
-import ModelNode from "../node/ModelNode";
-import Vector2 from "../node/Vector2";
-import DirtyValue from "../node/DirtyValue";
+import ModelNode from "./basic/ModelNode";
+import Vector2 from "./basic/Vector2";
+import DirtyValue from "./basic/DirtyValue";
 import ControlsModel from "./ControlsModel";
 import AssetCache from "../class/AssetCache";
-import ResourcesModel from "./ResourcesModel";
-import SaveGameModel from "./SaveGameModel";
+import ResourcesModel from "./resources/ResourcesModel";
+import SaveGameModel from "./savegame/SaveGameModel";
 import CharacterPreviewModel, {SEX_WOLF} from "./CharacterPreviewModel";
-import BattleModel from "./BattleModel";
-import WaypointModel from "./WaypointModel";
-import TextureModel from "./TextureModel";
-import MaterialModel from "./MaterialModel";
+import BattleModel from "./battle/BattleModel";
+import WaypointModel from "./resources/WaypointModel";
+import TextureModel from "./resources/TextureModel";
+import MaterialModel from "./resources/MaterialModel";
 
 export default class GameModel extends ModelNode {
 

@@ -1,11 +1,11 @@
-import Dictionary from "./Dictionary";
-import DirtyValue from "../node/DirtyValue";
-import Collection from "./Collection";
+import Dictionary from "./basic/Dictionary";
+import DirtyValue from "../model/basic/DirtyValue";
+import Collection from "./basic/Collection";
 import AnimationLoader from "./loaders/AnimationLoader";
 import ImageLoader from "./loaders/ImageLoader";
 import GlbLoader from "./loaders/GlbLoader";
 import MaterialLoader from "./loaders/MaterialLoader";
-import Pixies from "./Pixies";
+import Pixies from "./basic/Pixies";
 
 const ASSET_TYPE_LOADERS = {
 	'img': ImageLoader,

@@ -1,5 +1,5 @@
 import ProgressVector2 from "./ProgressVector2";
-import Pixies from "../Pixies";
+import Pixies from "../basic/Pixies";
 
 export default class AnimatedVector2 {
 	progressVector;

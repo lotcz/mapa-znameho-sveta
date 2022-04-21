@@ -1,5 +1,5 @@
-import IdentifiedModelNode from "../node/IdentifiedModelNode";
-import ModelNodeTable from "../node/ModelNodeTable";
+import IdentifiedModelNode from "../basic/IdentifiedModelNode";
+import ModelNodeTable from "../basic/ModelNodeTable";
 import MaterialModel from "./MaterialModel";
 import RaceModel from "./RaceModel";
 import MapModel from "./MapModel";

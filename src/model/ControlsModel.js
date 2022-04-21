@@ -1,6 +1,6 @@
-import DirtyValue from "../node/DirtyValue";
-import Vector2 from "../node/Vector2";
-import ModelNode from "../node/ModelNode";
+import DirtyValue from "./basic/DirtyValue";
+import Vector2 from "./basic/Vector2";
+import ModelNode from "./basic/ModelNode";
 
 const CLICK_TIMEOUT = 250;
 

@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import {SEX_FEMALE, SEX_MALE} from "../model/CharacterPreviewModel";
-import RendererNode from "../node/RendererNode";
-import AnimationHelper from "../class/AnimationHelper";
+import RendererNode from "./basic/RendererNode";
+import AnimationHelper from "../class/animating/AnimationHelper";
 import * as SkeletonUtils from "three/examples/jsm/utils/SkeletonUtils.js";
 
 export default class BattleCharacterRenderer extends RendererNode {

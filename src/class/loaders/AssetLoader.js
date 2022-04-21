@@ -1,4 +1,4 @@
-import Node from "../Node";
+import Node from "../basic/Node";
 
 /**
  * Loads a single raw resource.
@@ -25,7 +25,7 @@ export default class AssetLoader extends Node {
 	 */
 	loadInternal() {
 		// do something
-		// then call this.finish(result) or fail(msg)
+		// then call this.finish(result) or this.fail(msg)
 	}
 
 	finish(result) {

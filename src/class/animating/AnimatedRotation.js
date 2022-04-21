@@ -1,4 +1,4 @@
-import Pixies from "../Pixies";
+import Pixies from "../basic/Pixies";
 import ProgressRotation from "./ProgressRotation";
 
 export default class AnimatedRotation {

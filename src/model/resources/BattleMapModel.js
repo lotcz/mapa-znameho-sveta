@@ -1,7 +1,7 @@
-import ModelNode from "../node/ModelNode";
-import DirtyValue from "../node/DirtyValue";
-import Vector3 from "../node/Vector3";
-import Vector2 from "../node/Vector2";
+import ModelNode from "../basic/ModelNode";
+import DirtyValue from "../basic/DirtyValue";
+import Vector3 from "../basic/Vector3";
+import Vector2 from "../basic/Vector2";
 
 export default class BattleMapModel extends ModelNode {
 

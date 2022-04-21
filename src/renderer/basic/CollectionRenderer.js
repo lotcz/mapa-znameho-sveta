@@ -1,4 +1,4 @@
-import RendererNode from "../node/RendererNode";
+import RendererNode from "./RendererNode";
 
 export default class CollectionRenderer extends RendererNode {
 

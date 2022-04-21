@@ -1,8 +1,8 @@
-import ControllerNode from "../node/ControllerNode";
-import DirtyValue from "../node/DirtyValue";
-import CollectionController from "./CollectionController";
+import ControllerNode from "./basic/ControllerNode";
+import DirtyValue from "../model/basic/DirtyValue";
+import CollectionController from "./basic/CollectionController";
 import BattleCharacterController from "./BattleCharacterController";
-import Pixies from "../class/Pixies";
+import Pixies from "../class/basic/Pixies";
 
 const TRAVEL_SPEED = 1; // tiles per second
 

@@ -1,4 +1,4 @@
-import ControllerNode from "../node/ControllerNode";
+import ControllerNode from "./basic/ControllerNode";
 
 export default class ControlsController extends ControllerNode {
 	dom;

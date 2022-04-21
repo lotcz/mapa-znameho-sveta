@@ -1,5 +1,5 @@
-import SvgRenderer from "./SvgRenderer";
-import {WAYPOINT_TYPE_END, WAYPOINT_TYPE_START} from "../model/WaypointModel";
+import SvgRenderer from "./basic/SvgRenderer";
+import {WAYPOINT_TYPE_END, WAYPOINT_TYPE_START} from "../model/resources/WaypointModel";
 
 export default class WaypointRenderer extends SvgRenderer {
 

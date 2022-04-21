@@ -1,9 +1,9 @@
-import DomRenderer from "./DomRenderer";
+import DomRenderer from "./basic/DomRenderer";
 import {SVG} from "@svgdotjs/svg.js";
 import PathRenderer from "./PathRenderer";
-import CollectionRenderer from "./CollectionRenderer";
+import CollectionRenderer from "./basic/CollectionRenderer";
 import LocationRenderer from "./LocationRenderer";
-import Pixies from "../class/Pixies";
+import Pixies from "../class/basic/Pixies";
 
 export default class MapRenderer extends DomRenderer {
 

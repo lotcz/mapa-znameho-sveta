@@ -1,4 +1,4 @@
-import Rotation from "../../node/Rotation";
+import Rotation from "../../model/basic/Rotation";
 
 export default class ProgressRotation {
 

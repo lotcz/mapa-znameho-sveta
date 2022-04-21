@@ -1,6 +1,6 @@
-import ControllerNode from "../node/ControllerNode";
+import ControllerNode from "./basic/ControllerNode";
 import AnimatedVector2 from "../class/animating/AnimatedVector2";
-import {CHARACTER_STATE_IDLE, CHARACTER_STATE_RUN} from "../model/BattleCharacterModel";
+import {CHARACTER_STATE_IDLE, CHARACTER_STATE_RUN} from "../model/battle/BattleCharacterModel";
 import AnimatedRotation from "../class/animating/AnimatedRotation";
 
 const TRAVEL_SPEED = 3.25 / 1000; // position units per milisecond

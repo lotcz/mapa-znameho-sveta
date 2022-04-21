@@ -1,7 +1,7 @@
-import DirtyValue from "../node/DirtyValue";
-import ModelNodeCollection from "../node/ModelNodeCollection";
+import DirtyValue from "../basic/DirtyValue";
+import ModelNodeCollection from "../basic/ModelNodeCollection";
 import WaypointModel, {WAYPOINT_TYPE_END, WAYPOINT_TYPE_MIDDLE, WAYPOINT_TYPE_START} from "./WaypointModel";
-import IdentifiedModelNode from "../node/IdentifiedModelNode";
+import IdentifiedModelNode from "../basic/IdentifiedModelNode";
 
 export default class PathModel extends IdentifiedModelNode {
 

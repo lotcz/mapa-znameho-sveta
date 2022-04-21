@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import AssetLoader from "./AssetLoader";
-import Pixies from "../Pixies";
+import Pixies from "../basic/Pixies";
 
 /**
  * Loads a single THREE material.

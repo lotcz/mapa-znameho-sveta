@@ -1,4 +1,4 @@
-import ActivatedTreeNode from "./ActivatedTreeNode";
+import ActivatedTreeNode from "../../class/basic/ActivatedTreeNode";
 
 export default class RendererNode extends ActivatedTreeNode {
 

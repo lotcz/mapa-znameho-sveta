@@ -1,7 +1,7 @@
-import DirtyValue from "../node/DirtyValue";
-import ModelNode from "../node/ModelNode";
-import Vector2 from "../node/Vector2";
-import Vector3 from "../node/Vector3";
+import DirtyValue from "./basic/DirtyValue";
+import ModelNode from "./basic/ModelNode";
+import Vector2 from "./basic/Vector2";
+import Vector3 from "./basic/Vector3";
 
 export const SEX_MALE = 'male';
 export const SEX_FEMALE = 'female';
