@@ -1,20 +1,37 @@
-/**
- * Keeps track of rotation in radians, these are always in interval (-pi, +pi>
- */
+import Rotation from "../../node/Rotation";
+
 export default class ProgressRotation {
+
+	/**
+	 * @type Number
+	 */
 	start;
-	end;
+
+	/**
+	 * @type Number
+	 */
+	distance;
+
+	/**
+	 * @type Number
+	 */
 	progress;
 
+	/**
+	 *
+	 * @param {Number} start
+	 * @param {Number} end
+	 * @param {Number} progress
+	 */
 	constructor(start, end, progress = 0) {
-		this.start = start;
-		this.end = end;
+		this.start = Rotation.normalizeValue(start);
+		this.distance = Rotation.diff(end, start);
 		this.progress = progress;
 	}
 
 	get(progress = null) {
 		if (progress !== null) this.progress = progress;
-		return this.start + (this.progress * (this.end - this.start));
+		return Rotation.normalizeValue(this.start + (this.progress * this.distance));
 	}
 
 }

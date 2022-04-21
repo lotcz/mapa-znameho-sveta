@@ -106,9 +106,7 @@ export default class Vector2 extends ModelNode {
 	 */
 	getAngleToYAxis(b) {
 		const diff = b.subtract(this);
-		const left = diff.x > 0;
 		const down = diff.y < 0;
-		console.log(diff.x, diff.y);
 		const sinX = diff.x / diff.size();
 		const angle = Math.asin(sinX);
 		const result = down ?

@@ -5,6 +5,7 @@ import AnimatedVector3 from "../class/animating/AnimatedVector3";
 import Vector3 from "../node/Vector3";
 import * as THREE from "three";
 import AnimatedValue from "../class/animating/AnimatedValue";
+import AnimatedRotation from "../class/animating/AnimatedRotation";
 
 const TRAVEL_SPEED = 5; // position units per second
 
@@ -59,9 +60,7 @@ export default class BattleCharacterController extends ControllerNode {
 		this.positionAnimation = new AnimatedVector2(this.model.position, position, 1000);
 
 		const rotation = this.model.position.getRotationFromYAxis(position);
-		console.log(rotation.getDegrees());
-		this.rotationAnimation = new AnimatedValue(this.model.rotation.get(), rotation.get(), 100);
-
+		this.rotationAnimation = new AnimatedRotation(this.model.rotation.get(), rotation.get(), 100);
 	}
 
 	arrived() {
