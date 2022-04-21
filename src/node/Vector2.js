@@ -55,6 +55,10 @@ export default class Vector2 extends ModelNode {
 		return this;
 	}
 
+	round() {
+		return new Vector2(Math.round(this.x), Math.round(this.y));
+	}
+
 	add(v) {
 		return new Vector2(this.x + v.x, this.y + v.y);
 	}
@@ -96,23 +100,27 @@ export default class Vector2 extends ModelNode {
 	}
 
 	/***
-	 * Return angle between AB and Y axis
-	 * @param Vector2 b
+	 * Return angle between AB and Y axis in radians
+	 * @param {Vector2} b
 	 * @returns {number}
 	 */
-	getAngleToY(b) {
-		const diff = this.subtract(b);
+	getAngleToYAxis(b) {
+		const diff = b.subtract(this);
 		const left = diff.x > 0;
 		const down = diff.y < 0;
 		const sinX = diff.x / diff.size();
-		const x = Math.asin(sinX);
-		const angle = -x * 180 / Math.PI;
-		const result = down ? left ? (-90 - (90 + angle)) : (90 + (90 - angle)) : angle;
+		const angle = Math.asin(sinX);
+		const result = down ? left ? (angle - Math.PI) : (Math.PI - angle) : angle;
 		return result || 0;
 	}
 
-	getRotation(target) {
-		return Rotation.normalizeValue(this.getAngleToY(target) + 180);
+	/**
+	 * If you are standing at this vector and looking at target vector, this will be rotation that you have to Y axis.
+	 * @param target
+	 * @returns {Rotation}
+	 */
+	getRotationFromYAxis(target) {
+		return new Rotation(this.getAngleToYAxis(target));
 	}
 
 	addOnChangeListener(eventHandler) {

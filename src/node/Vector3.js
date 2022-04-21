@@ -46,7 +46,7 @@ export default class Vector3 extends Vector2 {
 	}
 
 	subtract(v) {
-		return new Vector2(this.x - v.x, this.y - v.y, this.z - v.z);
+		return new Vector3(this.x - v.x, this.y - v.y, this.z - v.z);
 	}
 
 	toArray() {

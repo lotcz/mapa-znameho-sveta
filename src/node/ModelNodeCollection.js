@@ -52,6 +52,10 @@ export default class ModelNodeCollection extends ModelNode {
 		return this.children.count();
 	}
 
+	find(search) {
+		return this.children.find(search);
+	}
+
 	clean() {
 		if (this.isDirty) {
 			super.clean();

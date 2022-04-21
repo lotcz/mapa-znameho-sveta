@@ -130,6 +130,7 @@ export default class BattleRenderer extends DomRenderer {
 		this.currentTile = new Vector2();
 		const til = GUIHelper.addVector2(this.gui, this.currentTile, 'tile');
 
+		const cam = GUIHelper.addScaler(this.gui, this.camera, 'zoom', -10, 10);
 
 		this.game.assets.getAsset(
 			'img/palm-tree.png',
@@ -141,12 +142,9 @@ export default class BattleRenderer extends DomRenderer {
 				texture.wrapT = THREE.RepeatWrapping;
 				texture.repeat.set(1, 1);
 				const sprite = new THREE.Mesh(new THREE.PlaneGeometry(5, 5), new THREE.MeshBasicMaterial({transparent: true, map:texture}));
-				sprite.position.set(-27, 2.5, -5);
+				sprite.position.set(-27, 2.5, -25);
 				const target = sprite.position.clone().add(new THREE.Vector3(-1,1, -1));
 				sprite.lookAt(target.x, target.y, target.z);
-
-				GUIHelper.addRotationVector3(this.gui, sprite.rotation, 'sprite rotation');
-
 				this.scene.add(sprite);
 			}
 		);
@@ -179,7 +177,14 @@ export default class BattleRenderer extends DomRenderer {
 	renderInternal() {
 		if (this.model.coordinates.isDirty || this.model.zoom.isDirty) {
 			this.renderBgImage();
-			this.updateCamera();
+		}
+
+		if (this.model.coordinates.isDirty) {
+			this.updateCameraPosition();
+		}
+
+		if (this.model.zoom.isDirty) {
+			this.updateCameraZoom();
 		}
 
 		const corner = this.model.coordinates.subtract(this.game.viewBoxSize.multiply(0.5 / this.model.zoom.get()));
@@ -190,6 +195,7 @@ export default class BattleRenderer extends DomRenderer {
 		this.currentTile.set(tile);
 
 		this.composer.render();
+
 	}
 
 	renderBgImage() {
@@ -226,26 +232,32 @@ export default class BattleRenderer extends DomRenderer {
 		this.effectFXAA.material.uniforms[ 'resolution' ].value.x = 1 / (  this.game.viewBoxSize.x * pixelRatio );
 		this.effectFXAA.material.uniforms[ 'resolution' ].value.y = 1 / (  this.game.viewBoxSize.y * pixelRatio );
 
-		this.updateCamera();
+		this.updateCameraSize();
 	}
 
-	updateCamera() {
-		const pxPerUnit = this.model.zoom.get() * this.model.battleMap.tileSize.get();
+	updateCameraSize() {
+		const pxPerUnit =  this.model.battleMap.tileSize.get();
 		const horizontal = (this.game.viewBoxSize.x / 2) / pxPerUnit;
 		const vertical = (this.game.viewBoxSize.y / 2) / pxPerUnit;
 		this.camera.left = - horizontal;
 		this.camera.right = horizontal;
 		this.camera.bottom = - vertical;
 		this.camera.top = vertical;
+		this.camera.updateProjectionMatrix();
+	}
 
+	updateCameraZoom() {
+		this.camera.zoom = this.model.zoom.get();
+		this.camera.updateProjectionMatrix();
+	}
+
+	updateCameraPosition() {
 		const xz = this.model.battleMap.screenCoordsToPosition(this.model.coordinates);
 		const center = new Vector3(xz.x, 0, xz.y);
 		//console.log(Math.floor(xz.x), Math.floor(xz.y));
 		const position = center.add(new Vector3(-10, 10, -10));
 		this.camera.position.set(position.x, position.y, position.z);
 		this.camera.lookAt(center.x, center.y, center.z);
-		this.camera.updateProjectionMatrix();
-
 	}
 
 }

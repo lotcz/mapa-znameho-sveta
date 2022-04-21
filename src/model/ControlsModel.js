@@ -2,7 +2,7 @@ import DirtyValue from "../node/DirtyValue";
 import Vector2 from "../node/Vector2";
 import ModelNode from "../node/ModelNode";
 
-const CLICK_TIMEOUT = 150;
+const CLICK_TIMEOUT = 250;
 
 export default class ControlsModel extends ModelNode {
 	isMouseOver;

@@ -1,36 +1,33 @@
 import DirtyValue from "./DirtyValue";
 
+/**
+ * Keeps track of rotation in radians or degrees that is always in interval (-pi, +pi> which equals to (-180, 180> degrees
+ */
 export default class Rotation extends DirtyValue {
 
-	static normalizeValue(value) {
-		let result = value % 360;
-		if (result > 180) {
-			result = result - 360;
+	static normalizeValue(rads) {
+		const range = 2 * Math.PI;
+		let result = rads % range;
+		if (result > (range / 2)) {
+			result = result - range;
 		}
-		if (result < -180) {
-			result = result + 360;
+		if (result < (-range / 2)) {
+			result = result + range;
 		}
 		return result;
+	}
+
+	static radToDeg(rads) {
+		return rads * 180 / Math.PI;
+	}
+
+	static degToRad(degs) {
+		return degs * Math.PI / 180;
 	}
 
 	set(value) {
 		const normalized = Rotation.normalizeValue(value);
 		super.set(normalized);
-	}
-
-	add(value) {
-		this.set(this.get() + value);
-	}
-
-	static subtractValues(a, b) {
-		let diff = a - b;
-		if (diff > 180) {
-			diff = 360 - diff;
-		}
-		if (diff < -180) {
-			diff = 360 + diff;
-		}
-		return diff;
 	}
 
 	equalsTo(value) {
@@ -39,6 +36,14 @@ export default class Rotation extends DirtyValue {
 
 	clone() {
 		return new Rotation(this.value);
+	}
+
+	setDegrees(value) {
+		this.set(Rotation.degToRad(value));
+	}
+
+	getDegrees() {
+		return Rotation.radToDeg(this.get());
 	}
 
 }

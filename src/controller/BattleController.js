@@ -101,6 +101,17 @@ export default class BattleController extends ControllerNode {
 		//const xz = this.model.battleMap.screenCoordsToPosition(this.game.controls.mouseCoordinates);
 		const corner = this.model.coordinates.subtract(this.game.viewBoxSize.multiply(0.5 / this.model.zoom.get()));
 		const coords = corner.add(this.game.controls.mouseCoordinates.multiply(1/this.model.zoom.get()));
-		Pixies.randomElement(this.model.characters.children.items).coordinates.set(coords);
+		const position = this.model.battleMap.screenCoordsToPosition(coords);
+		const tile = position.round();
+		//const character = Pixies.randomElement(this.model.characters.children.items);
+
+		const occupant = this.model.characters.find((ch) => ch.position.round().equalsTo(tile));
+		if (occupant) {
+			this.model.selectedCharacter.set(occupant);
+		} else {
+			if (this.model.selectedCharacter.isSet()) {
+				this.model.selectedCharacter.get().triggerEvent('go-to', tile);
+			}
+		}
 	}
 }

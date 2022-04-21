@@ -4,6 +4,7 @@ import ModelNodeCollection from "../node/ModelNodeCollection";
 import BattleCharacterModel from "./BattleCharacterModel";
 import BattleMapModel from "./BattleMapModel";
 import DirtyValue from "../node/DirtyValue";
+import NullableNode from "../node/NullableNode";
 
 export default class BattleModel extends ModelNode {
 
@@ -29,6 +30,13 @@ export default class BattleModel extends ModelNode {
 	 */
 	zoom;
 
+	/**
+	 * @type NullableNode
+	 *
+	 */
+	selectedCharacter;
+
+
 	constructor() {
 		super();
 
@@ -36,6 +44,7 @@ export default class BattleModel extends ModelNode {
 		this.battleMap = this.addProperty('battleMap', new BattleMapModel());
 		this.coordinates = this.addProperty('coordinates', new Vector2(800, 700));
 		this.zoom = this.addProperty('zoom', new DirtyValue(1));
+		this.selectedCharacter = this.addProperty('selectedCharacter', new NullableNode(() => new BattleCharacterModel()));
 
 	}
 

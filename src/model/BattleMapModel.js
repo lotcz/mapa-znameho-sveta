@@ -20,7 +20,7 @@ export default class BattleMapModel extends ModelNode {
 	constructor() {
 		super();
 
-		this.backgroundImage = this.addProperty('backgroundImage', new DirtyValue('img/desert.jpg'));
+		this.backgroundImage = this.addProperty('backgroundImage', new DirtyValue('img/camp.jpg'));
 		this.tileSize = this.addProperty('tileSize', new DirtyValue(62.77));
 
 	}
@@ -48,7 +48,7 @@ export default class BattleMapModel extends ModelNode {
 	 */
 	screenCoordsToTile(coords) {
 		const position = this.screenCoordsToPosition(coords);
-		return new Vector2(Math.round(position.x), Math.round(position.y));
+		return position.round();
 	}
 
 }

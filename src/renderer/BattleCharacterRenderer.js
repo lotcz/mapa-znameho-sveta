@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import {SEX_MALE} from "../model/CharacterPreviewModel";
+import {SEX_FEMALE, SEX_MALE} from "../model/CharacterPreviewModel";
 import RendererNode from "../node/RendererNode";
 import AnimationHelper from "../class/AnimationHelper";
 import * as SkeletonUtils from "three/examples/jsm/utils/SkeletonUtils.js";
@@ -31,9 +31,12 @@ export default class BattleCharacterRenderer extends RendererNode {
 	activateInternal() {
 
 		this.group = new THREE.Group();
+		this.group.scale.set(this.model.scale.x, this.model.scale.y, this.model.scale.z);
+
 		this.scene.add( this.group );
 
 		this.skinMaterial = new THREE.MeshLambertMaterial({color:this.model.skinColor.get()});
+		this.skinMaterial.side = THREE.DoubleSide;
 
 		this.updateCharacter();
 	}
@@ -58,13 +61,16 @@ export default class BattleCharacterRenderer extends RendererNode {
 			this.updateCharacter();
 		}
 
-		if (this.model.coordinates.isDirty) {
-			const tile = this.game.battle.battleMap.screenCoordsToTile(this.model.coordinates);
-			this.group.position.set(tile.x, 0, tile.y);
+		if (this.model.position.isDirty) {
+			this.group.position.set(this.model.position.x, 0, this.model.position.y);
 		}
 
 		if (this.model.rotation.isDirty) {
 			this.group.rotation.set(this.model.rotation.x, this.model.rotation.y, this.model.rotation.z);
+		}
+
+		if (this.model.state.isDirty) {
+			this.switchAnimation(this.model.state.get());
 		}
 
 		if (this.model.scale.isDirty) {
@@ -88,7 +94,7 @@ export default class BattleCharacterRenderer extends RendererNode {
 
 	switchAnimation(name) {
 		if (this.animation) {
-			this.animation.activateAction(name, 1000, false);
+			this.animation.activateAction(name, 500, false);
 		}
 	}
 
@@ -96,14 +102,14 @@ export default class BattleCharacterRenderer extends RendererNode {
 		if (this.animation) {
 			this.group.remove(this.animation.mesh);
 		}
-		const uri = this.model.sex.equalsTo(SEX_MALE) ? 'ani/male.glb' : 'ani/female.glb';
+		const uri = this.model.sex.equalsTo(SEX_MALE) ? 'ani/male.glb' : this.model.sex.equalsTo(SEX_FEMALE) ? 'ani/female.glb' : 'ani/wolf.glb';
 		this.game.assets.getAsset(
 			uri,
 			(asset) => {
 				if (this.group) {
 					//console.log(asset);
 					this.animation = new AnimationHelper(SkeletonUtils.clone(asset.scene), asset.animations);
-					this.switchAnimation(Pixies.randomElement(['Idle', 'Run', 'Sword']));
+					this.switchAnimation(this.model.state.get());
 					this.animation.mesh.traverse((mesh) => {
 						if (mesh.material && mesh.geometry) {
 							mesh.material.dispose();
@@ -113,7 +119,7 @@ export default class BattleCharacterRenderer extends RendererNode {
 						}
 					});
 					this.group.add(this.animation.mesh);
-					this.model.coordinates.makeDirty();
+					this.model.position.makeDirty();
 
 					this.game.assets.getAsset(
 						'glb/hair.glb',
@@ -121,8 +127,10 @@ export default class BattleCharacterRenderer extends RendererNode {
 							if (this.animation) {
 								const hair = asset.clone();
 								const head = this.animation.mesh.getObjectByName('mixamorigHead');
-								head.add(hair);
-								this.item = hair;
+								if (head) {
+									head.add(hair);
+									this.item = hair;
+								}
 								this.model.itemScale.makeDirty();
 							}
 						}

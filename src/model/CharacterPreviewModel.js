@@ -5,6 +5,7 @@ import Vector3 from "../node/Vector3";
 
 export const SEX_MALE = 'male';
 export const SEX_FEMALE = 'female';
+export const SEX_WOLF = 'wolf';
 
 export default class CharacterPreviewModel extends ModelNode {
 

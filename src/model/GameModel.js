@@ -5,7 +5,7 @@ import ControlsModel from "./ControlsModel";
 import AssetCache from "../class/AssetCache";
 import ResourcesModel from "./ResourcesModel";
 import SaveGameModel from "./SaveGameModel";
-import CharacterPreviewModel from "./CharacterPreviewModel";
+import CharacterPreviewModel, {SEX_WOLF} from "./CharacterPreviewModel";
 import BattleModel from "./BattleModel";
 import WaypointModel from "./WaypointModel";
 import TextureModel from "./TextureModel";
@@ -126,18 +126,25 @@ export default class GameModel extends ModelNode {
 		this.resources.materials.add(material);
 
 		const character = this.battle.characters.add();
-		character.coordinates.set(700, 700);
+		character.position.set(-27, 0);
+		character.scale.set(1.2, 0.9, 1.2);
 
 		const character2 = this.battle.characters.add();
 		//character2.sex.set(SEX_MALE);
-		character2.coordinates.set(800, 500);
+		character2.position.set(-22, -4);
 		character2.skinColor.set('#5050a0');
 
 		const character3 = this.battle.characters.add();
 		//character3.sex.set(SEX_MALE);
-		character3.coordinates.set(700, 400);
+		character3.position.set(-30, 3);
 		character3.skinColor.set('#905020');
+		character3.scale.set(1.1, 0.7, 1.1);
 
+		const wolf = this.battle.characters.add();
+		wolf.sex.set(SEX_WOLF);
+		wolf.position.set(-20, -13);
+		wolf.skinColor.set('#505050');
+		wolf.scale.set(1, 1, 1);
 	}
 
 }
