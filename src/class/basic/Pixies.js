@@ -25,6 +25,12 @@ export default class Pixies {
 		return Math.min(maximum, Math.max(minimum, n));
 	}
 
+	static isBetween(n, min, max) {
+		const minimum = Math.min(min, max);
+		const maximum = Math.max(min, max);
+		return n >= minimum && n <= maximum;
+	}
+
 	static hash(value) {
 		let hash = 0;
 		if (value.length == 0) return hash;

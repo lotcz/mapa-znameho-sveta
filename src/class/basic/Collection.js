@@ -77,6 +77,10 @@ export default class Collection extends Node {
 		return this.items.find(func);
 	}
 
+	map(transform) {
+		return this.items.map(transform);
+	}
+
 	addOnRemoveListener(listener) {
 		this.addEventListener('remove', listener);
 	}

@@ -22,8 +22,8 @@ export default class ModelNodeCollection extends ModelNode {
 
 	/**
 	 *
-	 * @param {ModelNode | null} child
-	 * @returns {ModelNode}
+	 * @param {ModelNode | any} child
+	 * @returns {ModelNode | any}
 	 */
 	add(child = null) {
 		if (!child) {
@@ -54,6 +54,14 @@ export default class ModelNodeCollection extends ModelNode {
 
 	find(search) {
 		return this.children.find(search);
+	}
+
+	filter(search) {
+		return this.children.filter(search);
+	}
+
+	map(transform) {
+		return this.children.map(transform);
 	}
 
 	clean() {
