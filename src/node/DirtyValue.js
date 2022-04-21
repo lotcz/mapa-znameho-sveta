@@ -3,7 +3,7 @@ import ModelNode from "./ModelNode";
 export default class DirtyValue extends ModelNode {
 	value;
 
-	constructor(value) {
+	constructor(value = null) {
 		super();
 		this.set(value);
 	}

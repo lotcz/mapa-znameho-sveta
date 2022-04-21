@@ -3,6 +3,7 @@ import ModelNode from "../node/ModelNode";
 import Vector2 from "../node/Vector2";
 import Vector3 from "../node/Vector3";
 import {SEX_FEMALE} from "./CharacterPreviewModel";
+import Rotation from "../node/Rotation";
 
 export const CHARACTER_STATE_IDLE = 'Idle';
 export const CHARACTER_STATE_RUN = 'Run';
@@ -16,7 +17,7 @@ export default class BattleCharacterModel extends ModelNode {
 	position;
 
 	/**
-	 * @type Vector3
+	 * @type Rotation
 	 */
 	rotation;
 
@@ -64,7 +65,7 @@ export default class BattleCharacterModel extends ModelNode {
 		super();
 
 		this.position = this.addProperty('position', new Vector2(0, 0));
-		this.rotation = this.addProperty('rotation', new Vector3());
+		this.rotation = this.addProperty('rotation', new Rotation(0));
 		this.state = this.addProperty('state', new DirtyValue('Idle'));
 
 		this.sex = this.addProperty('sex', new DirtyValue(SEX_FEMALE));

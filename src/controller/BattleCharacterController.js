@@ -49,7 +49,7 @@ export default class BattleCharacterController extends ControllerNode {
 				this.removeChild(this.rotationAnimation);
 				this.rotationAnimation = null;
 			} else {
-				this.model.rotation.set(0, this.rotationAnimation.get(delta), 0);
+				this.model.rotation.set(this.rotationAnimation.get(delta));
 			}
 		}
 	}
@@ -58,19 +58,10 @@ export default class BattleCharacterController extends ControllerNode {
 		this.model.state.set(CHARACTER_STATE_RUN);
 		this.positionAnimation = new AnimatedVector2(this.model.position, position, 1000);
 
-		const v1 = new THREE.Vector2(this.model.position.x, this.model.position.y);
-		const v2 = new THREE.Vector2(position.x, position.y);
-		const direction = v1.sub(v2);
+		const rotation = this.model.position.getRotationFromYAxis(position);
+		console.log(rotation.getDegrees());
+		this.rotationAnimation = new AnimatedValue(this.model.rotation.get(), rotation.get(), 100);
 
-		const angle = direction.angle() + (Math.PI / 2);// * ((this.model.position.x > position.x) ? -1 : 1);
-
-
-		//const this.model.position
-		console.log(angle);
-		//const rotation = new Vector3(0, angle, 0);
-		this.rotationAnimation = new AnimatedValue(this.model.rotation.y, -angle, 100);
-		//console.log(rotation);
-		//this.prevDirection = direction;
 	}
 
 	arrived() {

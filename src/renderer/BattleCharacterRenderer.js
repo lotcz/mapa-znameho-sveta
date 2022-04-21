@@ -66,7 +66,7 @@ export default class BattleCharacterRenderer extends RendererNode {
 		}
 
 		if (this.model.rotation.isDirty) {
-			this.group.rotation.set(this.model.rotation.x, this.model.rotation.y, this.model.rotation.z);
+			this.group.rotation.set(0, this.model.rotation.get(), 0);
 		}
 
 		if (this.model.state.isDirty) {

@@ -108,9 +108,12 @@ export default class Vector2 extends ModelNode {
 		const diff = b.subtract(this);
 		const left = diff.x > 0;
 		const down = diff.y < 0;
+		console.log(diff.x, diff.y);
 		const sinX = diff.x / diff.size();
 		const angle = Math.asin(sinX);
-		const result = down ? left ? (angle - Math.PI) : (Math.PI - angle) : angle;
+		const result = down ?
+			Math.PI - angle :
+			angle;
 		return result || 0;
 	}
 
