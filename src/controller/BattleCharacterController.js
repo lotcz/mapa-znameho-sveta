@@ -17,10 +17,19 @@ export default class BattleCharacterController extends ControllerNode {
 	positionAnimation;
 	rotationAnimation;
 
+	/**
+	 * @type array
+	 */
+	pathToGo;
+
 	constructor(game, model) {
 		super(game, model);
 
 		this.model = model;
+		this.pathToGo = [];
+
+		this.positionAnimation = null;
+		this.rotationAnimation = null;
 
 		this.goToHandler = (p) => this.goTo(p);
 	}
@@ -31,6 +40,8 @@ export default class BattleCharacterController extends ControllerNode {
 
 	deactivateInternal() {
 		this.model.removeEventListener('go-to', this.goToHandler);
+		this.positionAnimation = null;
+		this.rotationAnimation = null;
 	}
 
 	updateInternal(delta) {
@@ -53,8 +64,18 @@ export default class BattleCharacterController extends ControllerNode {
 		}
 	}
 
+	isMoving() {
+		return (this.positionAnimation !== null);
+	}
+
 	goTo(position) {
-		const path = PathFinder.findPath(this.model.position, position, this.game.battle.characters.filter((ch) => ch !== this.model).map((ch) => ch.position));
+		const blocks = this.game.battle.characters.filter((ch) => ch !== this.model).map((ch) => ch.position);
+		if (PathFinder.isTileBlocked(this.model.position.round(), blocks)) {
+			console.log('Blocked');
+			return;
+		}
+
+		const path = PathFinder.findBestPath(this.model.position.round(), position.round(), blocks);
 		if (!path) {
 			console.log('No path');
 			return;
@@ -62,7 +83,10 @@ export default class BattleCharacterController extends ControllerNode {
 
 		console.log(path);
 
-		this.startMovement(path[0]);
+		this.pathToGo = path;
+
+		this.startMovement(this.pathToGo.shift());
+
 	}
 
 	startMovement(target) {
@@ -78,8 +102,12 @@ export default class BattleCharacterController extends ControllerNode {
 	}
 
 	arrived() {
+		if (this.pathToGo.length > 0) {
+			this.startMovement(this.pathToGo.shift());
+			return;
+		}
+
 		this.model.state.set(CHARACTER_STATE_IDLE);
-		//this.rotationAnimation = new AnimatedValue(this.model.rotation.y, 0, 500);
 	}
 
 }

@@ -1,7 +1,8 @@
 import Pixies from "./basic/Pixies";
 import Vector2 from "../model/basic/Vector2";
 
-const DEBUG_PATH_FINDER = true;
+const DEBUG_PATH_FINDER = false;
+const SHOW_PATH_FINDER_STATS = true;
 
 export default class PathFinder {
 
@@ -9,16 +10,77 @@ export default class PathFinder {
 	 * @param {Vector2} start
 	 * @param {Vector2} end
 	 * @param {array<Vector2>} blocks
+	 */
+	static findBestPath(start, end, blocks) {
+		const maxAttempts = 20;
+		const maxSuccess = 3;
+		const results = [];
+
+		let attempts = 0;
+
+		while (attempts < maxAttempts && results.length < maxSuccess) {
+			const path = PathFinder.findPath(start, end, blocks);
+			if (path) {
+				if (path.length === 1) {
+					if (SHOW_PATH_FINDER_STATS) {
+						console.log(`Way clear! (${attempts} attempts)`);
+					}
+					return path;
+				}
+				results.push(path);
+			}
+			attempts++;
+		}
+
+		if (results.length === 0) {
+			if (DEBUG_PATH_FINDER) console.log(`No results found :-(`);
+			if (SHOW_PATH_FINDER_STATS) {
+				console.log(`Total ${attempts} attempts, but none successful`);
+			}
+			return false;
+		}
+
+		let best = results[0];
+		let worst = results[0];
+		let bestLength = PathFinder.pathLength(start, results[0]);
+		let worstLength = bestLength;
+
+		if (results.length > 1) {
+			for (let i = 1; i < results.length; i++) {
+				const length = PathFinder.pathLength(start, results[i]);
+				if (length < bestLength) {
+					best = results[i];
+					bestLength = length;
+				}
+				if (length > worstLength) {
+					worst = results[i];
+					worstLength = length;
+				}
+			}
+		}
+
+		if (SHOW_PATH_FINDER_STATS) {
+			console.log(`Total ${attempts} attempts, ${results.length} successful`);
+			console.log(`Best path ${best.length} nodes, ${bestLength} length`);
+			console.log(`Worst path ${worst.length} nodes, ${worstLength} length`);
+		}
+
+		return best;
+	}
+
+	/**
+	 * @param {Vector2} start
+	 * @param {Vector2} end
+	 * @param {array<Vector2>} blocks
 	 * @param {array<Vector2> | null} free
+	 * @param {boolean} expanded
 	 * @returns {array<Vector2>| false}
 	 */
-	static findPath(start, end, blocks, free = null) {
+	static findPath(start, end, blocks, free = null, expanded = false) {
 
 		if (DEBUG_PATH_FINDER) console.log(`Going from [${start.x}, ${start.y}] to [${end.x}, ${end.y}]`);
 
-		const relevantBlocks = PathFinder.filterArea(start, end, blocks);
-		const isBlocked = relevantBlocks.length > 0;
-
+		const isBlocked = PathFinder.isAreaBlocked(start, end, blocks);
 		if (!isBlocked) {
 			return [end];
 		}
@@ -30,25 +92,38 @@ export default class PathFinder {
 		const width = maxX - minX + 1;
 		const height = maxY - minY + 1;
 
+		if (DEBUG_PATH_FINDER) console.log(`width: ${width}, height: ${height}`);
+
+		const offset = new Vector2();
+
 		if (width <= 1 || height <= 1) {
-			if (DEBUG_PATH_FINDER) console.log(`width: ${width}, height: ${height}`);
-			if (DEBUG_PATH_FINDER) console.log(`Too thin and blocked.`);
-			return false;
+			if (expanded) {
+				if (DEBUG_PATH_FINDER) console.log(`Too thin and blocked. No more expansion.`);
+				return false;
+			}
+			if (DEBUG_PATH_FINDER) console.log(`Too thin and blocked. Expanding range`);
+			const offsetX = (width <= 1) ? 2 : 0;
+			const offsetY = (height <= 1) ? 2 : 0;
+			offset.set(offsetX, offsetY);
+			expanded = true;
 		}
+
+		const relevantBlocks = PathFinder.filterArea(start.subtract(offset), end.add(offset), blocks);
 
 		let relevantFree;
 
 		if (!free) {
 			relevantFree = [];
-			for (let x = minX; x <= maxX; x++) {
-				for (let y = minY; y <= maxY; y++) {
-					if (!PathFinder.isTileBlocked(x, y, relevantBlocks)) {
-						relevantFree.push(new Vector2(x, y));
+			for (let x = minX - offset.x, max = maxX + offset.x; x <= max; x++) {
+				for (let y = minY - offset.y, max = maxY + offset.y; y <= max; y++) {
+					const tile = new Vector2(x, y);
+					if (!PathFinder.isTileBlocked(tile, relevantBlocks)) {
+						relevantFree.push(tile);
 					}
 				}
 			}
 		} else {
-			relevantFree = PathFinder.filterArea(start, end, free);
+			relevantFree = PathFinder.filterArea(start.subtract(offset), end.add(offset), free);
 		}
 
 		if (relevantFree.length === 0) {
@@ -76,6 +151,7 @@ export default class PathFinder {
 		}
 
 		if (point === null) {
+			if (DEBUG_PATH_FINDER) console.log(`No valid point found`);
 			return false;
 		}
 
@@ -84,12 +160,12 @@ export default class PathFinder {
 		let nextPath;
 
 		if (fromStart) {
-			nextPath = PathFinder.findPath(point, end, relevantBlocks, relevantFree);
+			nextPath = PathFinder.findPath(point, end, relevantBlocks, relevantFree, expanded);
 			if (nextPath) {
 				return [point, ...nextPath];
 			}
 		} else {
-			nextPath = PathFinder.findPath(start, point, relevantBlocks, relevantFree);
+			nextPath = PathFinder.findPath(start, point, relevantBlocks, relevantFree, expanded);
 			if (nextPath) {
 				return [...nextPath, end];
 			}
@@ -100,10 +176,6 @@ export default class PathFinder {
 		return false;
 	}
 
-	static isInArea(v, start, end) {
-		return Pixies.isBetween(v.x, start.x, end.x) && Pixies.isBetween(v.y, start.y, end.y);
-	}
-
 	static filterArea(start, end, vectors) {
 		return vectors.filter((v) => PathFinder.isInArea(v, start, end));
 	}
@@ -112,11 +184,27 @@ export default class PathFinder {
 		return blocks.some((b) => PathFinder.isInArea(b, start, end));
 	}
 
-	static isTileBlocked(x, y, blocks) {
-		return blocks.some((b) => {
-			const rounded = b.round();
-			return rounded.x === x && rounded.y === y;
-		});
+	static isInArea(v, start, end) {
+		return Pixies.isBetween(v.x, start.x, end.x) && Pixies.isBetween(v.y, start.y, end.y);
+	}
+
+	static isTileBlocked(v, blocks) {
+		const t = v.round();
+		return blocks.some((b) => t.equalsTo(b.round()));
+	}
+
+	static pathLength(start, path) {
+		if (path.length <= 0) return 0;
+
+		let sum = start.distanceTo(path[0]);
+
+		if (path.length > 1) {
+			for (let i = 1; i < path.length; i++) {
+				sum += path[i - 1].distanceTo(path[i]);
+			}
+		}
+
+		return sum;
 	}
 
 }

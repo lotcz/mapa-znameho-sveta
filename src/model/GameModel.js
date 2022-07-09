@@ -5,7 +5,7 @@ import ControlsModel from "./ControlsModel";
 import AssetCache from "../class/AssetCache";
 import ResourcesModel from "./resources/ResourcesModel";
 import SaveGameModel from "./savegame/SaveGameModel";
-import CharacterPreviewModel, {SEX_WOLF} from "./CharacterPreviewModel";
+import CharacterPreviewModel, {SEX_MAMMOTH, SEX_WOLF} from "./CharacterPreviewModel";
 import BattleModel from "./battle/BattleModel";
 import WaypointModel from "./resources/WaypointModel";
 import TextureModel from "./resources/TextureModel";
@@ -145,6 +145,12 @@ export default class GameModel extends ModelNode {
 		wolf.position.set(-20, -13);
 		wolf.skinColor.set('#505050');
 		wolf.scale.set(1, 1, 1);
+
+		const mammoth = this.battle.characters.add();
+		mammoth.sex.set(SEX_MAMMOTH);
+		mammoth.position.set(-10, -7);
+		mammoth.skinColor.set('#505050');
+		mammoth.scale.set(1, 1, 1);
 	}
 
 }

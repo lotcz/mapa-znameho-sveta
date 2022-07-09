@@ -20,8 +20,8 @@ export default class BattleMapModel extends ModelNode {
 	constructor() {
 		super();
 
-		this.backgroundImage = this.addProperty('backgroundImage', new DirtyValue('img/camp.jpg'));
-		this.tileSize = this.addProperty('tileSize', new DirtyValue(62.77));
+		this.backgroundImage = this.addProperty('backgroundImage', new DirtyValue('img/Adelan.jpg'));
+		this.tileSize = this.addProperty('tileSize', new DirtyValue(70/*62.77*/));
 
 	}
 

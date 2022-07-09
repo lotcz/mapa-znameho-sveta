@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import {SEX_FEMALE, SEX_MALE} from "../model/CharacterPreviewModel";
+import {SEX_FEMALE, SEX_MALE, SEX_MAMMOTH} from "../model/CharacterPreviewModel";
 import RendererNode from "./basic/RendererNode";
 import AnimationHelper from "../class/animating/AnimationHelper";
 import * as SkeletonUtils from "three/examples/jsm/utils/SkeletonUtils.js";
@@ -101,7 +101,7 @@ export default class BattleCharacterRenderer extends RendererNode {
 		if (this.animation) {
 			this.group.remove(this.animation.mesh);
 		}
-		const uri = this.model.sex.equalsTo(SEX_MALE) ? 'ani/male.glb' : this.model.sex.equalsTo(SEX_FEMALE) ? 'ani/female.glb' : 'ani/wolf.glb';
+		const uri = this.model.sex.equalsTo(SEX_MALE) ? 'ani/male.glb' : this.model.sex.equalsTo(SEX_FEMALE) ? 'ani/female.glb' : this.model.sex.equalsTo(SEX_MAMMOTH) ? 'ani/mammoth.glb' : 'ani/wolf.glb';
 		this.game.assets.getAsset(
 			uri,
 			(asset) => {
