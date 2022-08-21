@@ -13,11 +13,17 @@ export default class ConversationLineModel extends ModelNode {
 	 */
 	portrait;
 
+	/**
+	 * @type DirtyValue
+	 */
+	isNarrator;
+
 	constructor() {
 		super();
 
 		this.text = this.addProperty('responseText', new DirtyValue('text'));
 		this.portrait = this.addProperty('portrait', new DirtyValue());
+		this.isNarrator = this.addProperty('isNarrator', new DirtyValue(false));
 
 	}
 

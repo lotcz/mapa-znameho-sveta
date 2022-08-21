@@ -16,17 +16,20 @@ export default class ConversationController extends ControllerNode {
 		this.model = model;
 
 		this.onEntrySelected = (p) => this.entrySelected(p.oldValue, p.newValue);
+		this.onRestart = () => this.restartConversation();
 	}
 
 	activateInternal() {
 		this.model.currentEntry.addOnChangeListener(this.onEntrySelected);
 		if (this.model.currentEntry.isEmpty()) {
-			this.model.currentEntry.set(new RunningConversationEntryModel(this.model, this.model.conversation.initialEntry));
+			this.restartConversation();
 		}
+		this.model.addEventListener('restart', this.onRestart);
 	}
 
 	deactivateInternal() {
 		this.model.currentEntry.removeOnChangeListener(this.onEntrySelected);
+		this.model.removeEventListener('restart', this.onRestart);
 	}
 
 	entrySelected(oldval, newval) {
@@ -49,6 +52,12 @@ export default class ConversationController extends ControllerNode {
 				entry.lines.add(new RunningConversationLineModel(this.model, entry, l, false));
 			});
 		}
+	}
+
+	restartConversation() {
+		this.model.currentEntry.set(null);
+		this.model.pastEntries.reset();
+		this.model.currentEntry.set(new RunningConversationEntryModel(this.model, this.model.conversation.initialEntry));
 	}
 
 }

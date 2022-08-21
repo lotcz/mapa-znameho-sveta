@@ -22,8 +22,11 @@ export default class NodeFormRenderer extends DomRenderer {
 	activateInternal() {
 		this.container = this.addElement('form');
 
-		const buttons = Pixies.createElement(this.container, 'div');
-		const submit = Pixies.createElement(buttons, 'button');
+		const buttons = Pixies.createElement(this.container, 'div', 'buttons');
+		const buttonsLeft = Pixies.createElement(buttons, 'div');
+		const buttonsRight = Pixies.createElement(buttons, 'div');
+
+		const submit = Pixies.createElement(buttonsLeft, 'button');
 		submit.innerText = 'Save';
 		submit.addEventListener('click', (e) => {
 			e.preventDefault();
@@ -31,9 +34,9 @@ export default class NodeFormRenderer extends DomRenderer {
 		});
 
 		if (this.name === 'conversations') {
-			const submit = Pixies.createElement(buttons, 'button');
-			submit.innerText = 'Start';
-			submit.addEventListener('click', (e) => {
+			const start = Pixies.createElement(buttonsRight, 'button');
+			start.innerText = 'Start';
+			start.addEventListener('click', (e) => {
 				e.preventDefault();
 				this.game.saveGame.runningConversation.set(new RunningConversationModel(this.model));
 			});

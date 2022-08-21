@@ -172,4 +172,67 @@ export default class Pixies {
 		session.start = performance.now();
 	}
 
+	static instantEditor(element, setter, textarea = false) {
+		if (element.dataset.instantEditor === '1') {
+			return;
+		}
+		element.dataset.instantEditor = '1';
+		const text = element.innerText;
+		Pixies.emptyElement(element);
+		const editor = Pixies.createElement(element, 'form', 'instant-editor');
+		const input = Pixies.createElement(editor, textarea ? 'textarea' : 'input');
+		input.value = text;
+		if (textarea) {
+			const cancel = Pixies.createElement(editor, 'button');
+			cancel.innerText = 'Cancel';
+			cancel.addEventListener('click', (e) => {
+				e.stopPropagation();
+				Pixies.destroyElement(editor);
+				element.innerText = text;
+				element.dataset.instantEditor = '0';
+			});
+			const save = Pixies.createElement(editor, 'input');
+			save.setAttribute('type', 'submit');
+			save.value = 'Save';
+		} else {
+			input.setAttribute('type', 'text');
+		}
+		input.focus();
+		editor.addEventListener('submit', (e) => {
+			e.preventDefault();
+			e.stopPropagation();
+			const value = input.value;
+			Pixies.destroyElement(editor);
+			element.dataset.instantEditor = '0';
+			element.innerText = value;
+			setter(value);
+		});
+		if (!textarea) {
+			editor.addEventListener('focusout', (e) => {
+				Pixies.destroyElement(editor);
+				element.innerText = text;
+				element.dataset.instantEditor = '0';
+			});
+		}
+	}
+
+	static magicEditor(element, setter, textarea = false) {
+		const addHintIfNeeded = () => {
+			if (element.innerText.length === 0) {
+				element.innerText = '(edit)';
+			}
+		}
+		addHintIfNeeded();
+		element.style.cursor = 'text';
+		element.addEventListener('click', () => {
+			Pixies.instantEditor(
+				element,
+				(value) => {
+					setter(value);
+					addHintIfNeeded();
+				},
+				textarea
+			);
+		});
+	}
 }

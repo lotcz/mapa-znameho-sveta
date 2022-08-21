@@ -20,7 +20,7 @@ export default class Collection extends Node {
 	}
 
 	removeByIndex(index) {
-		if (index >= 0 && index < this.items.length) {
+		if (index >= 0 && index < this.count()) {
 			return this.removeInternal(index, this.items[index]);
 		}
 		return false;
@@ -51,10 +51,7 @@ export default class Collection extends Node {
 	}
 
 	removeFirst() {
-		if (this.count() > 0) {
-			return this.remove(this.first());
-		}
-		return false;
+		return this.removeByIndex(0);
 	}
 
 	first() {

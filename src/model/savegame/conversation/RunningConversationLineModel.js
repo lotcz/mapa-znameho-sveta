@@ -1,16 +1,17 @@
 import ModelNode from "../../basic/ModelNode";
+import DirtyValue from "../../basic/DirtyValue";
 
 export default class RunningConversationLineModel extends ModelNode {
 
 	/**
 	 * @type RunningConversationModel
 	 */
-	conversation;
+	runningConversation;
 
 	/**
 	 * @type RunningConversationEntryModel
 	 */
-	entry;
+	runningEntry;
 
 	/**
 	 * @type ConversationLineModel
@@ -25,10 +26,10 @@ export default class RunningConversationLineModel extends ModelNode {
 	constructor(conversation, entry, line, isResponse) {
 		super();
 
-		this.conversation = conversation;
-		this.entry = entry;
+		this.runningConversation = conversation;
+		this.runningEntry = entry;
 		this.line = line;
-		this.isResponse = isResponse;
+		this.isResponse = new DirtyValue(isResponse);
 
 	}
 

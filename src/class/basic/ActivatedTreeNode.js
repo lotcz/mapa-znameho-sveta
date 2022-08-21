@@ -43,6 +43,7 @@ export default class ActivatedTreeNode {
 		if (index >= 0) {
 			this.children.splice(index, 1);
 			node.deactivate();
+			node.parent = null;
 			return node;
 		}
 		for (let i = 0, max = this.children.length; i < max; i++) {

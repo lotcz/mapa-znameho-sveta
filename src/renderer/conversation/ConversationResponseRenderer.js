@@ -30,6 +30,17 @@ export default class ConversationResponseRenderer extends DomRenderer {
 		this.link.addEventListener('click', () => {
 			this.model.conversation.currentEntry.set(this.model);
 		});
+
+		if (this.game.isInDebugMode.get()) {
+			this.del = Pixies.createElement(this.container, 'button');
+			this.del.innerText = 'del';
+			this.del.addEventListener('click', () => {
+				if (confirm('Delete response ' + this.model.originalEntry.responseText.get() + '?')) {
+					this.model.conversation.currentEntry.get().entries.remove(this.model);
+					this.model.conversation.currentEntry.get().originalEntry.entries.remove(this.model.originalEntry);
+				}
+			});
+		}
 	}
 
 	deactivateInternal() {

@@ -33,10 +33,17 @@ export default class NodeTableRenderer extends CollectionRenderer {
 		this.container.addEventListener('mousemove', (e) => e.stopPropagation());
 		this.container.addEventListener('click', (e) => e.stopPropagation());
 
-		this.buttons = Pixies.createElement(this.container, 'div');
-		this.addButton = Pixies.createElement(this.buttons, 'button');
+		this.buttons = Pixies.createElement(this.container, 'div', 'buttons');
+		const buttonsLeft = Pixies.createElement(this.buttons, 'div');
+		const buttonsRight = Pixies.createElement(this.buttons, 'div');
+
+		this.addButton = Pixies.createElement(buttonsLeft, 'button');
 		this.addButton.innerText = 'Add';
 		this.addButton.addEventListener('click', () => this.addRow());
+
+		this.closeButton = Pixies.createElement(buttonsRight, 'button');
+		this.closeButton.innerText = 'Close';
+		this.closeButton.addEventListener('click', () => this.model.triggerEvent('closed'));
 
 		this.table = Pixies.createElement(this.container, 'table');
 		this.rendererFactory = (item) => new TableRowRenderer(game, item, this.table, this.name);

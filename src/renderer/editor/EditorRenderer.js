@@ -22,6 +22,7 @@ export default class EditorRenderer extends DomRenderer {
 
 		this.updateModeHandler = () => this.updateMode();
 		this.updateMenuHandler = () => this.updateMenu();
+		this.closeTableHandler = () => this.closeTable();
 	}
 
 	activateInternal() {
@@ -35,9 +36,11 @@ export default class EditorRenderer extends DomRenderer {
 		this.tableRenderer = null;
 
 		this.updateMenu();
-		this.updateMode();
 		this.model.activeOption.addOnChangeListener(this.updateMenuHandler);
+
+		this.updateMode();
 		this.game.saveGame.mode.addOnChangeListener(this.updateModeHandler);
+
 	}
 
 	deactivateInternal() {
@@ -76,14 +79,21 @@ export default class EditorRenderer extends DomRenderer {
 	}
 
 	updateTable() {
-		if (this.tableRenderer) {
-			this.removeChild(this.tableRenderer);
-			this.tableRenderer = null;
-		}
+		this.closeTable();
+
 		const name = this.model.activeOption.get();
 		if (name && name.length > 0) {
 			const table = this.game.resources[name];
+			table.addEventListener('closed', this.closeTableHandler);
 			this.tableRenderer = this.addChild(new NodeTableRenderer(this.game, table, this.dock, name));
+		}
+	}
+
+	closeTable() {
+		if (this.tableRenderer) {
+			this.tableRenderer.model.removeEventListener('closed', this.closeTableHandler);
+			this.removeChild(this.tableRenderer);
+			this.tableRenderer = null;
 		}
 	}
 

@@ -40,6 +40,18 @@ html, body {
 	padding: 10px;
 }
 
+.editor .buttons {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.editor .buttons > div {
+	display: flex;
+	flex-direction: row;
+	justify-content: start;
+}
+
 .editor button {
 	background-color: gray;
 	color: black;
@@ -156,15 +168,35 @@ html, body {
 	left: 0;
 	right: 0;
 	bottom: 0;
+	cursor: default;
+
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+	-khtml-user-select: none; /* Konqueror HTML */
+	-moz-user-select: none; /* Old versions of Firefox */
+	-ms-user-select: none; /* Internet Explorer/Edge */
+	user-select: none;
 }
 
 .conversation .inner {
 	margin: auto;
 	background-image: url('../assets/img/texture/paper.jpg');
 	background-color: sandybrown;
-	color:saddlebrown;
-	width: 80%;
-	height: 80%;
+	color:#311a0a;
+	width: 900px;
+	max-width: 100%;
+	height: 85%;
+	max-height: 100%;
+	padding: 2rem;
+	border-radius: 10px;
+	box-shadow: #311a0a 0 0 40px inset;
+	border: 1px #311a0a solid;
+}
+
+.conversation .scroll {
+	overflow-y: auto;
+	overflow-x: hidden;
+	max-height: 100%;
 }
 
 .conversation .info {
@@ -172,17 +204,64 @@ html, body {
 	flex-direction: row;
 }
 
+.conversation .header {
+	padding-bottom: 10px;
+	margin-bottom: 10px;
+}
+
 .conversation .info .portrait {
 	max-width: 150px;
 	max-height: 150px;
+	margin-right: 20px;
 }
 
-.conversation .response a:hover {
+.conversation .info .description {
+	flex: 1;
+}
+
+.conversation h2 {
+	margin: 0 0 10px 0;
+}
+.conversation a {
 	cursor: pointer;
+	color: saddlebrown;
+}
+
+.conversation a:hover {
 	color: orange;
+}
+
+.conversation .line {
+	display: flex;
+	flex-direction: row;
+	margin-top: 10px;
+	align-items: flex-start;
 }
 
 .conversation .line .portrait {
 	max-width: 50px;
 	max-height: 50px;
+	margin-right: 10px;
+}
+
+.conversation .line .text {
+	flex: 1;
+}
+
+.conversation .line.response {
+	padding-left: 20px;
+}
+
+.instant-editor {
+	display: block;
+	position: static;
+	padding: 1px;
+	margin: 1px;
+}
+
+.instant-editor input[type=text],
+.instant-editor textarea {
+	display: block;
+	width: 100%;
+	margin: auto;
 }

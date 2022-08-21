@@ -9,6 +9,8 @@ import ConversationEntryRenderer from "./ConversationEntryRenderer";
 import ConversationResponseRenderer from "./ConversationResponseRenderer";
 import ConversationEntryModel from "../../model/resources/conversation/ConversationEntryModel";
 import RunningConversationEntryModel from "../../model/savegame/conversation/RunningConversationEntryModel";
+import ConversationLineModel from "../../model/resources/conversation/ConversationLineModel";
+import RunningConversationLineModel from "../../model/savegame/conversation/RunningConversationLineModel";
 
 export default class ConversationRenderer extends DomRenderer {
 
@@ -34,14 +36,16 @@ export default class ConversationRenderer extends DomRenderer {
 		this.container = this.addElement('div', 'conversation');
 		this.container.addEventListener('mousemove', (e) => e.stopPropagation());
 		this.container.addEventListener('click', (e) => e.stopPropagation());
+		this.container.addEventListener('wheel', (e) => e.stopPropagation());
 
 		this.inner = Pixies.createElement(this.container, 'div', 'inner');
+		const scroll = this.scroll = Pixies.createElement(this.inner, 'div', 'scroll');
 
-		this.header = Pixies.createElement(this.inner, 'div', 'header');
-		const title = Pixies.createElement(this.header, 'div', 'title');
+		const header = Pixies.createElement(scroll, 'div', 'header');
+		const title = Pixies.createElement(header, 'h2', 'title');
 		title.innerText = this.model.getTitle();
 
-		const info = Pixies.createElement(this.header, 'div', 'info');
+		const info = Pixies.createElement(header, 'div', 'info');
 
 		const portraitUrl = this.model.getPortrait();
 		if (portraitUrl) {
@@ -54,15 +58,45 @@ export default class ConversationRenderer extends DomRenderer {
 		const description = Pixies.createElement(info, 'div', 'description');
 		description.innerText = this.model.getDescription();
 
-		this.entries = Pixies.createElement(this.inner, 'div', 'entries');
+		if (this.game.isInDebugMode.get()) {
+			Pixies.magicEditor(title, (value) => this.model.conversation.title.set(value));
+			Pixies.magicEditor(description, (value) => this.model.conversation.description.set(value), true);
+
+			const buttons = Pixies.createElement(info, 'div', 'buttons');
+			const restart = Pixies.createElement(buttons, 'button');
+			restart.innerText = 'Restart';
+			restart.addEventListener('click', () => {
+				this.model.triggerEvent('restart');
+			});
+			const close = Pixies.createElement(buttons, 'button');
+			close.innerText = 'Close';
+			close.addEventListener('click', () => {
+				this.game.saveGame.runningConversation.set(null);
+			});
+		}
+
+		this.entries = Pixies.createElement(scroll, 'div', 'entries');
 		this.entriesRenderer = new CollectionRenderer(this.game, this.model.pastEntries, (model) => new ConversationEntryRenderer(this.game, model, this.entries));
 		this.addChild(this.entriesRenderer);
 
-		this.responses = Pixies.createElement(this.inner, 'div', 'responses');
+		this.currentEntry = Pixies.createElement(scroll, 'div', 'current-entry');
 		if (this.game.isInDebugMode.get()) {
-			const buttons = Pixies.createElement(this.responses, 'div', 'buttons');
+			const buttons = Pixies.createElement(scroll, 'div', 'buttons');
 			const add = Pixies.createElement(buttons, 'button');
-			add.innerText = 'Add';
+			add.innerText = 'Add Line';
+			add.addEventListener('click', () => {
+				const currentEntry = this.model.currentEntry.get();
+				const newLine = currentEntry.originalEntry.lines.add(new ConversationLineModel());
+				newLine.text.set('line text');
+				currentEntry.lines.add(new RunningConversationLineModel(this.model, currentEntry, newLine));
+			});
+		}
+
+		this.responses = Pixies.createElement(scroll, 'div', 'responses');
+		if (this.game.isInDebugMode.get()) {
+			const buttons = Pixies.createElement(this.scroll, 'div', 'buttons');
+			const add = Pixies.createElement(buttons, 'button');
+			add.innerText = 'Add Response';
 			add.addEventListener('click', () => {
 				const currentEntry = this.model.currentEntry.get();
 				const newEntry = currentEntry.originalEntry.entries.add(new ConversationEntryModel());
@@ -84,10 +118,16 @@ export default class ConversationRenderer extends DomRenderer {
 		if (this.responsesRenderer) {
 			this.removeChild(this.responsesRenderer);
 		}
+		if (this.currentEntryRenderer) {
+			this.removeChild(this.currentEntryRenderer);
+		}
 		const currentEntry = this.model.currentEntry.get();
 		if (currentEntry) {
 			this.responsesRenderer = new CollectionRenderer(this.game, currentEntry.entries, (model) => new ConversationResponseRenderer(this.game, model, this.responses));
 			this.addChild(this.responsesRenderer);
+			this.currentEntryRenderer = new ConversationEntryRenderer(this.game, currentEntry, this.currentEntry);
+			this.addChild(this.currentEntryRenderer);
 		}
+
 	}
 }
