@@ -1,6 +1,13 @@
 import ModelNode from "../basic/ModelNode";
 import DirtyValue from "../basic/DirtyValue";
 import Vector2 from "../basic/Vector2";
+import BattleModel from "../battle/BattleModel";
+import WaypointModel from "../resources/WaypointModel";
+import TextureModel from "../resources/TextureModel";
+import MaterialModel from "../resources/MaterialModel";
+import {SEX_MAMMOTH, SEX_WOLF} from "../CharacterPreviewModel";
+import NullableNode from "../basic/NullableNode";
+import RunningConversationModel from "./conversation/RunningConversationModel";
 
 export const GAME_MODE_MAP = 'map';
 export const GAME_MODE_BATTLE = 'battle';
@@ -38,6 +45,16 @@ export default class SaveGameModel extends ModelNode {
 	 */
 	pathProgress;
 
+	/**
+	 * @type BattleModel
+	 */
+	battle;
+
+	/**
+	 * @type NullableNode
+	 */
+	runningConversation;
+
 	constructor() {
 		super();
 
@@ -48,6 +65,9 @@ export default class SaveGameModel extends ModelNode {
 		this.currentPathId = this.addProperty('currentPathId', new DirtyValue(1));
 		this.pathProgress = this.addProperty('pathProgress', new DirtyValue(0));
 
+		this.battle = this.addProperty('battle', new BattleModel());
+
+		this.runningConversation = this.addProperty('runningConversation', new NullableNode(() => new RunningConversationModel()));
 	}
 
 }

@@ -70,8 +70,8 @@ export default class ActivatedTreeNode {
 	activate() {
 		if (!this.isActivated) {
 			this.activateInternal();
-			this.isActivated = true;
 			this.children.forEach((c) => c.activate());
+			this.isActivated = true;
 		}
 	}
 
@@ -82,8 +82,8 @@ export default class ActivatedTreeNode {
 	deactivate() {
 		if (this.isActivated) {
 			this.children.forEach((c) => c.deactivate());
-			this.isActivated = false;
 			this.deactivateInternal();
+			this.isActivated = false;
 		}
 	}
 

@@ -37,7 +37,7 @@ export default class MapRenderer extends DomRenderer {
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', 'map');
+		this.container = this.addElement('div', ['map', 'container-host']);
 		this.canvas = Pixies.createElement(this.container, 'canvas');
 		this.context2d = this.canvas.getContext("2d");
 

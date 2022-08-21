@@ -3,6 +3,9 @@ import ControlsController from "./ControlsController";
 import MapController from "./MapController";
 import {GAME_MODE_BATTLE, GAME_MODE_MAP} from "../model/savegame/SaveGameModel";
 import BattleController from "./BattleController";
+import * as localForage from "localforage";
+import EditorController from "./EditorController";
+import ConversationController from "./ConversationController";
 
 export default class GameController extends ControllerNode {
 
@@ -11,24 +14,42 @@ export default class GameController extends ControllerNode {
 	 */
 	model;
 
+	/**
+	 * @type ControlsController
+	 */
 	controlsController;
 
 	mainController;
+
+	/**
+	 * @type EditorController
+	 */
+	editorController;
+
+	/**
+	 * @type ConversationController
+	 */
+	conversationController;
 
 	constructor(model) {
 		super(model, model);
 
 		this.model = model;
 
+		this.isResourcesDirty = false;
 		this.controlsController = this.addChild(new ControlsController(this.game, this.model.controls));
+		this.conversationController = null;
 
 		this.onResizeHandler = () => this.onResize();
 		this.onDebugKeyHandler = () => this.onDebugKey();
+		this.updateDebugMenuHandler = () => this.updateDebugMenu();
+		this.conversationChangedHandler = () => this.updateConversation();
 
 		this.model.saveGame.mode.addOnChangeListener(() => {
 			this.updateGameMode();
 		});
 
+		this.updateDebugMenu();
 		this.updateGameMode();
 	}
 
@@ -36,11 +57,49 @@ export default class GameController extends ControllerNode {
 		this.onResize();
 		window.addEventListener('resize', this.onResizeHandler);
 		this.model.controls.addOnDebugKeyListener(this.onDebugKeyHandler);
+		this.model.isInDebugMode.addOnChangeListener(this.updateDebugMenuHandler);
+
+		this.updateConversation();
+		this.model.saveGame.runningConversation.addOnChangeListener(this.conversationChangedHandler);
+
+		this.loadResourcesFromStorage().then(() => console.log('resources loaded'));
+		this.model.resources.addOnDirtyListener(() => this.isResourcesDirty = true);
 	}
 
 	deactivateInternal() {
 		window.removeEventListener('resize', this.onResizeHandler);
 		this.model.controls.removeOnDebugKeyListener(this.onDebugKeyHandler);
+		this.model.isInDebugMode.removeOnChangeListener(this.updateDebugMenuHandler);
+		this.model.saveGame.runningConversation.removeOnChangeListener(this.conversationChangedHandler);
+	}
+
+	updateInternal(delta) {
+		super.updateInternal(delta);
+		if (this.isResourcesDirty) {
+			this.isResourcesDirty = false;
+			this.saveResourcesToStorage().then(() => console.log('resources saved'));
+		}
+	}
+
+	updateConversation() {
+		if (this.conversationController) {
+			this.removeChild(this.conversationController);
+			this.conversationController = null;
+		}
+		if (this.model.saveGame.runningConversation.isSet()) {
+			this.conversationController = this.addChild(new ConversationController(this.game, this.model.saveGame.runningConversation.get()));
+		}
+	}
+
+	updateDebugMenu() {
+		if (this.editorController) {
+			this.removeChild(this.editorController);
+			this.editorController = null;
+		}
+		if (this.model.isInDebugMode.get()) {
+			this.editorController = new EditorController(this.game, this.model.editor);
+			this.addChild(this.editorController);
+		}
 	}
 
 	updateGameMode() {
@@ -52,10 +111,9 @@ export default class GameController extends ControllerNode {
 				this.mainController = this.addChild(new MapController(this.game, this.model.saveGame));
 				break;
 			case GAME_MODE_BATTLE:
-				this.mainController = this.addChild(new BattleController(this.game, this.model.battle));
+				this.mainController = this.addChild(new BattleController(this.game, this.model.saveGame.battle));
 				break;
 		}
-
 	}
 
 	onResize() {
@@ -65,6 +123,29 @@ export default class GameController extends ControllerNode {
 
 	onDebugKey() {
 		this.model.isInDebugMode.set(!this.model.isInDebugMode.get());
+	}
+
+	async loadResourcesFromStorage() {
+		try {
+			const state = await localForage.getItem('kobok-resources');
+			if (state) {
+				this.model.resources.restoreState(state);
+				this.updateGameMode();
+			} else {
+				console.log('nothing in storage');
+			}
+		} catch (err) {
+			console.error(err);
+		}
+	}
+
+	async saveResourcesToStorage() {
+		const state = this.model.resources.getState();
+		try {
+			await localForage.setItem('kobok-resources', state);
+		} catch (err) {
+			console.error(err);
+		}
 	}
 
 }

@@ -3,9 +3,8 @@
 	src: url("../assets/Vollkorn-SemiBold.ttf") format('truetype');
 }
 
-.history .section-header {
-	text-align: center;
-	line-height: 150%;
+.hidden {
+	display: none !important;
 }
 
 .menu, svg {
@@ -19,76 +18,101 @@
 html, body {
 	font-family: "Vollkorn", "Georgia", serif;
 	color: black;
-	font-size: 120%;
+	font-size: 12pt;
 	background: #000;
 	margin: 0;
 	padding: 0;
 	overflow: hidden;
 }
 
-.container > * {
+.container-host,
+.container-host > canvas,
+.container-host > svg {
 	position: absolute;
 	top: 0;
 	left: 0;
 }
 
-.main .map svg,
-.main .three,
-.debug-menu {
-	position: absolute;
-	top: 0;
-	left: 0;
+.editor {
+	background-color: black;
+	color: gray;
+	font-size: 10pt;
+	padding: 10px;
 }
 
-.three {
-	background-size: contain;
-	background-repeat: no-repeat;
-	background-image: url('../assets/img/paper.png');
-	padding: 25px;
+.editor button {
+	background-color: gray;
+	color: black;
+	border: 0;
+	border-radius: 5px;
+	cursor: pointer;
+	margin: 10px;
 }
 
-.hidden {
-	display: none !important;
+.editor button:hover {
+	background-color: lightblue;
 }
 
-.menu {
-	position: fixed;
-	z-index: 1000;
-}
-
-.menu a:hover {
+.editor button.active {
+	background-color: black;
 	color: white;
+	border: 1px white solid;
+	cursor: default;
+}
+
+.editor .dock {
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	justify-items: flex-start;
+}
+
+.editor .dock > * {
+
+}
+
+.editor .table,
+.editor form {
+	border: 1px gray solid;
+	border-radius: 5px;
+	margin: 10px;
+	padding: 10px;
+}
+
+.editor table td {
+	border-left: 1px gray solid;
+}
+
+.editor table td:last-of-type {
+	border-right: 1px gray solid;
+}
+
+.editor table tr:hover {
+	color: lightblue;
 	cursor: pointer;
 }
 
-.menu ul,
-.menu ul li {
+.editor form div {
+	display: grid;
+	grid-template-columns: 1fr 3fr;
+	gap: 10px;
+	margin-bottom: 10px;
+}
+
+.menu a:hover {
+	color: lightblue;
+	cursor: pointer;
+}
+
+.menu .active {
+	color: white;
+}
+
+.menu,
+.menu li {
 	margin: 0;
 	padding: 0;
 	list-style: none;
-}
-
-.menu.main {
-	top: 15%;
-	left: 15%;
-}
-
-.menu.main ul {
-	display: flex;
-	flex-direction: column;
-	flex-wrap: wrap;
-}
-
-.menu.main ul li {
-	flex: 1 1 auto;
-}
-
-.menu.list ul {
-	max-height: 600px;
-}
-
-.menu.list ul li {
-	padding-right: 25px;
 }
 
 .loading {
@@ -112,4 +136,53 @@ html, body {
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-image: url('../assets/img/paper.png');
+}
+
+.overlay {
+
+}
+
+.portrait img {
+	width: 100%;
+}
+
+.conversation {
+	display: flex;
+	position: fixed;
+	flex-direction: column;
+	align-items: center;
+	justify-items: center;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+
+.conversation .inner {
+	margin: auto;
+	background-image: url('../assets/img/texture/paper.jpg');
+	background-color: sandybrown;
+	color:saddlebrown;
+	width: 80%;
+	height: 80%;
+}
+
+.conversation .info {
+	display: flex;
+	flex-direction: row;
+}
+
+.conversation .info .portrait {
+	max-width: 150px;
+	max-height: 150px;
+}
+
+.conversation .response a:hover {
+	cursor: pointer;
+	color: orange;
+}
+
+.conversation .line .portrait {
+	max-width: 50px;
+	max-height: 50px;
 }

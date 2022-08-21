@@ -15,11 +15,13 @@ export default class NullableNode extends DirtyValue {
 	 * @param {ModelNode} value
 	 */
 	set(value) {
-		super.set(value);
 		if (this.value) {
 			this.value.removeOnDirtyListener(this.valueDirtyHandler);
 		}
-		if (value) {
+
+		super.set(value);
+
+		if (this.value) {
 			this.value.addOnDirtyListener(this.valueDirtyHandler);
 		}
 	}
@@ -34,7 +36,7 @@ export default class NullableNode extends DirtyValue {
 	restoreStateInternal(state) {
 		this.set(null);
 		if (state) {
-			const node = this.nodeFactory(state);
+			const node = this.nodeFactory();
 			node.restoreState(state);
 			this.set(node);
 		}

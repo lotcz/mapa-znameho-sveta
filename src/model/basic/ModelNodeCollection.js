@@ -64,11 +64,19 @@ export default class ModelNodeCollection extends ModelNode {
 		return this.children.map(transform);
 	}
 
+	forEach(func) {
+		return this.children.forEach(func);
+	}
+
 	clean() {
 		if (this.isDirty) {
 			super.clean();
 			this.children.forEach((child) => child.clean());
 		}
+	}
+
+	reset() {
+		this.children.reset();
 	}
 
 	addOnAddListener(handler) {

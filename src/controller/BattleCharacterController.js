@@ -69,7 +69,7 @@ export default class BattleCharacterController extends ControllerNode {
 	}
 
 	goTo(position) {
-		const blocks = this.game.battle.characters.filter((ch) => ch !== this.model).map((ch) => ch.position);
+		const blocks = this.game.saveGame.battle.characters.filter((ch) => ch !== this.model).map((ch) => ch.position);
 		if (PathFinder.isTileBlocked(this.model.position.round(), blocks)) {
 			console.log('Blocked');
 			return;

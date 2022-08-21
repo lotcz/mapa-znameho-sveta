@@ -40,7 +40,7 @@ export default class BattleRenderer extends DomRenderer {
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', ['battle', 'container']);
+		this.container = this.addElement('div', ['battle', 'container-host']);
 		this.bgCanvas = Pixies.createElement(this.container, 'canvas');
 		this.context2d = this.bgCanvas.getContext('2d');
 

@@ -6,6 +6,11 @@ export default class RaceModel extends IdentifiedModelNode {
 	/**
 	 * @type DirtyValue
 	 */
+	name;
+
+	/**
+	 * @type DirtyValue
+	 */
 	description;
 
 	/**
@@ -13,9 +18,10 @@ export default class RaceModel extends IdentifiedModelNode {
 	 */
 	skinColor;
 
-	constructor(id, name) {
-		super(id, name);
+	constructor(id) {
+		super(id);
 
+		this.name = this.addProperty('name', new DirtyValue('Adelan'));
 		this.description = this.addProperty('description', new DirtyValue('Popis národa'));
 		this.skinColor = this.addProperty('color', new DirtyValue('#006000'));
 	}

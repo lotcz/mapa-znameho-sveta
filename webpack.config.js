@@ -28,7 +28,6 @@ module.exports = {
 		new CopyWebpackPlugin({
 			patterns: [
 				{ from: 'pwa.webmanifest', to: '' },
-				{ from: 'assets/favicon.ico', to: '' },
 				{ from: 'assets/**', to: '' }
 			]
 		})
@@ -43,7 +42,7 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				test: /\.(jpg|png|svg|woff|woff2|ttf)$/,
+				test: /\.(jpg|jpeg|png|woff|woff2|ttf)$/,
 				use: {
 					loader: 'url-loader',
 				},
@@ -58,7 +57,7 @@ module.exports = {
 					'style-loader',
 					'css-loader'
 				]
-			},
+			}
 		]
 	}
 };

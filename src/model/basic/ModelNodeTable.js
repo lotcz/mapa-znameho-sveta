@@ -6,7 +6,7 @@ import ModelNodeCollection from "./ModelNodeCollection";
 export default class ModelNodeTable extends ModelNodeCollection {
 
 	getById(id) {
-		return this.children.find((ch) => ch.id.equalsTo(id));
+		return this.children.find((ch) => ch.id.value == id);
 	}
 
 	maxId() {
