@@ -31,16 +31,18 @@ export default class TableRowRenderer extends DomRenderer {
 	}
 
 	updateRow() {
-		console.log('updating');
 		Pixies.emptyElement(this.container);
 
 		this.model.properties.forEach((name, value) => {
 			const cell = Pixies.createElement(this.container, 'td');
 			if (value) {
-				if (typeof value.get === 'function') {
-					cell.innerText = value.get();
-				} else {
-					cell.innerText = value.toString();
+				const text = (typeof value.get === 'function') ? value.get() : value.toString();
+				if (typeof text === 'string') {
+					let short = text.substring(0, 15);
+					if (short.length < text.length) {
+						short += '...';
+					}
+					cell.innerText = short;
 				}
 			}
 		});

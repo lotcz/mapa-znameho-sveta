@@ -6,6 +6,7 @@ import BattleController from "./BattleController";
 import * as localForage from "localforage";
 import EditorController from "./EditorController";
 import ConversationController from "./ConversationController";
+import DirtyValue from "../model/basic/DirtyValue";
 
 export default class GameController extends ControllerNode {
 
@@ -44,10 +45,7 @@ export default class GameController extends ControllerNode {
 		this.onDebugKeyHandler = () => this.onDebugKey();
 		this.updateDebugMenuHandler = () => this.updateDebugMenu();
 		this.conversationChangedHandler = () => this.updateConversation();
-
-		this.model.saveGame.mode.addOnChangeListener(() => {
-			this.updateGameMode();
-		});
+		this.onGameModeChanged = () => this.updateGameMode();
 
 		this.updateDebugMenu();
 		this.updateGameMode();
@@ -62,8 +60,11 @@ export default class GameController extends ControllerNode {
 		this.updateConversation();
 		this.model.saveGame.runningConversation.addOnChangeListener(this.conversationChangedHandler);
 
-		this.loadResourcesFromStorage().then(() => console.log('resources loaded'));
-		this.model.resources.addOnDirtyListener(() => this.isResourcesDirty = true);
+		this.loadResourcesFromStorage().then(() => {
+			console.log('resources loaded');
+			this.model.resources.addOnDirtyListener(() => this.isResourcesDirty = true);
+			this.model.saveGame.mode.addOnChangeListener(this.onGameModeChanged);
+		});
 	}
 
 	deactivateInternal() {
@@ -71,6 +72,7 @@ export default class GameController extends ControllerNode {
 		this.model.controls.removeOnDebugKeyListener(this.onDebugKeyHandler);
 		this.model.isInDebugMode.removeOnChangeListener(this.updateDebugMenuHandler);
 		this.model.saveGame.runningConversation.removeOnChangeListener(this.conversationChangedHandler);
+		this.model.saveGame.mode.removeOnChangeListener(this.onGameModeChanged);
 	}
 
 	updateInternal(delta) {
@@ -85,9 +87,12 @@ export default class GameController extends ControllerNode {
 		if (this.conversationController) {
 			this.removeChild(this.conversationController);
 			this.conversationController = null;
+			if (this.mainController) this.mainController.activate();
 		}
 		if (this.model.saveGame.runningConversation.isSet()) {
-			this.conversationController = this.addChild(new ConversationController(this.game, this.model.saveGame.runningConversation.get()));
+			this.conversationController = new ConversationController(this.game, this.model.saveGame.runningConversation.get());
+			this.addChild(this.conversationController);
+			if (this.mainController) this.mainController.deactivate();
 		}
 	}
 
@@ -130,7 +135,6 @@ export default class GameController extends ControllerNode {
 			const state = await localForage.getItem('kobok-resources');
 			if (state) {
 				this.model.resources.restoreState(state);
-				this.updateGameMode();
 			} else {
 				console.log('nothing in storage');
 			}

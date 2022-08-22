@@ -15,7 +15,7 @@ export default class ConversationController extends ControllerNode {
 
 		this.model = model;
 
-		this.onEntrySelected = (p) => this.entrySelected(p.oldValue, p.newValue);
+		this.onEntrySelected = () => this.entrySelected();
 		this.onRestart = () => this.restartConversation();
 	}
 
@@ -32,16 +32,13 @@ export default class ConversationController extends ControllerNode {
 		this.model.removeEventListener('restart', this.onRestart);
 	}
 
-	entrySelected(oldval, newval) {
-		if (oldval) {
-			this.model.pastEntries.add(oldval);
-		}
-		if (!this.model.currentEntry.isEmpty()) {
+	entrySelected() {
+		if (this.model.currentEntry.isSet()) {
+			this.model.pastEntries.add(this.model.currentEntry.get());
 			const entry = this.model.currentEntry.get();
 			entry.entries.reset();
 			entry.originalEntry.entries.forEach((e) => {
 				const character = this.game.resources.characters.getById(1);
-				console.log(character);
 				const runningEntry = entry.entries.add(new RunningConversationEntryModel(this.model, e, character));
 			});
 			entry.lines.reset();
@@ -55,7 +52,6 @@ export default class ConversationController extends ControllerNode {
 	}
 
 	restartConversation() {
-		this.model.currentEntry.set(null);
 		this.model.pastEntries.reset();
 		this.model.currentEntry.set(new RunningConversationEntryModel(this.model, this.model.conversation.initialEntry));
 	}

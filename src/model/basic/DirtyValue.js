@@ -1,7 +1,7 @@
 import ModelNode from "./ModelNode";
 
 export default class DirtyValue extends ModelNode {
-	value;
+	value = null;
 
 	constructor(value = null) {
 		super();

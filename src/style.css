@@ -3,6 +3,12 @@
 	src: url("../assets/Vollkorn-SemiBold.ttf") format('truetype');
 }
 
+:root {
+	--dark-brown: #311a0a;
+	--light-brown: saddlebrown;
+	--orange: sandybrown;
+}
+
 .hidden {
 	display: none !important;
 }
@@ -178,25 +184,51 @@ html, body {
 	user-select: none;
 }
 
-.conversation .inner {
+.conversation .panel {
 	margin: auto;
+	color:#311a0a;
 	background-image: url('../assets/img/texture/paper.jpg');
 	background-color: sandybrown;
-	color:#311a0a;
 	width: 900px;
 	max-width: 100%;
 	height: 85%;
 	max-height: 100%;
-	padding: 2rem;
 	border-radius: 10px;
+	box-shadow: #311a0a 0 0 60px;
+	display: flex;
+}
+
+.conversation .inner {
+	border-radius: 10px;
+	padding: 2rem;
 	box-shadow: #311a0a 0 0 40px inset;
-	border: 1px #311a0a solid;
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	justify-content: space-between;
 }
 
 .conversation .scroll {
 	overflow-y: auto;
 	overflow-x: hidden;
-	max-height: 100%;
+}
+
+.conversation .scroll {
+	scrollbar-color: var(--dark-brown) var(--orange);
+	scrollbar-width: thin;
+}
+
+.conversation .scroll::-webkit-scrollbar {
+	width: 10px; /* Mostly for vertical scrollbars */
+	height: 10px; /* Mostly for horizontal scrollbars */
+}
+
+.conversation .scroll::-webkit-scrollbar-thumb { /* Foreground */
+	background: #311a0a;
+}
+
+.conversation .scroll::-webkit-scrollbar-track { /* Background */
+	background: sandybrown;
 }
 
 .conversation .info {
@@ -217,6 +249,14 @@ html, body {
 
 .conversation .info .description {
 	flex: 1;
+}
+
+.conversation .entries {
+	flex: 1 2;
+}
+
+.conversation .responses {
+	height: 100px;
 }
 
 .conversation h2 {

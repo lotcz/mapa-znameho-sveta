@@ -76,8 +76,10 @@ export default class Pixies {
 	}
 
 	static destroyElement(el) {
-		if (el) {
+		if (el && el.parentNode) {
 			el.parentNode.removeChild(el);
+		}
+		if (el && typeof el.remove === 'function') {
 			el.remove();
 		}
 	}

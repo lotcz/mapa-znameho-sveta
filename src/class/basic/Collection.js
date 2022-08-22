@@ -54,6 +54,10 @@ export default class Collection extends Node {
 		return this.removeByIndex(0);
 	}
 
+	removeLast() {
+		return this.removeByIndex(this.count() - 1);
+	}
+
 	first() {
 		return this.items[0];
 	}

@@ -1,16 +1,11 @@
 import DomRenderer from "../basic/DomRenderer";
 import Pixies from "../../class/basic/Pixies";
-import MapRenderer from "../MapRenderer";
-import {GAME_MODE_BATTLE, GAME_MODE_MAP} from "../../model/savegame/SaveGameModel";
-import BattleRenderer from "../BattleRenderer";
-import NodeTableRenderer from "../editor/NodeTableRenderer";
 import CollectionRenderer from "../basic/CollectionRenderer";
 import ConversationEntryRenderer from "./ConversationEntryRenderer";
 import ConversationResponseRenderer from "./ConversationResponseRenderer";
 import ConversationEntryModel from "../../model/resources/conversation/ConversationEntryModel";
 import RunningConversationEntryModel from "../../model/savegame/conversation/RunningConversationEntryModel";
-import ConversationLineModel from "../../model/resources/conversation/ConversationLineModel";
-import RunningConversationLineModel from "../../model/savegame/conversation/RunningConversationLineModel";
+import AnimatedValue from "../../class/animating/AnimatedValue";
 
 export default class ConversationRenderer extends DomRenderer {
 
@@ -30,6 +25,9 @@ export default class ConversationRenderer extends DomRenderer {
 		this.responsesRenderer = null;
 
 		this.onCurrentEntryChanged = () => this.updateResponses();
+
+		this.scrollLastTime = 0;
+		this.scrollAnimation = null;
 	}
 
 	activateInternal() {
@@ -38,10 +36,10 @@ export default class ConversationRenderer extends DomRenderer {
 		this.container.addEventListener('click', (e) => e.stopPropagation());
 		this.container.addEventListener('wheel', (e) => e.stopPropagation());
 
-		this.inner = Pixies.createElement(this.container, 'div', 'inner');
-		const scroll = this.scroll = Pixies.createElement(this.inner, 'div', 'scroll');
+		this.panel = Pixies.createElement(this.container, 'div', 'panel');
+		this.inner = Pixies.createElement(this.panel, 'div', 'inner');
 
-		const header = Pixies.createElement(scroll, 'div', 'header');
+		const header = Pixies.createElement(this.inner, 'div', 'header');
 		const title = Pixies.createElement(header, 'h2', 'title');
 		title.innerText = this.model.getTitle();
 
@@ -62,7 +60,16 @@ export default class ConversationRenderer extends DomRenderer {
 			Pixies.magicEditor(title, (value) => this.model.conversation.title.set(value));
 			Pixies.magicEditor(description, (value) => this.model.conversation.description.set(value), true);
 
-			const buttons = Pixies.createElement(info, 'div', 'buttons');
+			const buttons = Pixies.createElement(info, 'div');
+			const back = Pixies.createElement(buttons, 'button');
+			back.innerText = 'Back';
+			back.addEventListener('click', () => {
+				const current = this.model.pastEntries.children.removeLast();
+				const prev = this.model.pastEntries.children.removeLast();
+				if (prev) {
+					this.model.currentEntry.set(prev);
+				}
+			});
 			const restart = Pixies.createElement(buttons, 'button');
 			restart.innerText = 'Restart';
 			restart.addEventListener('click', () => {
@@ -75,26 +82,13 @@ export default class ConversationRenderer extends DomRenderer {
 			});
 		}
 
-		this.entries = Pixies.createElement(scroll, 'div', 'entries');
+		this.entries = Pixies.createElement(this.inner, 'div', ['entries', 'scroll']);
 		this.entriesRenderer = new CollectionRenderer(this.game, this.model.pastEntries, (model) => new ConversationEntryRenderer(this.game, model, this.entries));
 		this.addChild(this.entriesRenderer);
 
-		this.currentEntry = Pixies.createElement(scroll, 'div', 'current-entry');
+		this.responses = Pixies.createElement(this.inner, 'div', ['responses', 'scroll']);
 		if (this.game.isInDebugMode.get()) {
-			const buttons = Pixies.createElement(scroll, 'div', 'buttons');
-			const add = Pixies.createElement(buttons, 'button');
-			add.innerText = 'Add Line';
-			add.addEventListener('click', () => {
-				const currentEntry = this.model.currentEntry.get();
-				const newLine = currentEntry.originalEntry.lines.add(new ConversationLineModel());
-				newLine.text.set('line text');
-				currentEntry.lines.add(new RunningConversationLineModel(this.model, currentEntry, newLine));
-			});
-		}
-
-		this.responses = Pixies.createElement(scroll, 'div', 'responses');
-		if (this.game.isInDebugMode.get()) {
-			const buttons = Pixies.createElement(this.scroll, 'div', 'buttons');
+			const buttons = Pixies.createElement(this.inner, 'div', 'buttons');
 			const add = Pixies.createElement(buttons, 'button');
 			add.innerText = 'Add Response';
 			add.addEventListener('click', () => {
@@ -129,5 +123,24 @@ export default class ConversationRenderer extends DomRenderer {
 			this.addChild(this.currentEntryRenderer);
 		}
 
+		this.scrollDown();
+	}
+
+	scrollDown() {
+		let scrollLastTime = performance.now();
+		const scrollAnimation = new AnimatedValue(this.entries.scrollTop, this.entries.scrollHeight, 5000);
+		const timer = setInterval(
+			() => {
+				const time = performance.now();
+				const delta = time - scrollLastTime;
+				this.entries.scrollTop = scrollAnimation.get(delta);
+				console.log(this.entries.scrollTop);
+				scrollLastTime = time;
+				if (scrollAnimation.isFinished()) {
+					clearInterval(timer);
+				}
+			},
+		150
+		);
 	}
 }

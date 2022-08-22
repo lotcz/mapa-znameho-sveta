@@ -27,7 +27,7 @@ export default class ModelNode extends Node {
 		if (state.p) {
 			this.properties.forEach((name, property) => property.restoreState(state.p[name]));
 		}
-		if (state.i) {
+		if (state.i !== undefined) {
 			this.restoreStateInternal(state.i);
 		}
 	}
