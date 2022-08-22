@@ -1,7 +1,7 @@
 import DirtyValue from "../basic/DirtyValue";
-import IdentifiedModelNode from "../basic/IdentifiedModelNode";
+import TemplateNode from "../basic/TemplateNode";
 
-export default class CharacterModel extends IdentifiedModelNode {
+export default class CharacterModel extends TemplateNode {
 
 	/**
 	 * @type DirtyValue

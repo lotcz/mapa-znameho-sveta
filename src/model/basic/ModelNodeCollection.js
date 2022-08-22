@@ -32,6 +32,10 @@ export default class ModelNodeCollection extends ModelNode {
 		return this.children.add(child);
 	}
 
+	prepend(child) {
+		this.children.prepend(child);
+	}
+
 	remove(child) {
 		return this.children.remove(child);
 	}

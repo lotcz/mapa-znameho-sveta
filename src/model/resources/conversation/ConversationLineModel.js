@@ -18,6 +18,11 @@ export default class ConversationLineModel extends ModelNode {
 	 */
 	isNarrator;
 
+	/**
+	 * @type DirtyValue
+	 */
+	isResponse;
+
 	constructor() {
 		super();
 
@@ -25,6 +30,7 @@ export default class ConversationLineModel extends ModelNode {
 		this.portrait = this.addProperty('portrait', new DirtyValue());
 		this.isNarrator = this.addProperty('isNarrator', new DirtyValue(false));
 
+		this.isResponse = new DirtyValue(false);
 	}
 
 }

@@ -50,7 +50,7 @@ export default class GameRenderer extends DomRenderer {
 		this.model.saveGame.mode.addOnChangeListener(this.updateGameModeHandler);
 
 		this.updateConversation();
-		this.model.saveGame.runningConversation.addOnChangeListener(this.updateConversationHandler);
+		this.model.saveGame.conversation.addOnChangeListener(this.updateConversationHandler);
 
 		this.updateDebugMenu();
 		this.model.isInDebugMode.addOnChangeListener(this.updateDebugMenuHandler);
@@ -59,7 +59,7 @@ export default class GameRenderer extends DomRenderer {
 	deactivateInternal() {
 		this.model.assets.isLoading.removeOnChangeListener(this.updateLoadingHandler);
 		this.model.saveGame.mode.removeOnChangeListener(this.updateGameModeHandler);
-		this.model.saveGame.runningConversation.removeOnChangeListener(this.updateConversationHandler);
+		this.model.saveGame.conversation.removeOnChangeListener(this.updateConversationHandler);
 		this.model.isInDebugMode.removeOnChangeListener(this.updateDebugMenuHandler);
 		this.removeElement(this.mainLayer);
 	}
@@ -85,8 +85,8 @@ export default class GameRenderer extends DomRenderer {
 		if (this.conversationRenderer) {
 			this.removeChild(this.conversationRenderer);
 		}
-		if (this.model.saveGame.runningConversation.isSet()) {
-			this.conversationRenderer = this.addChild(new ConversationRenderer(this.game, this.model.saveGame.runningConversation.get(), this.overlayLayer));
+		if (this.model.saveGame.conversation.isSet()) {
+			this.conversationRenderer = this.addChild(new ConversationRenderer(this.game, this.model.saveGame.conversation.get(), this.overlayLayer));
 		}
 	}
 

@@ -1,12 +1,10 @@
 import ControllerNode from "./basic/ControllerNode";
-import RunningConversationEntryModel from "../model/savegame/conversation/RunningConversationEntryModel";
-import RunningConversationLineModel from "../model/savegame/conversation/RunningConversationLineModel";
 import ConversationLineModel from "../model/resources/conversation/ConversationLineModel";
 
 export default class ConversationController extends ControllerNode {
 
 	/**
-	 * @type RunningConversationModel
+	 * @type ConversationModel
 	 */
 	model;
 
@@ -21,6 +19,9 @@ export default class ConversationController extends ControllerNode {
 
 	activateInternal() {
 		this.model.currentEntry.addOnChangeListener(this.onEntrySelected);
+		if (this.model.character.isEmpty() && this.model.characterId.isSet()) {
+			this.model.character.set(this.game.resources.characterTemplates.getById(this.model.characterId.get()));
+		}
 		if (this.model.currentEntry.isEmpty()) {
 			this.restartConversation();
 		}
@@ -34,26 +35,23 @@ export default class ConversationController extends ControllerNode {
 
 	entrySelected() {
 		if (this.model.currentEntry.isSet()) {
-			this.model.pastEntries.add(this.model.currentEntry.get());
 			const entry = this.model.currentEntry.get();
-			entry.entries.reset();
-			entry.originalEntry.entries.forEach((e) => {
-				const character = this.game.resources.characters.getById(1);
-				const runningEntry = entry.entries.add(new RunningConversationEntryModel(this.model, e, character));
+			entry.entries.forEach((responseEntry) => {
+				const character = this.game.resources.characterTemplates.getById(1);
+				responseEntry.responseCharacter.set(character);
 			});
-			entry.lines.reset();
-			const line = new ConversationLineModel();
-			line.text.set(entry.originalEntry.responseText.get());
-			entry.lines.add(new RunningConversationLineModel(this.model, entry, line, true));
-			entry.originalEntry.lines.forEach((l) => {
-				entry.lines.add(new RunningConversationLineModel(this.model, entry, l, false));
+			entry.lines.forEach((line) => {
+				line.portrait.set(this.model.portrait.get());
 			});
+
+			this.model.pastEntries.add(entry);
 		}
 	}
 
 	restartConversation() {
 		this.model.pastEntries.reset();
-		this.model.currentEntry.set(new RunningConversationEntryModel(this.model, this.model.conversation.initialEntry));
+		this.model.currentEntry.set(null);
+		this.model.currentEntry.set(this.model.initialEntry);
 	}
 
 }

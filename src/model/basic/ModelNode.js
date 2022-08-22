@@ -81,6 +81,12 @@ export default class ModelNode extends Node {
 		}
 	}
 
+	clone() {
+		const n = new this.constructor();
+		n.restoreState(this.getState());
+		return n;
+	}
+
 	addProperty(name, property) {
 		return this.properties.add(name, property);
 	}

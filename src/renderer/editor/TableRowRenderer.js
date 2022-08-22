@@ -43,6 +43,8 @@ export default class TableRowRenderer extends DomRenderer {
 						short += '...';
 					}
 					cell.innerText = short;
+				} else {
+					cell.innerText = text;
 				}
 			}
 		});

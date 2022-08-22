@@ -2,12 +2,8 @@ import ModelNode from "../basic/ModelNode";
 import DirtyValue from "../basic/DirtyValue";
 import Vector2 from "../basic/Vector2";
 import BattleModel from "../battle/BattleModel";
-import WaypointModel from "../resources/WaypointModel";
-import TextureModel from "../resources/TextureModel";
-import MaterialModel from "../resources/MaterialModel";
-import {SEX_MAMMOTH, SEX_WOLF} from "../CharacterPreviewModel";
-import NullableNode from "../basic/NullableNode";
-import RunningConversationModel from "./conversation/RunningConversationModel";
+import ModelNodeTable from "../basic/ModelNodeTable";
+import CharacterModel from "../characters/CharacterModel";
 
 export const GAME_MODE_MAP = 'map';
 export const GAME_MODE_BATTLE = 'battle';
@@ -18,6 +14,11 @@ export default class SaveGameModel extends ModelNode {
 	 * @type DirtyValue
 	 */
 	mode;
+
+	/**
+	 * @type ModelNodeTable
+	 */
+	characters;
 
 	/**
 	 * @type Vector2
@@ -51,9 +52,9 @@ export default class SaveGameModel extends ModelNode {
 	battle;
 
 	/**
-	 * @type NullableNode
+	 * @type DirtyValue
 	 */
-	runningConversation;
+	conversation;
 
 	constructor() {
 		super();
@@ -65,9 +66,11 @@ export default class SaveGameModel extends ModelNode {
 		this.currentPathId = this.addProperty('currentPathId', new DirtyValue(1));
 		this.pathProgress = this.addProperty('pathProgress', new DirtyValue(0));
 
+		this.characters = this.addProperty('characters', new ModelNodeTable((id) => new CharacterModel(id)));
+
 		this.battle = this.addProperty('battle', new BattleModel());
 
-		this.runningConversation = this.addProperty('runningConversation', new NullableNode(() => new RunningConversationModel()));
+		this.conversation = new DirtyValue();
 	}
 
 }

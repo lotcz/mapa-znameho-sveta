@@ -8,17 +8,30 @@ export default class EditorModel extends ModelNode {
 	 */
 	activeOption;
 
-	menuOptions;
+	resourcesOptions;
+
+	mapOptions;
+
+	saveGameOptions;
 
 	constructor() {
 		super();
 
 		this.activeOption = this.addProperty('activeOption', new DirtyValue());
 
-		this.menuOptions = {
+		this.resourcesOptions = {
 			races: 'Races',
-			characters: 'Characters',
+			characterTemplates: 'Character Templates',
 			conversations: 'Conversations'
+		};
+
+		this.mapOptions = {
+			paths: 'Paths',
+			locations: 'Locations'
+		};
+
+		this.saveGameOptions = {
+			characters: 'Characters'
 		};
 
 	}

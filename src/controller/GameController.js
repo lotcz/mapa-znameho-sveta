@@ -58,7 +58,7 @@ export default class GameController extends ControllerNode {
 		this.model.isInDebugMode.addOnChangeListener(this.updateDebugMenuHandler);
 
 		this.updateConversation();
-		this.model.saveGame.runningConversation.addOnChangeListener(this.conversationChangedHandler);
+		this.model.saveGame.conversation.addOnChangeListener(this.conversationChangedHandler);
 
 		this.loadResourcesFromStorage().then(() => {
 			console.log('resources loaded');
@@ -71,7 +71,7 @@ export default class GameController extends ControllerNode {
 		window.removeEventListener('resize', this.onResizeHandler);
 		this.model.controls.removeOnDebugKeyListener(this.onDebugKeyHandler);
 		this.model.isInDebugMode.removeOnChangeListener(this.updateDebugMenuHandler);
-		this.model.saveGame.runningConversation.removeOnChangeListener(this.conversationChangedHandler);
+		this.model.saveGame.conversation.removeOnChangeListener(this.conversationChangedHandler);
 		this.model.saveGame.mode.removeOnChangeListener(this.onGameModeChanged);
 	}
 
@@ -89,8 +89,8 @@ export default class GameController extends ControllerNode {
 			this.conversationController = null;
 			if (this.mainController) this.mainController.activate();
 		}
-		if (this.model.saveGame.runningConversation.isSet()) {
-			this.conversationController = new ConversationController(this.game, this.model.saveGame.runningConversation.get());
+		if (this.model.saveGame.conversation.isSet()) {
+			this.conversationController = new ConversationController(this.game, this.model.saveGame.conversation.get());
 			this.addChild(this.conversationController);
 			if (this.mainController) this.mainController.deactivate();
 		}

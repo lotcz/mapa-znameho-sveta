@@ -14,6 +14,12 @@ export default class Collection extends Node {
 		return element;
 	}
 
+	prepend(element) {
+		this.items.unshift(element);
+		this.triggerEvent('add', element);
+		return element;
+	}
+
 	remove(element) {
 		const index = this.items.indexOf(element);
 		return this.removeInternal(index, element);

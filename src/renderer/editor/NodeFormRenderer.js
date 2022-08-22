@@ -1,6 +1,5 @@
 import DomRenderer from "../basic/DomRenderer";
 import Pixies from "../../class/basic/Pixies";
-import RunningConversationModel from "../../model/savegame/conversation/RunningConversationModel";
 
 export default class NodeFormRenderer extends DomRenderer {
 
@@ -38,7 +37,8 @@ export default class NodeFormRenderer extends DomRenderer {
 			start.innerText = 'Start';
 			start.addEventListener('click', (e) => {
 				e.preventDefault();
-				this.game.saveGame.runningConversation.set(new RunningConversationModel(this.model));
+				//const conversation = this.model.clone();
+				this.game.saveGame.conversation.set(this.model);
 			});
 		}
 

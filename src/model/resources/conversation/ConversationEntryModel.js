@@ -20,6 +20,16 @@ export default class ConversationEntryModel extends ModelNode {
 	 */
 	entries;
 
+	/**
+	 * @type DirtyValue
+	 */
+	isResponseAvailable;
+
+	/**
+	 * @type DirtyValue
+	 */
+	responseCharacter;
+
 	constructor() {
 		super();
 
@@ -27,6 +37,8 @@ export default class ConversationEntryModel extends ModelNode {
 		this.lines = this.addProperty('lines', new ModelNodeCollection(() => new ConversationLineModel()));
 		this.entries = this.addProperty('entries', new ModelNodeCollection(() => new ConversationEntryModel()));
 
+		this.isResponseAvailable = new DirtyValue(true);
+		this.responseCharacter = new DirtyValue();
 	}
 
 }
