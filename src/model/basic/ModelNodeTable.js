@@ -23,9 +23,11 @@ export default class ModelNodeTable extends ModelNodeCollection {
 		return this.children.items.reduce((prev, current) => Math.max(prev, parseInt(current.id.get())), 0);
 	}
 
-	createNode() {
-		const node = this.nodeFactory(this.maxId() + 1);
-		this.add(node);
+	add(node) {
+		if (!node) {
+			node = this.nodeFactory(this.maxId() + 1);
+		}
+		super.add(node);
 		return node;
 	}
 

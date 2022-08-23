@@ -2,6 +2,8 @@ import DomRenderer from "../basic/DomRenderer";
 import Pixies from "../../class/basic/Pixies";
 import {GAME_MODE_BATTLE, GAME_MODE_MAP} from "../../model/savegame/SaveGameModel";
 import NodeTableRenderer from "./NodeTableRenderer";
+import NullableNodeRenderer from "../basic/NullableNodeRenderer";
+import ConversationRenderer from "../conversation/ConversationRenderer";
 
 export default class EditorRenderer extends DomRenderer {
 
@@ -19,8 +21,9 @@ export default class EditorRenderer extends DomRenderer {
 		this.menu = null;
 
 		this.updateModeHandler = () => this.updateMode();
-		this.updateMenuHandler = () => this.updateMenu();
-		this.closeTableHandler = () => this.closeTable();
+
+		this.tableRenderer = new NullableNodeRenderer(this.game, this.model.activeTable, (model) => new NodeTableRenderer(this.game, model, this.dock));
+		this.addChild(this.tableRenderer);
 	}
 
 	activateInternal() {
@@ -31,10 +34,7 @@ export default class EditorRenderer extends DomRenderer {
 		this.nav = Pixies.createElement(this.container, 'nav');
 		this.dock = Pixies.createElement(this.container, 'div', 'dock');
 
-		this.tableRenderer = null;
-
 		this.updateMenu();
-		this.model.activeOption.addOnChangeListener(this.updateMenuHandler);
 
 		this.updateMode();
 		this.game.saveGame.mode.addOnChangeListener(this.updateModeHandler);
@@ -42,7 +42,7 @@ export default class EditorRenderer extends DomRenderer {
 	}
 
 	deactivateInternal() {
-		this.model.activeOption.removeOnChangeListener(this.updateMenuHandler);
+		//this.model.activeTable.removeOnChangeListener(this.updateMenuHandler);
 		this.game.saveGame.mode.removeOnChangeListener(this.updateModeHandler);
 		this.removeElement(this.container);
 	}
@@ -70,7 +70,7 @@ export default class EditorRenderer extends DomRenderer {
 		this.addMenuSection(this.model.mapOptions, 'Map');
 		this.addMenuSection(this.model.saveGameOptions, 'SaveGame');
 
-		this.updateTable();
+		//this.updateTable();
 	}
 
 	addMenuSection(options, name) {
@@ -81,30 +81,11 @@ export default class EditorRenderer extends DomRenderer {
 	}
 
 	addMenuLink(wrapper, options, key) {
-		const isActive = this.model.activeOption.equalsTo(key);
-		const item = Pixies.createElement(wrapper,'li', isActive ? 'active' : null);
+		//const isActive = this.model.activeTable.equalsTo(table);
+		const item = Pixies.createElement(wrapper,'li');
 		const link = Pixies.createElement(item,'a');
 		link.innerText = options[key];
-		link.addEventListener('click', () => this.model.activeOption.set(key));
-	}
-
-	updateTable() {
-		this.closeTable();
-
-		const name = this.model.activeOption.get();
-		if (name && name.length > 0) {
-			const table = this.game.resources[name] || this.game.saveGame[name] || this.game.resources.map[name];
-			table.addEventListener('closed', this.closeTableHandler);
-			this.tableRenderer = this.addChild(new NodeTableRenderer(this.game, table, this.dock, name));
-		}
-	}
-
-	closeTable() {
-		if (this.tableRenderer) {
-			this.tableRenderer.model.removeEventListener('closed', this.closeTableHandler);
-			this.removeChild(this.tableRenderer);
-			this.tableRenderer = null;
-		}
+		link.addEventListener('click', () => this.model.triggerEvent('table-selected', key));
 	}
 
 }

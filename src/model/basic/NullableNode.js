@@ -42,4 +42,20 @@ export default class NullableNode extends DirtyValue {
 		}
 	}
 
+	clean() {
+		if (this.isDirty) {
+			super.clean();
+			if (this.isSet()) {
+				this.value.clean();
+			}
+		}
+	}
+
+	cleanAll() {
+		super.cleanAll();
+		if (this.isSet()) {
+			this.value.cleanAll();
+		}
+	}
+
 }

@@ -2,6 +2,8 @@ import DirtyValue from "../../basic/DirtyValue";
 import ConversationEntryModel from "./ConversationEntryModel";
 import ModelNodeCollection from "../../basic/ModelNodeCollection";
 import IdentifiedModelNode from "../../basic/IdentifiedModelNode";
+import CharacterModel from "../../characters/CharacterModel";
+import NullableNode from "../../basic/NullableNode";
 
 export default class ConversationModel extends IdentifiedModelNode {
 
@@ -31,7 +33,7 @@ export default class ConversationModel extends IdentifiedModelNode {
 	initialEntry;
 
 	/**
-	 * @type DirtyValue
+	 * @type NullableNode
 	 */
 	currentEntry;
 
@@ -41,7 +43,7 @@ export default class ConversationModel extends IdentifiedModelNode {
 	pastEntries;
 
 	/**
-	 * @type DirtyValue
+	 * @type NullableNode
 	 */
 	character;
 
@@ -54,9 +56,9 @@ export default class ConversationModel extends IdentifiedModelNode {
 		this.characterId = this.addProperty('characterId', new DirtyValue());
 		this.initialEntry = this.addProperty('initialEntry', new ConversationEntryModel());
 
-		this.currentEntry = new DirtyValue();
+		this.currentEntry = new NullableNode(() => new ConversationEntryModel());
 		this.pastEntries = new ModelNodeCollection(() => new ConversationEntryModel());
-		this.character = new DirtyValue();
+		this.character = new NullableNode(() => new CharacterModel());
 	}
 
 }

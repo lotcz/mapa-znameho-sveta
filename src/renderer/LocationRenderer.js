@@ -33,7 +33,6 @@ export default class LocationRenderer extends SvgRenderer {
 	}
 
 	renderInternal() {
-		console.log('rendering location');
 		if (this.model.coordinates.isDirty) {
 			this.helper.center(this.model.coordinates.x, this.model.coordinates.y);
 		}

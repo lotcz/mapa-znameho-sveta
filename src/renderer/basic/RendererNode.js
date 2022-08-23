@@ -31,7 +31,9 @@ export default class RendererNode extends ActivatedTreeNode {
 		}
 		this.renderInternal();
 		this.children.forEach((c) => c.render());
-		this.model.clean();
+		if (this.isRoot()) {
+			this.model.cleanAll();
+		}
 	}
 
 	/**

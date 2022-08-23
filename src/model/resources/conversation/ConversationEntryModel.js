@@ -2,6 +2,8 @@ import ModelNode from "../../basic/ModelNode";
 import DirtyValue from "../../basic/DirtyValue";
 import ModelNodeCollection from "../../basic/ModelNodeCollection";
 import ConversationLineModel from "./ConversationLineModel";
+import CharacterModel from "../../characters/CharacterModel";
+import NullableNode from "../../basic/NullableNode";
 
 export default class ConversationEntryModel extends ModelNode {
 
@@ -26,7 +28,7 @@ export default class ConversationEntryModel extends ModelNode {
 	isResponseAvailable;
 
 	/**
-	 * @type DirtyValue
+	 * @type NullableNode
 	 */
 	responseCharacter;
 
@@ -38,7 +40,7 @@ export default class ConversationEntryModel extends ModelNode {
 		this.entries = this.addProperty('entries', new ModelNodeCollection(() => new ConversationEntryModel()));
 
 		this.isResponseAvailable = new DirtyValue(true);
-		this.responseCharacter = new DirtyValue();
+		this.responseCharacter = new NullableNode(() => new CharacterModel());
 	}
 
 }

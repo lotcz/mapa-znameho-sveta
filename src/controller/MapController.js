@@ -50,7 +50,6 @@ export default class MapController extends ControllerNode {
 
 		this.resourcesChangedHandler = () => {
 			this.model.makeDirty();
-			console.log('res changed');
 		};
 	}
 
@@ -152,7 +151,7 @@ export default class MapController extends ControllerNode {
 	}
 
 	onLocationChanged(location) {
-		this.runOnUpdate(() => location.connections.children.forEach((conn) => this.updatePoint(location, conn)));
+		location.connections.forEach((conn) => this.updatePoint(location, conn));
 	}
 
 }

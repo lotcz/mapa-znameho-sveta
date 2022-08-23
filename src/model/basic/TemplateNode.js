@@ -8,7 +8,7 @@ export default class TemplateNode extends IdentifiedModelNode {
 	 */
 	isTemplate;
 
-	constructor(id) {
+	constructor(id = 0) {
 		super(id);
 
 		this.isTemplate = this.addProperty('isTemplate', new DirtyValue(true));

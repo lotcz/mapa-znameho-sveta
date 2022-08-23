@@ -43,7 +43,7 @@ export default class NodeTableRenderer extends CollectionRenderer {
 
 		this.closeButton = Pixies.createElement(buttonsRight, 'button');
 		this.closeButton.innerText = 'Close';
-		this.closeButton.addEventListener('click', () => this.model.triggerEvent('closed'));
+		this.closeButton.addEventListener('click', () => this.game.editor.triggerEvent('table-closed'));
 
 		this.table = Pixies.createElement(this.container, 'table');
 		this.rendererFactory = (item) => new TableRowRenderer(game, item, this.table, this.name);
@@ -67,7 +67,7 @@ export default class NodeTableRenderer extends CollectionRenderer {
 	}
 
 	addRow() {
-		const item = this.model.createNode();
+		const item = this.model.add();
 		this.editRow(item);
 	}
 

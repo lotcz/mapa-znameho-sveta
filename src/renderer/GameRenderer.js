@@ -5,6 +5,7 @@ import {GAME_MODE_BATTLE, GAME_MODE_MAP} from "../model/savegame/SaveGameModel";
 import BattleRenderer from "./BattleRenderer";
 import EditorRenderer from "./editor/EditorRenderer";
 import ConversationRenderer from "./conversation/ConversationRenderer";
+import NullableNodeRenderer from "./basic/NullableNodeRenderer";
 
 export default class GameRenderer extends DomRenderer {
 
@@ -14,7 +15,7 @@ export default class GameRenderer extends DomRenderer {
 	model;
 
 	/**
-	 * @type {MapRenderer|ThreeRenderer}
+	 * @type {MapRenderer|BattleRenderer}
 	 */
 	mainRenderer;
 
@@ -27,12 +28,13 @@ export default class GameRenderer extends DomRenderer {
 		this.addClass('game');
 
 		this.editorRenderer = null;
-		this.conversationRenderer= null;
+
+		this.conversationRenderer = new NullableNodeRenderer(this.game, this.model.saveGame.conversation, (model) => new ConversationRenderer(this.game, model, this.overlayLayer));
+		this.addChild(this.conversationRenderer);
 
 		this.updateLoadingHandler = () => this.updateLoading();
 		this.updateGameModeHandler = () => this.updateGameMode();
 		this.updateDebugMenuHandler = () => this.updateDebugMenu();
-		this.updateConversationHandler = () => this.updateConversation();
 	}
 
 	activateInternal() {
@@ -48,17 +50,14 @@ export default class GameRenderer extends DomRenderer {
 		this.updateGameMode();
 		this.model.saveGame.mode.addOnChangeListener(this.updateGameModeHandler);
 
-		this.updateConversation();
-		this.model.saveGame.conversation.addOnChangeListener(this.updateConversationHandler);
-
 		this.updateDebugMenu();
 		this.model.isInDebugMode.addOnChangeListener(this.updateDebugMenuHandler);
+
 	}
 
 	deactivateInternal() {
 		this.model.assets.isLoading.removeOnChangeListener(this.updateLoadingHandler);
 		this.model.saveGame.mode.removeOnChangeListener(this.updateGameModeHandler);
-		this.model.saveGame.conversation.removeOnChangeListener(this.updateConversationHandler);
 		this.model.isInDebugMode.removeOnChangeListener(this.updateDebugMenuHandler);
 		this.removeElement(this.mainLayer);
 	}
@@ -77,15 +76,6 @@ export default class GameRenderer extends DomRenderer {
 				break;
 			default:
 				console.warn(`Unknown game mode ${mode}`);
-		}
-	}
-
-	updateConversation() {
-		if (this.conversationRenderer) {
-			this.removeChild(this.conversationRenderer);
-		}
-		if (this.model.saveGame.conversation.isSet()) {
-			this.conversationRenderer = this.addChild(new ConversationRenderer(this.game, this.model.saveGame.conversation.get(), this.overlayLayer));
 		}
 	}
 

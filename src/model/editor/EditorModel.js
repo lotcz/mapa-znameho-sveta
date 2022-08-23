@@ -1,12 +1,17 @@
-import DirtyValue from "../basic/DirtyValue";
 import ModelNode from "../basic/ModelNode";
+import NullableNode from "../basic/NullableNode";
 
 export default class EditorModel extends ModelNode {
 
 	/**
-	 * @type DirtyValue
+	 * @type NullableNode
 	 */
-	activeOption;
+	activeTable;
+
+	/**
+	 * @type NullableNode
+	 */
+	activeForm;
 
 	resourcesOptions;
 
@@ -17,7 +22,8 @@ export default class EditorModel extends ModelNode {
 	constructor() {
 		super();
 
-		this.activeOption = this.addProperty('activeOption', new DirtyValue());
+		this.activeTable = new NullableNode();
+		this.activeForm = new NullableNode();
 
 		this.resourcesOptions = {
 			races: 'Races',

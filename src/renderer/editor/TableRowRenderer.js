@@ -38,8 +38,8 @@ export default class TableRowRenderer extends DomRenderer {
 			let text = '';
 			if (value !== undefined && value !== null) {
 				if (typeof value === 'object') {
-					if (typeof value.get === 'function') {
-						text = value.get();
+					if (value.value !== undefined) {
+						text = value.value;
 					} else if (value.x !== undefined && value.y !== undefined) {
 						text = '[' + value.x + ',' + value.y;
 						if (value.z !== undefined) {

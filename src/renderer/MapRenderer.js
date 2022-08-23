@@ -73,7 +73,6 @@ export default class MapRenderer extends DomRenderer {
 		if (this.saveGame.zoom.isDirty || this.saveGame.coordinates.isDirty) {
 			this.updateZoom();
 		}
-		console.log('rendering map');
 	}
 
 	updateSize() {

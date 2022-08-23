@@ -13,7 +13,7 @@ export default class CharacterModel extends TemplateNode {
 	 */
 	portrait;
 
-	constructor(id) {
+	constructor(id = 0) {
 		super(id);
 
 		this.raceId = this.addProperty('raceId', new DirtyValue(0));

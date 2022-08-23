@@ -81,6 +81,11 @@ export default class ModelNode extends Node {
 		}
 	}
 
+	cleanAll() {
+		this.clean();
+		this.properties.forEach((name, property) => property.cleanAll());
+	}
+
 	clone() {
 		const n = new this.constructor();
 		n.restoreState(this.getState());

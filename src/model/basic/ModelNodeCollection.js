@@ -79,6 +79,11 @@ export default class ModelNodeCollection extends ModelNode {
 		}
 	}
 
+	cleanAll() {
+		this.clean();
+		this.children.forEach((child) => child.cleanAll());
+	}
+
 	reset() {
 		this.children.reset();
 	}

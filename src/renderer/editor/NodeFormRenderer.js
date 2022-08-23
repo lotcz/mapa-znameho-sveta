@@ -33,7 +33,7 @@ export default class NodeFormRenderer extends DomRenderer {
 			this.save();
 		});
 
-		if (this.name === 'conversations') {
+		if (this.model.constructor.name === 'ConversationModel') {
 			const start = Pixies.createElement(buttonsRight, 'button');
 			start.innerText = 'Start';
 			start.addEventListener('click', (e) => {
@@ -59,7 +59,7 @@ export default class NodeFormRenderer extends DomRenderer {
 		const input = Pixies.createElement(container, 'input');
 		input.setAttribute('type', 'text');
 		input.setAttribute('name', name);
-		input.value = (typeof value.get === 'function') ? value.get() : value.toString();
+		input.value = (value.value !== undefined) ? value.value : value.toString();
 	}
 
 	renderField(container, name, value) {

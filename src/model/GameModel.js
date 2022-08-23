@@ -67,23 +67,8 @@ export default class GameModel extends ModelNode {
 
 	initialize() {
 
-		const location = this.resources.map.locations.createNode();
-		location.name = 'Location';
-		location.coordinates.set(550, 450);
-		const conn = location.connections.add();
-		conn.pathId.set(1);
+		const path = this.resources.map.paths.add();
 
-		const location2 = this.resources.map.locations.createNode();
-		location2.name = 'Location 2';
-		location2.coordinates.set(1550, 450);
-		const conn2 = location2.connections.add();
-		conn2.pathId.set(1);
-		conn2.forward.set(false);
-		const conn3 = location2.connections.add();
-		conn3.pathId.set(2);
-		conn3.forward.set(false);
-
-		const path = this.resources.map.paths.createNode();
 		const w1 = path.waypoints.add(new WaypointModel());
 		w1.coordinates.set(245, 250);
 		w1.a.set(255, 225);
@@ -104,7 +89,8 @@ export default class GameModel extends ModelNode {
 		w4.a.set(1205, 725);
 		w4.b.set(1185, 885);
 
-		const path2 = this.resources.map.paths.createNode();
+		const path2 = this.resources.map.paths.add();
+
 		const w5 = path2.waypoints.add(new WaypointModel());
 		w5.coordinates.set(145, 150);
 		w5.a.set(155, 125);
@@ -114,6 +100,28 @@ export default class GameModel extends ModelNode {
 		w6.coordinates.set(50, 50);
 		w6.a.set(55, 125);
 		w6.b.set(45, 85);
+
+		const location = this.resources.map.locations.add();
+		location.name.set('Location');
+		location.coordinates.set(550, 450);
+		const conn = location.connections.add();
+		conn.pathId.set(path.id.get());
+
+		const location2 = this.resources.map.locations.add();
+		location2.name.set('Location 2');
+		location2.coordinates.set(1550, 450);
+		const conn2 = location2.connections.add();
+		conn2.pathId.set(path.id.get());
+		conn2.forward.set(false);
+		const conn3 = location2.connections.add();
+		conn3.pathId.set(path2.id.get());
+		conn3.forward.set(false);
+
+
+
+
+
+
 
 		const texture = new TextureModel();
 		texture.uri.set('img/paper-texture.jpg');

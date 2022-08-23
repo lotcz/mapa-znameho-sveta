@@ -6,7 +6,6 @@ import BattleController from "./BattleController";
 import * as localForage from "localforage";
 import EditorController from "./EditorController";
 import ConversationController from "./ConversationController";
-import DirtyValue from "../model/basic/DirtyValue";
 
 export default class GameController extends ControllerNode {
 
@@ -61,7 +60,6 @@ export default class GameController extends ControllerNode {
 		this.model.saveGame.conversation.addOnChangeListener(this.conversationChangedHandler);
 
 		this.loadResourcesFromStorage().then(() => {
-			console.log('resources loaded');
 			this.model.resources.addOnDirtyListener(() => this.isResourcesDirty = true);
 			this.model.saveGame.mode.addOnChangeListener(this.onGameModeChanged);
 		});
