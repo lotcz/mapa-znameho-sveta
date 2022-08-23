@@ -27,14 +27,12 @@ export default class BattleRenderer extends DomRenderer {
 		super(game, model, dom);
 
 		this.model = model;
-		this.alwaysRender = true;
 		this.animation = null;
 		this.item = null;
 
 		this.scene = new THREE.Scene();
 
 		this.charactersRenderer = this.addChild(new CollectionRenderer(this.game, this.model.characters, (m) => new BattleCharacterRenderer(this.game, m, this.scene)));
-		this.charactersRenderer.alwaysRender = true;
 
 		this.onViewBoxChangeHandler = () => this.onViewBoxSizeChanged();
 	}

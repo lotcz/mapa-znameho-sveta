@@ -1,5 +1,17 @@
 export default class Pixies {
 
+	static shorten(text, length = 25, ellipsis = '...') {
+		if (text === null || text === undefined || typeof text !== 'string') {
+			return text;
+		}
+		if (text.length <= length) {
+			return text;
+		}
+		let short = text.substring(0, length - ellipsis.length);
+		short += ellipsis;
+		return short;
+	}
+
 	static extractId(str, pos = 1) {
 		const words = str.split('/');
 		if (words.length > pos) return words[pos];
@@ -19,6 +31,9 @@ export default class Pixies {
 		return Math.floor(Math.random() * length);
 	}
 
+	/**
+		Returns n if n is between min and max. Return min if n lower than min or return max if n is greater than max.
+	 */
 	static between(min, max, n) {
 		const minimum = Math.min(min, max);
 		const maximum = Math.max(min, max);
@@ -33,7 +48,7 @@ export default class Pixies {
 
 	static hash(value) {
 		let hash = 0;
-		if (value.length == 0) return hash;
+		if (value.length === 0) return hash;
 		for (let i = 0 ; i < value.length ; i++)
 		{
 			let ch = value.charCodeAt(i);
@@ -45,7 +60,7 @@ export default class Pixies {
 
 	static token(value) {
 		let hash = Pixies.hash(value);
-		if (hash == 0) return null;
+		if (hash === 0) return null;
 		let token = 'a';
 		if (hash < 0) {
 			token = 'b';
@@ -66,11 +81,26 @@ export default class Pixies {
 		element.classList.remove(css);
 	}
 
-	static createElement(parent, tag, css = null) {
+	/**
+	 *
+	 * @param parent Element
+	 * @param tag string
+	 * @param css string|array|null
+	 * @param innerText string|null
+	 * @param onClick ()=>any|null
+	 * @returns Element
+	 */
+	static createElement(parent, tag, css = null, innerText = null, onClick = null) {
 		const el = document.createElement(tag);
 		this.addClass(el, css);
 		if (parent) {
 			parent.appendChild(el);
+		}
+		if (innerText) {
+			el.innerText = innerText;
+		}
+		if (onClick) {
+			el.addEventListener('click', onClick);
 		}
 		return el;
 	}
@@ -236,5 +266,17 @@ export default class Pixies {
 				textarea
 			);
 		});
+	}
+
+	/**
+	 *
+	 * @param element Element
+	 * @param value Vector2|Vector3
+	 * @param setter (value)=>any
+	 */
+	static magicVectorEditor(element, value, setter) {
+		Pixies.emptyElement(element);
+		const wrapper = Pixies.createElement(element, 'div', 'vector-editor');
+
 	}
 }

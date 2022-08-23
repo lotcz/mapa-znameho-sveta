@@ -16,6 +16,7 @@ export default class NodeFormRenderer extends DomRenderer {
 		this.model = model;
 		this.name = name;
 		this.container = null;
+		this.fields = null;
 	}
 
 	activateInternal() {
@@ -42,28 +43,48 @@ export default class NodeFormRenderer extends DomRenderer {
 			});
 		}
 
-		this.model.properties.forEach((name, value) => {
-			const item = Pixies.createElement(this.container, 'div');
-			const label = Pixies.createElement(item, 'label');
-			label.innerText = name;
-			label.setAttribute('for', name);
-			if (value) {
-				if (typeof value.get === 'function') {
-					const input = Pixies.createElement(item, 'input');
-					input.setAttribute('type', 'text');
-					input.setAttribute('name', name);
-					input.value = value.get();
-				} else {
-					const input = Pixies.createElement(item, 'span');
-					input.innerText = value.toString();
-				}
-			}
-		});
-
+		this.fields = Pixies.createElement(this.container, 'div', 'fields');
+		this.renderFields();
 	}
 
 	deactivateInternal() {
 		this.removeElement(this.container);
+	}
+
+	renderInternal() {
+		this.renderFields();
+	}
+
+	renderInput(container, name, value) {
+		const input = Pixies.createElement(container, 'input');
+		input.setAttribute('type', 'text');
+		input.setAttribute('name', name);
+		input.value = (typeof value.get === 'function') ? value.get() : value.toString();
+	}
+
+	renderField(container, name, value) {
+		const row = Pixies.createElement(container, 'div', 'row');
+		const label = Pixies.createElement(row, 'label', null, name);
+		label.setAttribute('for', name);
+		const item = Pixies.createElement(row, 'div', 'field');
+		if (value !== null && value !== undefined) {
+			if (value && value.x !== undefined && value.y !== undefined) {
+				this.renderInput(item, name, value.x);
+				this.renderInput(item, name, value.y);
+				if (value.z !== undefined) {
+					this.renderInput(item, name, value.z);
+				}
+			} else {
+				this.renderInput(item, name, value);
+			}
+		}
+	}
+
+	renderFields() {
+		Pixies.emptyElement(this.fields);
+		this.model.properties.forEach((name, value) => {
+			this.renderField(this.fields, name, value);
+		});
 	}
 
 	save() {

@@ -24,10 +24,10 @@ export default class MapController extends ControllerNode {
 	 */
 	focusedHelper;
 
-	constructor(game, model) {
-		super(game, model);
+	constructor(game, saveGame) {
+		super(game, saveGame);
 
-		this.saveGame = model;
+		this.saveGame = saveGame;
 		this.map = game.resources.map;
 
 		this.dragging = false;
@@ -35,19 +35,23 @@ export default class MapController extends ControllerNode {
 
 		this.focusedHelper = new DirtyValue(null);
 
-		this.helperMouseOverHandler = (point) => this.focusedHelper.set(point);
+		this.helperMouseOverHandler = (point) => this.runOnUpdate((delta) => this.focusedHelper.set(point));
 		this.helperMouseOutHandler = (point) => {
 			if (this.focusedHelper.equalsTo(point))
-				this.focusedHelper.set(null);
+				this.runOnUpdate(() => this.focusedHelper.set(null));
 		};
 
-		this.mouseMoveHandler = () => this.onMouseMove();
+		this.mouseMoveHandler = () => this.runOnUpdate(() => this.onMouseMove());
 		this.zoomHandler = (param) => this.onZoom(param);
 
 		this.locationAddedHandler = (param) => this.onLocationAdded(param);
 		this.locationRemovedHandler = (param) => this.onLocationRemoved(param);
 		this.locationChangedHandler = (param) => this.onLocationChanged(param);
 
+		this.resourcesChangedHandler = () => {
+			this.model.makeDirty();
+			console.log('res changed');
+		};
 	}
 
 	activateInternal() {
@@ -60,6 +64,8 @@ export default class MapController extends ControllerNode {
 		this.map.locations.children.forEach(this.locationAddedHandler);
 		this.map.locations.children.addOnAddListener(this.locationAddedHandler);
 		this.map.locations.children.addOnRemoveListener(this.locationRemovedHandler);
+
+		this.map.addOnDirtyListener(this.resourcesChangedHandler);
 	}
 
 	deactivateInternal() {
@@ -71,11 +77,13 @@ export default class MapController extends ControllerNode {
 
 		this.map.locations.children.removeOnAddListener(this.locationAddedHandler);
 		this.map.locations.children.removeOnRemoveListener(this.locationRemovedHandler);
+
+		this.map.removeOnDirtyListener(this.resourcesChangedHandler);
 	}
 
 	updateInternal(delta) {
 		super.updateInternal(delta);
-
+/*
 		// move marker
 		const path = this.map.paths.first();
 		let progress = this.saveGame.pathProgress.get() + ((delta / 1000) * TRAVEL_SPEED * (this.saveGame.forward.get() ? 1 : -1));
@@ -91,7 +99,7 @@ export default class MapController extends ControllerNode {
 		}
 
 		this.saveGame.pathProgress.set(progress);
-
+ */
 		// dragging and scrolling
 		if (!this.game.controls.mouseDownLeft.get()) {
 			this.dragging = false;
@@ -99,12 +107,14 @@ export default class MapController extends ControllerNode {
 		if (!this.game.controls.mouseDownRight.get()) {
 			this.scrolling = false;
 		}
+
+
 	}
 
 	onMouseMove() {
 		if (this.game.controls.mouseDownLeft.get()) {
 			if (this.dragging) {
-				const mapCoords = this.model.coordinates.add(this.game.controls.mouseCoordinates.multiply(this.model.zoom.get()));
+				const mapCoords = this.saveGame.coordinates.add(this.game.controls.mouseCoordinates.multiply(this.saveGame.zoom.get()));
 				this.dragging.set(mapCoords);
 			} else if (this.focusedHelper.isSet()) {
 				this.dragging = this.focusedHelper.get();
@@ -114,8 +124,8 @@ export default class MapController extends ControllerNode {
 		if (this.game.controls.mouseDownRight.get()) {
 			if (this.scrolling) {
 				const offset = this.game.controls.mouseCoordinates.subtract(this.scrolling);
-				const mapCoords = this.model.coordinates.subtract(offset.multiply(this.model.zoom.get()));
-				this.model.coordinates.set(mapCoords);
+				const mapCoords = this.saveGame.coordinates.subtract(offset.multiply(this.saveGame.zoom.get()));
+				this.saveGame.coordinates.set(mapCoords);
 				this.scrolling = this.game.controls.mouseCoordinates.clone();
 			} else {
 				this.scrolling = this.game.controls.mouseCoordinates.clone();
@@ -124,7 +134,7 @@ export default class MapController extends ControllerNode {
 	}
 
 	onZoom(param) {
-		this.model.zoom.set(this.model.zoom.get() + (param * 0.1));
+		this.saveGame.zoom.set(this.saveGame.zoom.get() + (param * 0.1));
 	}
 
 	onLocationAdded(location) {
@@ -136,13 +146,13 @@ export default class MapController extends ControllerNode {
 	}
 
 	updatePoint(location, conn) {
-		const path = this.game.resources.map.paths.getById(conn.pathId.get());
+		const path = this.map.paths.getById(conn.pathId.get());
 		const point = conn.forward.get() ? path.waypoints.first().coordinates : path.waypoints.last().coordinates;
 		point.set(location.coordinates);
 	}
 
 	onLocationChanged(location) {
-		location.connections.children.forEach((conn) => this.updatePoint(location, conn));
+		this.runOnUpdate(() => location.connections.children.forEach((conn) => this.updatePoint(location, conn)));
 	}
 
 }

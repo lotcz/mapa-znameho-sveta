@@ -114,7 +114,7 @@ export default class ModelNodeCollection extends ModelNode {
 	 */
 	onChildRemoved(child) {
 		this.makeDirty();
-		child.removeOnDirtyListener('dirty', this.childDirtyHandler);
+		child.removeOnDirtyListener(this.childDirtyHandler);
 	}
 
 	onChildDirty(child) {

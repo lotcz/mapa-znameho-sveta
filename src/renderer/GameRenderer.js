@@ -22,7 +22,6 @@ export default class GameRenderer extends DomRenderer {
 		super(model, model, dom);
 
 		this.model = model;
-		this.alwaysRender = true;
 		this.loading = null;
 		this.debugMenu = null;
 		this.addClass('game');

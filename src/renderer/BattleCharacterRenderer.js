@@ -22,7 +22,6 @@ export default class BattleCharacterRenderer extends RendererNode {
 		this.model = model;
 		this.scene = scene;
 
-		this.alwaysRender = true;
 		this.animation = null;
 		this.item = null;
 	}

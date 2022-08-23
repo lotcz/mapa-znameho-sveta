@@ -22,7 +22,7 @@ export default class SaveGameModel extends ModelNode {
 
 	/**
 	 * @type Vector2
-	 * current scroll position
+	 * current screen position on map
 	 */
 	coordinates;
 
@@ -60,13 +60,13 @@ export default class SaveGameModel extends ModelNode {
 		super();
 
 		this.mode = this.addProperty('mode', new DirtyValue(GAME_MODE_MAP));
+		this.characters = this.addProperty('characters', new ModelNodeTable((id) => new CharacterModel(id)));
+
 		this.coordinates = this.addProperty('coordinates', new Vector2());
 		this.zoom = this.addProperty('zoom', new DirtyValue(1));
 		this.forward = this.addProperty('forward', new DirtyValue(true));
 		this.currentPathId = this.addProperty('currentPathId', new DirtyValue(1));
 		this.pathProgress = this.addProperty('pathProgress', new DirtyValue(0));
-
-		this.characters = this.addProperty('characters', new ModelNodeTable((id) => new CharacterModel(id)));
 
 		this.battle = this.addProperty('battle', new BattleModel());
 

@@ -35,18 +35,25 @@ export default class TableRowRenderer extends DomRenderer {
 
 		this.model.properties.forEach((name, value) => {
 			const cell = Pixies.createElement(this.container, 'td');
-			if (value) {
-				const text = (typeof value.get === 'function') ? value.get() : value.toString();
-				if (typeof text === 'string') {
-					let short = text.substring(0, 15);
-					if (short.length < text.length) {
-						short += '...';
+			let text = '';
+			if (value !== undefined && value !== null) {
+				if (typeof value === 'object') {
+					if (typeof value.get === 'function') {
+						text = value.get();
+					} else if (value.x !== undefined && value.y !== undefined) {
+						text = '[' + value.x + ',' + value.y;
+						if (value.z !== undefined) {
+							text += ',' + value.z;
+						}
+						text += ']';
+					} else {
+						text = Pixies.shorten(value.toString());
 					}
-					cell.innerText = short;
 				} else {
-					cell.innerText = text;
+					text = Pixies.shorten(value);
 				}
 			}
+			cell.innerText = text;
 		});
 	}
 
