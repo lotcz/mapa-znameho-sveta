@@ -40,9 +40,17 @@ html, body {
 }
 
 .editor {
+	background-color: transparent;
+	font-size: 10pt;
+	width: 100%;
+}
+
+.editor .bg {
 	background-color: black;
 	color: gray;
-	font-size: 10pt;
+}
+
+.editor .table-selection {
 	padding: 10px;
 }
 
@@ -67,6 +75,11 @@ html, body {
 	margin: 10px;
 }
 
+.editor button.special {
+	background-color: var(--light-brown);
+	color: var(--dark-brown);
+}
+
 .editor button:hover {
 	background-color: lightblue;
 }
@@ -79,10 +92,11 @@ html, body {
 }
 
 .editor .dock {
+	width: 100%;
 	display: flex;
 	flex-direction: row;
 	align-items: flex-start;
-	justify-items: flex-start;
+	justify-content: space-between;
 }
 
 .editor .dock > * {

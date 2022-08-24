@@ -3,7 +3,7 @@ import Pixies from "../../class/basic/Pixies";
 import {GAME_MODE_BATTLE, GAME_MODE_MAP} from "../../model/savegame/SaveGameModel";
 import NodeTableRenderer from "./NodeTableRenderer";
 import NullableNodeRenderer from "../basic/NullableNodeRenderer";
-import ConversationRenderer from "../conversation/ConversationRenderer";
+import NodeFormRenderer from "./NodeFormRenderer";
 
 export default class EditorRenderer extends DomRenderer {
 
@@ -20,10 +20,13 @@ export default class EditorRenderer extends DomRenderer {
 		this.container = null;
 		this.menu = null;
 
-		this.updateModeHandler = () => this.updateMode();
-
-		this.tableRenderer = new NullableNodeRenderer(this.game, this.model.activeTable, (model) => new NodeTableRenderer(this.game, model, this.dock));
+		this.tableRenderer = new NullableNodeRenderer(this.game, this.model.activeTable, (model) => new NodeTableRenderer(this.game, model, this.table));
 		this.addChild(this.tableRenderer);
+
+		this.formRenderer = new NullableNodeRenderer(this.game, this.model.activeForm, (model) => new NodeFormRenderer(this.game, model, this.form));
+		this.addChild(this.formRenderer);
+
+		this.updateModeHandler = () => this.updateMode();
 	}
 
 	activateInternal() {
@@ -31,58 +34,59 @@ export default class EditorRenderer extends DomRenderer {
 		this.container.addEventListener('mousemove', (e) => e.stopPropagation());
 		this.container.addEventListener('click', (e) => e.stopPropagation());
 
-		this.nav = Pixies.createElement(this.container, 'nav');
+		this.nav = Pixies.createElement(this.container, 'nav', 'bg');
+		this.gameMode = Pixies.createElement(this.nav, 'div', 'game-mode');
 		this.dock = Pixies.createElement(this.container, 'div', 'dock');
-
-		this.updateMenu();
+		this.tables = Pixies.createElement(this.dock, 'div', 'table-selection bg');
+		this.table = Pixies.createElement(this.dock, 'div', 'active-table');
+		this.form = Pixies.createElement(this.dock, 'div', 'active-form');
 
 		this.updateMode();
 		this.game.saveGame.mode.addOnChangeListener(this.updateModeHandler);
 
+		this.updateTables();
 	}
 
 	deactivateInternal() {
-		//this.model.activeTable.removeOnChangeListener(this.updateMenuHandler);
 		this.game.saveGame.mode.removeOnChangeListener(this.updateModeHandler);
 		this.removeElement(this.container);
 	}
 
-	updateMode() {
-		if (this.debugMenu) {
-			Pixies.destroyElement(this.debugMenu);
-			this.debugMenu = null;
+	renderInternal() {
+		if (this.model.activeTable.isDirty) {
+			this.updateTables();
 		}
-		this.debugMenu = Pixies.createElement(this.nav, 'div', 'debug-menu');
-		const mapButton = Pixies.createElement(this.debugMenu, 'button', this.game.saveGame.mode.equalsTo(GAME_MODE_MAP) ? 'active' : null);
+	}
+
+	updateMode() {
+		Pixies.emptyElement(this.gameMode);
+		const mapButton = Pixies.createElement(this.gameMode, 'button', this.game.saveGame.mode.equalsTo(GAME_MODE_MAP) ? 'active' : null);
 		mapButton.innerText = 'MAP';
 		mapButton.addEventListener('click', () => this.game.saveGame.mode.set(GAME_MODE_MAP));
-		const battleButton = Pixies.createElement(this.debugMenu, 'button', this.game.saveGame.mode.equalsTo(GAME_MODE_BATTLE) ? 'active' : null);
+		const battleButton = Pixies.createElement(this.gameMode, 'button', this.game.saveGame.mode.equalsTo(GAME_MODE_BATTLE) ? 'active' : null);
 		battleButton.innerText = 'BATTLE';
 		battleButton.addEventListener('click', () => this.game.saveGame.mode.set(GAME_MODE_BATTLE));
 	}
 
-	updateMenu() {
-		if (this.menu) {
-			Pixies.destroyElement(this.menu);
-		}
-		this.menu = Pixies.createElement(this.dock, 'div');
+	updateTables() {
+		Pixies.emptyElement(this.tables);
 		this.addMenuSection(this.model.resourcesOptions, 'Resources');
 		this.addMenuSection(this.model.mapOptions, 'Map');
 		this.addMenuSection(this.model.saveGameOptions, 'SaveGame');
-
-		//this.updateTable();
 	}
 
 	addMenuSection(options, name) {
-		const h = Pixies.createElement(this.menu, 'h3');
+		const h = Pixies.createElement(this.tables, 'h3');
 		h.innerText = name;
-		const menu = Pixies.createElement(this.menu, 'ul', 'menu');
+		const menu = Pixies.createElement(this.tables, 'ul', 'menu');
 		Object.keys(options).forEach((key) => this.addMenuLink(menu, options, key));
 	}
 
 	addMenuLink(wrapper, options, key) {
-		//const isActive = this.model.activeTable.equalsTo(table);
-		const item = Pixies.createElement(wrapper,'li');
+		const table = this.game.getTableByName(key);
+		const isActive = this.model.activeTable.equalsTo(table);
+		console.log(isActive);
+		const item = Pixies.createElement(wrapper,'li', isActive ? 'active' : '');
 		const link = Pixies.createElement(item,'a');
 		link.innerText = options[key];
 		link.addEventListener('click', () => this.model.triggerEvent('table-selected', key));

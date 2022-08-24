@@ -10,7 +10,7 @@ import BattleModel from "./battle/BattleModel";
 import WaypointModel from "./resources/WaypointModel";
 import TextureModel from "./resources/TextureModel";
 import MaterialModel from "./resources/MaterialModel";
-import EditorModel from "./editor/EditorModel";
+import EditorModel from "./EditorModel";
 
 export default class GameModel extends ModelNode {
 
@@ -63,6 +63,10 @@ export default class GameModel extends ModelNode {
 		this.characterPreview = this.addProperty('characterPreview', new CharacterPreviewModel());
 
 		this.initialize();
+	}
+
+	getTableByName(name) {
+		return this.resources[name] || this.saveGame[name] || this.resources.map[name] || null;
 	}
 
 	initialize() {

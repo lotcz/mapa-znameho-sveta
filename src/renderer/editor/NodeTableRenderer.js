@@ -22,14 +22,10 @@ export default class NodeTableRenderer extends CollectionRenderer {
 		this.name = name;
 		this.container = null;
 
-		this.editRowHandler = (item) => this.editRow(item);
-		this.closeFormHandler = () => this.closeForm();
-
-		this.formRenderer = null;
 	}
 
 	activateInternal() {
-		this.container = Pixies.createElement(this.dom, 'div', 'table');
+		this.container = Pixies.createElement(this.dom, 'div', 'table bg');
 		this.container.addEventListener('mousemove', (e) => e.stopPropagation());
 		this.container.addEventListener('click', (e) => e.stopPropagation());
 
@@ -55,37 +51,17 @@ export default class NodeTableRenderer extends CollectionRenderer {
 			cell.innerText = name;
 		});
 
-		this.game.editor.addEventListener('edit', this.editRowHandler);
-
 		super.activateInternal();
 	}
 
 	deactivateInternal() {
 		super.deactivateInternal();
-		this.game.editor.removeEventListener('edit', this.editRowHandler);
 		Pixies.destroyElement(this.container);
 	}
 
 	addRow() {
 		const item = this.model.add();
-		this.editRow(item);
-	}
-
-	editRow(item) {
-		if (this.formRenderer) {
-			this.removeChild(this.formRenderer);
-			this.formRenderer = null;
-		}
-		item.addEventListener('closed', this.closeFormHandler);
-		this.formRenderer = this.addChild(new NodeFormRenderer(this.game, item, this.dom, this.name));
-	}
-
-	closeForm() {
-		if (this.formRenderer) {
-			this.formRenderer.model.removeEventListener('closed', this.closeFormHandler);
-			this.removeChild(this.formRenderer);
-			this.formRenderer = null;
-		}
+		this.game.editor.triggerEvent('row-selected', item);
 	}
 
 }

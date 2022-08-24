@@ -73,7 +73,7 @@ export default class Pixies {
 		if (Array.isArray((css)) && css.length > 0) {
 			css.forEach((c) => element.classList.add(c));
 		} else if (css) {
-			element.classList.add(css);
+			css.split(' ').forEach((cls) =>	element.classList.add(cls));
 		}
 	}
 
@@ -106,7 +106,7 @@ export default class Pixies {
 	}
 
 	static destroyElement(el) {
-		if (el && el.parentNode) {
+		if (el && el.parentNode && typeof el.parentNode.removeChild === 'function') {
 			el.parentNode.removeChild(el);
 		}
 		if (el && typeof el.remove === 'function') {
@@ -115,7 +115,7 @@ export default class Pixies {
 	}
 
 	static emptyElement(el) {
-		if (el) {
+		if (el && el.textContent !== undefined) {
 			el.textContent = '';
 		}
 	}

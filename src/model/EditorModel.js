@@ -1,5 +1,5 @@
-import ModelNode from "../basic/ModelNode";
-import NullableNode from "../basic/NullableNode";
+import ModelNode from "./basic/ModelNode";
+import NullableNode from "./basic/NullableNode";
 
 export default class EditorModel extends ModelNode {
 

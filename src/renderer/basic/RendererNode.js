@@ -39,8 +39,6 @@ export default class RendererNode extends ActivatedTreeNode {
 	/**
 	 * Override this
 	 */
-	renderInternal() {
-
-	}
+	renderInternal() {}
 
 }

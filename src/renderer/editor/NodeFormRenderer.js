@@ -20,7 +20,7 @@ export default class NodeFormRenderer extends DomRenderer {
 	}
 
 	activateInternal() {
-		this.container = this.addElement('form');
+		this.container = this.addElement('form', 'bg');
 
 		const buttons = Pixies.createElement(this.container, 'div', 'buttons');
 		const buttonsLeft = Pixies.createElement(buttons, 'div');
@@ -33,12 +33,18 @@ export default class NodeFormRenderer extends DomRenderer {
 			this.save();
 		});
 
+		const close = Pixies.createElement(buttonsRight, 'button');
+		close.innerText = 'Close';
+		close.addEventListener('click', (e) => {
+			e.preventDefault();
+			this.game.editor.triggerEvent('form-closed');
+		});
+
 		if (this.model.constructor.name === 'ConversationModel') {
-			const start = Pixies.createElement(buttonsRight, 'button');
+			const start = Pixies.createElement(buttonsLeft, 'button', 'special');
 			start.innerText = 'Start';
 			start.addEventListener('click', (e) => {
 				e.preventDefault();
-				//const conversation = this.model.clone();
 				this.game.saveGame.conversation.set(this.model);
 			});
 		}
@@ -90,7 +96,7 @@ export default class NodeFormRenderer extends DomRenderer {
 	save() {
 		const data = new FormData(this.container);
 		this.game.editor.triggerEvent('node-saved', {node: this.model, data: data});
-		this.model.triggerEvent('closed');
+		this.game.editor.triggerEvent('form-closed');
 	}
 
 }
