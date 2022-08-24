@@ -34,7 +34,10 @@ export default class ControllerNode extends ActivatedTreeNode {
 			return;
 		}
 
-		this.updateActions.forEach((action) => action(delta));
+		while (this.updateActions.length > 0) {
+			const action = this.updateActions.shift();
+			action(delta);
+		}
 		this.updateActions = [];
 
 		this.updateInternal(delta);

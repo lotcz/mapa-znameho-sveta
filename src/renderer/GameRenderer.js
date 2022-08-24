@@ -24,7 +24,6 @@ export default class GameRenderer extends DomRenderer {
 
 		this.model = model;
 		this.loading = null;
-		this.debugMenu = null;
 		this.addClass('game');
 
 		this.editorRenderer = null;
@@ -91,7 +90,7 @@ export default class GameRenderer extends DomRenderer {
 		if (!this.loading) {
 			this.loading = this.addElement('div', 'loading');
 			const inner = Pixies.createElement(this.loading, 'div');
-			inner.innerText = 'Obětujte ovci...';
+			inner.innerText = Pixies.randomElement(['Obětuji ovci...', 'Rozdělávám oheň...', 'Zpívám bohům...', 'Zahajuji rituál...']);
 		}
 	}
 

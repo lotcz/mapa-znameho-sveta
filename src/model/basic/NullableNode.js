@@ -7,7 +7,6 @@ export default class NullableNode extends DirtyValue {
 		super();
 
 		this.nodeFactory = nodeFactory;
-		this.valueDirtyHandler = () => this.makeDirty();
 	}
 
 	/**
@@ -16,13 +15,13 @@ export default class NullableNode extends DirtyValue {
 	 */
 	set(value) {
 		if (this.value) {
-			this.value.removeOnDirtyListener(this.valueDirtyHandler);
+			this.removeDirtyListener(this.value);
 		}
 
 		super.set(value);
 
 		if (this.value) {
-			this.value.addOnDirtyListener(this.valueDirtyHandler);
+			this.addDirtyListener(this.value);
 		}
 	}
 

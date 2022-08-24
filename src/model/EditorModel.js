@@ -22,8 +22,8 @@ export default class EditorModel extends ModelNode {
 	constructor() {
 		super();
 
-		this.activeTable = new NullableNode();
-		this.activeForm = new NullableNode();
+		this.activeTable = this.addProperty('activeTable', new NullableNode());
+		this.activeForm = this.addProperty('activeForm', new NullableNode());
 
 		this.resourcesOptions = {
 			races: 'Races',

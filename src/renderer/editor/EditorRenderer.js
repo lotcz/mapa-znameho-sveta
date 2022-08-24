@@ -27,19 +27,33 @@ export default class EditorRenderer extends DomRenderer {
 		this.addChild(this.formRenderer);
 
 		this.updateModeHandler = () => this.updateMode();
+		this.stopEventPropagationHandler = (e) => e.stopPropagation();
 	}
 
 	activateInternal() {
 		this.container = this.addElement('div', ['editor', 'container-host']);
-		this.container.addEventListener('mousemove', (e) => e.stopPropagation());
-		this.container.addEventListener('click', (e) => e.stopPropagation());
 
 		this.nav = Pixies.createElement(this.container, 'nav', 'bg');
+		this.nav.addEventListener('click', this.stopEventPropagationHandler);
+		this.nav.addEventListener('mousemove', this.stopEventPropagationHandler);
+
 		this.gameMode = Pixies.createElement(this.nav, 'div', 'game-mode');
+		this.gameMode.addEventListener('click', this.stopEventPropagationHandler);
+		this.gameMode.addEventListener('mousemove', this.stopEventPropagationHandler);
+
 		this.dock = Pixies.createElement(this.container, 'div', 'dock');
+
 		this.tables = Pixies.createElement(this.dock, 'div', 'table-selection bg');
+		this.tables.addEventListener('click', this.stopEventPropagationHandler);
+		this.tables.addEventListener('mousemove', this.stopEventPropagationHandler);
+
 		this.table = Pixies.createElement(this.dock, 'div', 'active-table');
+		this.table.addEventListener('click', this.stopEventPropagationHandler);
+		this.table.addEventListener('mousemove', this.stopEventPropagationHandler);
+
 		this.form = Pixies.createElement(this.dock, 'div', 'active-form');
+		this.form.addEventListener('click', this.stopEventPropagationHandler);
+		this.form.addEventListener('mousemove', this.stopEventPropagationHandler);
 
 		this.updateMode();
 		this.game.saveGame.mode.addOnChangeListener(this.updateModeHandler);
@@ -53,19 +67,32 @@ export default class EditorRenderer extends DomRenderer {
 	}
 
 	renderInternal() {
+		console.log('rendering');
 		if (this.model.activeTable.isDirty) {
+			console.log('updating');
 			this.updateTables();
 		}
 	}
 
 	updateMode() {
 		Pixies.emptyElement(this.gameMode);
-		const mapButton = Pixies.createElement(this.gameMode, 'button', this.game.saveGame.mode.equalsTo(GAME_MODE_MAP) ? 'active' : null);
+		const buttons = Pixies.createElement(this.gameMode, 'div', 'buttons');
+		const buttonsLeft = Pixies.createElement(buttons, 'div');
+		const mapButton = Pixies.createElement(buttonsLeft, 'button', this.game.saveGame.mode.equalsTo(GAME_MODE_MAP) ? 'active' : null);
 		mapButton.innerText = 'MAP';
 		mapButton.addEventListener('click', () => this.game.saveGame.mode.set(GAME_MODE_MAP));
-		const battleButton = Pixies.createElement(this.gameMode, 'button', this.game.saveGame.mode.equalsTo(GAME_MODE_BATTLE) ? 'active' : null);
+		const battleButton = Pixies.createElement(buttonsLeft, 'button', this.game.saveGame.mode.equalsTo(GAME_MODE_BATTLE) ? 'active' : null);
 		battleButton.innerText = 'BATTLE';
 		battleButton.addEventListener('click', () => this.game.saveGame.mode.set(GAME_MODE_BATTLE));
+
+		const buttonsRight = Pixies.createElement(buttons, 'div');
+		const switchButton = Pixies.createElement(
+			buttonsRight,
+			'button',
+			null,
+			'Switch',
+			() => Pixies.toggleClass(this.container, 'full')
+		);
 	}
 
 	updateTables() {
@@ -76,8 +103,7 @@ export default class EditorRenderer extends DomRenderer {
 	}
 
 	addMenuSection(options, name) {
-		const h = Pixies.createElement(this.tables, 'h3');
-		h.innerText = name;
+		const h = Pixies.createElement(this.tables, 'h3', null, name);
 		const menu = Pixies.createElement(this.tables, 'ul', 'menu');
 		Object.keys(options).forEach((key) => this.addMenuLink(menu, options, key));
 	}
@@ -85,10 +111,8 @@ export default class EditorRenderer extends DomRenderer {
 	addMenuLink(wrapper, options, key) {
 		const table = this.game.getTableByName(key);
 		const isActive = this.model.activeTable.equalsTo(table);
-		console.log(isActive);
 		const item = Pixies.createElement(wrapper,'li', isActive ? 'active' : '');
-		const link = Pixies.createElement(item,'a');
-		link.innerText = options[key];
+		const link = Pixies.createElement(item,'a', null, options[key]);
 		link.addEventListener('click', () => this.model.triggerEvent('table-selected', key));
 	}
 

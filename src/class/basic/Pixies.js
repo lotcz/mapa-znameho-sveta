@@ -81,6 +81,18 @@ export default class Pixies {
 		element.classList.remove(css);
 	}
 
+	static hasClass(element, css) {
+		return element.classList.contains(css);
+	}
+
+	static toggleClass(element, css) {
+		if (Pixies.hasClass(element, css)) {
+			Pixies.removeClass(element, css);
+		} else {
+			Pixies.addClass(element, css);
+		}
+	}
+
 	/**
 	 *
 	 * @param parent Element

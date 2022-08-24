@@ -92,18 +92,28 @@ export default class ModelNode extends Node {
 		return n;
 	}
 
+	addDirtyListener(node) {
+		node.addEventListener('dirty', this.propertyValueDirtyHandler);
+		return node;
+	}
+
+	removeDirtyListener(node) {
+		node.removeEventListener('dirty', this.propertyValueDirtyHandler);
+		return node;
+	}
+
 	addProperty(name, property) {
 		return this.properties.add(name, property);
 	}
 
 	propertyAdded(name, property) {
 		this.makeDirty();
-		property.addEventListener('dirty', this.propertyValueDirtyHandler);
+		this.addDirtyListener(property);
 	}
 
 	propertyRemoved(name, property) {
 		this.makeDirty();
-		property.removeEventListener('dirty', this.propertyValueDirtyHandler);
+		this.removeDirtyListener(property);
 	}
 
 	propertySet(name, oldProperty, newProperty) {

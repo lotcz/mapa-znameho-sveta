@@ -42,6 +42,10 @@ html, body {
 .editor {
 	background-color: transparent;
 	font-size: 10pt;
+}
+
+.editor.full,
+.editor.full .dock {
 	width: 100%;
 }
 
@@ -97,10 +101,6 @@ html, body {
 	flex-direction: row;
 	align-items: flex-start;
 	justify-content: space-between;
-}
-
-.editor .dock > * {
-
 }
 
 .editor .table,

@@ -11,7 +11,10 @@ export default class EditorController extends ControllerNode {
 		super(game, model);
 
 		this.model = model;
-		this.onTableSelectedHandler = (name) => this.runOnUpdate(() => this.model.activeTable.set(this.game.getTableByName(name)));
+		this.onTableSelectedHandler = (name) => this.runOnUpdate(() => {
+
+			this.model.activeTable.set(this.game.getTableByName(name));
+		});
 		this.onTableClosedHandler = () => this.runOnUpdate(() => this.model.activeTable.set(null));
 		this.onRowSelectedHandler = (item) => this.runOnUpdate(() => this.model.activeForm.set(item));
 		this.onNodeSavedHandler = (param) => this.runOnUpdate(() => this.saveNode(param));
