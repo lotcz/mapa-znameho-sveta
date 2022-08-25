@@ -1,4 +1,7 @@
-import "./style.css";
+import "./style/style.css";
+import "./style/editor.css";
+import "./style/party.css";
+import "./style/conversation.css";
 
 import GameController from "./controller/GameController";
 import GameModel from "./model/GameModel";

@@ -6,7 +6,7 @@ import AssetCache from "../class/AssetCache";
 import ResourcesModel from "./resources/ResourcesModel";
 import SaveGameModel from "./savegame/SaveGameModel";
 import CharacterPreviewModel, {SEX_MAMMOTH, SEX_WOLF} from "./CharacterPreviewModel";
-import BattleModel from "./battle/BattleModel";
+import BattleModel from "./savegame/battle/BattleModel";
 import WaypointModel from "./resources/WaypointModel";
 import TextureModel from "./resources/TextureModel";
 import MaterialModel from "./resources/MaterialModel";

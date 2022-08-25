@@ -3,13 +3,13 @@ import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader.js";
-import DomRenderer from "../basic/DomRenderer";
-import Pixies from "../../class/basic/Pixies";
-import CollectionRenderer from "../basic/CollectionRenderer";
+import DomRenderer from "../../basic/DomRenderer";
+import Pixies from "../../../class/basic/Pixies";
+import CollectionRenderer from "../../basic/CollectionRenderer";
 import BattleCharacterRenderer from "./BattleCharacterRenderer";
-import Vector3 from "../../model/basic/Vector3";
-import Vector2 from "../../model/basic/Vector2";
-import GUIHelper from "../../class/basic/GUIHelper";
+import Vector3 from "../../../model/basic/Vector3";
+import Vector2 from "../../../model/basic/Vector2";
+import GUIHelper from "../../../class/basic/GUIHelper";
 
 export default class BattleRenderer extends DomRenderer {
 

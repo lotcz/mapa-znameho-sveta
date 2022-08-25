@@ -1,9 +1,10 @@
-import DomRenderer from "./basic/DomRenderer";
+import DomRenderer from "../basic/DomRenderer";
 import MapRenderer from "./map/MapRenderer";
-import {GAME_MODE_BATTLE, GAME_MODE_MAP} from "../model/savegame/SaveGameModel";
+import {GAME_MODE_BATTLE, GAME_MODE_MAP} from "../../model/savegame/SaveGameModel";
 import BattleRenderer from "./battle/BattleRenderer";
 import ConversationRenderer from "./conversation/ConversationRenderer";
-import NullableNodeRenderer from "./basic/NullableNodeRenderer";
+import NullableNodeRenderer from "../basic/NullableNodeRenderer";
+import PartyRenderer from "./party/PartyRenderer";
 
 export default class SaveGameRenderer extends DomRenderer {
 
@@ -22,12 +23,17 @@ export default class SaveGameRenderer extends DomRenderer {
 	 */
 	conversationRenderer;
 
+	/**
+	 * @type PartyRenderer
+	 */
+	partyRenderer;
+
 	constructor(game, model, dom) {
 		super(game, model, dom);
 
 		this.model = model;
 
-		this.conversationRenderer = new NullableNodeRenderer(this.game, this.model.conversation, (model) => new ConversationRenderer(this.game, model, this.overlayLayer));
+		this.conversationRenderer = new NullableNodeRenderer(this.game, this.model.conversation, (model) => new ConversationRenderer(this.game, model, this.topLayer));
 		this.addChild(this.conversationRenderer);
 
 		this.updateLoadingHandler = () => this.updateLoading();
@@ -37,7 +43,10 @@ export default class SaveGameRenderer extends DomRenderer {
 
 	activateInternal() {
 		this.mainLayer = this.addElement('div', ['main', 'container-host']);
-		this.overlayLayer = this.addElement('div', ['overlay', 'container-host']);
+		this.topLayer = this.addElement('div', ['top-layer']);
+
+		this.partyRenderer = new PartyRenderer(this.game, this.model.party, this.topLayer);
+		this.addChild(this.partyRenderer);
 
 		this.updateGameMode();
 		this.model.mode.addOnChangeListener(this.updateGameModeHandler);
@@ -47,7 +56,7 @@ export default class SaveGameRenderer extends DomRenderer {
 	deactivateInternal() {
 		this.model.mode.removeOnChangeListener(this.updateGameModeHandler);
 		this.removeElement(this.mainLayer);
-		this.removeElement(this.overlayLayer);
+		this.removeElement(this.topLayer);
 	}
 
 	updateGameMode() {

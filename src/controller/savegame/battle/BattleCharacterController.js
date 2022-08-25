@@ -1,8 +1,8 @@
-import ControllerNode from "../basic/ControllerNode";
-import AnimatedVector2 from "../../class/animating/AnimatedVector2";
-import {CHARACTER_STATE_IDLE, CHARACTER_STATE_RUN} from "../../model/battle/BattleCharacterModel";
-import AnimatedRotation from "../../class/animating/AnimatedRotation";
-import PathFinder from "../../class/PathFinder";
+import ControllerNode from "../../basic/ControllerNode";
+import AnimatedVector2 from "../../../class/animating/AnimatedVector2";
+import {CHARACTER_STATE_IDLE, CHARACTER_STATE_RUN} from "../../../model/savegame/battle/BattleCharacterModel";
+import AnimatedRotation from "../../../class/animating/AnimatedRotation";
+import PathFinder from "../../../class/PathFinder";
 
 const TRAVEL_SPEED = 3.25 / 1000; // position units per milisecond
 const ROTATION_SPEED = (Math.PI * 4) / 1000; // radians per milisecond

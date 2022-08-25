@@ -1,8 +1,8 @@
-import DomRenderer from "../basic/DomRenderer";
-import Pixies from "../../class/basic/Pixies";
-import CollectionRenderer from "../basic/CollectionRenderer";
+import DomRenderer from "../../basic/DomRenderer";
+import Pixies from "../../../class/basic/Pixies";
+import CollectionRenderer from "../../basic/CollectionRenderer";
 import ConversationLineRenderer from "./ConversationLineRenderer";
-import ConversationLineModel from "../../model/resources/conversation/ConversationLineModel";
+import ConversationLineModel from "../../../model/resources/conversation/ConversationLineModel";
 
 export default class ConversationEntryRenderer extends DomRenderer {
 
@@ -52,8 +52,8 @@ export default class ConversationEntryRenderer extends DomRenderer {
 	}
 
 	deactivateInternal() {
-		this.removeElement(this.container);
 		this.resetChildren();
+		this.removeElement(this.container);
 	}
 
 }

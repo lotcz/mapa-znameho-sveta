@@ -1,5 +1,5 @@
-import ControllerNode from "./basic/ControllerNode";
-import ConversationLineModel from "../model/resources/conversation/ConversationLineModel";
+import ControllerNode from "../basic/ControllerNode";
+import ConversationLineModel from "../../model/resources/conversation/ConversationLineModel";
 
 export default class ConversationController extends ControllerNode {
 

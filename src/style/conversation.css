@@ -1,0 +1,128 @@
+
+.conversation {
+	display: flex;
+	position: fixed;
+	flex-direction: column;
+	align-items: center;
+	justify-items: center;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	cursor: default;
+
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+	-khtml-user-select: none; /* Konqueror HTML */
+	-moz-user-select: none; /* Old versions of Firefox */
+	-ms-user-select: none; /* Internet Explorer/Edge */
+	user-select: none;
+}
+
+.conversation .panel {
+	margin: auto;
+	color:var(--dark-brown);;
+	background-image: url('../../assets/img/texture/paper.jpg');
+	background-color: sandybrown;
+	width: 900px;
+	max-width: 100%;
+	height: 85%;
+	max-height: 100%;
+	border-radius: 10px;
+	box-shadow: #311a0a 0 0 60px;
+	display: flex;
+}
+
+.conversation .inner {
+	border-radius: 10px;
+	padding: 2rem;
+	box-shadow: #311a0a 0 0 40px inset;
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.conversation .scroll {
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.conversation .scroll {
+	scrollbar-color: var(--dark-brown) var(--orange);
+	scrollbar-width: thin;
+}
+
+.conversation .scroll::-webkit-scrollbar {
+	width: 10px; /* Mostly for vertical scrollbars */
+	height: 10px; /* Mostly for horizontal scrollbars */
+}
+
+.conversation .scroll::-webkit-scrollbar-thumb { /* Foreground */
+	background: #311a0a;
+}
+
+.conversation .scroll::-webkit-scrollbar-track { /* Background */
+	background: sandybrown;
+}
+
+.conversation .info {
+	display: flex;
+	flex-direction: row;
+}
+
+.conversation .header {
+	padding-bottom: 10px;
+	margin-bottom: 10px;
+}
+
+.conversation .info .portrait {
+	max-width: 150px;
+	max-height: 150px;
+	margin-right: 20px;
+}
+
+.conversation .info .description {
+	flex: 1;
+}
+
+.conversation .entries {
+	flex: 1 2;
+}
+
+.conversation .responses {
+	height: 100px;
+}
+
+.conversation h2 {
+	margin: 0 0 10px 0;
+}
+.conversation a {
+	cursor: pointer;
+	color: saddlebrown;
+}
+
+.conversation a:hover {
+	color: orange;
+}
+
+.conversation .line {
+	display: flex;
+	flex-direction: row;
+	margin-top: 10px;
+	align-items: flex-start;
+}
+
+.conversation .line .portrait {
+	max-width: 50px;
+	max-height: 50px;
+	margin-right: 10px;
+}
+
+.conversation .line .text {
+	flex: 1;
+}
+
+.conversation .line.response {
+	padding-left: 20px;
+}

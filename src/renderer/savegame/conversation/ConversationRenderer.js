@@ -1,10 +1,10 @@
-import DomRenderer from "../basic/DomRenderer";
-import Pixies from "../../class/basic/Pixies";
-import CollectionRenderer from "../basic/CollectionRenderer";
+import DomRenderer from "../../basic/DomRenderer";
+import Pixies from "../../../class/basic/Pixies";
+import CollectionRenderer from "../../basic/CollectionRenderer";
 import ConversationEntryRenderer from "./ConversationEntryRenderer";
 import ConversationResponseRenderer from "./ConversationResponseRenderer";
-import ConversationEntryModel from "../../model/resources/conversation/ConversationEntryModel";
-import AnimatedValue from "../../class/animating/AnimatedValue";
+import ConversationEntryModel from "../../../model/resources/conversation/ConversationEntryModel";
+import AnimatedValue from "../../../class/animating/AnimatedValue";
 
 export default class ConversationRenderer extends DomRenderer {
 

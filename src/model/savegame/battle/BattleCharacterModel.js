@@ -1,9 +1,9 @@
-import DirtyValue from "../basic/DirtyValue";
-import ModelNode from "../basic/ModelNode";
-import Vector2 from "../basic/Vector2";
-import Vector3 from "../basic/Vector3";
-import {SEX_FEMALE} from "../CharacterPreviewModel";
-import Rotation from "../basic/Rotation";
+import DirtyValue from "../../basic/DirtyValue";
+import ModelNode from "../../basic/ModelNode";
+import Vector2 from "../../basic/Vector2";
+import Vector3 from "../../basic/Vector3";
+import {SEX_FEMALE} from "../../CharacterPreviewModel";
+import Rotation from "../../basic/Rotation";
 
 export const CHARACTER_STATE_IDLE = 'Idle';
 export const CHARACTER_STATE_RUN = 'Run';

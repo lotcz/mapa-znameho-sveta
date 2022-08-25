@@ -1,4 +1,4 @@
-import SvgRenderer from "../basic/SvgRenderer";
+import SvgRenderer from "../../basic/SvgRenderer";
 
 export default class LocationRenderer extends SvgRenderer {
 	helper;

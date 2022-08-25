@@ -1,10 +1,10 @@
-import ModelNode from "../basic/ModelNode";
-import Vector2 from "../basic/Vector2";
-import ModelNodeCollection from "../basic/ModelNodeCollection";
+import ModelNode from "../../basic/ModelNode";
+import Vector2 from "../../basic/Vector2";
+import ModelNodeCollection from "../../basic/ModelNodeCollection";
 import BattleCharacterModel from "./BattleCharacterModel";
-import BattleMapModel from "../resources/BattleMapModel";
-import DirtyValue from "../basic/DirtyValue";
-import NullableNode from "../basic/NullableNode";
+import BattleMapModel from "../../resources/BattleMapModel";
+import DirtyValue from "../../basic/DirtyValue";
+import NullableNode from "../../basic/NullableNode";
 
 export default class BattleModel extends ModelNode {
 

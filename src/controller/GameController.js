@@ -1,12 +1,12 @@
 import ControllerNode from "./basic/ControllerNode";
 import ControlsController from "./ControlsController";
-import MapController from "./map/MapController";
+import MapController from "./savegame/map/MapController";
 import {GAME_MODE_BATTLE, GAME_MODE_MAP} from "../model/savegame/SaveGameModel";
-import BattleController from "./battle/BattleController";
+import BattleController from "./savegame/battle/BattleController";
 import * as localForage from "localforage";
 import EditorController from "./EditorController";
-import ConversationController from "./ConversationController";
-import SaveGameController from "./SaveGameController";
+import ConversationController from "./savegame/ConversationController";
+import SaveGameController from "./savegame/SaveGameController";
 import NullableNodeController from "./basic/NullableNodeController";
 
 export default class GameController extends ControllerNode {

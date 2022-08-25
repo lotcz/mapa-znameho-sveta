@@ -25,12 +25,12 @@ export default class EditorRenderer extends DomRenderer {
 
 		this.formRenderer = new NullableNodeRenderer(this.game, this.model.activeForm, (model) => new NodeFormRenderer(this.game, model, this.form));
 		this.addChild(this.formRenderer);
-		
+
 		this.stopEventPropagationHandler = (e) => e.stopPropagation();
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', ['editor', 'container-host']);
+		this.container = this.addElement('div', ['editor']);
 
 		this.nav = Pixies.createElement(this.container, 'nav', 'bg');
 		this.nav.addEventListener('click', this.stopEventPropagationHandler);

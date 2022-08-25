@@ -1,0 +1,131 @@
+.instant-editor {
+	display: block;
+	position: static;
+	padding: 1px;
+	margin: 1px;
+}
+
+.instant-editor input[type=text],
+.instant-editor textarea {
+	display: block;
+	width: 100%;
+	margin: auto;
+}
+
+.editor-layer.full,
+.editor-layer.full .editor,
+.editor-layer.full .editor .dock {
+	width: 100%;
+}
+
+.editor-layer {
+	position: absolute;
+}
+
+.editor {
+	background-color: transparent;
+	font-size: 10pt;
+}
+
+
+.editor .bg {
+	background-color: black;
+	color: gray;
+}
+
+.editor .table-selection {
+	padding: 10px;
+}
+
+.editor .buttons {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.editor .buttons > div {
+	display: flex;
+	flex-direction: row;
+	justify-content: start;
+}
+
+.editor button {
+	background-color: gray;
+	color: black;
+	border: 0;
+	border-radius: 5px;
+	cursor: pointer;
+	margin: 10px;
+}
+
+.editor button.special {
+	background-color: var(--light-brown);
+	color: var(--dark-brown);
+}
+
+.editor button.red {
+	background-color: red;
+}
+
+.editor button:hover {
+	background-color: lightblue;
+}
+
+.editor button.active {
+	background-color: black;
+	color: white;
+	border: 1px white solid;
+	cursor: default;
+}
+
+.editor .dock {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	justify-content: space-between;
+}
+
+.editor .table,
+.editor form {
+	border: 1px gray solid;
+	border-radius: 5px;
+	margin: 10px;
+	padding: 10px;
+}
+
+.editor table td {
+	border-left: 1px gray solid;
+}
+
+.editor table td:last-of-type {
+	border-right: 1px gray solid;
+}
+
+.editor table tr:hover {
+	color: lightblue;
+	cursor: pointer;
+}
+
+.editor form .fields .row {
+	display: grid;
+	grid-template-columns: 1fr 2fr;
+	gap: 10px;
+	margin-bottom: 10px;
+}
+
+.menu a:hover {
+	color: lightblue;
+	cursor: pointer;
+}
+
+.menu .active {
+	color: white;
+}
+
+.menu,
+.menu li {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}

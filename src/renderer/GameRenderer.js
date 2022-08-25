@@ -2,7 +2,7 @@ import DomRenderer from "./basic/DomRenderer";
 import Pixies from "../class/basic/Pixies";
 import EditorRenderer from "./editor/EditorRenderer";
 import NullableNodeRenderer from "./basic/NullableNodeRenderer";
-import SaveGameRenderer from "./SaveGameRenderer";
+import SaveGameRenderer from "./savegame/SaveGameRenderer";
 
 export default class GameRenderer extends DomRenderer {
 
@@ -37,7 +37,7 @@ export default class GameRenderer extends DomRenderer {
 		if (initLoading) Pixies.destroyElement(initLoading);
 
 		this.saveGameLayer = this.addElement('div', ['savegame-layer', 'container-host']);
-		this.editorLayer = this.addElement('div', ['editor-layer', 'container-host']);
+		this.editorLayer = this.addElement('div', ['editor-layer']);
 
 		this.updateLoading();
 		this.model.assets.isLoading.addOnChangeListener(this.updateLoadingHandler);

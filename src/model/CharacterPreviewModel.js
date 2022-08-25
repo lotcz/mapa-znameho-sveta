@@ -10,15 +10,9 @@ export const SEX_MAMMOTH = 'mammoth';
 
 export default class CharacterPreviewModel extends ModelNode {
 
-	/**
-	 * @type DirtyValue
-	 */
-	sex;
 
-	/**
-	 * @type DirtyValue
-	 */
-	skinColor;
+
+
 
 	/**
 	 * @type DirtyValue
