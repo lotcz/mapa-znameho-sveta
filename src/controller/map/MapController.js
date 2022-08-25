@@ -1,5 +1,5 @@
-import ControllerNode from "./basic/ControllerNode";
-import DirtyValue from "../model/basic/DirtyValue";
+import ControllerNode from "../basic/ControllerNode";
+import DirtyValue from "../../model/basic/DirtyValue";
 
 const TRAVEL_SPEED = 10; // px per second
 

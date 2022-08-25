@@ -11,6 +11,7 @@ import WaypointModel from "./resources/WaypointModel";
 import TextureModel from "./resources/TextureModel";
 import MaterialModel from "./resources/MaterialModel";
 import EditorModel from "./EditorModel";
+import NullableNode from "./basic/NullableNode";
 
 export default class GameModel extends ModelNode {
 
@@ -45,7 +46,7 @@ export default class GameModel extends ModelNode {
 	isInDebugMode;
 
 	/**
-	 * @type SaveGameModel
+	 * @type NullableNode
 	 */
 	saveGame;
 
@@ -59,14 +60,23 @@ export default class GameModel extends ModelNode {
 		this.viewBoxSize = this.addProperty('viewBoxSize', new Vector2());
 		this.isInDebugMode = this.addProperty('isInDebugMode', new DirtyValue(true));
 
-		this.saveGame = this.addProperty('saveGame', new SaveGameModel());
+		this.saveGame = this.addProperty('saveGame', new NullableNode(() => new SaveGameModel()));
 		this.characterPreview = this.addProperty('characterPreview', new CharacterPreviewModel());
 
 		this.initialize();
 	}
 
 	getTableByName(name) {
-		return this.resources[name] || this.saveGame[name] || this.resources.map[name] || null;
+		if (this.resources[name]) {
+			return this.resources[name];
+		}
+		if (this.resources.map[name]) {
+			return this.resources.map[name];
+		}
+		if (this.saveGame.isEmpty()) {
+			return null;
+		}
+		return this.saveGame.get()[name];
 	}
 
 	initialize() {
@@ -121,11 +131,7 @@ export default class GameModel extends ModelNode {
 		conn3.pathId.set(path2.id.get());
 		conn3.forward.set(false);
 
-
-
-
-
-
+		this.saveGame.set(new SaveGameModel());
 
 		const texture = new TextureModel();
 		texture.uri.set('img/paper-texture.jpg');
@@ -133,28 +139,28 @@ export default class GameModel extends ModelNode {
 		material.texture.set(texture);
 		this.resources.materials.add(material);
 
-		const character = this.saveGame.battle.characters.add();
+		const character = this.saveGame.get().battle.characters.add();
 		character.position.set(-27, 0);
 		character.scale.set(1.2, 0.9, 1.2);
 
-		const character2 = this.saveGame.battle.characters.add();
+		const character2 = this.saveGame.get().battle.characters.add();
 		//character2.sex.set(SEX_MALE);
 		character2.position.set(-22, -4);
 		character2.skinColor.set('#5050a0');
 
-		const character3 = this.saveGame.battle.characters.add();
+		const character3 = this.saveGame.get().battle.characters.add();
 		//character3.sex.set(SEX_MALE);
 		character3.position.set(-30, 3);
 		character3.skinColor.set('#905020');
 		character3.scale.set(1.1, 0.7, 1.1);
 
-		const wolf = this.saveGame.battle.characters.add();
+		const wolf = this.saveGame.get().battle.characters.add();
 		wolf.sex.set(SEX_WOLF);
 		wolf.position.set(-20, -13);
 		wolf.skinColor.set('#505050');
 		wolf.scale.set(1, 1, 1);
 
-		const mammoth = this.saveGame.battle.characters.add();
+		const mammoth = this.saveGame.get().battle.characters.add();
 		mammoth.sex.set(SEX_MAMMOTH);
 		mammoth.position.set(-10, -7);
 		mammoth.skinColor.set('#505050');

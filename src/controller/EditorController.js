@@ -42,6 +42,12 @@ export default class EditorController extends ControllerNode {
 		this.game.saveGame.removeOnDirtyListener(this.onResourcesChanged);
 	}
 
+	/**
+	 *
+	 * * @param {Object} param
+	 *  * @param {ModelNode} param.node
+	 *  * @param {FormData} param.data
+	 */
 	saveNode(param) {
 		const node = param.node;
 		const data = param.data;

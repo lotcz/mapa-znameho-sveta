@@ -1,11 +1,8 @@
 import DomRenderer from "./basic/DomRenderer";
 import Pixies from "../class/basic/Pixies";
-import MapRenderer from "./MapRenderer";
-import {GAME_MODE_BATTLE, GAME_MODE_MAP} from "../model/savegame/SaveGameModel";
-import BattleRenderer from "./BattleRenderer";
 import EditorRenderer from "./editor/EditorRenderer";
-import ConversationRenderer from "./conversation/ConversationRenderer";
 import NullableNodeRenderer from "./basic/NullableNodeRenderer";
+import SaveGameRenderer from "./SaveGameRenderer";
 
 export default class GameRenderer extends DomRenderer {
 
@@ -15,9 +12,9 @@ export default class GameRenderer extends DomRenderer {
 	model;
 
 	/**
-	 * @type {MapRenderer|BattleRenderer}
+	 * @type NullableNodeRenderer
 	 */
-	mainRenderer;
+	saveGameRenderer;
 
 	constructor(model, dom) {
 		super(model, model, dom);
@@ -28,11 +25,10 @@ export default class GameRenderer extends DomRenderer {
 
 		this.editorRenderer = null;
 
-		this.conversationRenderer = new NullableNodeRenderer(this.game, this.model.saveGame.conversation, (model) => new ConversationRenderer(this.game, model, this.overlayLayer));
-		this.addChild(this.conversationRenderer);
+		this.saveGameRenderer = new NullableNodeRenderer(this.game, this.model.saveGame, (model) => new SaveGameRenderer(this.game, model, this.dom));
+		this.addChild(this.saveGameRenderer);
 
 		this.updateLoadingHandler = () => this.updateLoading();
-		this.updateGameModeHandler = () => this.updateGameMode();
 		this.updateDebugMenuHandler = () => this.updateDebugMenu();
 	}
 
@@ -40,14 +36,8 @@ export default class GameRenderer extends DomRenderer {
 		const initLoading = document.getElementById('initial_loading');
 		if (initLoading) Pixies.destroyElement(initLoading);
 
-		this.mainLayer = this.addElement('div', ['main', 'container-host']);
-		this.overlayLayer = this.addElement('div', ['overlay', 'container-host']);
-
 		this.updateLoading();
 		this.model.assets.isLoading.addOnChangeListener(this.updateLoadingHandler);
-
-		this.updateGameMode();
-		this.model.saveGame.mode.addOnChangeListener(this.updateGameModeHandler);
 
 		this.updateDebugMenu();
 		this.model.isInDebugMode.addOnChangeListener(this.updateDebugMenuHandler);
@@ -56,70 +46,30 @@ export default class GameRenderer extends DomRenderer {
 
 	deactivateInternal() {
 		this.model.assets.isLoading.removeOnChangeListener(this.updateLoadingHandler);
-		this.model.saveGame.mode.removeOnChangeListener(this.updateGameModeHandler);
 		this.model.isInDebugMode.removeOnChangeListener(this.updateDebugMenuHandler);
 		this.removeElement(this.mainLayer);
 	}
 
-	updateGameMode() {
-		if (this.mainRenderer) {
-			this.removeChild(this.mainRenderer);
-		}
-		const mode = this.model.saveGame.mode.get();
-		switch (mode) {
-			case GAME_MODE_MAP:
-				this.mainRenderer = this.addChild(new MapRenderer(this.game, this.model.saveGame, this.mainLayer));
-				break;
-			case GAME_MODE_BATTLE:
-				this.mainRenderer = this.addChild(new BattleRenderer(this.game, this.model.saveGame.battle, this.mainLayer));
-				break;
-			default:
-				console.warn(`Unknown game mode ${mode}`);
-		}
-	}
-
 	updateLoading() {
-		if (this.model.assets.isLoading.get()) {
-			this.showLoading();
-		} else {
-			this.hideLoading();
+		if (this.loading) {
+			this.removeElement(this.loading);
+			this.loading = null;
 		}
-	}
-
-	showLoading() {
-		if (!this.loading) {
+		if (this.model.assets.isLoading.get()) {
 			this.loading = this.addElement('div', 'loading');
 			const inner = Pixies.createElement(this.loading, 'div');
 			inner.innerText = Pixies.randomElement(['Obětuji ovci...', 'Rozdělávám oheň...', 'Zpívám bohům...', 'Zahajuji rituál...']);
 		}
 	}
 
-	hideLoading() {
-		if (this.loading) {
-			this.removeElement(this.loading);
-			this.loading = null;
-		}
-	}
-
 	updateDebugMenu() {
-		if (this.model.isInDebugMode.get()) {
-			this.showDebugMenu();
-		} else {
-			this.hideDebugMenu();
-		}
-	}
-
-	showDebugMenu() {
-		if (!this.editorRenderer) {
-			this.editorRenderer = new EditorRenderer(this.game, this.model.editor, this.dom);
-			this.addChild(this.editorRenderer);
-		}
-	}
-
-	hideDebugMenu() {
 		if (this.editorRenderer) {
 			this.removeChild(this.editorRenderer);
 			this.editorRenderer = null;
+		}
+		if (this.model.isInDebugMode.get()) {
+			this.editorRenderer = new EditorRenderer(this.game, this.model.editor, this.dom);
+			this.addChild(this.editorRenderer);
 		}
 	}
 

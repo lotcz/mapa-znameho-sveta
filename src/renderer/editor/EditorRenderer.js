@@ -56,13 +56,13 @@ export default class EditorRenderer extends DomRenderer {
 		this.form.addEventListener('mousemove', this.stopEventPropagationHandler);
 
 		this.updateMode();
-		this.game.saveGame.mode.addOnChangeListener(this.updateModeHandler);
+		this.game.saveGame.get().mode.addOnChangeListener(this.updateModeHandler);
 
 		this.updateTables();
 	}
 
 	deactivateInternal() {
-		this.game.saveGame.mode.removeOnChangeListener(this.updateModeHandler);
+		this.game.saveGame.get().mode.removeOnChangeListener(this.updateModeHandler);
 		this.removeElement(this.container);
 	}
 
@@ -76,12 +76,12 @@ export default class EditorRenderer extends DomRenderer {
 		Pixies.emptyElement(this.gameMode);
 		const buttons = Pixies.createElement(this.gameMode, 'div', 'buttons');
 		const buttonsLeft = Pixies.createElement(buttons, 'div');
-		const mapButton = Pixies.createElement(buttonsLeft, 'button', this.game.saveGame.mode.equalsTo(GAME_MODE_MAP) ? 'active' : null);
+		const mapButton = Pixies.createElement(buttonsLeft, 'button', this.game.saveGame.get().mode.equalsTo(GAME_MODE_MAP) ? 'active' : null);
 		mapButton.innerText = 'MAP';
-		mapButton.addEventListener('click', () => this.game.saveGame.mode.set(GAME_MODE_MAP));
-		const battleButton = Pixies.createElement(buttonsLeft, 'button', this.game.saveGame.mode.equalsTo(GAME_MODE_BATTLE) ? 'active' : null);
+		mapButton.addEventListener('click', () => this.game.saveGame.get().mode.set(GAME_MODE_MAP));
+		const battleButton = Pixies.createElement(buttonsLeft, 'button', this.game.saveGame.get().mode.equalsTo(GAME_MODE_BATTLE) ? 'active' : null);
 		battleButton.innerText = 'BATTLE';
-		battleButton.addEventListener('click', () => this.game.saveGame.mode.set(GAME_MODE_BATTLE));
+		battleButton.addEventListener('click', () => this.game.saveGame.get().mode.set(GAME_MODE_BATTLE));
 
 		const buttonsRight = Pixies.createElement(buttons, 'div');
 		const switchButton = Pixies.createElement(

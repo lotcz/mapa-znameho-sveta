@@ -52,7 +52,7 @@ export default class NodeFormRenderer extends DomRenderer {
 			start.innerText = 'Start';
 			start.addEventListener('click', (e) => {
 				e.preventDefault();
-				this.game.saveGame.conversation.set(this.model);
+				this.game.saveGame.get().conversation.set(this.model);
 			});
 		}
 

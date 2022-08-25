@@ -1,5 +1,5 @@
-import SvgRenderer from "./basic/SvgRenderer";
-import CollectionRenderer from "./basic/CollectionRenderer";
+import SvgRenderer from "../basic/SvgRenderer";
+import CollectionRenderer from "../basic/CollectionRenderer";
 import WaypointRenderer from "./WaypointRenderer";
 
 export default class PathRenderer extends SvgRenderer {
@@ -56,7 +56,7 @@ export default class PathRenderer extends SvgRenderer {
 		if (this.model.waypoints.isDirty) {
 			this.renderPath();
 		}
-		if (this.game.saveGame.pathProgress.isDirty) {
+		if (this.game.saveGame.get().pathProgress.isDirty) {
 			this.renderMarker();
 		}
 	}
@@ -90,7 +90,7 @@ export default class PathRenderer extends SvgRenderer {
 			this.marker = this.groupFg.group();
 			this.marker.use(this.getRef('marker'));
 		}
-		const pos = this.path.pointAt(this.game.saveGame.pathProgress.get());
+		const pos = this.path.pointAt(this.game.saveGame.get().pathProgress.get());
 		this.marker.center(pos.x, pos.y);
 	}
 

@@ -1,11 +1,13 @@
 import ControllerNode from "./basic/ControllerNode";
 import ControlsController from "./ControlsController";
-import MapController from "./MapController";
+import MapController from "./map/MapController";
 import {GAME_MODE_BATTLE, GAME_MODE_MAP} from "../model/savegame/SaveGameModel";
-import BattleController from "./BattleController";
+import BattleController from "./battle/BattleController";
 import * as localForage from "localforage";
 import EditorController from "./EditorController";
 import ConversationController from "./ConversationController";
+import SaveGameController from "./SaveGameController";
+import NullableNodeController from "./basic/NullableNodeController";
 
 export default class GameController extends ControllerNode {
 
@@ -19,17 +21,10 @@ export default class GameController extends ControllerNode {
 	 */
 	controlsController;
 
-	mainController;
-
 	/**
-	 * @type EditorController
+	 * @type NullableNodeController
 	 */
-	editorController;
-
-	/**
-	 * @type ConversationController
-	 */
-	conversationController;
+	saveGameController;
 
 	constructor(model) {
 		super(model, model);
@@ -38,32 +33,30 @@ export default class GameController extends ControllerNode {
 
 		this.isResourcesDirty = false;
 		this.resourcesTimeOut = null;
+
 		this.controlsController = new ControlsController(this.game, this.model.controls);
 		this.addChild(this.controlsController);
-		this.conversationController = null;
+
+		this.saveGameController = new NullableNodeController(this.game, this.model.saveGame, (model) => new SaveGameController(this.game, model));
+		this.addChild(this.saveGameController);
 
 		this.onResizeHandler = () => this.onResize();
 		this.onDebugKeyHandler = () => this.onDebugKey();
 		this.updateDebugMenuHandler = () => this.updateDebugMenu();
-		this.conversationChangedHandler = () => this.updateConversation();
-		this.onGameModeChanged = () => this.updateGameMode();
 
-		this.updateDebugMenu();
-		this.updateGameMode();
 	}
 
 	activateInternal() {
 		this.onResize();
 		window.addEventListener('resize', this.onResizeHandler);
-		this.model.controls.addOnDebugKeyListener(this.onDebugKeyHandler);
-		this.model.isInDebugMode.addOnChangeListener(this.updateDebugMenuHandler);
 
-		this.updateConversation();
-		this.model.saveGame.conversation.addOnChangeListener(this.conversationChangedHandler);
+		this.model.controls.addOnDebugKeyListener(this.onDebugKeyHandler);
+
+		this.updateDebugMenu();
+		this.model.isInDebugMode.addOnChangeListener(this.updateDebugMenuHandler);
 
 		this.loadResourcesFromStorage().then(() => {
 			this.model.resources.addOnDirtyListener(() => this.isResourcesDirty = true);
-			this.model.saveGame.mode.addOnChangeListener(this.onGameModeChanged);
 		});
 	}
 
@@ -71,8 +64,6 @@ export default class GameController extends ControllerNode {
 		window.removeEventListener('resize', this.onResizeHandler);
 		this.model.controls.removeOnDebugKeyListener(this.onDebugKeyHandler);
 		this.model.isInDebugMode.removeOnChangeListener(this.updateDebugMenuHandler);
-		this.model.saveGame.conversation.removeOnChangeListener(this.conversationChangedHandler);
-		this.model.saveGame.mode.removeOnChangeListener(this.onGameModeChanged);
 	}
 
 	updateInternal(delta) {
@@ -90,19 +81,6 @@ export default class GameController extends ControllerNode {
 		}
 	}
 
-	updateConversation() {
-		if (this.conversationController) {
-			this.removeChild(this.conversationController);
-			this.conversationController = null;
-			if (this.mainController) this.mainController.activate();
-		}
-		if (this.model.saveGame.conversation.isSet()) {
-			this.conversationController = new ConversationController(this.game, this.model.saveGame.conversation.get());
-			this.addChild(this.conversationController);
-			if (this.mainController) this.mainController.deactivate();
-		}
-	}
-
 	updateDebugMenu() {
 		if (this.editorController) {
 			this.removeChild(this.editorController);
@@ -111,20 +89,6 @@ export default class GameController extends ControllerNode {
 		if (this.model.isInDebugMode.get()) {
 			this.editorController = new EditorController(this.game, this.model.editor);
 			this.addChild(this.editorController);
-		}
-	}
-
-	updateGameMode() {
-		const mode = this.model.saveGame.mode.get();
-		if (this.mainController) this.removeChild(this.mainController);
-
-		switch (mode) {
-			case GAME_MODE_MAP:
-				this.mainController = this.addChild(new MapController(this.game, this.model.saveGame));
-				break;
-			case GAME_MODE_BATTLE:
-				this.mainController = this.addChild(new BattleController(this.game, this.model.saveGame.battle));
-				break;
 		}
 	}
 
