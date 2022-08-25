@@ -33,8 +33,6 @@ const updateLoop = function () {
 			controller.update(delta);
 			renderer.render();
 		}
-	} else {
-		console.log(`Waited for ${Math.round(delta/500)/2} s and skipped frame rendering.`);
 	}
 	requestAnimationFrame(updateLoop);
 }

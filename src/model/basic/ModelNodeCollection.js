@@ -10,8 +10,8 @@ export default class ModelNodeCollection extends ModelNode {
 
 	nodeFactory;
 
-	constructor(nodeFactory) {
-		super();
+	constructor(nodeFactory, persistent = true) {
+		super(persistent);
 
 		this.nodeFactory = nodeFactory;
 		this.children = new Collection();

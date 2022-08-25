@@ -8,9 +8,7 @@ export default class NodeFormRenderer extends DomRenderer {
 	 */
 	model;
 
-	name;
-
-	constructor(game, model, dom, name = null) {
+	constructor(game, model, dom) {
 		super(game, model, dom);
 
 		this.model = model;
@@ -32,6 +30,15 @@ export default class NodeFormRenderer extends DomRenderer {
 			e.preventDefault();
 			this.save();
 		});
+
+		const del = Pixies.createElement(buttonsLeft, 'button', 'red', 'Del',
+			(e) => {
+				e.preventDefault();
+				if (confirm('Delete node?')) {
+					this.game.editor.triggerEvent('node-delete', this.model);
+				}
+			}
+		);
 
 		const close = Pixies.createElement(buttonsRight, 'button');
 		close.innerText = 'Close';
@@ -62,10 +69,39 @@ export default class NodeFormRenderer extends DomRenderer {
 	}
 
 	renderInput(container, name, value) {
+		if (value === undefined) {
+			Pixies.createElement(container, 'span', null, '--undefined--');
+			return;
+		}
+
+		if (value === null) {
+			Pixies.createElement(container, 'span', null, '--null--');
+			return;
+		}
+
+		if (typeof value === 'object' && value.x !== undefined && value.y !== undefined) {
+			this.renderInput(container, name, value.x);
+			this.renderInput(container, name, value.y);
+			if (value.z !== undefined) {
+				this.renderInput(container, name, value.z);
+			}
+			return;
+		}
+
+		if (typeof value === 'object' && value.value !== undefined) {
+			this.renderInput(container, name, value.value);
+			return;
+		}
+
+		if (typeof value === 'object') {
+			Pixies.createElement(container, 'span', null, '[Object]');
+			return;
+		}
+
 		const input = Pixies.createElement(container, 'input');
 		input.setAttribute('type', 'text');
 		input.setAttribute('name', name);
-		input.value = (value.value !== undefined) ? value.value : value.toString();
+		input.value = value.toString();
 	}
 
 	renderField(container, name, value) {
@@ -73,17 +109,7 @@ export default class NodeFormRenderer extends DomRenderer {
 		const label = Pixies.createElement(row, 'label', null, name);
 		label.setAttribute('for', name);
 		const item = Pixies.createElement(row, 'div', 'field');
-		if (value !== null && value !== undefined) {
-			if (value && value.x !== undefined && value.y !== undefined) {
-				this.renderInput(item, name, value.x);
-				this.renderInput(item, name, value.y);
-				if (value.z !== undefined) {
-					this.renderInput(item, name, value.z);
-				}
-			} else {
-				this.renderInput(item, name, value);
-			}
-		}
+		this.renderInput(item, name, value);
 	}
 
 	renderFields() {

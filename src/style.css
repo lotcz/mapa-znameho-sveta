@@ -84,6 +84,10 @@ html, body {
 	color: var(--dark-brown);
 }
 
+.editor button.red {
+	background-color: red;
+}
+
 .editor button:hover {
 	background-color: lightblue;
 }

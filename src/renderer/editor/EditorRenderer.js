@@ -67,9 +67,7 @@ export default class EditorRenderer extends DomRenderer {
 	}
 
 	renderInternal() {
-		console.log('rendering');
 		if (this.model.activeTable.isDirty) {
-			console.log('updating');
 			this.updateTables();
 		}
 	}

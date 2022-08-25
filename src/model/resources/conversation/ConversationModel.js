@@ -53,12 +53,14 @@ export default class ConversationModel extends IdentifiedModelNode {
 		this.title = this.addProperty('title', new DirtyValue('Conversation'));
 		this.description = this.addProperty('description', new DirtyValue('Conversation description'));
 		this.portrait = this.addProperty('portrait', new DirtyValue('img/portrait/adelan/female-1.jpg'));
-		this.characterId = this.addProperty('characterId', new DirtyValue());
+		this.characterId = this.addProperty('characterId', new DirtyValue(0));
+		this.character = this.addProperty('character', new NullableNode(() => new CharacterModel(), false));
+
 		this.initialEntry = this.addProperty('initialEntry', new ConversationEntryModel());
 
-		this.currentEntry = new NullableNode(() => new ConversationEntryModel());
-		this.pastEntries = new ModelNodeCollection(() => new ConversationEntryModel());
-		this.character = new NullableNode(() => new CharacterModel());
+		this.currentEntry = this.addProperty('currentEntry', new NullableNode(() => new ConversationEntryModel(), false));
+		this.pastEntries = this.addProperty('pastEntries', new ModelNodeCollection(() => new ConversationEntryModel(), false));
+
 	}
 
 }

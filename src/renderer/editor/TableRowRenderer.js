@@ -55,6 +55,7 @@ export default class TableRowRenderer extends DomRenderer {
 			}
 			cell.innerText = text;
 		});
+
 	}
 
 	renderInternal() {

@@ -4,6 +4,7 @@ import Vector2 from "../basic/Vector2";
 import BattleModel from "../battle/BattleModel";
 import ModelNodeTable from "../basic/ModelNodeTable";
 import CharacterModel from "../characters/CharacterModel";
+import NullableNode from "../basic/NullableNode";
 
 export const GAME_MODE_MAP = 'map';
 export const GAME_MODE_BATTLE = 'battle';
@@ -52,7 +53,7 @@ export default class SaveGameModel extends ModelNode {
 	battle;
 
 	/**
-	 * @type DirtyValue
+	 * @type NullableNode
 	 */
 	conversation;
 
@@ -70,7 +71,7 @@ export default class SaveGameModel extends ModelNode {
 
 		this.battle = this.addProperty('battle', new BattleModel());
 
-		this.conversation = new DirtyValue();
+		this.conversation = this.addProperty('conversation', new NullableNode());
 	}
 
 }

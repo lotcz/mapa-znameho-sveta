@@ -3,8 +3,8 @@ import DirtyValue from "./DirtyValue";
 export default class NullableNode extends DirtyValue {
 	nodeFactory;
 
-	constructor(nodeFactory) {
-		super();
+	constructor(nodeFactory, persistent = true) {
+		super(null, persistent);
 
 		this.nodeFactory = nodeFactory;
 	}

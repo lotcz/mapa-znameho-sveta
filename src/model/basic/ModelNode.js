@@ -13,8 +13,14 @@ export default class ModelNode extends Node {
 	 */
 	isDirty;
 
-	constructor() {
+	/**
+	 * @type boolean
+	 */
+	isPersistent;
+
+	constructor(persistent = true) {
 		super();
+		this.isPersistent = persistent;
 		this.isDirty = true;
 		this.properties = new Dictionary();
 		this.properties.addOnAddListener((param) => this.propertyAdded(param.key, param.value));
@@ -24,6 +30,9 @@ export default class ModelNode extends Node {
 	}
 
 	restoreState(state) {
+		if (state === null || state === undefined || typeof state !== 'object') {
+			return;
+		}
 		if (state.p) {
 			this.properties.forEach((name, property) => property.restoreState(state.p[name]));
 		}
@@ -41,6 +50,10 @@ export default class ModelNode extends Node {
 	}
 
 	getState() {
+		if (!this.isPersistent) {
+			return null;
+		}
+
 		const state = {};
 
 		if (this.properties.count() > 0) {

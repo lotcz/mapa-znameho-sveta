@@ -37,7 +37,9 @@ export default class GameController extends ControllerNode {
 		this.model = model;
 
 		this.isResourcesDirty = false;
-		this.controlsController = this.addChild(new ControlsController(this.game, this.model.controls));
+		this.resourcesTimeOut = null;
+		this.controlsController = new ControlsController(this.game, this.model.controls);
+		this.addChild(this.controlsController);
 		this.conversationController = null;
 
 		this.onResizeHandler = () => this.onResize();
@@ -75,9 +77,16 @@ export default class GameController extends ControllerNode {
 
 	updateInternal(delta) {
 		super.updateInternal(delta);
+		if (this.resourcesTimeOut !== null) this.resourcesTimeOut -= delta;
 		if (this.isResourcesDirty) {
-			this.isResourcesDirty = false;
-			this.saveResourcesToStorage().then(() => console.log('resources saved'));
+			if (this.resourcesTimeOut === null) this.resourcesTimeOut = 1000;
+			if (this.resourcesTimeOut <= 0) {
+				this.saveResourcesToStorage().then(() => {
+					this.isResourcesDirty = false;
+					this.resourcesTimeOut = null;
+					console.log('resources saved');
+				});
+			}
 		}
 	}
 
