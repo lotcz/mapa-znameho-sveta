@@ -36,7 +36,6 @@ export default class ConversationController extends ControllerNode {
 	entrySelected() {
 		if (this.model.currentEntry.isSet()) {
 			const entry = this.model.currentEntry.get();
-			console.log(entry);
 			entry.entries.forEach((responseEntry) => {
 				const character = this.game.resources.characterTemplates.getById(1);
 				responseEntry.responseCharacter.set(character);

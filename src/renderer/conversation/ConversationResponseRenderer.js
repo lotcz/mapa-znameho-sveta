@@ -28,7 +28,7 @@ export default class ConversationResponseRenderer extends DomRenderer {
 		this.link.innerText = this.model.responseText.get();
 
 		this.link.addEventListener('click', () => {
-			this.game.saveGame.conversation.get().currentEntry.set(this.model);
+			this.game.saveGame.get().conversation.get().currentEntry.set(this.model);
 		});
 
 		if (this.game.isInDebugMode.get()) {

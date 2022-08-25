@@ -69,8 +69,9 @@ export default class ConversationRenderer extends DomRenderer {
 				const current = this.model.pastEntries.children.removeLast();
 				const prev = this.model.pastEntries.children.removeLast();
 				if (prev) {
-					console.log(prev);
 					this.model.currentEntry.set(prev);
+				} else {
+					this.model.triggerEvent('restart');
 				}
 			});
 			const restart = Pixies.createElement(buttons, 'button');
@@ -81,7 +82,7 @@ export default class ConversationRenderer extends DomRenderer {
 			const close = Pixies.createElement(buttons, 'button');
 			close.innerText = 'Close';
 			close.addEventListener('click', () => {
-				this.game.saveGame.conversation.set(null);
+				this.game.saveGame.get().conversation.set(null);
 			});
 		}
 
