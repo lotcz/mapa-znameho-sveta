@@ -76,7 +76,13 @@ export default class GameModel extends ModelNode {
 		if (this.saveGame.isEmpty()) {
 			return null;
 		}
-		return this.saveGame.get()[name];
+		if (this.saveGame.get()[name]) {
+			return this.saveGame.get()[name];
+		}
+		if (this.saveGame.get().party[name]) {
+			return this.saveGame.get().party[name];
+		}
+		return null;
 	}
 
 	initialize() {

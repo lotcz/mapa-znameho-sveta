@@ -44,8 +44,9 @@ html, body {
 	font-size: 10pt;
 }
 
-.editor.full,
-.editor.full .dock {
+.editor-layer.full,
+.editor-layer.full .editor,
+.editor-layer.full .editor .dock {
 	width: 100%;
 }
 

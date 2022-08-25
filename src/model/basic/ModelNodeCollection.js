@@ -40,6 +40,10 @@ export default class ModelNodeCollection extends ModelNode {
 		return this.children.remove(child);
 	}
 
+	contains(item) {
+		return this.children.contains(item);
+	}
+
 	first() {
 		return this.children.first();
 	}

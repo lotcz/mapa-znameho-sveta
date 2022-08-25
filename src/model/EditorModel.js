@@ -37,7 +37,8 @@ export default class EditorModel extends ModelNode {
 		};
 
 		this.saveGameOptions = {
-			characters: 'Characters'
+			characters: 'Characters',
+			slots: 'Party Slots'
 		};
 
 	}

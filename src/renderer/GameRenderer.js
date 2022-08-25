@@ -25,7 +25,7 @@ export default class GameRenderer extends DomRenderer {
 
 		this.editorRenderer = null;
 
-		this.saveGameRenderer = new NullableNodeRenderer(this.game, this.model.saveGame, (model) => new SaveGameRenderer(this.game, model, this.dom));
+		this.saveGameRenderer = new NullableNodeRenderer(this.game, this.model.saveGame, (model) => new SaveGameRenderer(this.game, model, this.saveGameLayer));
 		this.addChild(this.saveGameRenderer);
 
 		this.updateLoadingHandler = () => this.updateLoading();
@@ -35,6 +35,9 @@ export default class GameRenderer extends DomRenderer {
 	activateInternal() {
 		const initLoading = document.getElementById('initial_loading');
 		if (initLoading) Pixies.destroyElement(initLoading);
+
+		this.saveGameLayer = this.addElement('div', ['savegame-layer', 'container-host']);
+		this.editorLayer = this.addElement('div', ['editor-layer', 'container-host']);
 
 		this.updateLoading();
 		this.model.assets.isLoading.addOnChangeListener(this.updateLoadingHandler);
@@ -47,7 +50,8 @@ export default class GameRenderer extends DomRenderer {
 	deactivateInternal() {
 		this.model.assets.isLoading.removeOnChangeListener(this.updateLoadingHandler);
 		this.model.isInDebugMode.removeOnChangeListener(this.updateDebugMenuHandler);
-		this.removeElement(this.mainLayer);
+		this.removeElement(this.saveGameLayer);
+		this.removeElement(this.editorLayer);
 	}
 
 	updateLoading() {
@@ -56,7 +60,7 @@ export default class GameRenderer extends DomRenderer {
 			this.loading = null;
 		}
 		if (this.model.assets.isLoading.get()) {
-			this.loading = this.addElement('div', 'loading');
+			this.loading = Pixies.createElement(this.editorLayer, 'div', 'loading');
 			const inner = Pixies.createElement(this.loading, 'div');
 			inner.innerText = Pixies.randomElement(['Obětuji ovci...', 'Rozdělávám oheň...', 'Zpívám bohům...', 'Zahajuji rituál...']);
 		}
@@ -68,7 +72,7 @@ export default class GameRenderer extends DomRenderer {
 			this.editorRenderer = null;
 		}
 		if (this.model.isInDebugMode.get()) {
-			this.editorRenderer = new EditorRenderer(this.game, this.model.editor, this.dom);
+			this.editorRenderer = new EditorRenderer(this.game, this.model.editor, this.editorLayer);
 			this.addChild(this.editorRenderer);
 		}
 	}

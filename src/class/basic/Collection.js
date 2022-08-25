@@ -56,6 +56,10 @@ export default class Collection extends Node {
 		return this.items.length;
 	}
 
+	contains(item) {
+		return this.items.includes(item);
+	}
+
 	removeFirst() {
 		return this.removeByIndex(0);
 	}

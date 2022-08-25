@@ -5,6 +5,7 @@ import BattleModel from "../battle/BattleModel";
 import ModelNodeTable from "../basic/ModelNodeTable";
 import CharacterModel from "../characters/CharacterModel";
 import NullableNode from "../basic/NullableNode";
+import PartyModel from "./party/PartyModel";
 
 export const GAME_MODE_MAP = 'map';
 export const GAME_MODE_BATTLE = 'battle';
@@ -57,11 +58,17 @@ export default class SaveGameModel extends ModelNode {
 	 */
 	conversation;
 
+	/**
+	 * @type PartyModel
+	 */
+	party;
+
 	constructor() {
 		super();
 
 		this.mode = this.addProperty('mode', new DirtyValue(GAME_MODE_MAP));
 		this.characters = this.addProperty('characters', new ModelNodeTable((id) => new CharacterModel(id)));
+		this.party = this.addProperty('party', new PartyModel());
 
 		this.coordinates = this.addProperty('coordinates', new Vector2());
 		this.zoom = this.addProperty('zoom', new DirtyValue(1));

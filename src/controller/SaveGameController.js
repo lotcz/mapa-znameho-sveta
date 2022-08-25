@@ -6,6 +6,7 @@ import BattleController from "./battle/BattleController";
 import * as localForage from "localforage";
 import EditorController from "./EditorController";
 import ConversationController from "./ConversationController";
+import PartyController from "./savegame/party/PartyController";
 
 export default class SaveGameController extends ControllerNode {
 
@@ -31,6 +32,9 @@ export default class SaveGameController extends ControllerNode {
 
 		this.conversationController = null;
 		this.mainController = null;
+
+		this.partyController = new PartyController(this.game, this.model.party);
+		this.addChild(this.partyController);
 
 		this.conversationChangedHandler = () => this.updateConversation();
 		this.onGameModeChanged = () => this.updateGameMode();

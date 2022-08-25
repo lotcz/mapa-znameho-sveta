@@ -43,7 +43,11 @@ export default class GameController extends ControllerNode {
 		this.onResizeHandler = () => this.onResize();
 		this.onDebugKeyHandler = () => this.onDebugKey();
 		this.updateDebugMenuHandler = () => this.updateDebugMenu();
-
+		this.onSaveGameHandler = () => 	{
+			this.saveGameToStorage().then(() => {
+				console.log('game saved');
+			});
+		}
 	}
 
 	activateInternal() {
@@ -55,8 +59,14 @@ export default class GameController extends ControllerNode {
 		this.updateDebugMenu();
 		this.model.isInDebugMode.addOnChangeListener(this.updateDebugMenuHandler);
 
+		this.model.saveGame.addEventListener('save', this.onSaveGameHandler);
+
 		this.loadResourcesFromStorage().then(() => {
 			this.model.resources.addOnDirtyListener(() => this.isResourcesDirty = true);
+		});
+
+		this.loadGameFromStorage().then(() => {
+			//console.log('game loaded');
 		});
 	}
 
@@ -64,6 +74,7 @@ export default class GameController extends ControllerNode {
 		window.removeEventListener('resize', this.onResizeHandler);
 		this.model.controls.removeOnDebugKeyListener(this.onDebugKeyHandler);
 		this.model.isInDebugMode.removeOnChangeListener(this.updateDebugMenuHandler);
+		this.model.saveGame.removeEventListener('save', this.onSaveGameHandler);
 	}
 
 	updateInternal(delta) {
@@ -118,6 +129,28 @@ export default class GameController extends ControllerNode {
 		const state = this.model.resources.getState();
 		try {
 			await localForage.setItem('kobok-resources', state);
+		} catch (err) {
+			console.error(err);
+		}
+	}
+
+	async loadGameFromStorage() {
+		try {
+			const state = await localForage.getItem('kobok-autosave');
+			if (state) {
+				this.model.saveGame.restoreState(state);
+			} else {
+				console.log('no saved game in storage');
+			}
+		} catch (err) {
+			console.error(err);
+		}
+	}
+
+	async saveGameToStorage() {
+		const state = this.model.saveGame.getState();
+		try {
+			await localForage.setItem('kobok-autosave', state);
 		} catch (err) {
 			console.error(err);
 		}

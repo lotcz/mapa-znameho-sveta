@@ -44,15 +44,16 @@ export default class MapRenderer extends DomRenderer {
 		this.draw = SVG().addTo(this.container);
 		this.pathsGroup = this.draw.group();
 		this.pathsRenderer = this.addChild(new CollectionRenderer(this.game, this.map.paths, (model) => new PathRenderer(this.game, model, this.pathsGroup)));
-		//this.pathsRenderer.activate();
 		this.locationsGroup = this.draw.group();
 		this.locationsRenderer = this.addChild(new CollectionRenderer(this.game, this.map.locations, (model) => new LocationRenderer(this.game, model, this.locationsGroup)));
-		//this.locationsRenderer.activate();
 
 		this.mapImage = null;
 		this.game.assets.getAsset(
 			'img/world.jpg',
 			(img) => {
+				if (!this.draw) {
+					return;
+				}
 				this.mapImage = img;
 				this.updateSize();
 				this.game.viewBoxSize.addOnChangeListener(this.onViewBoxChangeHandler);

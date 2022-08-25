@@ -25,8 +25,7 @@ export default class EditorRenderer extends DomRenderer {
 
 		this.formRenderer = new NullableNodeRenderer(this.game, this.model.activeForm, (model) => new NodeFormRenderer(this.game, model, this.form));
 		this.addChild(this.formRenderer);
-
-		this.updateModeHandler = () => this.updateMode();
+		
 		this.stopEventPropagationHandler = (e) => e.stopPropagation();
 	}
 
@@ -56,19 +55,19 @@ export default class EditorRenderer extends DomRenderer {
 		this.form.addEventListener('mousemove', this.stopEventPropagationHandler);
 
 		this.updateMode();
-		this.game.saveGame.get().mode.addOnChangeListener(this.updateModeHandler);
-
 		this.updateTables();
 	}
 
 	deactivateInternal() {
-		this.game.saveGame.get().mode.removeOnChangeListener(this.updateModeHandler);
 		this.removeElement(this.container);
 	}
 
 	renderInternal() {
 		if (this.model.activeTable.isDirty) {
 			this.updateTables();
+		}
+		if (this.game.saveGame.get().mode.isDirty) {
+			this.updateMode();
 		}
 	}
 
@@ -83,13 +82,22 @@ export default class EditorRenderer extends DomRenderer {
 		battleButton.innerText = 'BATTLE';
 		battleButton.addEventListener('click', () => this.game.saveGame.get().mode.set(GAME_MODE_BATTLE));
 
+		const buttonsMiddle = Pixies.createElement(buttons, 'div');
+		const saveButton = Pixies.createElement(
+			buttonsMiddle,
+			'button',
+			null,
+			'Save',
+			() => this.game.saveGame.triggerEvent('save')
+		);
+
 		const buttonsRight = Pixies.createElement(buttons, 'div');
 		const switchButton = Pixies.createElement(
 			buttonsRight,
 			'button',
 			null,
 			'Switch',
-			() => Pixies.toggleClass(this.container, 'full')
+			() => Pixies.toggleClass(this.dom, 'full')
 		);
 	}
 
