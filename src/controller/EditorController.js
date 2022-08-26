@@ -52,17 +52,21 @@ export default class EditorController extends ControllerNode {
 		const node = param.node;
 		const data = param.data;
 		node.properties.forEach((name, value) => {
-			if (value && value.value !== undefined && typeof value.set === 'function') {
-				value.set(data.get(name));
+			if (data.has(name)) {
+				if (value && value.value !== undefined && typeof value.set === 'function') {
+					value.set(data.get(name));
+				}
 			}
 		});
 	}
 
 	deleteNode(node) {
 		if (this.model.activeTable.isEmpty()) {
+			console.log('no active table, node cannot be deleted', node);
 			return;
 		}
-		this.model.activeTable.get().remove(node);
+		const result = this.model.activeTable.get().remove(node);
+		console.log('removed node', result);
 	}
 
 }

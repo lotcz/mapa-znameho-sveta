@@ -1,5 +1,6 @@
-import ControllerNode from "../basic/ControllerNode";
-import ConversationLineModel from "../../model/resources/conversation/ConversationLineModel";
+import ControllerNode from "../../basic/ControllerNode";
+import ConversationLineModel from "../../../model/resources/conversation/ConversationLineModel";
+import Pixies from "../../../class/basic/Pixies";
 
 export default class ConversationController extends ControllerNode {
 
@@ -37,7 +38,7 @@ export default class ConversationController extends ControllerNode {
 		if (this.model.currentEntry.isSet()) {
 			const entry = this.model.currentEntry.get();
 			entry.entries.forEach((responseEntry) => {
-				const character = this.game.resources.characterTemplates.getById(1);
+				const character = this.game.saveGame.get().characters.random();
 				responseEntry.responseCharacter.set(character);
 			});
 			entry.lines.forEach((line) => {

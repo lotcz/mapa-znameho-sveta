@@ -35,6 +35,10 @@ export default class NullableNode extends DirtyValue {
 	restoreStateInternal(state) {
 		this.set(null);
 		if (state) {
+			if (!this.nodeFactory) {
+				console.log('No nodeFactory');
+				return;
+			}
 			const node = this.nodeFactory();
 			node.restoreState(state);
 			this.set(node);

@@ -1,5 +1,6 @@
 import ModelNode from "./ModelNode";
 import Collection from "../../class/basic/Collection";
+import Pixies from "../../class/basic/Pixies";
 
 export default class ModelNodeCollection extends ModelNode {
 
@@ -50,6 +51,10 @@ export default class ModelNodeCollection extends ModelNode {
 
 	last() {
 		return this.children.last();
+	}
+
+	random() {
+		return Pixies.randomElement(this.children.items);
 	}
 
 	get(i) {

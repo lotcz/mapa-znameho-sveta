@@ -62,6 +62,7 @@ export default class BattleCharacterController extends ControllerNode {
 				this.model.rotation.set(this.rotationAnimation.get(delta));
 			}
 		}
+		this.model.makeDirty();
 	}
 
 	isMoving() {

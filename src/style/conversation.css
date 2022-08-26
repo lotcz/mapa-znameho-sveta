@@ -103,7 +103,8 @@
 }
 
 .conversation a:hover {
-	color: orange;
+	color: darkred;
+	/* text-shadow: 2px 2px orange; */
 }
 
 .conversation .line {

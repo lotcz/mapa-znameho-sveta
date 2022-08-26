@@ -23,6 +23,10 @@ export default class Pixies {
 		return min + (diff * Math.random());
 	}
 
+	static arrayRemove(arr, el) {
+		arr.splice(arr.indexOf(el), 1);
+	}
+
 	static randomElement(arr) {
 		return arr[Pixies.randomIndex(arr.length)];
 	}

@@ -1,7 +1,7 @@
 import DomRenderer from "../../basic/DomRenderer";
 import CollectionRenderer from "../../basic/CollectionRenderer";
-import PartyCharacterRenderer from "./PartyCharacterRenderer";
 import Pixies from "../../../class/basic/Pixies";
+import PartySlotRenderer from "./PartySlotRenderer";
 
 export default class PartyRenderer extends DomRenderer {
 
@@ -20,7 +20,7 @@ export default class PartyRenderer extends DomRenderer {
 
 		this.model = model;
 
-		this.charactersRenderer = new CollectionRenderer(this.game, this.model.characters, (model) => new PartyCharacterRenderer(this.game, model, this.inner));
+		this.charactersRenderer = new CollectionRenderer(this.game, this.model.slots, (m) => new PartySlotRenderer(this.game, m, this.inner));
 		this.addChild(this.charactersRenderer);
 
 	}
@@ -33,6 +33,5 @@ export default class PartyRenderer extends DomRenderer {
 	deactivateInternal() {
 		this.removeElement(this.container);
 	}
-
 
 }

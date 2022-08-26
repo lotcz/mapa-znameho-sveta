@@ -26,33 +26,30 @@ export default class EditorRenderer extends DomRenderer {
 		this.formRenderer = new NullableNodeRenderer(this.game, this.model.activeForm, (model) => new NodeFormRenderer(this.game, model, this.form));
 		this.addChild(this.formRenderer);
 
-		this.stopEventPropagationHandler = (e) => e.stopPropagation();
+		this.stopEventPropagationHandler = (e) => {
+			e.stopPropagation();
+			//e.preventDefault();
+		}
+
 	}
 
 	activateInternal() {
 		this.container = this.addElement('div', ['editor']);
-
 		this.nav = Pixies.createElement(this.container, 'nav', 'bg');
-		this.nav.addEventListener('click', this.stopEventPropagationHandler);
-		this.nav.addEventListener('mousemove', this.stopEventPropagationHandler);
 
 		this.gameMode = Pixies.createElement(this.nav, 'div', 'game-mode');
-		this.gameMode.addEventListener('click', this.stopEventPropagationHandler);
-		this.gameMode.addEventListener('mousemove', this.stopEventPropagationHandler);
-
 		this.dock = Pixies.createElement(this.container, 'div', 'dock');
-
 		this.tables = Pixies.createElement(this.dock, 'div', 'table-selection bg');
-		this.tables.addEventListener('click', this.stopEventPropagationHandler);
-		this.tables.addEventListener('mousemove', this.stopEventPropagationHandler);
-
 		this.table = Pixies.createElement(this.dock, 'div', 'active-table');
-		this.table.addEventListener('click', this.stopEventPropagationHandler);
-		this.table.addEventListener('mousemove', this.stopEventPropagationHandler);
-
 		this.form = Pixies.createElement(this.dock, 'div', 'active-form');
-		this.form.addEventListener('click', this.stopEventPropagationHandler);
-		this.form.addEventListener('mousemove', this.stopEventPropagationHandler);
+
+		const events = ['click', 'mousemove', 'mousedown', 'mouseup'];
+		const elements = [this.nav, this.tables, this.table, this.form];
+		for (const eli in elements) {
+			for (const evi in events) {
+				this.addAutoEvent(elements[eli], events[evi], this.stopEventPropagationHandler);
+			}
+		}
 
 		this.updateMode();
 		this.updateTables();

@@ -5,7 +5,7 @@ import {GAME_MODE_BATTLE, GAME_MODE_MAP} from "../../model/savegame/SaveGameMode
 import BattleController from "./battle/BattleController";
 import * as localForage from "localforage";
 import EditorController from "../EditorController";
-import ConversationController from "./ConversationController";
+import ConversationController from "./conversation/ConversationController";
 import PartyController from "./party/PartyController";
 
 export default class SaveGameController extends ControllerNode {

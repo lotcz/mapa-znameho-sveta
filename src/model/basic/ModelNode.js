@@ -18,22 +18,10 @@ export default class ModelNode extends Node {
 	 */
 	isPersistent;
 
-	/**
-	 * @type boolean
-	 */
-	isHydrated;
-
-	/**
-	 * @type GameModel|null
-	 */
-	autoHydrateFrom;
-
 	constructor(persistent = true) {
 		super();
 		this.isPersistent = persistent;
 		this.isDirty = true;
-		this.isHydrated = false;
-		this.autoHydrateFrom = null;
 		this.properties = new Dictionary();
 		this.properties.addOnAddListener((param) => this.propertyAdded(param.key, param.value));
 		this.properties.addOnRemoveListener((param) => this.propertyRemoved(param.key, param.value));
@@ -115,40 +103,6 @@ export default class ModelNode extends Node {
 		const n = new this.constructor();
 		n.restoreState(this.getState());
 		return n;
-	}
-
-	/**
-	 * @param {GameModel} game
-	 */
-	hydrate(game) {
-		this.hydrateInternal(game);
-		this.properties.forEach((name, property) => property.hydrate(game));
-		this.isHydrated = true;
-	}
-
-	/**
-	 * @param {GameModel} game
-	 */
-	hydrateInternal(game) {}
-
-	/**
-	 * @param {GameModel|null} game
-	 */
-	setAutoHydrate(game) {
-		this.autoHydrateFrom = game;
-		if (this.autoHydrateFrom && !this.isHydrated) {
-			this.hydrate(this.autoHydrateFrom);
-		}
-	}
-
-	stopAutoHydrate() {
-		this.setAutoHydrate(null);
-	}
-
-	autoHydrate() {
-		if (this.autoHydrateFrom) {
-			this.hydrate(this.autoHydrateFrom);
-		}
 	}
 
 	addDirtyListener(node) {

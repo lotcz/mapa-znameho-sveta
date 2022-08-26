@@ -1,10 +1,21 @@
 /**
 	Base for controller and renderer nodes.
  */
+import Pixies from "./Pixies";
+
 export default class ActivatedTreeNode {
 	children;
 	parent;
 	isActivated;
+
+	/**
+	 *
+	 * @type {[{param}]}
+	 * @type param.node {ModelNode}
+	 * @type param.event {string}
+	 * @type param.handler {(ep) => any}
+	 */
+	autoRegisterEvents = [];
 
 	constructor() {
 		this.isActivated = false;
@@ -73,6 +84,10 @@ export default class ActivatedTreeNode {
 			this.activateInternal();
 			this.children.forEach((c) => c.activate());
 			this.isActivated = true;
+
+			this.autoRegisterEvents.forEach((event) => {
+				event.node.addEventListener(event.name, event.handler);
+			})
 		}
 	}
 
@@ -82,6 +97,10 @@ export default class ActivatedTreeNode {
 
 	deactivate() {
 		if (this.isActivated) {
+			this.autoRegisterEvents.forEach((event) => {
+				event.node.removeEventListener(event.name, event.handler);
+			})
+
 			this.children.forEach((c) => c.deactivate());
 			this.deactivateInternal();
 			this.isActivated = false;
@@ -90,6 +109,17 @@ export default class ActivatedTreeNode {
 
 	deactivateInternal() {
 
+	}
+
+	addAutoEvent(node, event, handler) {
+		this.autoRegisterEvents.push({node: node, name:event, handler: handler});
+	}
+
+	removeAutoEvent(node, name, handler) {
+		const event = this.autoRegisterEvents.find((e) => e.handler === handler && e.name === name && e.node === node);
+		if (event) {
+			Pixies.arrayRemove(this.autoRegisterEvents, event);
+		}
 	}
 
 }
