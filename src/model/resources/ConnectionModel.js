@@ -1,5 +1,6 @@
 import DirtyValue from "../basic/DirtyValue";
 import ModelNode from "../basic/ModelNode";
+import IntValue from "../basic/IntValue";
 
 export const DIRECTION_NORTH = 'north';
 export const DIRECTION_SOUTH = 'south';
@@ -12,7 +13,7 @@ export default class ConnectionModel extends ModelNode {
 	direction;
 
 	/**
-	 * @type DirtyValue
+	 * @type IntValue
 	 */
 	pathId;
 
@@ -26,7 +27,7 @@ export default class ConnectionModel extends ModelNode {
 
 		this.direction = this.addProperty('direction', new DirtyValue(DIRECTION_NORTH));
 		this.forward = this.addProperty('forward', new DirtyValue(true));
-		this.pathId = this.addProperty('pathId', new DirtyValue(0));
+		this.pathId = this.addProperty('pathId', new IntValue(0));
 	}
 
 }

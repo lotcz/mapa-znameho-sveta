@@ -121,21 +121,6 @@ export default class GameModel extends ModelNode {
 		w6.a.set(55, 125);
 		w6.b.set(45, 85);
 
-		const location = this.resources.map.locations.add();
-		location.name.set('Location');
-		location.coordinates.set(550, 450);
-		const conn = location.connections.add();
-		conn.pathId.set(path.id.get());
-
-		const location2 = this.resources.map.locations.add();
-		location2.name.set('Location 2');
-		location2.coordinates.set(1550, 450);
-		const conn2 = location2.connections.add();
-		conn2.pathId.set(path.id.get());
-		conn2.forward.set(false);
-		const conn3 = location2.connections.add();
-		conn3.pathId.set(path2.id.get());
-		conn3.forward.set(false);
 
 		this.saveGame.set(new SaveGameModel());
 

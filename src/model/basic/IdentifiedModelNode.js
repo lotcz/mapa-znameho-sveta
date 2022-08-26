@@ -1,17 +1,17 @@
-import DirtyValue from "./DirtyValue";
 import ModelNode from "./ModelNode";
+import IntValue from "./IntValue";
 
 export default class IdentifiedModelNode extends ModelNode {
 
 	/**
-	 * @type DirtyValue
+	 * @type IntValue
 	 */
 	id;
 
 	constructor(id = 0) {
 		super();
 
-		this.id = this.addProperty('id', new DirtyValue(id));
+		this.id = this.addProperty('id', new IntValue(id));
 	}
 
 }

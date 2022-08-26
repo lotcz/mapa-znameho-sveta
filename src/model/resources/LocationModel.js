@@ -17,7 +17,7 @@ export default class LocationModel extends IdentifiedModelNode {
 	name;
 
 	/**
-	 * @type ModelNodeCollection
+	 * @type ModelNodeCollection<ConnectionModel>
 	 */
 	connections;
 
@@ -25,9 +25,28 @@ export default class LocationModel extends IdentifiedModelNode {
 		super(id);
 
 		this.coordinates = this.addProperty('coordinates', new Vector2());
-		this.coordinates.addOnChangeListener(() => this.triggerEvent('change', this));
 		this.name = this.addProperty('name', new DirtyValue(''));
-		this.connections = this.addProperty('connections', new ModelNodeCollection(() => new ConnectionModel()));
+		this.connections = this.addProperty('connections', new ModelNodeCollection(null, false));
+	}
+
+	addConnection(path, forward = true) {
+		const conn = new ConnectionModel();
+		conn.pathId.set(path.id.get());
+		conn.forward.set(forward);
+		return this.connections.add(conn);
+	}
+
+	updateConnections(paths) {
+		this.connections.reset();
+		console.log('updating cvonnections', this.id.get(), paths);
+		paths.forEach((path) => {
+			if (path.startLocationId.equalsTo(this.id.get())) {
+				this.addConnection(path);
+			} else if (path.endLocationId.equalsTo(this.id.get())) {
+				this.addConnection(path, false);
+			}
+		});
+		console.log('updated cvonnections', this.connections.children.items);
 	}
 
 }

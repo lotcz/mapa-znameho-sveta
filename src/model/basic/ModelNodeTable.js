@@ -9,7 +9,8 @@ export default class ModelNodeTable extends ModelNodeCollection {
 		if (id === null || id === undefined || id === '') {
 			return null;
 		}
-		return this.children.find((ch) => ch.id.value == id);
+		const i = parseInt(id);
+		return this.children.find((ch) => ch.id.equalsTo(i));
 	}
 
 	get(id) {

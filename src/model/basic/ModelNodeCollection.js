@@ -143,6 +143,10 @@ export default class ModelNodeCollection extends ModelNode {
 
 	restoreStateInternal(state) {
 		this.children.reset();
+		if (!this.nodeFactory) {
+			console.log('no factory for restoring ModelNodeCollection');
+			return;
+		}
 		for (let i = 0, max = state.length; i < max; i++) {
 			const child = this.nodeFactory(state[i]);
 			child.restoreState(state[i]);

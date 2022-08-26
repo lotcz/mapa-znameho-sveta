@@ -4,6 +4,7 @@ import ModelNodeCollection from "../../basic/ModelNodeCollection";
 import IdentifiedModelNode from "../../basic/IdentifiedModelNode";
 import CharacterModel from "../../characters/CharacterModel";
 import NullableNode from "../../basic/NullableNode";
+import IntValue from "../../basic/IntValue";
 
 export default class ConversationModel extends IdentifiedModelNode {
 
@@ -23,7 +24,7 @@ export default class ConversationModel extends IdentifiedModelNode {
 	portrait;
 
 	/**
-	 * @type DirtyValue
+	 * @type IntValue
 	 */
 	characterId;
 
@@ -53,7 +54,7 @@ export default class ConversationModel extends IdentifiedModelNode {
 		this.title = this.addProperty('title', new DirtyValue('Conversation'));
 		this.description = this.addProperty('description', new DirtyValue('Conversation description'));
 		this.portrait = this.addProperty('portrait', new DirtyValue('img/portrait/adelan/female-1.jpg'));
-		this.characterId = this.addProperty('characterId', new DirtyValue(0));
+		this.characterId = this.addProperty('characterId', new IntValue(0));
 		this.character = this.addProperty('character', new NullableNode(() => new CharacterModel(), false));
 
 		this.initialEntry = this.addProperty('initialEntry', new ConversationEntryModel());

@@ -1,5 +1,8 @@
 import ControllerNode from "../../basic/ControllerNode";
 import DirtyValue from "../../../model/basic/DirtyValue";
+import CollectionController from "../../basic/CollectionController";
+import MapPathController from "./MapPathController";
+import MapLocationController from "./MapLocationController";
 
 const TRAVEL_SPEED = 10; // px per second
 
@@ -35,18 +38,21 @@ export default class MapController extends ControllerNode {
 
 		this.focusedHelper = new DirtyValue(null);
 
-		this.helperMouseOverHandler = (point) => this.runOnUpdate((delta) => this.focusedHelper.set(point));
+		this.pathsController = new CollectionController(this.game, this.game.resources.map.paths, (m) => new MapPathController(this.game, m));
+		this.addChild(this.pathsController);
+
+		this.locationsController = new CollectionController(this.game, this.game.resources.map.locations, (m) => new MapLocationController(this.game, m));
+		this.addChild(this.locationsController);
+
+		this.helperMouseOverHandler = (point) => this.focusedHelper.set(point);
 		this.helperMouseOutHandler = (point) => {
-			if (this.focusedHelper.equalsTo(point))
-				this.runOnUpdate(() => this.focusedHelper.set(null));
+			if (this.focusedHelper.equalsTo(point)) {
+				this.focusedHelper.set(null);
+			}
 		};
 
 		this.mouseMoveHandler = () => this.runOnUpdate(() => this.onMouseMove());
 		this.zoomHandler = (param) => this.onZoom(param);
-
-		this.locationAddedHandler = (param) => this.onLocationAdded(param);
-		this.locationRemovedHandler = (param) => this.onLocationRemoved(param);
-		this.locationChangedHandler = (param) => this.onLocationChanged(param);
 
 		this.resourcesChangedHandler = () => {
 			this.model.makeDirty();
@@ -60,10 +66,6 @@ export default class MapController extends ControllerNode {
 		this.game.controls.mouseCoordinates.addOnChangeListener(this.mouseMoveHandler);
 		this.game.controls.addEventListener('zoom', this.zoomHandler);
 
-		this.map.locations.children.forEach(this.locationAddedHandler);
-		this.map.locations.children.addOnAddListener(this.locationAddedHandler);
-		this.map.locations.children.addOnRemoveListener(this.locationRemovedHandler);
-
 		this.map.addOnDirtyListener(this.resourcesChangedHandler);
 	}
 
@@ -73,9 +75,6 @@ export default class MapController extends ControllerNode {
 
 		this.game.controls.mouseCoordinates.removeOnChangeListener(this.mouseMoveHandler);
 		this.game.controls.removeEventListener('zoom', this.zoomHandler);
-
-		this.map.locations.children.removeOnAddListener(this.locationAddedHandler);
-		this.map.locations.children.removeOnRemoveListener(this.locationRemovedHandler);
 
 		this.map.removeOnDirtyListener(this.resourcesChangedHandler);
 	}
@@ -134,24 +133,6 @@ export default class MapController extends ControllerNode {
 
 	onZoom(param) {
 		this.saveGame.zoom.set(this.saveGame.zoom.get() + (param * 0.1));
-	}
-
-	onLocationAdded(location) {
-		location.addEventListener('change', this.locationChangedHandler);
-	}
-
-	onLocationRemoved(location) {
-		location.removeEventListener('change', this.locationChangedHandler);
-	}
-
-	updatePoint(location, conn) {
-		const path = this.map.paths.getById(conn.pathId.get());
-		const point = conn.forward.get() ? path.waypoints.first().coordinates : path.waypoints.last().coordinates;
-		point.set(location.coordinates);
-	}
-
-	onLocationChanged(location) {
-		location.connections.forEach((conn) => this.updatePoint(location, conn));
 	}
 
 }
