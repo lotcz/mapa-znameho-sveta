@@ -4,8 +4,6 @@ import CollectionController from "../../basic/CollectionController";
 import MapPathController from "./MapPathController";
 import MapLocationController from "./MapLocationController";
 
-const TRAVEL_SPEED = 10; // px per second
-
 export default class MapController extends ControllerNode {
 
 	/**
@@ -81,23 +79,7 @@ export default class MapController extends ControllerNode {
 
 	updateInternal(delta) {
 		super.updateInternal(delta);
-/*
-		// move marker
-		const path = this.map.paths.first();
-		let progress = this.saveGame.pathProgress.get() + ((delta / 1000) * TRAVEL_SPEED * (this.saveGame.forward.get() ? 1 : -1));
 
-		if (progress > path.length.get()) {
-			progress = (2 * path.length.get()) - progress;
-			this.saveGame.forward.set(!this.saveGame.forward.get());
-		}
-
-		if (progress < 0) {
-			progress = -progress;
-			this.saveGame.forward.set(!this.saveGame.forward.get());
-		}
-
-		this.saveGame.pathProgress.set(progress);
- */
 		// dragging and scrolling
 		if (!this.game.controls.mouseDownLeft.get()) {
 			this.dragging = false;

@@ -1,6 +1,7 @@
 import SvgRenderer from "../../basic/SvgRenderer";
 import CollectionRenderer from "../../basic/CollectionRenderer";
 import WaypointRenderer from "./WaypointRenderer";
+import Vector2 from "../../../model/basic/Vector2";
 
 export default class PathRenderer extends SvgRenderer {
 	group;
@@ -18,7 +19,7 @@ export default class PathRenderer extends SvgRenderer {
 		super(game, model, svg);
 		this.model = model;
 
-		this.onDebugModeUpdatedHandler = () => this.onDebugModeUpdated();
+		this.onDebugModeUpdatedHandler = () => this.updateDebugMode();
 	}
 
 	activateInternal() {
@@ -33,15 +34,15 @@ export default class PathRenderer extends SvgRenderer {
 					if (!this.refExists(token)) {
 						const marker = this.getDefs().image(img.src);
 						this.setRef(token, marker);
+						if (this.model.isCurrentPath.get()) {
+							this.renderMarker();
+						}
 					}
 				}
 			);
 		}
 
-		this.waypointsRenderer = this.addChild(new CollectionRenderer(this.game, this.model.waypoints, (model) => new WaypointRenderer(this.game, model, this.groupFg)));
-		if (this.game.isInDebugMode.get()) {
-			this.waypointsRenderer.activate();
-		}
+		this.updateDebugMode();
 		this.game.isInDebugMode.addOnChangeListener(this.onDebugModeUpdatedHandler);
 	}
 
@@ -56,8 +57,10 @@ export default class PathRenderer extends SvgRenderer {
 		if (this.model.waypoints.isDirty) {
 			this.renderPath();
 		}
-		if (this.game.saveGame.get().pathProgress.isDirty) {
+		if (this.model.isCurrentPath.get()) {
 			this.renderMarker();
+		} else if (this.marker) {
+			this.hideMarker();
 		}
 	}
 
@@ -79,7 +82,11 @@ export default class PathRenderer extends SvgRenderer {
 		}
 
 		this.path = this.groupBg.path(path).stroke({color: 'rgba(255, 255, 255, 0.8)', width: '5px', linecap: 'round', linejoin: 'round'}).fill('transparent');
-		this.model.length.set(this.path.length());
+		this.path.on('click', (e) => {
+			this.model.triggerEvent('path-clicked');
+		});
+
+		this.model.triggerEvent('path-length', this.path.length());
 	}
 
 	renderMarker() {
@@ -92,13 +99,24 @@ export default class PathRenderer extends SvgRenderer {
 		}
 		const pos = this.path.pointAt(this.game.saveGame.get().pathProgress.get());
 		this.marker.center(pos.x, pos.y);
+
+		this.model.triggerEvent('path-marker-position', new Vector2(pos.x, pos.y));
 	}
 
-	onDebugModeUpdated() {
-		if (this.game.isInDebugMode.get() && this.isActivated) {
-			this.waypointsRenderer.activate();
-		} else {
-			this.waypointsRenderer.deactivate();
+	hideMarker() {
+		if (this.marker) {
+			this.marker.remove();
+			this.marker = null;
+		}
+	}
+
+	updateDebugMode() {
+		if (this.waypointsRenderer) {
+			this.removeChild(this.waypointsRenderer);
+			this.waypointsRenderer = null;
+		}
+		if (this.game.isInDebugMode.get()) {
+			this.waypointsRenderer = this.addChild(new CollectionRenderer(this.game, this.model.waypoints, (model) => new WaypointRenderer(this.game, model, this.groupFg)));
 		}
 	}
 

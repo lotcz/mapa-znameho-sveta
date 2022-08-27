@@ -1,5 +1,7 @@
 import ControllerNode from "../../basic/ControllerNode";
 
+const TRAVEL_SPEED = 10; // px per second
+
 export default class MapPathController extends ControllerNode {
 
 	/**
@@ -14,6 +16,22 @@ export default class MapPathController extends ControllerNode {
 
 		this.addAutoEvent(this.model.startLocationId, 'change', (param) => this.updateStartLocation(param));
 		this.addAutoEvent(this.model.endLocationId, 'change', (param) => this.updateEndLocation(param));
+		this.addAutoEvent(this.model, 'path-length', (length) => this.model.length.set(length));
+		this.addAutoEvent(this.model, 'path-clicked', () => {
+			if (this.game.editor.activePath.isSet()) {
+				this.game.editor.activePath.get().isCurrentPath.set(false);
+			}
+			this.model.isCurrentPath.set(true);
+			this.game.editor.activePath.set(this.model);
+		});
+		this.addAutoEvent(this.model, 'path-marker-position', (pos) => {
+			if (!this.model.isCurrentPath.get()) {
+				return;
+			}
+			const center = this.game.viewBoxSize.multiply(0.5 * this.game.saveGame.get().zoom.get());
+			const corner = pos.subtract(center);
+			this.runOnUpdate(() => this.game.saveGame.get().coordinates.set(corner));
+		});
 	}
 
 	activateInternal() {
@@ -25,6 +43,32 @@ export default class MapPathController extends ControllerNode {
 	deactivateInternal() {
 		this.updateLocationConnections(this.model.startLocation.get());
 		this.updateLocationConnections(this.model.endLocation.get());
+	}
+
+	updateInternal(delta) {
+
+		if (!this.model.isCurrentPath.get()) {
+			return;
+		}
+
+		// travel
+
+		let progress = this.model.pathProgress.get() + ((delta / 1000) * TRAVEL_SPEED * (this.game.saveGame.get().forward.get() ? 1 : -1));
+
+		if (progress > this.model.length.get()) {
+			progress = this.model.length.get();
+			this.game.saveGame.get().forward.set(!this.game.saveGame.get().forward.get());
+		}
+
+		if (progress < 0) {
+			progress = 0;
+			this.game.saveGame.get().forward.set(!this.game.saveGame.get().forward.get());
+		}
+
+		this.model.pathProgress.set(progress);
+		this.game.saveGame.get().pathProgress.set(progress);
+
+
 	}
 
 	initWaypoints() {
