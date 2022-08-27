@@ -65,6 +65,14 @@ export default class ModelNodeCollection extends ModelNode {
 		return this.children.count();
 	}
 
+	isEmpty() {
+		return (this.count() === 0);
+	}
+
+	hasAny() {
+		return (!this.isEmpty());
+	}
+
 	find(search) {
 		return this.children.find(search);
 	}

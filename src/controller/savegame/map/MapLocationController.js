@@ -21,6 +21,10 @@ export default class MapLocationController extends ControllerNode {
 
 	updateWaypoint(conn) {
 		const path = this.game.resources.map.paths.getById(conn.pathId.get());
+		if (!path) {
+			console.log('path not found', conn.pathId.get());
+			return;
+		}
 		if (path.waypoints.count() <= 0) return;
 		const point = conn.forward.get() ? path.waypoints.first().coordinates : path.waypoints.last().coordinates;
 		point.set(this.model.coordinates);

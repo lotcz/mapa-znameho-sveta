@@ -1,6 +1,6 @@
 import DirtyValue from "../basic/DirtyValue";
 import ModelNodeCollection from "../basic/ModelNodeCollection";
-import WaypointModel, {WAYPOINT_TYPE_END, WAYPOINT_TYPE_MIDDLE, WAYPOINT_TYPE_START} from "./WaypointModel";
+import WaypointModel, {WAYPOINT_TYPE_END, WAYPOINT_TYPE_MIDDLE, WAYPOINT_TYPE_START} from "./map/WaypointModel";
 import IdentifiedModelNode from "../basic/IdentifiedModelNode";
 import NullableNode from "../basic/NullableNode";
 import IntValue from "../basic/IntValue";

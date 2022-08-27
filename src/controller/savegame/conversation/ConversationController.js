@@ -32,6 +32,7 @@ export default class ConversationController extends ControllerNode {
 	deactivateInternal() {
 		this.model.currentEntry.removeOnChangeListener(this.onEntrySelected);
 		this.model.removeEventListener('restart', this.onRestart);
+		this.model.currentEntry.set(null);
 	}
 
 	entrySelected() {

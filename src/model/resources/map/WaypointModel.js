@@ -1,6 +1,6 @@
-import ModelNode from "../basic/ModelNode";
-import Vector2 from "../basic/Vector2";
-import DirtyValue from "../basic/DirtyValue";
+import ModelNode from "../../basic/ModelNode";
+import Vector2 from "../../basic/Vector2";
+import DirtyValue from "../../basic/DirtyValue";
 
 export const WAYPOINT_TYPE_START = 0;
 export const WAYPOINT_TYPE_MIDDLE = 1;
@@ -39,8 +39,14 @@ export default class WaypointModel extends ModelNode {
 		// move control points together with main point
 		this.coordinates.addOnChangeListener((param) => {
 			const diff = param.newValue.subtract(param.oldValue);
-			this.a.set(this.a.add(diff));
-			this.b.set(this.b.add(diff));
+			const distanceA = param.oldValue.subtract(this.a).size();
+			if (distanceA > 20) {
+				this.a.set(this.a.add(diff));
+			}
+			const distanceB = param.oldValue.subtract(this.b).size();
+			if (distanceB > 20) {
+				this.b.set(this.b.add(diff));
+			}
 		});
 	}
 

@@ -19,6 +19,23 @@ export default class MapPathController extends ControllerNode {
 	activateInternal() {
 		this.updateStartLocation();
 		this.updateEndLocation();
+		this.initWaypoints();
+	}
+
+	deactivateInternal() {
+		this.updateLocationConnections(this.model.startLocation.get());
+		this.updateLocationConnections(this.model.endLocation.get());
+	}
+
+	initWaypoints() {
+		if (this.model.startLocation.isSet() && this.model.endLocation.isSet() && this.model.waypoints.isEmpty()) {
+			const start = this.model.waypoints.add();
+			start.coordinates.set(this.model.startLocation.get().coordinates);
+			start.a.set(this.model.startLocation.get().coordinates);
+			start.b.set(this.model.endLocation.get().coordinates);
+			const end = this.model.waypoints.add();
+			end.coordinates.set(this.model.endLocation.get().coordinates);
+		}
 	}
 
 	loadLocation(id) {
@@ -35,6 +52,7 @@ export default class MapPathController extends ControllerNode {
 		const location = this.loadLocation(this.model.startLocationId.get());
 		if (location) {
 			this.model.startLocation.set(location);
+			this.initWaypoints();
 			this.updateLocationConnections(location);
 		} else {
 			console.log('location not found', this.model.startLocationId.get());
@@ -51,6 +69,7 @@ export default class MapPathController extends ControllerNode {
 		const location = this.loadLocation(this.model.endLocationId.get());
 		if (location) {
 			this.model.endLocation.set(location);
+			this.initWaypoints();
 			this.updateLocationConnections(location);
 		} else {
 			console.log('location not found', this.model.endLocationId.get());

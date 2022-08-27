@@ -1,7 +1,7 @@
-import DirtyValue from "../basic/DirtyValue";
-import IdentifiedModelNode from "../basic/IdentifiedModelNode";
-import Vector2 from "../basic/Vector2";
-import ModelNodeCollection from "../basic/ModelNodeCollection";
+import DirtyValue from "../../basic/DirtyValue";
+import IdentifiedModelNode from "../../basic/IdentifiedModelNode";
+import Vector2 from "../../basic/Vector2";
+import ModelNodeCollection from "../../basic/ModelNodeCollection";
 import ConnectionModel from "./ConnectionModel";
 
 export default class LocationModel extends IdentifiedModelNode {
@@ -38,7 +38,6 @@ export default class LocationModel extends IdentifiedModelNode {
 
 	updateConnections(paths) {
 		this.connections.reset();
-		console.log('updating cvonnections', this.id.get(), paths);
 		paths.forEach((path) => {
 			if (path.startLocationId.equalsTo(this.id.get())) {
 				this.addConnection(path);
@@ -46,7 +45,6 @@ export default class LocationModel extends IdentifiedModelNode {
 				this.addConnection(path, false);
 			}
 		});
-		console.log('updated cvonnections', this.connections.children.items);
 	}
 
 }
