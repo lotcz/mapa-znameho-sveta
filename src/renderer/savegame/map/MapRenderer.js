@@ -51,7 +51,7 @@ export default class MapRenderer extends DomRenderer {
 
 		this.mapImage = null;
 		this.game.assets.getAsset(
-			'img/world.jpg',
+			'img/world-HD.jpg',
 			(img) => {
 				if (!this.draw) {
 					return;
