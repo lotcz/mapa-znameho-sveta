@@ -2,6 +2,7 @@ import "./style/style.css";
 import "./style/editor.css";
 import "./style/party.css";
 import "./style/conversation.css";
+import "./style/map.css";
 
 import GameController from "./controller/GameController";
 import GameModel from "./model/GameModel";

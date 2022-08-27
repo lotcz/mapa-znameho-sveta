@@ -42,6 +42,8 @@ export default class PathRenderer extends SvgRenderer {
 			);
 		}
 
+		this.renderPath();
+
 		this.updateDebugMode();
 		this.game.isInDebugMode.addOnChangeListener(this.onDebugModeUpdatedHandler);
 	}
@@ -95,7 +97,8 @@ export default class PathRenderer extends SvgRenderer {
 		}
 		if (!this.marker) {
 			this.marker = this.groupFg.group();
-			this.marker.use(this.getRef('marker'));
+			const img = this.marker.use(this.getRef('marker'));
+			img.scale(3);
 		}
 		const pos = this.path.pointAt(this.game.saveGame.get().pathProgress.get());
 		this.marker.center(pos.x, pos.y);

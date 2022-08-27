@@ -1,0 +1,10 @@
+.map-menu {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+}
+
+.map-menu .buttons {
+	padding: 20px;
+	background-color: saddlebrown;
+}

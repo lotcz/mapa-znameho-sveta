@@ -87,6 +87,9 @@ export default class ActivatedTreeNode {
 
 			this.autoRegisterEvents.forEach((event) => {
 				event.node.addEventListener(event.name, event.handler);
+				if (event.runOnActivate) {
+					event.handler();
+				}
 			})
 		}
 	}
@@ -111,8 +114,8 @@ export default class ActivatedTreeNode {
 
 	}
 
-	addAutoEvent(node, event, handler) {
-		this.autoRegisterEvents.push({node: node, name:event, handler: handler});
+	addAutoEvent(node, event, handler, runOnActivate = false) {
+		this.autoRegisterEvents.push({node: node, name:event, handler: handler, runOnActivate: runOnActivate});
 	}
 
 	removeAutoEvent(node, name, handler) {

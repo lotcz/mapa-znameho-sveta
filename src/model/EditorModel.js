@@ -13,11 +13,6 @@ export default class EditorModel extends ModelNode {
 	 */
 	activeForm;
 
-	/**
-	 * @type NullableNode
-	 */
-	activePath;
-
 	resourcesOptions;
 
 	mapOptions;
@@ -29,7 +24,6 @@ export default class EditorModel extends ModelNode {
 
 		this.activeTable = this.addProperty('activeTable', new NullableNode());
 		this.activeForm = this.addProperty('activeForm', new NullableNode());
-		this.activePath = this.addProperty('activePath', new NullableNode());
 
 		this.resourcesOptions = {
 			races: 'Races',

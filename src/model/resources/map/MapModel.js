@@ -20,7 +20,7 @@ export default class MapModel extends ModelNode {
 
 		this.locations = this.addProperty('locations', new ModelNodeTable((id) => new LocationModel(id)));
 		this.paths = this.addProperty('paths', new ModelNodeTable((id) => new PathModel(id)));
-		
+
 	}
 
 }

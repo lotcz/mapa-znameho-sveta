@@ -1,6 +1,6 @@
 import ControllerNode from "../../basic/ControllerNode";
 
-const TRAVEL_SPEED = 10; // px per second
+const TRAVEL_SPEED = 40; // px per second
 
 export default class MapPathController extends ControllerNode {
 
@@ -18,19 +18,23 @@ export default class MapPathController extends ControllerNode {
 		this.addAutoEvent(this.model.endLocationId, 'change', (param) => this.updateEndLocation(param));
 		this.addAutoEvent(this.model, 'path-length', (length) => this.model.length.set(length));
 		this.addAutoEvent(this.model, 'path-clicked', () => {
-			if (this.game.editor.activePath.isSet()) {
-				this.game.editor.activePath.get().isCurrentPath.set(false);
-			}
-			this.model.isCurrentPath.set(true);
-			this.game.editor.activePath.set(this.model);
+			this.game.saveGame.get().currentPathId.set(this.model.id.get());
 		});
 		this.addAutoEvent(this.model, 'path-marker-position', (pos) => {
 			if (!this.model.isCurrentPath.get()) {
 				return;
 			}
-			const center = this.game.viewBoxSize.multiply(0.5 * this.game.saveGame.get().zoom.get());
-			const corner = pos.subtract(center);
-			this.runOnUpdate(() => this.game.saveGame.get().coordinates.set(corner));
+			if (!this.game.saveGame.get().partyTraveling.get()) {
+				return;
+			}
+
+			this.runOnUpdate(() => {
+				const save = this.game.saveGame.get();
+				save.partyCoordinates.set(pos);
+				const center = this.game.viewBoxSize.multiply(0.5 * save.zoom.get());
+				const corner = pos.subtract(center);
+				save.coordinates.set(corner)
+			});
 		});
 	}
 
@@ -48,6 +52,10 @@ export default class MapPathController extends ControllerNode {
 	updateInternal(delta) {
 
 		if (!this.model.isCurrentPath.get()) {
+			return;
+		}
+
+		if (!this.game.saveGame.get().partyTraveling.get()) {
 			return;
 		}
 

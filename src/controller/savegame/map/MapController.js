@@ -42,6 +42,13 @@ export default class MapController extends ControllerNode {
 		this.locationsController = new CollectionController(this.game, this.game.resources.map.locations, (m) => new MapLocationController(this.game, m));
 		this.addChild(this.locationsController);
 
+		this.addAutoEvent(
+			this.saveGame.currentPathId,
+			'change',
+			() => this.saveGame.currentPath.set(this.map.paths.getById(this.saveGame.currentPathId.get())),
+			true
+		);
+
 		this.helperMouseOverHandler = (point) => this.focusedHelper.set(point);
 		this.helperMouseOutHandler = (point) => {
 			if (this.focusedHelper.equalsTo(point)) {

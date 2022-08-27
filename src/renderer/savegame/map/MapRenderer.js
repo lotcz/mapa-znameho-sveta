@@ -4,13 +4,16 @@ import PathRenderer from "./PathRenderer";
 import CollectionRenderer from "../../basic/CollectionRenderer";
 import LocationRenderer from "./LocationRenderer";
 import Pixies from "../../../class/basic/Pixies";
+import MapMenuRenderer from "./MapMenuRenderer";
+import Vector2 from "../../../model/basic/Vector2";
+import MapPartyRenderer from "./MapPartyRenderer";
 
 export default class MapRenderer extends DomRenderer {
 
 	/**
 	 * @type SaveGameModel
 	 */
-	saveGame;
+	model;
 
 	/**
 	 * @type MapModel
@@ -30,7 +33,7 @@ export default class MapRenderer extends DomRenderer {
 	constructor(game, model, dom) {
 		super(game, model, dom);
 
-		this.saveGame = model;
+		this.model = model;
 		this.map = game.resources.map;
 		this.onViewBoxChangeHandler = () => this.updateSize();
 
@@ -43,9 +46,8 @@ export default class MapRenderer extends DomRenderer {
 
 		this.draw = SVG().addTo(this.container);
 		this.pathsGroup = this.draw.group();
-		this.pathsRenderer = this.addChild(new CollectionRenderer(this.game, this.map.paths, (model) => new PathRenderer(this.game, model, this.pathsGroup)));
 		this.locationsGroup = this.draw.group();
-		this.locationsRenderer = this.addChild(new CollectionRenderer(this.game, this.map.locations, (model) => new LocationRenderer(this.game, model, this.locationsGroup)));
+		this.partyGroup = this.draw.group();
 
 		this.mapImage = null;
 		this.game.assets.getAsset(
@@ -59,10 +61,17 @@ export default class MapRenderer extends DomRenderer {
 				this.game.viewBoxSize.addOnChangeListener(this.onViewBoxChangeHandler);
 			}
 		);
+
+		this.pathsRenderer = this.addChild(new CollectionRenderer(this.game, this.map.paths, (model) => new PathRenderer(this.game, model, this.pathsGroup)));
+		this.locationsRenderer = this.addChild(new CollectionRenderer(this.game, this.map.locations, (model) => new LocationRenderer(this.game, model, this.locationsGroup)));
+		this.partyRenderer = this.addChild(new MapPartyRenderer(this.game, this.model, this.partyGroup));
+
+		this.menuRenderer = this.addChild(new MapMenuRenderer(this.game, this.model, this.container));
 	}
 
 	deactivateInternal() {
 		this.game.viewBoxSize.removeOnChangeListener(this.onViewBoxChangeHandler);
+		this.resetChildren();
 		this.draw.remove();
 		this.draw = null;
 		Pixies.destroyElement(this.canvas);
@@ -71,7 +80,7 @@ export default class MapRenderer extends DomRenderer {
 	}
 
 	renderInternal() {
-		if (this.saveGame.zoom.isDirty || this.saveGame.coordinates.isDirty) {
+		if (this.model.zoom.isDirty || this.model.coordinates.isDirty) {
 			this.updateZoom();
 		}
 	}
@@ -85,10 +94,10 @@ export default class MapRenderer extends DomRenderer {
 
 	updateZoom() {
 		this.draw.viewbox(
-			this.saveGame.coordinates.x,
-			this.saveGame.coordinates.y,
-			this.game.viewBoxSize.x * this.saveGame.zoom.get(),
-			this.game.viewBoxSize.y * this.saveGame.zoom.get()
+			this.model.coordinates.x,
+			this.model.coordinates.y,
+			this.game.viewBoxSize.x * this.model.zoom.get(),
+			this.game.viewBoxSize.y * this.model.zoom.get()
 		);
 		this.updateMapImage();
 	}
@@ -101,10 +110,10 @@ export default class MapRenderer extends DomRenderer {
 		this.context2d.clearRect(0, 0, this.context2d.canvas.width, this.context2d.canvas.height);
 		this.context2d.drawImage(
 			this.mapImage,
-			this.saveGame.coordinates.x,
-			this.saveGame.coordinates.y,
-			this.game.viewBoxSize.x * this.saveGame.zoom.get(),
-			this.game.viewBoxSize.y * this.saveGame.zoom.get(),
+			this.model.coordinates.x,
+			this.model.coordinates.y,
+			this.game.viewBoxSize.x * this.model.zoom.get(),
+			this.game.viewBoxSize.y * this.model.zoom.get(),
 			0,
 			0,
 			this.game.viewBoxSize.x,

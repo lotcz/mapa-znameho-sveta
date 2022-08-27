@@ -117,7 +117,7 @@ export default class Vector2 extends ModelNode {
 
 	/**
 	 * If you are standing at this vector and looking at target vector, this will be rotation that you have to Y axis.
-	 * @param target
+	 * @param {Vector2} target
 	 * @returns {Rotation}
 	 */
 	getRotationFromYAxis(target) {
