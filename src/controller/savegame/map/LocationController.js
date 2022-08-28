@@ -1,6 +1,6 @@
 import ControllerNode from "../../basic/ControllerNode";
 
-export default class MapLocationController extends ControllerNode {
+export default class LocationController extends ControllerNode {
 
 	/**
 	 * @type LocationModel
@@ -11,6 +11,10 @@ export default class MapLocationController extends ControllerNode {
 		super(game, model);
 
 		this.model = model;
+
+		if (this.model.coordinates.size() === 0) {
+			this.model.coordinates.set(this.game.saveGame.get().coordinates.add(this.game.viewBoxSize.multiply(0.5 * this.game.saveGame.get().zoom.get())));
+		}
 
 		this.addAutoEvent(this.model.coordinates, 'change', () => this.updateWaypoints());
 	}

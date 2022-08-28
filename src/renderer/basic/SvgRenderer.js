@@ -17,13 +17,12 @@ export default class SvgRenderer extends RendererNode {
 
 	refExists(uri) {
 		const token = Pixies.token(uri);
-		let ref = this.getDefs().findOne('#' + token);
-		return ref;
+		return this.getDefs().findOne('#' + token);
 	}
 
 	getRef(uri) {
 		const token = Pixies.token(uri);
-		let ref = this.getDefs().findOne('#' + token);
+		const ref = this.getDefs().findOne('#' + token);
 		if (!ref) {
 			if (DEBUG_SVG_RENDERER) console.warn(`Resource ${uri} (token: ${token}) not found!`)
 		}

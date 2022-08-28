@@ -7,6 +7,8 @@ import Pixies from "../../../class/basic/Pixies";
 import MapMenuRenderer from "./MapMenuRenderer";
 import Vector2 from "../../../model/basic/Vector2";
 import MapPartyRenderer from "./MapPartyRenderer";
+import CurrentLocationRenderer from "./CurrentLocationRenderer";
+import NullableNodeRenderer from "../../basic/NullableNodeRenderer";
 
 export default class MapRenderer extends DomRenderer {
 
@@ -37,6 +39,7 @@ export default class MapRenderer extends DomRenderer {
 		this.map = game.resources.map;
 		this.onViewBoxChangeHandler = () => this.updateSize();
 
+		this.addChild(new NullableNodeRenderer(this.game, this.model.currentLocation, (m) => new CurrentLocationRenderer(this.game, m, this.draw)));
 	}
 
 	activateInternal() {

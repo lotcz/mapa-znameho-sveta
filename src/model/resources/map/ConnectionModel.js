@@ -1,14 +1,12 @@
 import DirtyValue from "../../basic/DirtyValue";
 import ModelNode from "../../basic/ModelNode";
 import IntValue from "../../basic/IntValue";
-
-export const DIRECTION_NORTH = 'north';
-export const DIRECTION_SOUTH = 'south';
+import Vector2 from "../../basic/Vector2";
 
 export default class ConnectionModel extends ModelNode {
 
 	/**
-	 * @type DirtyValue
+	 * @type Vector2
 	 */
 	direction;
 
@@ -22,12 +20,20 @@ export default class ConnectionModel extends ModelNode {
 	 */
 	forward;
 
-	constructor() {
+	/**
+	 * @type LocationModel
+	 */
+	location;
+
+	constructor(location) {
 		super();
 
-		this.direction = this.addProperty('direction', new DirtyValue(DIRECTION_NORTH));
+		this.location = location;
+
+		this.direction = this.addProperty('direction', new Vector2());
 		this.forward = this.addProperty('forward', new DirtyValue(true));
 		this.pathId = this.addProperty('pathId', new IntValue(0));
+
 	}
 
 }

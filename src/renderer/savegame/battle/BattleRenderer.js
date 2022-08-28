@@ -147,7 +147,7 @@ export default class BattleRenderer extends DomRenderer {
 				this.scene.add(sprite);
 			}
 		);
-		
+
 		this.updateCameraPosition();
 		this.updateCameraZoom();
 	}

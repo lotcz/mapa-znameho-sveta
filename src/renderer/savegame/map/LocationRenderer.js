@@ -15,6 +15,7 @@ export default class LocationRenderer extends SvgRenderer {
 
 	activateInternal() {
 		this.group = this.draw.group();
+		this.group.on('click', () => this.game.saveGame.get().currentLocation.set(this.model));
 		this.helper = this.createHelperPoint();
 		this.labelGroup = this.group.group();
 		this.updateLabel();
@@ -22,6 +23,7 @@ export default class LocationRenderer extends SvgRenderer {
 
 	deactivateInternal() {
 		this.group.remove();
+		this.helper.remove();
 	}
 
 	createHelperPoint() {
@@ -39,11 +41,10 @@ export default class LocationRenderer extends SvgRenderer {
 			this.label.remove();
 		}
 		const text = this.model.name.get();
-		console.log(text);
 
 		this.label = this.labelGroup.text(text)
-			.font({ fill: '#311a0a', size: 35, family: 'Vollkorn' })
-			.center(this.model.coordinates.x, this.model.coordinates.y - 40);
+			.font({ fill: '#311a0a', size: 55, family: 'Vollkorn' })
+			.center(this.model.coordinates.x, this.model.coordinates.y - 80);
 	}
 
 	renderInternal() {

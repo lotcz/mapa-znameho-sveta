@@ -12,50 +12,49 @@ export default class MapPartyRenderer extends SvgRenderer {
 
 		this.model = model;
 
-
-		this.lastRotation = 0;
 	}
 
 	activateInternal() {
 
-		this.party = this.draw.group();
-		this.arrow = null;
+		this.group = this.draw.group();
 
-		const token = 'party-arrow';
+		this.marker = null;
+
+		const token = 'marker';
 		if (!this.refExists(token)) {
 			this.game.assets.getAsset(
-				'img/arrow.svg',
+				'img/marker.svg',
 				(img) => {
-					if (!this.refExists(token)) {
-						const marker = this.getDefs().image(img.src);
-						this.setRef(token, marker);
-					}
+					const marker = this.getDefs().image(img.src);
+					this.setRef(token, marker);
 					this.renderParty();
 				}
 			);
+		} else {
+			this.renderParty();
 		}
 
 	}
 
 	deactivateInternal() {
-		this.party.remove();
+		this.group.remove();
 	}
 
 	renderInternal() {
-		this.renderParty();
+		if (this.model.partyCoordinates.isDirty || this.model.currentPath.isDirty) {
+			this.renderParty();
+		}
 	}
 
 	renderParty() {
-		if (!this.arrow) {
-			this.arrow = this.party.use(this.getRef('party-arrow'));
-			this.arrow.scale(3);
+		if (!this.marker) {
+			this.marker = this.group.group();
+			const img = this.marker.use(this.getRef('marker'));
+			img.scale(3);
 		}
+
 		const pos = this.model.partyCoordinates;
-		const last = this.model.lastPartyCoordinates;
-		const rotation = last.getRotationFromYAxis(pos).add(Math.PI);
-		this.party.center(pos.x, pos.y);
-		this.arrow.rotate( - (rotation.getDegrees() - this.lastRotation));
-		this.lastRotation = rotation.getDegrees();
+		this.group.center(pos.x, pos.y);
 	}
 
 }

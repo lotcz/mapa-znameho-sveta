@@ -2,14 +2,16 @@ import ControllerNode from "../../basic/ControllerNode";
 import DirtyValue from "../../../model/basic/DirtyValue";
 import CollectionController from "../../basic/CollectionController";
 import MapPathController from "./MapPathController";
-import MapLocationController from "./MapLocationController";
+import LocationController from "./LocationController";
+import NullableNodeController from "../../basic/NullableNodeController";
+import CurrentLocationController from "./CurrentLocationController";
 
 export default class MapController extends ControllerNode {
 
 	/**
 	 * @type SaveGameModel
 	 */
-	saveGame;
+	model;
 
 	/**
 	 * @type MapModel
@@ -28,7 +30,7 @@ export default class MapController extends ControllerNode {
 	constructor(game, saveGame) {
 		super(game, saveGame);
 
-		this.saveGame = saveGame;
+		this.model = saveGame;
 		this.map = game.resources.map;
 
 		this.dragging = false;
@@ -39,13 +41,15 @@ export default class MapController extends ControllerNode {
 		this.pathsController = new CollectionController(this.game, this.game.resources.map.paths, (m) => new MapPathController(this.game, m));
 		this.addChild(this.pathsController);
 
-		this.locationsController = new CollectionController(this.game, this.game.resources.map.locations, (m) => new MapLocationController(this.game, m));
+		this.locationsController = new CollectionController(this.game, this.game.resources.map.locations, (m) => new LocationController(this.game, m));
 		this.addChild(this.locationsController);
 
+		this.addChild(new NullableNodeController(this.game, this.model.currentLocation, (m) => new CurrentLocationController(this.game, m)));
+
 		this.addAutoEvent(
-			this.saveGame.currentPathId,
+			this.model.currentPathId,
 			'change',
-			() => this.saveGame.currentPath.set(this.map.paths.getById(this.saveGame.currentPathId.get())),
+			() => this.model.currentPath.set(this.map.paths.getById(this.model.currentPathId.get())),
 			true
 		);
 
@@ -101,7 +105,7 @@ export default class MapController extends ControllerNode {
 	onMouseMove() {
 		if (this.game.controls.mouseDownLeft.get()) {
 			if (this.dragging) {
-				const mapCoords = this.saveGame.coordinates.add(this.game.controls.mouseCoordinates.multiply(this.saveGame.zoom.get()));
+				const mapCoords = this.model.coordinates.add(this.game.controls.mouseCoordinates.multiply(this.model.zoom.get()));
 				this.dragging.set(mapCoords);
 			} else if (this.focusedHelper.isSet()) {
 				this.dragging = this.focusedHelper.get();
@@ -111,8 +115,8 @@ export default class MapController extends ControllerNode {
 		if (this.game.controls.mouseDownRight.get()) {
 			if (this.scrolling) {
 				const offset = this.game.controls.mouseCoordinates.subtract(this.scrolling);
-				const mapCoords = this.saveGame.coordinates.subtract(offset.multiply(this.saveGame.zoom.get()));
-				this.saveGame.coordinates.set(mapCoords);
+				const mapCoords = this.model.coordinates.subtract(offset.multiply(this.model.zoom.get()));
+				this.model.coordinates.set(mapCoords);
 				this.scrolling = this.game.controls.mouseCoordinates.clone();
 			} else {
 				this.scrolling = this.game.controls.mouseCoordinates.clone();
@@ -121,7 +125,7 @@ export default class MapController extends ControllerNode {
 	}
 
 	onZoom(param) {
-		this.saveGame.zoom.set(this.saveGame.zoom.get() + (param * 0.1));
+		this.model.zoom.set(this.model.zoom.get() + (param * 0.1));
 	}
 
 }

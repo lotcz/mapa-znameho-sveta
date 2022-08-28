@@ -30,7 +30,7 @@ export default class LocationModel extends IdentifiedModelNode {
 	}
 
 	addConnection(path, forward = true) {
-		const conn = new ConnectionModel();
+		const conn = new ConnectionModel(this);
 		conn.pathId.set(path.id.get());
 		conn.forward.set(forward);
 		return this.connections.add(conn);

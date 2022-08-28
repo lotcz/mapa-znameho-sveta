@@ -18,7 +18,7 @@ export default class MapPathController extends ControllerNode {
 		this.addAutoEvent(this.model.endLocationId, 'change', (param) => this.updateEndLocation(param));
 		this.addAutoEvent(this.model, 'path-length', (length) => this.model.length.set(length));
 		this.addAutoEvent(this.model, 'path-clicked', () => {
-			this.game.saveGame.get().currentPathId.set(this.model.id.get());
+			this.runOnUpdate(() => this.game.saveGame.get().currentPathId.set(this.model.id.get()));
 		});
 		this.addAutoEvent(this.model, 'path-marker-position', (pos) => {
 			if (!this.model.isCurrentPath.get()) {
