@@ -4,6 +4,7 @@ import WaypointModel, {WAYPOINT_TYPE_END, WAYPOINT_TYPE_MIDDLE, WAYPOINT_TYPE_ST
 import IdentifiedModelNode from "../../basic/IdentifiedModelNode";
 import NullableNode from "../../basic/NullableNode";
 import IntValue from "../../basic/IntValue";
+import Vector2 from "../../basic/Vector2";
 
 export default class PathModel extends IdentifiedModelNode {
 
@@ -78,6 +79,21 @@ export default class PathModel extends IdentifiedModelNode {
 				default:
 					wp.type.set(WAYPOINT_TYPE_MIDDLE);
 			}
+		}
+	}
+
+	addWaypoint() {
+		if (this.waypoints.count() >= 2) {
+			const last = this.waypoints.last();
+			const prev = this.waypoints.get(this.waypoints.count() - 2);
+			const wp = new WaypointModel();
+			wp.restoreState(last.getState());
+			this.waypoints.add(wp);
+			wp.b.set(wp.coordinates.add(new Vector2(50, 50)));
+
+			last.a.set(last.coordinates.add(new Vector2(-50, -50)));
+			const coords = prev.coordinates.add(last.coordinates).multiply(0.5);
+			last.coordinates.set(coords);
 		}
 	}
 

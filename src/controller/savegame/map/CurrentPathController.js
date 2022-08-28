@@ -15,23 +15,24 @@ export default class CurrentPathController extends ControllerNode {
 		this.model = model;
 
 		this.addAutoEvent(this.model, 'path-marker-position', (pos) => {
-			if (!this.model.isCurrentPath.get()) {
-				return;
-			}
-			if (!this.game.saveGame.get().partyTraveling.get()) {
-				return;
-			}
-
 			this.runOnUpdate(() => {
 				const save = this.game.saveGame.get();
 				save.partyCoordinates.set(pos);
-				const center = this.game.viewBoxSize.multiply(0.5 * save.zoom.get());
-				const corner = pos.subtract(center);
-				save.coordinates.set(corner)
 			});
+			if (this.game.saveGame.get().partyTraveling.get()) {
+				this.runOnUpdate(() => {
+					const save = this.game.saveGame.get();
+					const center = this.game.viewBoxSize.multiply(0.5 * save.zoom.get());
+					const corner = pos.subtract(center);
+					save.coordinates.set(corner)
+				});
+			}
 		});
 	}
 
+	activateInternal() {
+		this.game.editor.activeForm.set(this.model);
+	}
 
 	updateInternal(delta) {
 

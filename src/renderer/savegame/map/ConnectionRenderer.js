@@ -26,8 +26,10 @@ export default class ConnectionRenderer extends SvgRenderer {
 				'img/arrow.svg',
 				(img) => {
 					if (!this.refExists(token)) {
-						const marker = this.getDefs().image(img.src, () => this.createArrow());
-						this.setRef(token, marker);
+						const marker = this.getDefs().image(img.src, () => {
+							this.setRef(token, marker);
+							this.createArrow();
+						});
 					} else {
 						this.createArrow();
 					}

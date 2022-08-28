@@ -56,6 +56,15 @@ export default class NodeFormRenderer extends DomRenderer {
 			});
 		}
 
+		if (this.model.constructor.name === 'PathModel') {
+			const start = Pixies.createElement(buttonsLeft, 'button', 'special');
+			start.innerText = 'Add waypoint';
+			start.addEventListener('click', (e) => {
+				e.preventDefault();
+				this.model.addWaypoint();
+			});
+		}
+
 		this.fields = Pixies.createElement(this.container, 'div', 'fields');
 		this.renderFields();
 	}
