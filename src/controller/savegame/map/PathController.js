@@ -1,8 +1,7 @@
 import ControllerNode from "../../basic/ControllerNode";
+import Vector2 from "../../../model/basic/Vector2";
 
-const TRAVEL_SPEED = 40; // px per second
-
-export default class MapPathController extends ControllerNode {
+export default class PathController extends ControllerNode {
 
 	/**
 	 * @type PathModel
@@ -20,22 +19,7 @@ export default class MapPathController extends ControllerNode {
 		this.addAutoEvent(this.model, 'path-clicked', () => {
 			this.runOnUpdate(() => this.game.saveGame.get().currentPathId.set(this.model.id.get()));
 		});
-		this.addAutoEvent(this.model, 'path-marker-position', (pos) => {
-			if (!this.model.isCurrentPath.get()) {
-				return;
-			}
-			if (!this.game.saveGame.get().partyTraveling.get()) {
-				return;
-			}
 
-			this.runOnUpdate(() => {
-				const save = this.game.saveGame.get();
-				save.partyCoordinates.set(pos);
-				const center = this.game.viewBoxSize.multiply(0.5 * save.zoom.get());
-				const corner = pos.subtract(center);
-				save.coordinates.set(corner)
-			});
-		});
 	}
 
 	activateInternal() {
@@ -49,44 +33,16 @@ export default class MapPathController extends ControllerNode {
 		this.updateLocationConnections(this.model.endLocation.get());
 	}
 
-	updateInternal(delta) {
-
-		if (!this.model.isCurrentPath.get()) {
-			return;
-		}
-
-		if (!this.game.saveGame.get().partyTraveling.get()) {
-			return;
-		}
-
-		// travel
-
-		let progress = this.model.pathProgress.get() + ((delta / 1000) * TRAVEL_SPEED * (this.game.saveGame.get().forward.get() ? 1 : -1));
-
-		if (progress > this.model.length.get()) {
-			progress = this.model.length.get();
-			this.game.saveGame.get().forward.set(!this.game.saveGame.get().forward.get());
-		}
-
-		if (progress < 0) {
-			progress = 0;
-			this.game.saveGame.get().forward.set(!this.game.saveGame.get().forward.get());
-		}
-
-		this.model.pathProgress.set(progress);
-		this.game.saveGame.get().pathProgress.set(progress);
-
-
-	}
-
 	initWaypoints() {
 		if (this.model.startLocation.isSet() && this.model.endLocation.isSet() && this.model.waypoints.isEmpty()) {
 			const start = this.model.waypoints.add();
 			start.coordinates.set(this.model.startLocation.get().coordinates);
-			start.a.set(this.model.startLocation.get().coordinates);
-			start.b.set(this.model.endLocation.get().coordinates);
+			start.a.set(this.model.startLocation.get().coordinates.add(new Vector2(-50, -50)));
+			start.b.set(this.model.startLocation.get().coordinates.add(new Vector2(50, 50)));
 			const end = this.model.waypoints.add();
 			end.coordinates.set(this.model.endLocation.get().coordinates);
+			end.a.set(this.model.endLocation.get().coordinates.add(new Vector2(-50, -50)));
+			end.b.set(this.model.endLocation.get().coordinates.add(new Vector2(50, 50)));
 		}
 	}
 

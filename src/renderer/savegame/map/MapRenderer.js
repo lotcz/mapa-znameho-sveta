@@ -5,10 +5,10 @@ import CollectionRenderer from "../../basic/CollectionRenderer";
 import LocationRenderer from "./LocationRenderer";
 import Pixies from "../../../class/basic/Pixies";
 import MapMenuRenderer from "./MapMenuRenderer";
-import Vector2 from "../../../model/basic/Vector2";
 import MapPartyRenderer from "./MapPartyRenderer";
 import CurrentLocationRenderer from "./CurrentLocationRenderer";
 import NullableNodeRenderer from "../../basic/NullableNodeRenderer";
+import CurrentPathRenderer from "./CurrentPathRenderer";
 
 export default class MapRenderer extends DomRenderer {
 
@@ -40,6 +40,7 @@ export default class MapRenderer extends DomRenderer {
 		this.onViewBoxChangeHandler = () => this.updateSize();
 
 		this.addChild(new NullableNodeRenderer(this.game, this.model.currentLocation, (m) => new CurrentLocationRenderer(this.game, m, this.draw)));
+		this.addChild(new NullableNodeRenderer(this.game, this.model.currentPath, (m) => new CurrentPathRenderer(this.game, m, this.draw)));
 	}
 
 	activateInternal() {

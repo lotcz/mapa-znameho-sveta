@@ -14,6 +14,7 @@ export default class LocationController extends ControllerNode {
 
 		if (this.model.coordinates.size() === 0) {
 			this.model.coordinates.set(this.game.saveGame.get().coordinates.add(this.game.viewBoxSize.multiply(0.5 * this.game.saveGame.get().zoom.get())));
+			this.updateWaypoints();
 		}
 
 		this.addAutoEvent(this.model.coordinates, 'change', () => this.updateWaypoints());

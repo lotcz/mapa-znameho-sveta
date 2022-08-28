@@ -1,10 +1,11 @@
 import ControllerNode from "../../basic/ControllerNode";
 import DirtyValue from "../../../model/basic/DirtyValue";
 import CollectionController from "../../basic/CollectionController";
-import MapPathController from "./MapPathController";
+import PathController from "./PathController";
 import LocationController from "./LocationController";
 import NullableNodeController from "../../basic/NullableNodeController";
 import CurrentLocationController from "./CurrentLocationController";
+import CurrentPathController from "./CurrentPathController";
 
 export default class MapController extends ControllerNode {
 
@@ -38,18 +39,30 @@ export default class MapController extends ControllerNode {
 
 		this.focusedHelper = new DirtyValue(null);
 
-		this.pathsController = new CollectionController(this.game, this.game.resources.map.paths, (m) => new MapPathController(this.game, m));
+		this.pathsController = new CollectionController(this.game, this.game.resources.map.paths, (m) => new PathController(this.game, m));
 		this.addChild(this.pathsController);
 
 		this.locationsController = new CollectionController(this.game, this.game.resources.map.locations, (m) => new LocationController(this.game, m));
 		this.addChild(this.locationsController);
 
+		this.addChild(new NullableNodeController(this.game, this.model.currentPath, (m) => new CurrentPathController(this.game, m)));
 		this.addChild(new NullableNodeController(this.game, this.model.currentLocation, (m) => new CurrentLocationController(this.game, m)));
 
 		this.addAutoEvent(
 			this.model.currentPathId,
 			'change',
-			() => this.model.currentPath.set(this.map.paths.getById(this.model.currentPathId.get())),
+			() => {
+				this.runOnUpdate(() => this.model.currentPath.set(this.map.paths.getById(this.model.currentPathId.get())));
+			},
+			true
+		);
+
+		this.addAutoEvent(
+			this.model.currentLocationId,
+			'change',
+			() => {
+				this.runOnUpdate(() => this.model.currentLocation.set(this.map.locations.getById(this.model.currentLocationId.get())));
+			},
 			true
 		);
 

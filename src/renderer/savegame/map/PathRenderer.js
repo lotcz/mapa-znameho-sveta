@@ -1,7 +1,4 @@
 import SvgRenderer from "../../basic/SvgRenderer";
-import CollectionRenderer from "../../basic/CollectionRenderer";
-import WaypointRenderer from "./WaypointRenderer";
-import Vector2 from "../../../model/basic/Vector2";
 
 export default class PathRenderer extends SvgRenderer {
 
@@ -14,36 +11,24 @@ export default class PathRenderer extends SvgRenderer {
 	 */
 	model;
 
-	waypointsRenderer;
-
 	constructor(game, model, svg) {
 		super(game, model, svg);
 		this.model = model;
 
-		this.onDebugModeUpdatedHandler = () => this.updateDebugMode();
 	}
 
 	activateInternal() {
-		this.groupBg = this.draw.group();
-		this.groupFg = this.draw.group();
-
-		this.updateDebugMode();
-		this.game.isInDebugMode.addOnChangeListener(this.onDebugModeUpdatedHandler);
+		this.group = this.draw.group();
+		this.renderPath();
 	}
 
 	deactivateInternal() {
-		this.removeChild(this.waypointsRenderer);
-		this.groupBg.remove();
-		this.groupFg.remove();
-		this.game.isInDebugMode.removeOnChangeListener(this.onDebugModeUpdatedHandler);
+		this.group.remove();
 	}
 
 	renderInternal() {
 		if (this.model.waypoints.isDirty) {
 			this.renderPath();
-		}
-		if (this.model.isCurrentPath.get()) {
-			this.renderMarker();
 		}
 	}
 
@@ -67,32 +52,12 @@ export default class PathRenderer extends SvgRenderer {
 			prev = wp;
 		}
 
-		this.path = this.groupBg.path(path).stroke({color: 'rgba(255, 255, 255, 0.8)', width: '5px', linecap: 'round', linejoin: 'round'}).fill('transparent');
+		this.path = this.group.path(path).stroke({color: 'rgba(25, 25, 25, 0.8)', width: '1px', linecap: 'round', linejoin: 'round'}).fill('transparent');
 		this.path.on('click', (e) => {
 			this.model.triggerEvent('path-clicked');
 		});
 
 		this.model.triggerEvent('path-length', this.path.length());
-	}
-
-	renderMarker() {
-		if (!this.path) {
-			return;
-		}
-
-		const pos = this.path.pointAt(this.game.saveGame.get().pathProgress.get());
-		this.model.triggerEvent('path-marker-position', new Vector2(pos.x, pos.y));
-	}
-
-	updateDebugMode() {
-		if (this.waypointsRenderer) {
-			this.removeChild(this.waypointsRenderer);
-			this.waypointsRenderer = null;
-		}
-		if (this.game.isInDebugMode.get()) {
-			this.waypointsRenderer = this.addChild(new CollectionRenderer(this.game, this.model.waypoints, (model) => new WaypointRenderer(this.game, model, this.groupFg)));
-		}
-		this.renderPath();
 	}
 
 }
