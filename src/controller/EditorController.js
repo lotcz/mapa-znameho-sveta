@@ -56,6 +56,8 @@ export default class EditorController extends ControllerNode {
 				if (value && value.value !== undefined && typeof value.set === 'function') {
 					value.set(data.get(name));
 				}
+			} else if (value && typeof value.value === 'boolean' && typeof value.set === 'function') {
+				value.set(false);
 			}
 		});
 	}

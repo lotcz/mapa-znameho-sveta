@@ -63,9 +63,7 @@ export default class CurrentPathRenderer extends SvgRenderer {
 		if (this.model.waypoints.count() < 2) {
 			return;
 		}
-		if (!this.game.isInDebugMode.get()) {
-			return;
-		}
+
 		const waypoints = this.model.waypoints.children.items;
 		const first = waypoints[0];
 		let path = `M ${first.coordinates.x} ${first.coordinates.y} `;
@@ -76,7 +74,8 @@ export default class CurrentPathRenderer extends SvgRenderer {
 			prev = wp;
 		}
 
-		this.path = this.groupBg.path(path).stroke({color: 'rgba(255, 255, 255, 0.8)', width: '8px', linecap: 'round', linejoin: 'round'}).fill('transparent');
+		const width = this.game.isInDebugMode.get() ? '8px' : 0;
+		this.path = this.groupBg.path(path).stroke({color: 'rgba(255, 255, 255, 0.8)', width: width, linecap: 'round', linejoin: 'round'}).fill('transparent');
 		this.model.triggerEvent('path-length', this.path.length());
 	}
 

@@ -19,11 +19,21 @@ export default class ConnectionRenderer extends SvgRenderer {
 
 	activateInternal() {
 		this.group = this.draw.group();
+		this.group.opacity(0.5);
+		this.group.on('mouseover', () => {
+			this.group.opacity(1);
+		});
+		this.group.on('mouseout', () => {
+			this.group.opacity(0.5);
+		});
+		this.group.on('click', () => {
+			this.model.triggerEvent('connection-selected', this.model);
+		});
 
 		const token = 'party-arrow';
 		if (!this.refExists(token)) {
 			this.game.assets.getAsset(
-				'img/arrow.svg',
+				'img/icon/arrow.svg',
 				(img) => {
 					if (!this.refExists(token)) {
 						const marker = this.getDefs().image(img.src, () => {

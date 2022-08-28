@@ -21,7 +21,6 @@ export default class WaypointRenderer extends SvgRenderer {
 
 	activateInternal() {
 		this.group = this.draw.group();
-		this.helperMain = this.createHelperPoint(this.model.coordinates, 30, 'red');
 
 		this.updateType();
 	}
@@ -56,6 +55,7 @@ export default class WaypointRenderer extends SvgRenderer {
 			if (!this.lineA) this.lineA = this.group.line(this.model.coordinates.x, this.model.coordinates.y, this.model.a.x, this.model.a.y).stroke({color: 'green',width: '2px'});
 			if (!this.helperA) this.helperA = this.createHelperPoint(this.model.a, 25, 'green');
 		}
+
 		if (this.model.type.equalsTo(WAYPOINT_TYPE_START)) {
 			if (this.lineB) {
 				this.lineB.remove();
@@ -68,6 +68,10 @@ export default class WaypointRenderer extends SvgRenderer {
 		} else {
 			if (!this.lineB) this.lineB = this.group.line(this.model.coordinates.x, this.model.coordinates.y, this.model.b.x, this.model.b.y).stroke({color: 'blue',width: '2px'});
 			if (!this.helperB) this.helperB = this.createHelperPoint(this.model.b, 25, 'blue');
+		}
+
+		if (!(this.model.type.equalsTo(WAYPOINT_TYPE_START) || this.model.type.equalsTo(WAYPOINT_TYPE_END))) {
+			this.helperMain = this.createHelperPoint(this.model.coordinates, 30, 'red');
 		}
 	}
 

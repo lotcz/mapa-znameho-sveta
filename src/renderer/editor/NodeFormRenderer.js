@@ -107,6 +107,14 @@ export default class NodeFormRenderer extends DomRenderer {
 			return;
 		}
 
+		if (typeof value === 'boolean') {
+			const input = Pixies.createElement(container, 'input');
+			input.setAttribute('type', 'checkbox');
+			input.setAttribute('name', name);
+			input.checked = value;
+			return;
+		}
+
 		const input = Pixies.createElement(container, 'input');
 		input.setAttribute('type', 'text');
 		input.setAttribute('name', name);

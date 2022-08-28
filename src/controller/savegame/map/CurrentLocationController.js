@@ -17,5 +17,10 @@ export default class CurrentLocationController extends ControllerNode {
 		this.addChild(new CollectionController(this.game, this.model.connections, (m) => new ConnectionController(this.game, m)));
 	}
 
+	activateInternal() {
+		this.game.saveGame.get().currentPathId.set(0);
+		this.game.saveGame.get().partyCoordinates.set(this.model.coordinates);
+		this.game.saveGame.get().partyTraveling.set(false);
+	}
 }
 

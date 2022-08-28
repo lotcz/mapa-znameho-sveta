@@ -52,7 +52,8 @@ export default class PathRenderer extends SvgRenderer {
 			prev = wp;
 		}
 
-		this.path = this.group.path(path).stroke({color: 'rgba(25, 25, 25, 0.8)', width: '1px', linecap: 'round', linejoin: 'round'}).fill('transparent');
+		const width = this.model.isVisible.get() ? '1px' : 0;
+		this.path = this.group.path(path).stroke({color: 'rgba(25, 25, 25, 0.8)', width: width, linecap: 'round', linejoin: 'round'}).fill('transparent');
 		this.path.on('click', (e) => {
 			this.model.triggerEvent('path-clicked');
 		});

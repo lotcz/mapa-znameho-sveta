@@ -5,8 +5,14 @@ import IdentifiedModelNode from "../../basic/IdentifiedModelNode";
 import NullableNode from "../../basic/NullableNode";
 import IntValue from "../../basic/IntValue";
 import Vector2 from "../../basic/Vector2";
+import BoolValue from "../../basic/BoolValue";
 
 export default class PathModel extends IdentifiedModelNode {
+
+	/**
+	 * @type BoolValue
+	 */
+	isVisible;
 
 	/**
 	 * @type ModelNodeCollection
@@ -39,7 +45,7 @@ export default class PathModel extends IdentifiedModelNode {
 	length;
 
 	/**
-	 * @type DirtyValue<bool>
+	 * @type BoolValue
 	 */
 	isCurrentPath;
 
@@ -51,6 +57,8 @@ export default class PathModel extends IdentifiedModelNode {
 	constructor(id) {
 		super(id);
 
+		this.isVisible = this.addProperty('isVisible', new BoolValue(true));
+
 		this.waypoints = this.addProperty('waypoints', new ModelNodeCollection(() => new WaypointModel()));
 		this.waypoints.addOnAddListener(() => this.updateWaypoints());
 		this.waypoints.addOnRemoveListener(() => this.updateWaypoints());
@@ -61,7 +69,7 @@ export default class PathModel extends IdentifiedModelNode {
 		this.endLocationId = this.addProperty('endLocationId', new IntValue(0));
 		this.endLocation = this.addProperty('endLocation', new NullableNode(null, false));
 
-		this.isCurrentPath = this.addProperty('isCurrentPath', new DirtyValue(false, false));
+		this.isCurrentPath = this.addProperty('isCurrentPath', new BoolValue(false, false));
 		this.pathProgress = this.addProperty('pathProgress', new DirtyValue(0, false));
 
 	}

@@ -32,6 +32,7 @@ export default class CurrentPathController extends ControllerNode {
 
 	activateInternal() {
 		this.game.editor.activeForm.set(this.model);
+		this.game.saveGame.get().currentLocationId.set(0);
 	}
 
 	updateInternal(delta) {
@@ -45,13 +46,11 @@ export default class CurrentPathController extends ControllerNode {
 		let progress = this.model.pathProgress.get() + ((delta / 1000) * TRAVEL_SPEED * (this.game.saveGame.get().forward.get() ? 1 : -1));
 
 		if (progress > this.model.length.get()) {
-			progress = this.model.length.get();
-			this.game.saveGame.get().forward.set(!this.game.saveGame.get().forward.get());
+			this.game.saveGame.get().currentLocationId.set(this.model.endLocationId.get());
 		}
 
 		if (progress < 0) {
-			progress = 0;
-			this.game.saveGame.get().forward.set(!this.game.saveGame.get().forward.get());
+			this.game.saveGame.get().currentLocationId.set(this.model.startLocationId.get());
 		}
 
 		this.model.pathProgress.set(progress);

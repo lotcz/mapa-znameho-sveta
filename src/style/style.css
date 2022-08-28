@@ -43,8 +43,6 @@ html, body {
 
 .loading {
 	position: fixed;
-	left: 0;
-	top: 0;
 	right: 0;
 	bottom: 0;
 	display: flex;
@@ -73,6 +71,6 @@ html, body {
 	border-radius: 3px;
 }
 
-.savegame {
+.savegame-layer {
 	cursor: url('../../assets/img/cursor.png'), auto;
 }

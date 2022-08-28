@@ -14,6 +14,7 @@ export default class ConnectionController extends ControllerNode {
 
 		this.addAutoEvent(this.model.pathId, 'change', () => this.updateDirection(), true);
 		this.addAutoEvent(this.model.forward, 'change', () => this.updateDirection());
+		this.addAutoEvent(this.model, 'connection-selected', (p) => this.connectionSelected(p));
 	}
 
 	updateDirection() {
@@ -33,5 +34,13 @@ export default class ConnectionController extends ControllerNode {
 		this.model.direction.set(next);
 	}
 
+	connectionSelected(connection) {
+		const path = this.game.resources.map.paths.getById(connection.pathId.get());
+		const save = this.game.saveGame.get();
+		save.forward.set(connection.forward.get());
+		save.pathProgress.set(connection.forward.get() ? 0 : path.length.get());
+		save.currentPathId.set(path.id.get());
+		save.partyTraveling.set(true);
+	}
 }
 

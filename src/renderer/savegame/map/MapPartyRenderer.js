@@ -20,13 +20,27 @@ export default class MapPartyRenderer extends SvgRenderer {
 
 		this.marker = null;
 
-		const token = 'marker';
+		const token = 'marker-location';
 		if (!this.refExists(token)) {
 			this.game.assets.getAsset(
-				'img/marker.svg',
+				'img/icon/marker-stop.svg',
 				(img) => {
 					const marker = this.getDefs().image(img.src);
 					this.setRef(token, marker);
+					this.renderParty();
+				}
+			);
+		} else {
+			this.renderParty();
+		}
+
+		const tokenFire = 'marker-traveling';
+		if (!this.refExists(tokenFire)) {
+			this.game.assets.getAsset(
+				'img/icon/marker-traveling.svg',
+				(img) => {
+					const campfire = this.getDefs().image(img.src);
+					this.setRef(tokenFire, campfire);
 					this.renderParty();
 				}
 			);
@@ -44,13 +58,36 @@ export default class MapPartyRenderer extends SvgRenderer {
 		if (this.model.partyCoordinates.isDirty || this.model.currentPath.isDirty) {
 			this.renderParty();
 		}
+		if (this.model.partyTraveling.isDirty) {
+			this.renderParty();
+		}
 	}
 
 	renderParty() {
 		if (!this.marker) {
+			if (!this.refExists('marker-traveling')) {
+				return;
+			}
 			this.marker = this.group.group();
-			const img = this.marker.use(this.getRef('marker'));
-			img.scale(3);
+			const img = this.marker.use(this.getRef('marker-traveling'));
+			img.scale(5);
+		}
+
+		if (!this.campfire) {
+			if (!this.refExists('marker-location')) {
+				return;
+			}
+			this.campfire = this.group.group();
+			const img = this.campfire.use(this.getRef('marker-location'));
+			img.scale(5);
+		}
+
+		if (this.model.partyTraveling.get()) {
+			this.marker.show();
+			this.campfire.hide();
+		} else {
+			this.marker.hide();
+			this.campfire.show();
 		}
 
 		const pos = this.model.partyCoordinates;
