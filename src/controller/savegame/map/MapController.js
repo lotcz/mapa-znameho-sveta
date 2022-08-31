@@ -117,6 +117,7 @@ export default class MapController extends ControllerNode {
 
 	onMouseMove() {
 		if (this.game.controls.mouseDownLeft.get()) {
+			this.model.partyTraveling.set(false);
 			if (this.dragging) {
 				const mapCoords = this.model.coordinates.add(this.game.controls.mouseCoordinates.multiply(this.model.zoom.get()));
 				this.dragging.set(mapCoords);
@@ -126,6 +127,7 @@ export default class MapController extends ControllerNode {
 		}
 
 		if (this.game.controls.mouseDownRight.get()) {
+			this.model.partyTraveling.set(false);
 			if (this.scrolling) {
 				const offset = this.game.controls.mouseCoordinates.subtract(this.scrolling);
 				const mapCoords = this.model.coordinates.subtract(offset.multiply(this.model.zoom.get()));

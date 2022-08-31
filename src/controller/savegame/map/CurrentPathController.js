@@ -28,6 +28,29 @@ export default class CurrentPathController extends ControllerNode {
 				});
 			}
 		});
+
+		this.addAutoEvent(this.game.saveGame.get(), 'go-back', () => {
+			this.runOnUpdate(() => {
+				const save = this.game.saveGame.get();
+				save.forward.set(!save.forward.get());
+				save.partyTraveling.set(true);
+			});
+		});
+
+		this.addAutoEvent(this.game.saveGame.get(), 'go-forward', () => {
+			this.runOnUpdate(() => {
+				const save = this.game.saveGame.get();
+				save.partyTraveling.set(true);
+			});
+		});
+
+		this.addAutoEvent(this.game.controls, 'right-click', () => {
+			this.runOnUpdate(() => {
+				const save = this.game.saveGame.get();
+				save.partyTraveling.set(false);
+			});
+		});
+
 	}
 
 	activateInternal() {

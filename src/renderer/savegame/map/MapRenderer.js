@@ -39,8 +39,8 @@ export default class MapRenderer extends DomRenderer {
 		this.map = game.resources.map;
 		this.onViewBoxChangeHandler = () => this.updateSize();
 
-		this.addChild(new NullableNodeRenderer(this.game, this.model.currentLocation, (m) => new CurrentLocationRenderer(this.game, m, this.draw)));
-		this.addChild(new NullableNodeRenderer(this.game, this.model.currentPath, (m) => new CurrentPathRenderer(this.game, m, this.draw)));
+		this.addChild(new NullableNodeRenderer(this.game, this.model.currentLocation, (m) => new CurrentLocationRenderer(this.game, m, this.currentGroup)));
+		this.addChild(new NullableNodeRenderer(this.game, this.model.currentPath, (m) => new CurrentPathRenderer(this.game, m, this.currentGroup)));
 	}
 
 	activateInternal() {
@@ -51,6 +51,7 @@ export default class MapRenderer extends DomRenderer {
 		this.draw = SVG().addTo(this.container);
 		this.pathsGroup = this.draw.group();
 		this.locationsGroup = this.draw.group();
+		this.currentGroup = this.draw.group();
 		this.partyGroup = this.draw.group();
 
 		this.mapImage = null;
