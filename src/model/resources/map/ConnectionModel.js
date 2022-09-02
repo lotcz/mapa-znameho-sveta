@@ -1,7 +1,7 @@
-import DirtyValue from "../../basic/DirtyValue";
 import ModelNode from "../../basic/ModelNode";
 import IntValue from "../../basic/IntValue";
 import Vector2 from "../../basic/Vector2";
+import BoolValue from "../../basic/BoolValue";
 
 export default class ConnectionModel extends ModelNode {
 
@@ -16,7 +16,7 @@ export default class ConnectionModel extends ModelNode {
 	pathId;
 
 	/**
-	 * @type DirtyValue
+	 * @type BoolValue
 	 */
 	forward;
 
@@ -31,7 +31,7 @@ export default class ConnectionModel extends ModelNode {
 		this.location = location;
 
 		this.direction = this.addProperty('direction', new Vector2());
-		this.forward = this.addProperty('forward', new DirtyValue(true));
+		this.forward = this.addProperty('forward', new BoolValue(true));
 		this.pathId = this.addProperty('pathId', new IntValue(0));
 
 	}

@@ -1,4 +1,3 @@
-import DirtyValue from "../../basic/DirtyValue";
 import ModelNodeCollection from "../../basic/ModelNodeCollection";
 import WaypointModel, {WAYPOINT_TYPE_END, WAYPOINT_TYPE_MIDDLE, WAYPOINT_TYPE_START} from "./WaypointModel";
 import IdentifiedModelNode from "../../basic/IdentifiedModelNode";
@@ -6,6 +5,7 @@ import NullableNode from "../../basic/NullableNode";
 import IntValue from "../../basic/IntValue";
 import Vector2 from "../../basic/Vector2";
 import BoolValue from "../../basic/BoolValue";
+import FloatValue from "../../basic/FloatValue";
 
 export default class PathModel extends IdentifiedModelNode {
 
@@ -40,7 +40,7 @@ export default class PathModel extends IdentifiedModelNode {
 	endLocation;
 
 	/**
-	 * @type DirtyValue
+	 * @type FloatValue
 	 */
 	length;
 
@@ -50,7 +50,7 @@ export default class PathModel extends IdentifiedModelNode {
 	isCurrentPath;
 
 	/**
-	 * @type DirtyValue<float>
+	 * @type FloatValue
 	 */
 	pathProgress;
 
@@ -62,7 +62,7 @@ export default class PathModel extends IdentifiedModelNode {
 		this.waypoints = this.addProperty('waypoints', new ModelNodeCollection(() => new WaypointModel()));
 		this.waypoints.addOnAddListener(() => this.updateWaypoints());
 		this.waypoints.addOnRemoveListener(() => this.updateWaypoints());
-		this.length = this.addProperty('length', new DirtyValue(0));
+		this.length = this.addProperty('length', new FloatValue(0));
 
 		this.startLocationId = this.addProperty('startLocationId', new IntValue(0));
 		this.startLocation = this.addProperty('startLocation', new NullableNode(null, false));
@@ -70,7 +70,7 @@ export default class PathModel extends IdentifiedModelNode {
 		this.endLocation = this.addProperty('endLocation', new NullableNode(null, false));
 
 		this.isCurrentPath = this.addProperty('isCurrentPath', new BoolValue(false, false));
-		this.pathProgress = this.addProperty('pathProgress', new DirtyValue(0, false));
+		this.pathProgress = this.addProperty('pathProgress', new FloatValue(0, false));
 
 	}
 

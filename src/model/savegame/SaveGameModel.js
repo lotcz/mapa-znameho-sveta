@@ -7,6 +7,8 @@ import CharacterModel from "../characters/CharacterModel";
 import NullableNode from "../basic/NullableNode";
 import PartyModel from "./party/PartyModel";
 import IntValue from "../basic/IntValue";
+import FloatValue from "../basic/FloatValue";
+import BoolValue from "../basic/BoolValue";
 
 export const GAME_MODE_MAP = 'map';
 export const GAME_MODE_BATTLE = 'battle';
@@ -40,7 +42,7 @@ export default class SaveGameModel extends ModelNode {
 	lastPartyCoordinates;
 
 	/**
-	 * @type DirtyValue
+	 * @type FloatValue
 	 */
 	zoom;
 
@@ -55,17 +57,17 @@ export default class SaveGameModel extends ModelNode {
 	currentPath;
 
 	/**
-	 * @type DirtyValue
+	 * @type FloatValue
 	 */
 	pathProgress;
 
 	/**
-	 * @type DirtyValue
+	 * @type BoolValue
 	 */
 	forward;
 
 	/**
-	 * @type DirtyValue
+	 * @type BoolValue
 	 */
 	partyTraveling;
 
@@ -107,11 +109,11 @@ export default class SaveGameModel extends ModelNode {
 		this.partyCoordinates.addOnChangeListener((param) => {
 			this.lastPartyCoordinates.set(param.oldValue);
 		})
-		this.zoom = this.addProperty('zoom', new DirtyValue(1));
+		this.zoom = this.addProperty('zoom', new FloatValue(1));
 
-		this.pathProgress = this.addProperty('pathProgress', new DirtyValue(0));
-		this.forward = this.addProperty('forward', new DirtyValue(true));
-		this.partyTraveling = this.addProperty('partyTraveling', new DirtyValue(false, false));
+		this.pathProgress = this.addProperty('pathProgress', new FloatValue(0));
+		this.forward = this.addProperty('forward', new BoolValue(true));
+		this.partyTraveling = this.addProperty('partyTraveling', new BoolValue(false, false));
 
 		this.currentPathId = this.addProperty('currentPathId', new IntValue());
 		this.currentPath = this.addProperty('currentPath', new NullableNode(null, false));
