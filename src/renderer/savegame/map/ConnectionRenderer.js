@@ -30,24 +30,15 @@ export default class ConnectionRenderer extends SvgRenderer {
 			this.model.triggerEvent('connection-selected', this.model);
 		});
 
-		const token = 'party-arrow';
-		if (!this.refExists(token)) {
-			this.game.assets.getAsset(
-				'img/icon/arrow.svg',
-				(img) => {
-					if (!this.refExists(token)) {
-						const marker = this.getDefs().image(img.src, () => {
-							this.setRef(token, marker);
-							this.createArrow();
-						});
-					} else {
-						this.createArrow();
-					}
-				}
-			);
-		} else {
-			this.createArrow();
-		}
+		this.loadImageRef('img/icon/arrow.svg', (image) => {
+			if (!this.group) {
+				console.log('no group available');
+				return;
+			}
+			this.arrow = this.group.use(image);
+			this.arrow.scale(8);
+			this.renderArrow();
+		});
 	}
 
 	deactivateInternal() {
@@ -55,16 +46,6 @@ export default class ConnectionRenderer extends SvgRenderer {
 	}
 
 	renderInternal() {
-		this.renderArrow();
-	}
-
-	createArrow() {
-		if (!this.group) {
-			console.log('no group available');
-			return;
-		}
-		this.arrow = this.group.use(this.getRef('party-arrow'));
-		this.arrow.scale(8);
 		this.renderArrow();
 	}
 

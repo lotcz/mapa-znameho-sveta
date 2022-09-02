@@ -49,6 +49,7 @@ export default class MapRenderer extends DomRenderer {
 		this.context2d = this.canvas.getContext("2d");
 
 		this.draw = SVG().addTo(this.container);
+		this.draw.addClass('map-svg');
 		this.pathsGroup = this.draw.group();
 		this.locationsGroup = this.draw.group();
 		this.currentGroup = this.draw.group();

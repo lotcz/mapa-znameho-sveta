@@ -40,4 +40,33 @@ export default class SvgRenderer extends RendererNode {
 		}
 	}
 
+	loadImageRef(uri, onLoaded){
+		if (this.refExists(uri)) {
+			onLoaded(this.getRef(uri));
+			return;
+		}
+		this.game.assets.getAsset(
+			uri,
+			(img) => {
+				if (this.refExists(uri)) {
+					onLoaded(this.getRef(uri));
+					return;
+				}
+				const image = this.getDefs().image(img.src, () => {
+					this.setRef(uri, image);
+					onLoaded(image);
+				});
+			}
+		);
+	}
+
+	rotate(element, rotation) {
+		let lastRotation = element.remember('rotation');
+		if (!lastRotation) {
+			lastRotation = 0;
+		}
+		element.rotate(rotation - lastRotation);
+		element.remember('rotation', rotation);
+	}
+
 }

@@ -4,8 +4,8 @@ import "./style/party.css";
 import "./style/conversation.css";
 import "./style/map.css";
 
-import GameController from "./controller/GameController";
 import GameModel from "./model/GameModel";
+import GameController from "./controller/GameController";
 import GameRenderer from "./renderer/GameRenderer";
 
 const MAX_DELTA = 500;

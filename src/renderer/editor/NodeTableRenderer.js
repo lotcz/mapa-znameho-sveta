@@ -1,7 +1,6 @@
 import Pixies from "../../class/basic/Pixies";
 import CollectionRenderer from "../basic/CollectionRenderer";
 import TableRowRenderer from "./TableRowRenderer";
-import NodeFormRenderer from "./NodeFormRenderer";
 
 export default class NodeTableRenderer extends CollectionRenderer {
 
