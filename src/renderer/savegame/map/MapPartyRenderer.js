@@ -61,7 +61,7 @@ export default class MapPartyRenderer extends SvgRenderer {
 		if (this.model.partyCoordinates.isDirty || this.model.partyTraveling.isDirty) {
 			this.renderParty();
 		}
-		if (this.model.partyTraveling.isDirty) {
+		if (this.model.partyTraveling.isDirty || this.model.currentLocation.isDirty) {
 			this.renderArrows();
 		}
 	}
