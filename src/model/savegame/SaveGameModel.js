@@ -21,9 +21,19 @@ export default class SaveGameModel extends ModelNode {
 	mode;
 
 	/**
+	 * @type FloatValue
+	 */
+	time;
+
+	/**
 	 * @type ModelNodeTable
 	 */
 	characters;
+
+	/**
+	 * @type PartyModel
+	 */
+	party;
 
 	/**
 	 * @type Vector2
@@ -91,15 +101,11 @@ export default class SaveGameModel extends ModelNode {
 	 */
 	conversation;
 
-	/**
-	 * @type PartyModel
-	 */
-	party;
-
 	constructor() {
 		super();
 
 		this.mode = this.addProperty('mode', new DirtyValue(GAME_MODE_MAP));
+		this.time = this.addProperty('time', new FloatValue(0));
 		this.characters = this.addProperty('characters', new ModelNodeTable((id) => new CharacterModel(id)));
 		this.party = this.addProperty('party', new PartyModel());
 

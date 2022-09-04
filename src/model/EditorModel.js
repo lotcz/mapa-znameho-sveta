@@ -32,6 +32,7 @@ export default class EditorModel extends ModelNode {
 		};
 
 		this.mapOptions = {
+			biotopes: 'Biotopes',
 			paths: 'Paths',
 			locations: 'Locations'
 		};

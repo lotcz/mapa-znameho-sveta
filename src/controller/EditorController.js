@@ -11,35 +11,54 @@ export default class EditorController extends ControllerNode {
 		super(game, model);
 
 		this.model = model;
-		this.onTableSelectedHandler = (name) => this.runOnUpdate(() => this.model.activeTable.set(this.game.getTableByName(name)));
-		this.onTableClosedHandler = () => this.runOnUpdate(() => this.model.activeTable.set(null));
-		this.onRowSelectedHandler = (item) => this.runOnUpdate(() => this.model.activeForm.set(item));
-		this.onNodeSavedHandler = (param) => this.runOnUpdate(() => this.saveNode(param));
-		this.onFormClosedHandler = () => this.runOnUpdate(() =>  this.model.activeForm.set(null));
-		this.onNodeDeleteHandler = (node) => this.runOnUpdate(() => this.deleteNode(node));
-		this.onResourcesChanged = () => this.model.makeDirty();
+
+		this.addAutoEvent(
+			this.model,
+			'table-selected',
+			(name) => this.runOnUpdate(() => this.model.activeTable.set(this.game.getTableByName(name)))
+		);
+
+		this.addAutoEvent(
+			this.model,
+			'table-closed',
+			() => this.runOnUpdate(() => this.model.activeTable.set(null))
+		);
+
+		this.addAutoEvent(
+			this.model,
+			'node-saved',
+			(param) => this.runOnUpdate(() => this.saveNode(param))
+		);
+
+		this.addAutoEvent(
+			this.model,
+			'form-closed',
+			() => this.runOnUpdate(() =>  this.model.activeForm.set(null))
+		);
+
+		this.addAutoEvent(
+			this.model,
+			'node-delete',
+			(param) => this.runOnUpdate(() => this.deleteNode(param))
+		);
+
+		//this.onResourcesChanged = () => this.model.makeDirty();
+
+		//this.addAutoEvent(this.model, 'row-selected', (node) => this.runOnUpdate(() => this.nodeSelected(node)));
 	}
 
 	activateInternal() {
-		this.model.addEventListener('table-selected', this.onTableSelectedHandler);
-		this.model.addEventListener('table-closed', this.onTableClosedHandler);
-		this.model.addEventListener('row-selected', this.onRowSelectedHandler);
-		this.model.addEventListener('node-saved', this.onNodeSavedHandler);
-		this.model.addEventListener('node-delete', this.onNodeDeleteHandler);
-		this.model.addEventListener('form-closed', this.onFormClosedHandler);
-		this.game.resources.addOnDirtyListener(this.onResourcesChanged);
-		this.game.saveGame.addOnDirtyListener(this.onResourcesChanged);
+
+
+		//this.game.resources.addOnDirtyListener(this.onResourcesChanged);
+		//this.game.saveGame.addOnDirtyListener(this.onResourcesChanged);
 	}
 
 	deactivateInternal() {
-		this.model.removeEventListener('table-selected', this.onTableSelectedHandler);
-		this.model.removeEventListener('table-closed', this.onTableClosedHandler);
-		this.model.removeEventListener('row-selected', this.onRowSelectedHandler);
-		this.model.removeEventListener('node-saved', this.onNodeSavedHandler);
-		this.model.removeEventListener('node-delete', this.onNodeDeleteHandler);
-		this.model.removeEventListener('form-closed', this.onFormClosedHandler);
-		this.game.resources.removeOnDirtyListener(this.onResourcesChanged);
-		this.game.saveGame.removeOnDirtyListener(this.onResourcesChanged);
+
+
+		//this.game.resources.removeOnDirtyListener(this.onResourcesChanged);
+		//this.game.saveGame.removeOnDirtyListener(this.onResourcesChanged);
 	}
 
 	/**
@@ -62,12 +81,14 @@ export default class EditorController extends ControllerNode {
 		});
 	}
 
-	deleteNode(node) {
-		if (this.model.activeTable.isEmpty()) {
+	deleteNode(param) {
+		const node = param.node;
+		const table = param.table;
+		if (!table) {
 			console.log('no active table, node cannot be deleted', node);
 			return;
 		}
-		const result = this.model.activeTable.get().remove(node);
+		const result = table.remove(node);
 		console.log('removed node', result);
 	}
 

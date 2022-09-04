@@ -21,7 +21,13 @@ export default class TableRowRenderer extends DomRenderer {
 	activateInternal() {
 		this.container = this.addElement('tr');
 
-		this.container.addEventListener('click', () => this.game.editor.triggerEvent('row-selected', this.model));
+		this.container.addEventListener('click',
+			() => {
+				/** @type NodeTableRenderer */
+				const tableRenderer = this.parent;
+				tableRenderer.showForm(this.model);
+			}
+		);
 
 		this.updateRow();
 	}

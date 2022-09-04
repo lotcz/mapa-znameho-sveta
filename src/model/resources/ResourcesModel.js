@@ -5,6 +5,8 @@ import MapModel from "./map/MapModel";
 import CharacterModel from "../characters/CharacterModel";
 import ConversationModel from "./conversation/ConversationModel";
 import ModelNode from "../basic/ModelNode";
+import BiotopeModel from "./map/BiotopeModel";
+import ModelNodeCollection from "../basic/ModelNodeCollection";
 
 export default class ResourcesModel extends ModelNode {
 

@@ -102,7 +102,7 @@
 	border-right: 1px gray solid;
 }
 
-.editor table tr:hover {
+.editor table tr:hover > td {
 	color: lightblue;
 	cursor: pointer;
 }

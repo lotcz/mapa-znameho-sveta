@@ -1,5 +1,6 @@
 import DomRenderer from "../basic/DomRenderer";
 import Pixies from "../../class/basic/Pixies";
+import NodeTableRenderer from "./NodeTableRenderer";
 
 export default class NodeFormRenderer extends DomRenderer {
 
@@ -34,9 +35,7 @@ export default class NodeFormRenderer extends DomRenderer {
 		const del = Pixies.createElement(buttonsLeft, 'button', 'red', 'Del',
 			(e) => {
 				e.preventDefault();
-				if (confirm('Delete node?')) {
-					this.game.editor.triggerEvent('node-delete', this.model);
-				}
+				this.model.triggerEvent('node-delete', this.model);
 			}
 		);
 
@@ -44,7 +43,10 @@ export default class NodeFormRenderer extends DomRenderer {
 		close.innerText = 'Close';
 		close.addEventListener('click', (e) => {
 			e.preventDefault();
-			this.game.editor.triggerEvent('form-closed');
+			if (this.game.editor.activeForm.equalsTo(this.model)) {
+				this.game.editor.triggerEvent('form-closed');
+			}
+			this.model.triggerEvent('form-closed');
 		});
 
 		if (this.model.constructor.name === 'ConversationModel') {
@@ -94,6 +96,12 @@ export default class NodeFormRenderer extends DomRenderer {
 			if (value.z !== undefined) {
 				this.renderInput(container, name, value.z);
 			}
+			return;
+		}
+
+		if (typeof value === 'object' && (value.constructor.name === 'ModelNodeTable' || value.constructor.name === 'ModelNodeCollection' )) {
+			const tableRenderer = new NodeTableRenderer(this.game, value, container);
+			tableRenderer.activate();
 			return;
 		}
 
