@@ -103,8 +103,6 @@ export default class MapMenuRenderer extends DomRenderer {
 				const max = upper.time.get();
 				const realMax = min > max ? 1 : max;
 				const progress = (time - min) / (realMax - min);
-				console.log(time, min, realMax, progress);
-
 				this.artUpperImg.style.opacity = progress;
 			});
 		}
