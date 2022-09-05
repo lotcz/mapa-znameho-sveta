@@ -54,12 +54,21 @@ export default class NodeTableRenderer extends CollectionRenderer {
 		this.table = Pixies.createElement(this.container, 'table');
 		this.rendererFactory = (item) => new TableRowRenderer(game, item, this.table, this.name);
 
-		const header = Pixies.createElement(this.table, 'tr');
-		const dummy = this.model.nodeFactory();
-		dummy.properties.forEach((name, value) => {
-			const cell = Pixies.createElement(header, 'th');
-			cell.innerText = name;
-		});
+		let dummy = null;
+
+		if (typeof this.model.nodeFactory === 'function') {
+			dummy = this.model.nodeFactory();
+		} else if (this.model.count() > 0) {
+			dummy = this.model.first();
+		}
+
+		if (dummy) {
+			const header = Pixies.createElement(this.table, 'tr');
+			dummy.properties.forEach((name, value) => {
+				const cell = Pixies.createElement(header, 'th');
+				cell.innerText = name;
+			});
+		}
 
 		super.activateInternal();
 	}

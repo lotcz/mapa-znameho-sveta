@@ -40,6 +40,16 @@ export default class PathModel extends IdentifiedModelNode {
 	endLocation;
 
 	/**
+	 * @type IntValue
+	 */
+	biotopeId;
+
+	/**
+	 * @type NullableNode
+	 */
+	biotope;
+
+	/**
 	 * @type FloatValue
 	 */
 	length;
@@ -68,6 +78,9 @@ export default class PathModel extends IdentifiedModelNode {
 		this.startLocation = this.addProperty('startLocation', new NullableNode(null, false));
 		this.endLocationId = this.addProperty('endLocationId', new IntValue(0));
 		this.endLocation = this.addProperty('endLocation', new NullableNode(null, false));
+
+		this.biotopeId = this.addProperty('biotopeId', new IntValue(0));
+		this.biotope = this.addProperty('biotope', new NullableNode(null, false));
 
 		this.isCurrentPath = this.addProperty('isCurrentPath', new BoolValue(false, false));
 		this.pathProgress = this.addProperty('pathProgress', new FloatValue(0, false));

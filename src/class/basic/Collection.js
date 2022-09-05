@@ -92,6 +92,10 @@ export default class Collection extends Node {
 		return this.items.map(transform);
 	}
 
+	sort(sortFunc) {
+		return this.items.sort(sortFunc);
+	}
+
 	addOnRemoveListener(listener) {
 		this.addEventListener('remove', listener);
 	}

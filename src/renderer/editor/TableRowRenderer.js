@@ -47,7 +47,7 @@ export default class TableRowRenderer extends DomRenderer {
 					if (value.value !== undefined) {
 						text = value.value;
 					} else if (value.x !== undefined && value.y !== undefined) {
-						text = '[' + value.x + ',' + value.y;
+						text = '[' + Pixies.round(value.x, 2)+ ',' + Pixies.round(value.y, 2);
 						if (value.z !== undefined) {
 							text += ',' + value.z;
 						}

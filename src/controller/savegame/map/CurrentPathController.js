@@ -1,6 +1,7 @@
 import ControllerNode from "../../basic/ControllerNode";
 
 const TRAVEL_SPEED = 40; // px per second
+const TIME_SPEED = 0.05; // portion of day per second
 
 export default class CurrentPathController extends ControllerNode {
 
@@ -13,6 +14,15 @@ export default class CurrentPathController extends ControllerNode {
 		super(game, model);
 
 		this.model = model;
+
+		this.addAutoEvent(
+			this.model.biotopeId,
+			'change',
+			() => {
+				this.model.biotope.set(this.game.resources.map.biotopes.getById(this.model.biotopeId.get()));
+			},
+			true
+		);
 
 		this.addAutoEvent(this.model, 'path-marker-position', (pos) => {
 			this.runOnUpdate(() => {
@@ -54,7 +64,7 @@ export default class CurrentPathController extends ControllerNode {
 	}
 
 	activateInternal() {
-		this.game.editor.activeForm.set(this.model);
+		//this.game.editor.activeForm.set(this.model);
 		this.game.saveGame.get().currentLocationId.set(0);
 	}
 
@@ -66,19 +76,27 @@ export default class CurrentPathController extends ControllerNode {
 
 		// travel
 
-		let progress = this.model.pathProgress.get() + ((delta / 1000) * TRAVEL_SPEED * (this.game.saveGame.get().forward.get() ? 1 : -1));
+		const save = this.game.saveGame.get();
+
+		let progress = this.model.pathProgress.get() + ((delta / 1000) * TRAVEL_SPEED * (save.forward.get() ? 1 : -1));
 
 		if (progress > this.model.length.get()) {
-			this.game.saveGame.get().currentLocationId.set(this.model.endLocationId.get());
+			save.currentLocationId.set(this.model.endLocationId.get());
 		}
 
 		if (progress < 0) {
-			this.game.saveGame.get().currentLocationId.set(this.model.startLocationId.get());
+			save.currentLocationId.set(this.model.startLocationId.get());
 		}
 
 		this.model.pathProgress.set(progress);
-		this.game.saveGame.get().pathProgress.set(progress);
+		save.pathProgress.set(progress);
 
+		let time = save.time.get();
+		time += ((delta / 1000) * TIME_SPEED);
+		if (time > 1) {
+			time = 0;
+		}
+		save.time.set(time);
 
 	}
 

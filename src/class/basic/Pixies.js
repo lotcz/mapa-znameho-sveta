@@ -1,5 +1,10 @@
 export default class Pixies {
 
+	static round(number, decimals) {
+		const d = Math.pow(10, decimals);
+		return Math.round(number * d) / d;
+	}
+
 	static shorten(text, length = 25, ellipsis = '...') {
 		if (text === null || text === undefined || typeof text !== 'string') {
 			return text;
@@ -284,15 +289,4 @@ export default class Pixies {
 		});
 	}
 
-	/**
-	 *
-	 * @param element Element
-	 * @param value Vector2|Vector3
-	 * @param setter (value)=>any
-	 */
-	static magicVectorEditor(element, value, setter) {
-		Pixies.emptyElement(element);
-		const wrapper = Pixies.createElement(element, 'div', 'vector-editor');
-
-	}
 }

@@ -85,6 +85,10 @@ export default class ModelNodeCollection extends ModelNode {
 		return this.children.map(transform);
 	}
 
+	sort(sortFunc) {
+		return this.children.sort(sortFunc);
+	}
+
 	forEach(func) {
 		return this.children.forEach(func);
 	}

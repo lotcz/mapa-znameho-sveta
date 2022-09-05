@@ -21,7 +21,7 @@
 
 .conversation .panel {
 	margin: auto;
-	color:var(--dark-brown);;
+	color:var(--dark-brown);
 	background-image: url('../../assets/img/texture/paper.jpg');
 	background-color: sandybrown;
 	width: 900px;
