@@ -1,15 +1,14 @@
-import ModelNode from "./basic/ModelNode";
-import Vector2 from "./basic/Vector2";
-import DirtyValue from "./basic/DirtyValue";
+import ModelNode from "../basic/ModelNode";
+import Vector2 from "../basic/Vector2";
+import DirtyValue from "../basic/DirtyValue";
 import ControlsModel from "./ControlsModel";
-import AssetCache from "../class/AssetCache";
-import ResourcesModel from "./resources/ResourcesModel";
-import SaveGameModel from "./savegame/SaveGameModel";
-import CharacterPreviewModel from "./CharacterPreviewModel";
-import EditorModel from "./EditorModel";
-import NullableNode from "./basic/NullableNode";
+import AssetCache from "../../class/AssetCache";
+import ResourcesModel from "../resources/ResourcesModel";
+import SaveGameModel from "../savegame/SaveGameModel";
+import EditorModel from "../editor/EditorModel";
+import NullableNode from "../basic/NullableNode";
 
-import ResourcesJson from "../resources.json";
+import ResourcesJson from "../../resources.json";
 
 export default class GameModel extends ModelNode {
 
@@ -60,9 +59,8 @@ export default class GameModel extends ModelNode {
 		this.isInDebugMode = this.addProperty('isInDebugMode', new DirtyValue(true));
 
 		this.saveGame = this.addProperty('saveGame', new NullableNode(() => new SaveGameModel()));
-		this.characterPreview = this.addProperty('characterPreview', new CharacterPreviewModel());
+		this.saveGame.set(new SaveGameModel());
 
-		this.initialize();
 	}
 
 	getTableByName(name) {
@@ -82,10 +80,6 @@ export default class GameModel extends ModelNode {
 			return this.saveGame.get().party[name];
 		}
 		return null;
-	}
-
-	initialize() {
-		this.saveGame.set(new SaveGameModel());
 	}
 
 }

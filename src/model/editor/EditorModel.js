@@ -1,5 +1,5 @@
-import ModelNode from "./basic/ModelNode";
-import NullableNode from "./basic/NullableNode";
+import ModelNode from "../basic/ModelNode";
+import NullableNode from "../basic/NullableNode";
 
 export default class EditorModel extends ModelNode {
 
@@ -27,6 +27,7 @@ export default class EditorModel extends ModelNode {
 
 		this.resourcesOptions = {
 			materials: 'Materials',
+			models3d: '3D Models',
 			races: 'Races',
 			characterTemplates: 'Character Templates',
 			conversations: 'Conversations'
@@ -35,7 +36,8 @@ export default class EditorModel extends ModelNode {
 		this.mapOptions = {
 			biotopes: 'Biotopes',
 			paths: 'Paths',
-			locations: 'Locations'
+			locations: 'Locations',
+			battleMaps: 'Battle Maps',
 		};
 
 		this.saveGameOptions = {

@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import {SEX_FEMALE, SEX_MALE, SEX_MAMMOTH} from "../../../model/CharacterPreviewModel";
 import RendererNode from "../../basic/RendererNode";
 import AnimationHelper from "../../../class/animating/AnimationHelper";
 import * as SkeletonUtils from "three/examples/jsm/utils/SkeletonUtils.js";
@@ -16,6 +15,11 @@ export default class BattleCharacterRenderer extends RendererNode {
 	 */
 	animation;
 
+	/**
+	 * @type CharacterModel
+	 */
+	character;
+
 	constructor(game, model, scene) {
 		super(game, model);
 
@@ -23,20 +27,47 @@ export default class BattleCharacterRenderer extends RendererNode {
 		this.scene = scene;
 
 		this.animation = null;
-		this.item = null;
+
 	}
 
 	activateInternal() {
-
+		const character = this.model.character.get();
 		this.group = new THREE.Group();
-		this.group.scale.set(this.model.scale.x, this.model.scale.y, this.model.scale.z);
+		const scale = character.scale;
+		this.group.scale.set(scale.x, scale.y, scale.z);
 
-		this.scene.add( this.group );
+		this.scene.add(this.group);
 
-		this.skinMaterial = new THREE.MeshLambertMaterial({color:this.model.skinColor.get()});
-		this.skinMaterial.side = THREE.DoubleSide;
+		const race = this.game.resources.races.getById(character.raceId.get());
+		const materialId = race.skinMaterialId.get();
 
-		this.updateCharacter();
+		this.game.assets.getAsset(`mat/${materialId}`, (material) => {
+			const skinMaterial = material;
+			skinMaterial.side = THREE.DoubleSide;
+			const modelId = character.sex.get() ? race.male3dModelId.get() : race.female3dModelId.get();
+			const model = this.game.resources.models3d.getById(modelId);
+			this.game.assets.getAsset(
+				model.uri.get(),
+				(asset) => {
+					if (this.group) {
+						//console.log(asset);
+						this.animation = new AnimationHelper(SkeletonUtils.clone(asset.scene), asset.animations);
+						this.switchAnimation(this.model.state.get());
+						this.animation.mesh.traverse((mesh) => {
+							if (mesh.material && mesh.geometry) {
+								mesh.material.dispose();
+								mesh.material = skinMaterial;
+								mesh.castShadow = true;
+								mesh.receiveShadow = false;
+							}
+						});
+						this.group.add(this.animation.mesh);
+						this.model.position.makeDirty();
+					}
+				}
+			);
+		});
+
 	}
 
 	deactivateInternal() {
@@ -47,17 +78,14 @@ export default class BattleCharacterRenderer extends RendererNode {
 				if (mesh.geometry) {
 					mesh.geometry.dispose();
 				}
-			})
+			});
+			this.group.remove(this.animation.mesh);
 		}
 		this.scene.remove(this.group);
 		this.group = null;
 	}
 
 	renderInternal() {
-
-		if (this.model.sex.isDirty) {
-			this.updateCharacter();
-		}
 
 		if (this.model.position.isDirty) {
 			this.group.position.set(this.model.position.x, 0, this.model.position.y);
@@ -71,22 +99,8 @@ export default class BattleCharacterRenderer extends RendererNode {
 			this.switchAnimation(this.model.state.get());
 		}
 
-		if (this.model.scale.isDirty) {
-			this.group.scale.set(this.model.scale.x, this.model.scale.y, this.model.scale.z);
-		}
-
 		if (this.animation) {
 			this.animation.update();
-		}
-
-		if (this.item && (this.model.itemPosition.isDirty || this.model.itemScale.isDirty || this.model.itemRotation.isDirty)) {
-			this.item.position.set(this.model.itemPosition.x, this.model.itemPosition.y, this.model.itemPosition.z);
-			this.item.scale.set(this.model.itemScale.x, this.model.itemScale.y, this.model.itemScale.z);
-			this.item.rotation.set(this.model.itemRotation.x, this.model.itemRotation.y, this.model.itemRotation.z);
-		}
-
-		if (this.model.skinColor.isDirty) {
-			this.skinMaterial.color = new THREE.Color(this.model.skinColor.get());
 		}
 	}
 
@@ -96,46 +110,5 @@ export default class BattleCharacterRenderer extends RendererNode {
 		}
 	}
 
-	updateCharacter() {
-		if (this.animation) {
-			this.group.remove(this.animation.mesh);
-		}
-		const uri = this.model.sex.equalsTo(SEX_MALE) ? 'ani/male.glb' : this.model.sex.equalsTo(SEX_FEMALE) ? 'ani/female.glb' : this.model.sex.equalsTo(SEX_MAMMOTH) ? 'ani/mammoth.glb' : 'ani/wolf.glb';
-		this.game.assets.getAsset(
-			uri,
-			(asset) => {
-				if (this.group) {
-					//console.log(asset);
-					this.animation = new AnimationHelper(SkeletonUtils.clone(asset.scene), asset.animations);
-					this.switchAnimation(this.model.state.get());
-					this.animation.mesh.traverse((mesh) => {
-						if (mesh.material && mesh.geometry) {
-							mesh.material.dispose();
-							mesh.material = this.skinMaterial;
-							mesh.castShadow = true;
-							mesh.receiveShadow = false;
-						}
-					});
-					this.group.add(this.animation.mesh);
-					this.model.position.makeDirty();
-
-					this.game.assets.getAsset(
-						'glb/hair.glb',
-						(asset) => {
-							if (this.animation) {
-								const hair = asset.clone();
-								const head = this.animation.mesh.getObjectByName('mixamorigHead');
-								if (head) {
-									head.add(hair);
-									this.item = hair;
-								}
-								this.model.itemScale.makeDirty();
-							}
-						}
-					);
-				}
-			}
-		);
-	}
 
 }

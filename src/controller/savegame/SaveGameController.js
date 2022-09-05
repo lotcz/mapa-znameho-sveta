@@ -1,10 +1,10 @@
 import ControllerNode from "../basic/ControllerNode";
-import ControlsController from "../ControlsController";
+import ControlsController from "../game/ControlsController";
 import MapController from "./map/MapController";
 import {GAME_MODE_BATTLE, GAME_MODE_MAP} from "../../model/savegame/SaveGameModel";
 import BattleController from "./battle/BattleController";
 import * as localForage from "localforage";
-import EditorController from "../EditorController";
+import EditorController from "../editor/EditorController";
 import ConversationController from "./conversation/ConversationController";
 import PartyController from "./party/PartyController";
 
@@ -75,7 +75,7 @@ export default class SaveGameController extends ControllerNode {
 				this.mainController = this.addChild(new MapController(this.game, this.model));
 				break;
 			case GAME_MODE_BATTLE:
-				this.mainController = this.addChild(new BattleController(this.game, this.model.battle));
+				this.mainController = this.addChild(new BattleController(this.game, this.model.battle.get()));
 				break;
 		}
 	}

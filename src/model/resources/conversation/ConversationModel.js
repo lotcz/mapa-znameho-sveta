@@ -2,7 +2,7 @@ import DirtyValue from "../../basic/DirtyValue";
 import ConversationEntryModel from "./ConversationEntryModel";
 import ModelNodeCollection from "../../basic/ModelNodeCollection";
 import IdentifiedModelNode from "../../basic/IdentifiedModelNode";
-import CharacterModel from "../../characters/CharacterModel";
+import CharacterModel from "../characters/CharacterModel";
 import NullableNode from "../../basic/NullableNode";
 import IntValue from "../../basic/IntValue";
 

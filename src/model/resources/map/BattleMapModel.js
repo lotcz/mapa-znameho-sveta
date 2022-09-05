@@ -1,9 +1,14 @@
-import ModelNode from "../basic/ModelNode";
-import DirtyValue from "../basic/DirtyValue";
-import Vector3 from "../basic/Vector3";
-import Vector2 from "../basic/Vector2";
+import DirtyValue from "../../basic/DirtyValue";
+import Vector2 from "../../basic/Vector2";
+import IdentifiedModelNode from "../../basic/IdentifiedModelNode";
+import IntValue from "../../basic/IntValue";
 
-export default class BattleMapModel extends ModelNode {
+export default class BattleMapModel extends IdentifiedModelNode {
+
+	/**
+	 * @type DirtyValue
+	 */
+	name;
 
 	/**
 	 * @type DirtyValue
@@ -12,16 +17,17 @@ export default class BattleMapModel extends ModelNode {
 	backgroundImage;
 
 	/**
-	 * @type DirtyValue
+	 * @type IntValue
 	 * size of one battle tile in pixels, as it would be in background image when scale is 1 and not in isometric view
 	 */
 	tileSize;
 
-	constructor() {
-		super();
+	constructor(id) {
+		super(id);
 
-		this.backgroundImage = this.addProperty('backgroundImage', new DirtyValue('img/Adelan.jpg'));
-		this.tileSize = this.addProperty('tileSize', new DirtyValue(70/*62.77*/));
+		this.name = this.addProperty('name', new DirtyValue(`Battle Map ${id}`));
+		this.backgroundImage = this.addProperty('backgroundImage', new DirtyValue('img/camp.jpg'));
+		this.tileSize = this.addProperty('tileSize', new IntValue(70/*62.77*/));
 
 	}
 

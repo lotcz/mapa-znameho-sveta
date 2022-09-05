@@ -3,7 +3,7 @@ import DirtyValue from "../basic/DirtyValue";
 import Vector2 from "../basic/Vector2";
 import BattleModel from "./battle/BattleModel";
 import ModelNodeTable from "../basic/ModelNodeTable";
-import CharacterModel from "../characters/CharacterModel";
+import CharacterModel from "../resources/characters/CharacterModel";
 import NullableNode from "../basic/NullableNode";
 import PartyModel from "./party/PartyModel";
 import IntValue from "../basic/IntValue";
@@ -92,7 +92,7 @@ export default class SaveGameModel extends ModelNode {
 	currentLocation;
 
 	/**
-	 * @type BattleModel
+	 * @type NullableNode
 	 */
 	battle;
 
@@ -136,7 +136,7 @@ export default class SaveGameModel extends ModelNode {
 		this.currentLocationId = this.addProperty('currentLocationId', new IntValue());
 		this.currentLocation = this.addProperty('currentLocation', new NullableNode(null, false));
 
-		this.battle = this.addProperty('battle', new BattleModel());
+		this.battle = this.addProperty('battle', new NullableNode());
 
 		this.conversation = this.addProperty('conversation', new NullableNode());
 	}

@@ -91,10 +91,10 @@ export default class NodeFormRenderer extends DomRenderer {
 		}
 
 		if (typeof value === 'object' && value.x !== undefined && value.y !== undefined) {
-			this.renderInput(container, name, value.x);
-			this.renderInput(container, name, value.y);
+			this.renderInput(container, `${name}[]`, value.x);
+			this.renderInput(container, `${name}[]`, value.y);
 			if (value.z !== undefined) {
-				this.renderInput(container, name, value.z);
+				this.renderInput(container, `${name}[]`, value.z);
 			}
 			return;
 		}

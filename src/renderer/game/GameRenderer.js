@@ -1,8 +1,8 @@
-import DomRenderer from "./basic/DomRenderer";
-import Pixies from "../class/basic/Pixies";
-import EditorRenderer from "./editor/EditorRenderer";
-import NullableNodeRenderer from "./basic/NullableNodeRenderer";
-import SaveGameRenderer from "./savegame/SaveGameRenderer";
+import DomRenderer from "../basic/DomRenderer";
+import Pixies from "../../class/basic/Pixies";
+import EditorRenderer from "../editor/EditorRenderer";
+import NullableNodeRenderer from "../basic/NullableNodeRenderer";
+import SaveGameRenderer from "../savegame/SaveGameRenderer";
 
 export default class GameRenderer extends DomRenderer {
 

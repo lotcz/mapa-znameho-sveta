@@ -69,7 +69,7 @@ export default class SaveGameRenderer extends DomRenderer {
 				this.mainRenderer = new MapRenderer(this.game, this.model, this.mainLayer);
 				break;
 			case GAME_MODE_BATTLE:
-				this.mainRenderer = new BattleRenderer(this.game, this.model.battle, this.mainLayer);
+				this.mainRenderer = new BattleRenderer(this.game, this.model.battle.get(), this.mainLayer);
 				break;
 			default:
 				console.warn(`Unknown game mode ${mode}`);

@@ -20,9 +20,9 @@ export default class MaterialLoader extends AssetLoader {
 			color: definition.color.get()
 		};
 
-		if (definition.texture.isSet()) {
+		if (definition.useTexture.get()) {
 			this.assets.getAsset(
-				definition.texture.get().uri,
+				definition.uri.get(),
 				(img) => {
 					const texture = new THREE.Texture();
 					texture.image = img;

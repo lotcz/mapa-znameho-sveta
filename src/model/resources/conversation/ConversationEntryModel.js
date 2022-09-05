@@ -2,7 +2,7 @@ import ModelNode from "../../basic/ModelNode";
 import DirtyValue from "../../basic/DirtyValue";
 import ModelNodeCollection from "../../basic/ModelNodeCollection";
 import ConversationLineModel from "./ConversationLineModel";
-import CharacterModel from "../../characters/CharacterModel";
+import CharacterModel from "../characters/CharacterModel";
 import NullableNode from "../../basic/NullableNode";
 
 export default class ConversationEntryModel extends ModelNode {

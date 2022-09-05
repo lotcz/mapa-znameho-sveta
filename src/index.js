@@ -4,9 +4,9 @@ import "./style/party.css";
 import "./style/conversation.css";
 import "./style/map.css";
 
-import GameModel from "./model/GameModel";
-import GameController from "./controller/GameController";
-import GameRenderer from "./renderer/GameRenderer";
+import GameModel from "./model/game/GameModel";
+import GameController from "./controller/game/GameController";
+import GameRenderer from "./renderer/game/GameRenderer";
 
 const MAX_DELTA = 500;
 const DEBUG_MASTER = true;

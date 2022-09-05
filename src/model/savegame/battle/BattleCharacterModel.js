@@ -1,9 +1,9 @@
 import DirtyValue from "../../basic/DirtyValue";
 import ModelNode from "../../basic/ModelNode";
 import Vector2 from "../../basic/Vector2";
-import Vector3 from "../../basic/Vector3";
-import {SEX_FEMALE} from "../../CharacterPreviewModel";
 import Rotation from "../../basic/Rotation";
+import IntValue from "../../basic/IntValue";
+import NullableNode from "../../basic/NullableNode";
 
 export const CHARACTER_STATE_IDLE = 'Idle';
 export const CHARACTER_STATE_RUN = 'Run';
@@ -27,55 +27,23 @@ export default class BattleCharacterModel extends ModelNode {
 	state;
 
 	/**
-	 * @type DirtyValue
+	 * @type IntValue
 	 */
-	sex;
+	characterId;
 
 	/**
-	 * @type DirtyValue
+	 * @type NullableNode<CharacterModel>
 	 */
-	skinColor;
-
-	/**
-	 * @type Vector3
-	 */
-	scale;
-
-	/**
-	 * @type DirtyValue
-	 */
-	item;
-
-	/**
-	 * @type Vector3
-	 */
-	itemPosition;
-
-	/**
-	 * @type Vector3
-	 */
-	itemScale;
-
-	/**
-	 * @type Vector3
-	 */
-	itemRotation;
+	character;
 
 	constructor() {
 		super();
 
 		this.position = this.addProperty('position', new Vector2(0, 0));
 		this.rotation = this.addProperty('rotation', new Rotation(0));
-		this.state = this.addProperty('state', new DirtyValue('Idle'));
-
-		this.sex = this.addProperty('sex', new DirtyValue(SEX_FEMALE));
-		this.skinColor = this.addProperty('skinColor', new DirtyValue('#083e16'));
-		this.scale = this.addProperty('scale', new Vector3(1, 1, 1));
-
-		this.item = this.addProperty('item', new DirtyValue('glb/hair.glb'));
-		this.itemPosition = this.addProperty('itemPosition', new Vector3(0, 5, -4));
-		this.itemScale = this.addProperty('itemScale', new Vector3(100,100,100));
-		this.itemRotation = this.addProperty('itemRotation', new Vector3(-0.279, 0.698, 0.069));
+		this.state = this.addProperty('state', new DirtyValue(CHARACTER_STATE_IDLE));
+		this.characterId = this.addProperty('characterId', new IntValue());
+		this.character = this.addProperty('character', new NullableNode(null, false));
 	}
 
 }

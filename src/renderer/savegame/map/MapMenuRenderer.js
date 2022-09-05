@@ -20,22 +20,23 @@ export default class MapMenuRenderer extends DomRenderer {
 	activateInternal() {
 		this.container = this.addElement('div', 'map-menu');
 		this.inner = Pixies.createElement(this.container,'div', 'inner');
-		this.time = Pixies.createElement(this.inner,'div', 'time');
 		this.art = Pixies.createElement(this.inner,'div', 'art');
 		this.artLower = Pixies.createElement(this.art, 'div');
 		this.artUpper = Pixies.createElement(this.art,'div');
 		this.artLowerImg = null;
 		this.artUpperImg = null;
 
+		this.time = Pixies.createElement(this.inner,'div', 'time');
 
-		const buttons = Pixies.createElement(this.inner, 'div', 'buttons');
-		const start = Pixies.createElement(buttons, 'button', null, 'Start/Stop', () => {
+		this.buttons = Pixies.createElement(this.inner, 'div', 'buttons');
+		const start = Pixies.createElement(this.buttons, 'button', null, 'Start/Stop', () => {
 			this.game.saveGame.get().partyTraveling.set(!this.game.saveGame.get().partyTraveling.get());
 		});
-		const revert = Pixies.createElement(buttons, 'button', null, 'Revert', () => {
+		const revert = Pixies.createElement(this.buttons, 'button', null, 'Revert', () => {
 			this.game.saveGame.get().forward.set(!this.game.saveGame.get().forward.get());
 		});
 		this.updateArt();
+		this.updateLocation();
 	}
 
 	deactivateInternal() {
@@ -47,6 +48,12 @@ export default class MapMenuRenderer extends DomRenderer {
 			this.time.innerText = Pixies.round(this.model.time.get(), 2);
 			this.updateArt();
 		}
+	}
+
+	updateLocation() {
+		const battle = Pixies.createElement(this.buttons, 'button', 'special', 'To Battle', () => {
+			this.game.saveGame.get().triggerEvent('to-battle');
+		});
 	}
 
 	clearArt() {

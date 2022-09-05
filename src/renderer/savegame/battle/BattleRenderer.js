@@ -35,6 +35,9 @@ export default class BattleRenderer extends DomRenderer {
 		this.charactersRenderer = this.addChild(new CollectionRenderer(this.game, this.model.characters, (m) => new BattleCharacterRenderer(this.game, m, this.scene)));
 
 		this.onViewBoxChangeHandler = () => this.onViewBoxSizeChanged();
+
+		const battleMapId = this.model.battleMapId.get();
+		this.model.battleMap = this.game.resources.map.battleMaps.getById(battleMapId);
 	}
 
 	activateInternal() {
@@ -104,7 +107,10 @@ export default class BattleRenderer extends DomRenderer {
 			this.model.battleMap.backgroundImage.get(),
 			(img) => {
 				this.bgImage = img;
+				this.updateCameraPosition();
+				this.updateCameraZoom();
 				this.renderBgImage();
+				this.renderInternal();
 			}
 		);
 
@@ -200,6 +206,15 @@ export default class BattleRenderer extends DomRenderer {
 	}
 
 	renderBgImage() {
+		//debugger;
+		if (!this.context2d) {
+			console.log('no context for bg rendering');
+			return;
+		}
+		if (!this.bgImage) {
+			console.log('no image loaded for bg rendering');
+			return;
+		}
 		this.context2d.clearRect(0, 0, this.context2d.canvas.width, this.context2d.canvas.height);
 		this.context2d.drawImage(
 			this.bgImage,

@@ -1,13 +1,13 @@
-import ControllerNode from "./basic/ControllerNode";
+import ControllerNode from "../basic/ControllerNode";
 import ControlsController from "./ControlsController";
-import MapController from "./savegame/map/MapController";
-import {GAME_MODE_BATTLE, GAME_MODE_MAP} from "../model/savegame/SaveGameModel";
-import BattleController from "./savegame/battle/BattleController";
+import MapController from "../savegame/map/MapController";
+import {GAME_MODE_BATTLE, GAME_MODE_MAP} from "../../model/savegame/SaveGameModel";
+import BattleController from "../savegame/battle/BattleController";
 import * as localForage from "localforage";
-import EditorController from "./EditorController";
-import ConversationController from "./savegame/conversation/ConversationController";
-import SaveGameController from "./savegame/SaveGameController";
-import NullableNodeController from "./basic/NullableNodeController";
+import EditorController from "../editor/EditorController";
+import ConversationController from "../savegame/conversation/ConversationController";
+import SaveGameController from "../savegame/SaveGameController";
+import NullableNodeController from "../basic/NullableNodeController";
 
 export default class GameController extends ControllerNode {
 
@@ -105,7 +105,6 @@ export default class GameController extends ControllerNode {
 
 	onResize() {
 		this.model.viewBoxSize.set(window.innerWidth, window.innerHeight);
-		this.model.characterPreview.size.set(this.model.viewBoxSize);
 	}
 
 	onDebugKey() {

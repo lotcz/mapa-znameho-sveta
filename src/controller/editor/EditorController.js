@@ -1,4 +1,4 @@
-import ControllerNode from "./basic/ControllerNode";
+import ControllerNode from "../basic/ControllerNode";
 
 export default class EditorController extends ControllerNode {
 
@@ -76,10 +76,18 @@ export default class EditorController extends ControllerNode {
 	saveNode(param) {
 		const node = param.node;
 		const data = param.data;
+
 		node.properties.forEach((name, value) => {
 			if (data.has(name)) {
 				if (value && value.value !== undefined && typeof value.set === 'function') {
 					value.set(data.get(name));
+				} else {
+					console.log(data.get(name), name);
+				}
+			} else if (data.has(`${name}[]`)) {
+				if (typeof value === 'object' && (value.constructor.name === 'Vector2' || value.constructor.name === 'Vector3')) {
+					const arr = data.getAll(`${name}[]`);
+					value.setFromArray(arr);
 				}
 			} else if (value && typeof value.value === 'boolean' && typeof value.set === 'function') {
 				value.set(false);

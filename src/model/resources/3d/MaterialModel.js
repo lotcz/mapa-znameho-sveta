@@ -1,8 +1,8 @@
-import DirtyValue from "../basic/DirtyValue";
-import IdentifiedModelNode from "../basic/IdentifiedModelNode";
+import DirtyValue from "../../basic/DirtyValue";
+import IdentifiedModelNode from "../../basic/IdentifiedModelNode";
 import * as THREE from "three";
-import BoolValue from "../basic/BoolValue";
-import IntValue from "../basic/IntValue";
+import BoolValue from "../../basic/BoolValue";
+import IntValue from "../../basic/IntValue";
 
 export default class MaterialModel extends IdentifiedModelNode {
 

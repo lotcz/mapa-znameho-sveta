@@ -3,6 +3,7 @@ import IdentifiedModelNode from "../../basic/IdentifiedModelNode";
 import Vector2 from "../../basic/Vector2";
 import ModelNodeCollection from "../../basic/ModelNodeCollection";
 import ConnectionModel from "./ConnectionModel";
+import IntValue from "../../basic/IntValue";
 
 export default class LocationModel extends IdentifiedModelNode {
 
@@ -17,6 +18,11 @@ export default class LocationModel extends IdentifiedModelNode {
 	coordinates;
 
 	/**
+	 * @type IntValue
+	 */
+	battleMapId;
+
+	/**
 	 * @type ModelNodeCollection<ConnectionModel>
 	 */
 	connections;
@@ -26,6 +32,8 @@ export default class LocationModel extends IdentifiedModelNode {
 
 		this.name = this.addProperty('name', new DirtyValue(`Location ${id}`));
 		this.coordinates = this.addProperty('coordinates', new Vector2());
+		this.battleMapId = this.addProperty('battleMapId', new IntValue(0));
+
 		this.connections = this.addProperty('connections', new ModelNodeCollection(null, false));
 	}
 

@@ -1,10 +1,6 @@
 import ControllerNode from "../../basic/ControllerNode";
-import DirtyValue from "../../../model/basic/DirtyValue";
 import CollectionController from "../../basic/CollectionController";
 import BattleCharacterController from "./BattleCharacterController";
-import Pixies from "../../../class/basic/Pixies";
-
-const TRAVEL_SPEED = 1; // tiles per second
 
 export default class BattleController extends ControllerNode {
 
@@ -24,13 +20,6 @@ export default class BattleController extends ControllerNode {
 			new CollectionController(this.game, this.model.characters, (model) => new BattleCharacterController(game, model))
 		);
 
-		/*
-		this.helperMouseOverHandler = (point) => this.focusedHelper.set(point);
-		this.helperMouseOutHandler = (point) => {
-			if (this.focusedHelper.equalsTo(point))
-				this.focusedHelper.set(null);
-		};
-	*/
 		this.mouseMoveHandler = () => this.onMouseMove();
 		this.zoomHandler = (param) => this.onZoom(param);
 		this.clickHandler = (param) => this.onClick(param);
@@ -39,10 +28,7 @@ export default class BattleController extends ControllerNode {
 
 	activateInternal() {
 		this.model.coordinates.makeDirty();
-		/*
-		this.game.addEventListener('helperMouseOver', this.helperMouseOverHandler);
-		this.game.addEventListener('helperMouseOut', this.helperMouseOutHandler);
-*/
+
 		this.game.controls.mouseCoordinates.addOnChangeListener(this.mouseMoveHandler);
 		this.game.controls.addEventListener('zoom', this.zoomHandler);
 		this.game.controls.addOnLeftClickListener(this.clickHandler);
@@ -51,10 +37,6 @@ export default class BattleController extends ControllerNode {
 	}
 
 	deactivateInternal() {
-		/*
-		this.game.removeEventListener('helperMouseOver', this.helperMouseOverHandler);
-		this.game.removeEventListener('helperMouseOut', this.helperMouseOutHandler);
-*/
 		this.game.controls.mouseCoordinates.removeOnChangeListener(this.mouseMoveHandler);
 		this.game.controls.removeEventListener('zoom', this.zoomHandler);
 
@@ -72,16 +54,6 @@ export default class BattleController extends ControllerNode {
 	}
 
 	onMouseMove() {
-		/*
-		if (this.game.controls.mouseDownLeft.get()) {
-			if (this.dragging) {
-				const mapCoords = this.model.coordinates.add(this.game.controls.mouseCoordinates.multiply(this.model.zoom.get()));
-				this.dragging.set(mapCoords);
-			} else if (this.focusedHelper.isSet()) {
-				this.dragging = this.focusedHelper.get();
-			}
-		}
-*/
 		if (this.game.controls.mouseDownRight.get()) {
 			if (this.scrolling) {
 				const offset = this.game.controls.mouseCoordinates.subtract(this.scrolling);

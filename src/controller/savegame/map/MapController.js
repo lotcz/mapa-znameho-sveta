@@ -6,6 +6,8 @@ import LocationController from "./LocationController";
 import NullableNodeController from "../../basic/NullableNodeController";
 import CurrentLocationController from "./CurrentLocationController";
 import CurrentPathController from "./CurrentPathController";
+import BattleModel from "../../../model/savegame/battle/BattleModel";
+import {GAME_MODE_BATTLE} from "../../../model/savegame/SaveGameModel";
 
 export default class MapController extends ControllerNode {
 
@@ -64,6 +66,14 @@ export default class MapController extends ControllerNode {
 				this.runOnUpdate(() => this.model.currentLocation.set(this.map.locations.getById(this.model.currentLocationId.get())));
 			},
 			true
+		);
+
+		this.addAutoEvent(
+			this.model,
+			'to-battle',
+			() => {
+				this.runOnUpdate(() => this.toBattle());
+			}
 		);
 
 		this.helperMouseOverHandler = (point) => this.focusedHelper.set(point);
@@ -143,4 +153,12 @@ export default class MapController extends ControllerNode {
 		this.model.zoom.set(this.model.zoom.get() + (param * 0.1));
 	}
 
+	toBattle() {
+		const location = this.model.currentLocation.get();
+		const battleMapId = location.battleMapId.get();
+		const battle = new BattleModel();
+		battle.battleMapId.set(battleMapId);
+		this.model.battle.set(battle);
+		this.model.mode.set(GAME_MODE_BATTLE);
+	}
 }
