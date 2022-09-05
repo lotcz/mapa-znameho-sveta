@@ -7,14 +7,14 @@ import ConnectionModel from "./ConnectionModel";
 export default class LocationModel extends IdentifiedModelNode {
 
 	/**
-	 * @type Vector2
-	 */
-	coordinates;
-
-	/**
 	 * @type DirtyValue
 	 */
 	name;
+
+	/**
+	 * @type Vector2
+	 */
+	coordinates;
 
 	/**
 	 * @type ModelNodeCollection<ConnectionModel>
@@ -24,8 +24,8 @@ export default class LocationModel extends IdentifiedModelNode {
 	constructor(id) {
 		super(id);
 
+		this.name = this.addProperty('name', new DirtyValue(`Location ${id}`));
 		this.coordinates = this.addProperty('coordinates', new Vector2());
-		this.name = this.addProperty('name', new DirtyValue(''));
 		this.connections = this.addProperty('connections', new ModelNodeCollection(null, false));
 	}
 

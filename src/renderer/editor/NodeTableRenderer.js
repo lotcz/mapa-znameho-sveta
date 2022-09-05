@@ -51,8 +51,8 @@ export default class NodeTableRenderer extends CollectionRenderer {
 			}
 		});
 
-		this.table = Pixies.createElement(this.container, 'table');
-		this.rendererFactory = (item) => new TableRowRenderer(game, item, this.table, this.name);
+		this.scrollable = Pixies.createElement(this.container, 'div', 'scroll');
+		this.table = Pixies.createElement(this.scrollable, 'table');
 
 		let dummy = null;
 
@@ -63,12 +63,16 @@ export default class NodeTableRenderer extends CollectionRenderer {
 		}
 
 		if (dummy) {
-			const header = Pixies.createElement(this.table, 'tr');
+			const thead = Pixies.createElement(this.table, 'thead');
+			const header = Pixies.createElement(thead, 'tr');
 			dummy.properties.forEach((name, value) => {
 				const cell = Pixies.createElement(header, 'th');
 				cell.innerText = name;
 			});
 		}
+
+		this.tbody = Pixies.createElement(this.table, 'tbody');
+		this.rendererFactory = (item) => new TableRowRenderer(game, item, this.tbody, this.name);
 
 		super.activateInternal();
 	}

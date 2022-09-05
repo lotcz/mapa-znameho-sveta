@@ -43,7 +43,7 @@ export default class EditorRenderer extends DomRenderer {
 		this.table = Pixies.createElement(this.dock, 'div', 'active-table');
 		this.form = Pixies.createElement(this.dock, 'div', 'active-form');
 
-		const events = ['click', 'mousemove', 'mousedown', 'mouseup'];
+		const events = ['click', 'mousemove', 'mousedown', 'mouseup', 'wheel'];
 		const elements = [this.nav, this.tables, this.table, this.form];
 		for (const eli in elements) {
 			for (const evi in events) {
@@ -86,6 +86,14 @@ export default class EditorRenderer extends DomRenderer {
 			null,
 			'Save',
 			() => this.game.saveGame.triggerEvent('save')
+		);
+
+		const downloadButton = Pixies.createElement(
+			buttonsMiddle,
+			'button',
+			'special',
+			'Download Resources',
+			() => this.model.triggerEvent('download-resources')
 		);
 
 		const buttonsRight = Pixies.createElement(buttons, 'div');

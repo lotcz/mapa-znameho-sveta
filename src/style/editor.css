@@ -94,8 +94,13 @@
 	border-radius: 5px;
 	margin: 10px;
 	padding: 10px;
+}
+
+.editor .table .scroll,
+.editor form .scroll {
+	display: block;
+	max-height: 300px;
 	overflow-y: auto;
-	max-height: 400px;
 }
 
 .editor table td {

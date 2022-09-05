@@ -42,6 +42,12 @@ export default class EditorController extends ControllerNode {
 			(param) => this.runOnUpdate(() => this.deleteNode(param))
 		);
 
+		this.addAutoEvent(
+			this.model,
+			'download-resources',
+			(param) => this.runOnUpdate(() => this.downloadResources(param))
+		);
+
 		//this.onResourcesChanged = () => this.model.makeDirty();
 
 		//this.addAutoEvent(this.model, 'row-selected', (node) => this.runOnUpdate(() => this.nodeSelected(node)));
@@ -90,6 +96,17 @@ export default class EditorController extends ControllerNode {
 		}
 		const result = table.remove(node);
 		console.log('removed node', result);
+	}
+
+	downloadResources() {
+		const element = document.createElement('a');
+		const str = JSON.stringify(this.game.resources.getState());
+		element.setAttribute('href', 'data:text/json;charset=utf-8,' + encodeURIComponent(str));
+		element.setAttribute('download', 'resources.json');
+		element.style.display = 'none';
+		document.body.appendChild(element);
+		element.click();
+		document.body.removeChild(element);
 	}
 
 }

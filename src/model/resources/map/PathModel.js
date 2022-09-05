@@ -6,8 +6,14 @@ import IntValue from "../../basic/IntValue";
 import Vector2 from "../../basic/Vector2";
 import BoolValue from "../../basic/BoolValue";
 import FloatValue from "../../basic/FloatValue";
+import DirtyValue from "../../basic/DirtyValue";
 
 export default class PathModel extends IdentifiedModelNode {
+
+	/**
+	 * @type DirtyValue
+	 */
+	name;
 
 	/**
 	 * @type BoolValue
@@ -67,6 +73,7 @@ export default class PathModel extends IdentifiedModelNode {
 	constructor(id) {
 		super(id);
 
+		this.name = this.addProperty('name', new DirtyValue(`Path ${id}`));
 		this.isVisible = this.addProperty('isVisible', new BoolValue(true));
 
 		this.waypoints = this.addProperty('waypoints', new ModelNodeCollection(() => new WaypointModel()));

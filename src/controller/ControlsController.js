@@ -59,7 +59,6 @@ export default class ControlsController extends ControllerNode {
 
 	}
 
-
 	onMouseMove(e) {
 		this.model.mouseCoordinates.set(e.offsetX, e.offsetY);
 		this.model.isMouseOver.set(true);
@@ -76,7 +75,9 @@ export default class ControlsController extends ControllerNode {
 	}
 
 	onContextMenu(e) {
-		e.preventDefault();
+		if (!(e.ctrlKey && this.game.isInDebugMode.get())) {
+			e.preventDefault();
+		}
 		e.stopPropagation();
 		return false;
 	}

@@ -67,7 +67,7 @@ export default class NodeFormRenderer extends DomRenderer {
 			});
 		}
 
-		this.fields = Pixies.createElement(this.container, 'div', 'fields');
+		this.fields = Pixies.createElement(this.container, 'div', 'fields scroll');
 		this.renderFields();
 	}
 

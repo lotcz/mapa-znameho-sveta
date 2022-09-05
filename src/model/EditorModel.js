@@ -26,6 +26,7 @@ export default class EditorModel extends ModelNode {
 		this.activeForm = this.addProperty('activeForm', new NullableNode());
 
 		this.resourcesOptions = {
+			materials: 'Materials',
 			races: 'Races',
 			characterTemplates: 'Character Templates',
 			conversations: 'Conversations'
