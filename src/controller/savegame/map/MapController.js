@@ -8,6 +8,9 @@ import CurrentLocationController from "./CurrentLocationController";
 import CurrentPathController from "./CurrentPathController";
 import BattleModel from "../../../model/savegame/battle/BattleModel";
 import {GAME_MODE_BATTLE} from "../../../model/savegame/SaveGameModel";
+import BattleCharacterModel from "../../../model/savegame/battle/BattleCharacterModel";
+import Vector2 from "../../../model/basic/Vector2";
+import Pixies from "../../../class/basic/Pixies";
 
 export default class MapController extends ControllerNode {
 
@@ -159,7 +162,20 @@ export default class MapController extends ControllerNode {
 		const battle = new BattleModel();
 		battle.battleMapId.set(battleMapId);
 
+		const map = this.game.resources.map.battleMaps.getById(battleMapId);
+		battle.battleMap.set(map);
+
+		const slots = this.game.saveGame.get().party.slots;
+		slots.forEach((slot) => {
+			const character = new BattleCharacterModel();
+			character.characterId.set(slot.characterId.get());
+			const position = map.start.add(new Vector2(Pixies.random(-5, 5), Pixies.random(-5, 5))).round();
+			character.position.set(position);
+			battle.characters.add(character);
+		});
+
 		this.model.battle.set(battle);
 		this.model.mode.set(GAME_MODE_BATTLE);
 	}
+
 }

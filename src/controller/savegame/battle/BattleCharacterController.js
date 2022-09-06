@@ -3,6 +3,7 @@ import AnimatedVector2 from "../../../class/animating/AnimatedVector2";
 import {CHARACTER_STATE_IDLE, CHARACTER_STATE_RUN} from "../../../model/savegame/battle/BattleCharacterModel";
 import AnimatedRotation from "../../../class/animating/AnimatedRotation";
 import PathFinder from "../../../class/PathFinder";
+import Pixies from "../../../class/basic/Pixies";
 
 const TRAVEL_SPEED = 3.25 / 1000; // position units per milisecond
 const ROTATION_SPEED = (Math.PI * 4) / 1000; // radians per milisecond
@@ -78,10 +79,20 @@ export default class BattleCharacterController extends ControllerNode {
 		return (this.positionAnimation !== null);
 	}
 
+	getBlocks() {
+		return this.game.saveGame.get().battle.get().characters.filter((ch) => ch !== this.model).map((ch) => ch.position);
+	}
+
 	goTo(position) {
-		const blocks = this.game.saveGame.get().battle.get().characters.filter((ch) => ch !== this.model).map((ch) => ch.position);
-		if (PathFinder.isTileBlocked(this.model.position.round(), blocks)) {
+
+		const blocks = this.getBlocks();
+
+		if (PathFinder.isTileBlocked(position, blocks)) {
 			console.log('Blocked');
+			return;
+		}
+
+		if (!this.checkBlocks(blocks)) {
 			return;
 		}
 
@@ -117,7 +128,31 @@ export default class BattleCharacterController extends ControllerNode {
 			return;
 		}
 
-		this.model.state.set(CHARACTER_STATE_IDLE);
+		const blocks = this.getBlocks();
+		if (this.checkBlocks(blocks)) {
+			this.model.state.set(CHARACTER_STATE_IDLE);
+		}
+	}
+
+	checkBlocks(blocks) {
+		const blocked = PathFinder.isTileBlocked(this.model.position.round(), blocks);
+		if (blocked) {
+			console.log('Stepping aside');
+			this.stepAside(blocks);
+		}
+		return !blocked;
+	}
+
+	stepAside(blocks) {
+		const position = this.model.position.round();
+		const candidates = PathFinder.positionNeighbors(position);
+		const free = candidates.filter((c) => !PathFinder.isTileBlocked(c, blocks));
+		if (free.length > 0) {
+			const winner = Pixies.randomElement(free);
+			this.startMovement(winner);
+		} else {
+			console.log('nowhere to step');
+		}
 	}
 
 }

@@ -207,4 +207,17 @@ export default class PathFinder {
 		return sum;
 	}
 
+	static positionNeighbors(position) {
+		const neighbors = [];
+		for (let x = position.x - 1; x <= position.x + 1; x++) {
+			for (let y = position.y - 1; y <= position.y + 1; y++) {
+				const n = new Vector2(x, y);
+				if (!position.equalsTo(n)) {
+					neighbors.push(n);
+				}
+			}
+		}
+		return neighbors;
+	}
+
 }

@@ -30,7 +30,7 @@ export default class BattleRenderer extends DomRenderer {
 		this.animation = null;
 		this.item = null;
 
-		this.scene = new THREE.Scene();
+		this.scene = null;
 
 		this.charactersRenderer = this.addChild(new CollectionRenderer(this.game, this.model.characters, (m) => new BattleCharacterRenderer(this.game, m, this.scene)));
 
@@ -40,6 +40,13 @@ export default class BattleRenderer extends DomRenderer {
 
 	activateInternal() {
 		this.container = this.addElement('div', ['battle', 'container-host']);
+		this.container.addEventListener('mouseover', (e) => {
+			this.model.isMouseOver.set(true);
+		});
+		this.container.addEventListener('mouseout', (e) => {
+			this.model.isMouseOver.set(false);
+		});
+
 		this.bgCanvas = Pixies.createElement(this.container, 'canvas');
 		this.context2d = this.bgCanvas.getContext('2d');
 
@@ -49,6 +56,7 @@ export default class BattleRenderer extends DomRenderer {
 		this.renderer.shadowMap.enabled = true;
 		this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
+		this.scene = new THREE.Scene();
 		this.camera = new THREE.OrthographicCamera(-10,10, 10, -10);
 
 		this.ambientLight = new THREE.AmbientLight(0xe0e0e0);
@@ -104,7 +112,7 @@ export default class BattleRenderer extends DomRenderer {
 		this.currentTile = new Vector2();
 
 		this.game.assets.getAsset(
-			this.model.battleMap.backgroundImage.get(),
+			this.model.battleMap.get().backgroundImage.get(),
 			(img) => {
 				this.bgImage = img;
 				this.updateCameraPosition();
@@ -169,12 +177,15 @@ export default class BattleRenderer extends DomRenderer {
 		this.floor.material.dispose();
 		this.floor.geometry.dispose();
 		this.floor = null;
+		this.scene.dispose();
+		this.scene = null;
 		this.renderer.dispose();
 		this.renderer = null;
 		this.composer = null;
 		this.camera = null;
 		this.bgImage = null;
 		Pixies.destroyElement(this.bgCanvas);
+		this.bgCanvas = null;
 		this.canvas = null;
 		this.context2d = null;
 		Pixies.destroyElement(this.container);
@@ -182,6 +193,7 @@ export default class BattleRenderer extends DomRenderer {
 	}
 
 	renderInternal() {
+
 		if (this.model.coordinates.isDirty || this.model.zoom.isDirty) {
 			this.renderBgImage();
 		}
@@ -194,12 +206,14 @@ export default class BattleRenderer extends DomRenderer {
 			this.updateCameraZoom();
 		}
 
-		const corner = this.model.coordinates.subtract(this.game.viewBoxSize.multiply(0.5 / this.model.zoom.get()));
-		const coords = corner.add(this.game.controls.mouseCoordinates.multiply(1/this.model.zoom.get()));
-		const tile = this.model.battleMap.screenCoordsToTile(coords);
-		this.box.position.x = tile.x;
-		this.box.position.z = tile.y;
-		this.currentTile.set(tile);
+		if (this.model.isMouseOver.get()) {
+			const corner = this.model.coordinates.subtract(this.game.viewBoxSize.multiply(0.5 / this.model.zoom.get()));
+			const coords = corner.add(this.game.controls.mouseCoordinates.multiply(1 / this.model.zoom.get()));
+			const tile = this.model.battleMap.get().screenCoordsToTile(coords);
+			this.box.position.x = tile.x;
+			this.box.position.z = tile.y;
+			this.currentTile.set(tile);
+		}
 
 		this.composer.render();
 
@@ -252,7 +266,7 @@ export default class BattleRenderer extends DomRenderer {
 	}
 
 	updateCameraSize() {
-		const pxPerUnit =  this.model.battleMap.tileSize.get();
+		const pxPerUnit =  this.model.battleMap.get().tileSize.get();
 		const horizontal = (this.game.viewBoxSize.x / 2) / pxPerUnit;
 		const vertical = (this.game.viewBoxSize.y / 2) / pxPerUnit;
 		this.camera.left = - horizontal;
@@ -268,7 +282,7 @@ export default class BattleRenderer extends DomRenderer {
 	}
 
 	updateCameraPosition() {
-		const xz = this.model.battleMap.screenCoordsToPosition(this.model.coordinates);
+		const xz = this.model.battleMap.get().screenCoordsToPosition(this.model.coordinates);
 		const center = new Vector3(xz.x, 0, xz.y);
 		//console.log(Math.floor(xz.x), Math.floor(xz.y));
 		const position = center.add(new Vector3(-100, 100, -100));

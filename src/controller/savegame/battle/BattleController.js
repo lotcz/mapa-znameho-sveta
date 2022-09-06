@@ -27,8 +27,14 @@ export default class BattleController extends ControllerNode {
 		this.zoomHandler = (param) => this.onZoom(param);
 		this.clickHandler = (param) => this.onClick(param);
 
-		this.initializeBattle();
-
+		this.addAutoEvent(
+			this.model.battleMapId,
+			'change',
+			() => {
+				this.model.battleMap.set(this.game.resources.map.battleMaps.getById(this.model.battleMapId.get()));
+			},
+			true
+		);
 	}
 
 	activateInternal() {
@@ -75,12 +81,15 @@ export default class BattleController extends ControllerNode {
 	}
 
 	onClick() {
-		//const xz = this.model.battleMap.screenCoordsToPosition(this.game.controls.mouseCoordinates);
+
+		if (this.model.isMouseOver.get() === false) {
+			return;
+		}
+
 		const corner = this.model.coordinates.subtract(this.game.viewBoxSize.multiply(0.5 / this.model.zoom.get()));
 		const coords = corner.add(this.game.controls.mouseCoordinates.multiply(1/this.model.zoom.get()));
-		const position = this.model.battleMap.screenCoordsToPosition(coords);
+		const position = this.model.battleMap.get().screenCoordsToPosition(coords);
 		const tile = position.round();
-		//const character = Pixies.randomElement(this.model.characters.children.items);
 
 		const occupant = this.model.characters.find((ch) => ch.position.round().equalsTo(tile));
 		if (occupant) {
@@ -91,21 +100,6 @@ export default class BattleController extends ControllerNode {
 				character.triggerEvent('go-to', tile);
 			}
 		}
-	}
-
-	initializeBattle() {
-		const battleMapId = this.model.battleMapId.get();
-		const map = this.model.battleMap = this.game.resources.map.battleMaps.getById(battleMapId);
-
-		const slots = this.game.saveGame.get().party.slots;
-		slots.forEach((slot) => {
-			const character = new BattleCharacterModel();
-			character.characterId.set(slot.characterId.get());
-			const position = map.start.add(new Vector2(Pixies.random(-5, 5), Pixies.random(-5, 5))).round();
-			console.log(position);
-			character.position.set(position);
-			this.model.characters.add(character);
-		});
 	}
 
 	switchCharacter(characterId) {
