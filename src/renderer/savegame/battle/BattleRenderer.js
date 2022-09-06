@@ -36,8 +36,6 @@ export default class BattleRenderer extends DomRenderer {
 
 		this.onViewBoxChangeHandler = () => this.onViewBoxSizeChanged();
 
-		const battleMapId = this.model.battleMapId.get();
-		this.model.battleMap = this.game.resources.map.battleMaps.getById(battleMapId);
 	}
 
 	activateInternal() {
@@ -104,7 +102,7 @@ export default class BattleRenderer extends DomRenderer {
 		this.game.viewBoxSize.addOnChangeListener(this.onViewBoxChangeHandler);
 
 		this.currentTile = new Vector2();
-		
+
 		this.game.assets.getAsset(
 			this.model.battleMap.backgroundImage.get(),
 			(img) => {

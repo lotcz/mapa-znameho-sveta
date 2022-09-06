@@ -1,6 +1,9 @@
 import ControllerNode from "../../basic/ControllerNode";
 import CollectionController from "../../basic/CollectionController";
 import BattleCharacterController from "./BattleCharacterController";
+import BattleCharacterModel from "../../../model/savegame/battle/BattleCharacterModel";
+import Pixies from "../../../class/basic/Pixies";
+import Vector2 from "../../../model/basic/Vector2";
 
 export default class BattleController extends ControllerNode {
 
@@ -23,6 +26,8 @@ export default class BattleController extends ControllerNode {
 		this.mouseMoveHandler = () => this.onMouseMove();
 		this.zoomHandler = (param) => this.onZoom(param);
 		this.clickHandler = (param) => this.onClick(param);
+
+		this.initializeBattle();
 
 	}
 
@@ -79,11 +84,44 @@ export default class BattleController extends ControllerNode {
 
 		const occupant = this.model.characters.find((ch) => ch.position.round().equalsTo(tile));
 		if (occupant) {
-			this.model.selectedCharacter.set(occupant);
+			this.switchCharacter(occupant.characterId.get());
 		} else {
-			if (this.model.selectedCharacter.isSet()) {
-				this.model.selectedCharacter.get().triggerEvent('go-to', tile);
+			const character = this.getSelectedBattleCharacter()
+			if (character) {
+				character.triggerEvent('go-to', tile);
 			}
 		}
 	}
+
+	initializeBattle() {
+		const battleMapId = this.model.battleMapId.get();
+		const map = this.model.battleMap = this.game.resources.map.battleMaps.getById(battleMapId);
+
+		const slots = this.game.saveGame.get().party.slots;
+		slots.forEach((slot) => {
+			const character = new BattleCharacterModel();
+			character.characterId.set(slot.characterId.get());
+			const position = map.start.add(new Vector2(Pixies.random(-5, 5), Pixies.random(-5, 5))).round();
+			console.log(position);
+			character.position.set(position);
+			this.model.characters.add(character);
+		});
+	}
+
+	switchCharacter(characterId) {
+		this.game.saveGame.get().party.selectedCharacterId.set(characterId);
+	}
+
+	getBattleCharacter(characterId) {
+		if (!characterId) {
+			return null;
+		}
+		return this.model.characters.find((ch) => ch.characterId.equalsTo(characterId));
+	}
+
+	getSelectedBattleCharacter() {
+		const selected = this.game.saveGame.get().party.selectedCharacterId.get();
+		return this.getBattleCharacter(selected);
+	}
+
 }

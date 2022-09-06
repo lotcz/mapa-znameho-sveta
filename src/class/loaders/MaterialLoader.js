@@ -38,12 +38,12 @@ export default class MaterialLoader extends AssetLoader {
 				}
 			);
 		} else {
-			onLoaded(this.createMaterial(definition.type.get(), params));
+			onLoaded(this.createMaterial(definition.threeType.get(), params));
 		}
 	}
 
 	createMaterial(threeType, params) {
-		return THREE[threeType](params);
+		return new THREE[threeType](params);
 	}
 
 }

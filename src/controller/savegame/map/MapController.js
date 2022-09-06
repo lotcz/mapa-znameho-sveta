@@ -158,6 +158,7 @@ export default class MapController extends ControllerNode {
 		const battleMapId = location.battleMapId.get();
 		const battle = new BattleModel();
 		battle.battleMapId.set(battleMapId);
+
 		this.model.battle.set(battle);
 		this.model.mode.set(GAME_MODE_BATTLE);
 	}

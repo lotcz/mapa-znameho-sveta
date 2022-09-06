@@ -63,11 +63,12 @@ export default class GameController extends ControllerNode {
 
 		this.loadResourcesFromStorage().then(() => {
 			this.model.resources.addOnDirtyListener(() => this.isResourcesDirty = true);
+			console.log('resources loaded');
+			this.loadGameFromStorage().then(() => {
+				console.log('game loaded');
+			});
 		});
 
-		this.loadGameFromStorage().then(() => {
-			//console.log('game loaded');
-		});
 	}
 
 	deactivateInternal() {
@@ -142,7 +143,7 @@ export default class GameController extends ControllerNode {
 				console.log('no saved game in storage');
 			}
 		} catch (err) {
-			console.error(err);
+			console.error('Error when loading game.', err);
 		}
 	}
 

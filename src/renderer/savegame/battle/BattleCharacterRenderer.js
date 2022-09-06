@@ -71,8 +71,8 @@ export default class BattleCharacterRenderer extends RendererNode {
 	}
 
 	deactivateInternal() {
-		this.skinMaterial.dispose();
-		this.skinMaterial = null;
+		//this.skinMaterial.dispose();
+		//this.skinMaterial = null;
 		if (this.animation) {
 			this.animation.mesh.traverse((mesh) => {
 				if (mesh.geometry) {

@@ -7,8 +7,10 @@ export default class Vector2 extends ModelNode {
 
 	constructor(x, y) {
 		super();
+
 		this.x = 0;
 		this.y = 0;
+
 		if (y === undefined && typeof x === 'object') {
 			if (x.length === 2) {
 				this.setFromArray(x);
@@ -33,6 +35,10 @@ export default class Vector2 extends ModelNode {
 			this.set(x.x, x.y);
 			return;
 		}
+
+		x = Number(x);
+		y = Number(y);
+
 		if (this.x !== x || this.y !== y) {
 			const old = this.clone();
 			this.x = x;

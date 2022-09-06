@@ -22,12 +22,19 @@ export default class BattleMapModel extends IdentifiedModelNode {
 	 */
 	tileSize;
 
+	/**
+	 * @type Vector2
+	 */
+	start;
+
 	constructor(id) {
 		super(id);
 
 		this.name = this.addProperty('name', new DirtyValue(`Battle Map ${id}`));
 		this.backgroundImage = this.addProperty('backgroundImage', new DirtyValue('img/camp.jpg'));
 		this.tileSize = this.addProperty('tileSize', new IntValue(70/*62.77*/));
+
+		this.start = this.addProperty('start', new Vector2(-102, -25));
 
 	}
 

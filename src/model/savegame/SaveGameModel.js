@@ -136,7 +136,7 @@ export default class SaveGameModel extends ModelNode {
 		this.currentLocationId = this.addProperty('currentLocationId', new IntValue());
 		this.currentLocation = this.addProperty('currentLocation', new NullableNode(null, false));
 
-		this.battle = this.addProperty('battle', new NullableNode());
+		this.battle = this.addProperty('battle', new NullableNode(() => new BattleModel()));
 
 		this.conversation = this.addProperty('conversation', new NullableNode());
 	}

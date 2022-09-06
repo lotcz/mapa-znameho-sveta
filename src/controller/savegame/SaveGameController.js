@@ -75,6 +75,11 @@ export default class SaveGameController extends ControllerNode {
 				this.mainController = this.addChild(new MapController(this.game, this.model));
 				break;
 			case GAME_MODE_BATTLE:
+				if (this.model.battle.isEmpty()) {
+					this.model.mode.set(GAME_MODE_MAP);
+					console.log('no battle to fight!');
+					return;
+				}
 				this.mainController = this.addChild(new BattleController(this.game, this.model.battle.get()));
 				break;
 		}

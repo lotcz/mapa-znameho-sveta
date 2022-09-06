@@ -32,6 +32,15 @@ export default class BattleCharacterController extends ControllerNode {
 		this.rotationAnimation = null;
 
 		this.goToHandler = (p) => this.goTo(p);
+
+		this.addAutoEvent(
+			this.model.characterId,
+			'change',
+			() => {
+				this.model.character.set(this.game.saveGame.get().characters.getById(this.model.characterId.get()));
+			},
+			true
+		);
 	}
 
 	activateInternal() {
@@ -70,7 +79,7 @@ export default class BattleCharacterController extends ControllerNode {
 	}
 
 	goTo(position) {
-		const blocks = this.game.saveGame.get().battle.characters.filter((ch) => ch !== this.model).map((ch) => ch.position);
+		const blocks = this.game.saveGame.get().battle.get().characters.filter((ch) => ch !== this.model).map((ch) => ch.position);
 		if (PathFinder.isTileBlocked(this.model.position.round(), blocks)) {
 			console.log('Blocked');
 			return;

@@ -1,10 +1,15 @@
-import Vector2 from "./Vector2";
+import ModelNode from "./ModelNode";
 
-export default class Vector3 extends Vector2 {
+export default class Vector3 extends ModelNode {
+	x;
+	y;
 	z;
 
 	constructor(x, y, z) {
-		super(0, 0);
+		super();
+
+		this.x = 0;
+		this.y = 0;
 		this.z = 0;
 
 		if (y === undefined && typeof x === 'object') {
@@ -27,6 +32,11 @@ export default class Vector3 extends Vector2 {
 			this.set(x.x, x.y, x.z);
 			return;
 		}
+
+		x = Number(x);
+		y = Number(y);
+		z = Number(z);
+
 		if ((this.x !== x || this.y !== y || this.z !== z)) {
 			const old = this.clone();
 			this.x = x;

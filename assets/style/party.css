@@ -27,13 +27,11 @@
 .party .portrait {
 	width: 120px;
 	height: 120px;
-}
 
-.party .slot.selected {
 	border: 2px solid transparent;
-	border-radius: 2px;
+	border-radius: 3px;
 }
 
-.party .slot.selected {
-	border: 2px solid red;
+.party .selected .portrait {
+	border: 2px solid white;
 }

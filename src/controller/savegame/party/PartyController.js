@@ -40,8 +40,7 @@ export default class PartyController extends ControllerNode {
 			'character-selected',
 			(id) => {
 				this.model.selectedCharacterId.set(id);
-			},
-			true
+			}
 		);
 	}
 
