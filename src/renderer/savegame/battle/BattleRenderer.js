@@ -103,6 +103,8 @@ export default class BattleRenderer extends DomRenderer {
 		this.updateRendererSize();
 		this.game.viewBoxSize.addOnChangeListener(this.onViewBoxChangeHandler);
 
+		this.currentTile = new Vector2();
+		
 		this.game.assets.getAsset(
 			this.model.battleMap.backgroundImage.get(),
 			(img) => {
@@ -132,7 +134,7 @@ export default class BattleRenderer extends DomRenderer {
 
 		this.gui = GUIHelper.createGUI();
 		const coord = GUIHelper.addVector2(this.gui, this.model.coordinates, 'screen coords');
-		this.currentTile = new Vector2();
+
 		const til = GUIHelper.addVector2(this.gui, this.currentTile, 'tile');
 
 		const cam = GUIHelper.addScaler(this.gui, this.camera, 'zoom', -10, 10);

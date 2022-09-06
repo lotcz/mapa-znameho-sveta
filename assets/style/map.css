@@ -6,7 +6,7 @@
 	display: flex;
 
 	color:var(--dark-brown);
-	background-image: url('../../assets/img/texture/paper.jpg');
+	background-image: url('../img/texture/paper.jpg');
 	background-color: sandybrown;
 	text-align: center;
 

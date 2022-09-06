@@ -1,6 +1,6 @@
 @font-face {
-	font-family: "Vollkorn";
-	src: url("../../assets/Vollkorn-SemiBold.ttf") format('truetype');
+	font-family: 'Vollkorn';
+	src: url('../Vollkorn-SemiBold.ttf') format('truetype');
 }
 
 :root {
@@ -22,7 +22,7 @@
 }
 
 html, body {
-	font-family: "Vollkorn", "Georgia", serif;
+	font-family: 'Vollkorn', 'Georgia', serif;
 	color: black;
 	font-size: 12pt;
 	background: #000;
@@ -59,7 +59,7 @@ html, body {
 	line-height: 150px;
 	background-size: contain;
 	background-repeat: no-repeat;
-	background-image: url('../../assets/img/paper.png');
+	background-image: url('../img/paper.png');
 }
 
 .overlay {
@@ -72,5 +72,5 @@ html, body {
 }
 
 .savegame-layer {
-	cursor: url('../../assets/img/cursor.png'), auto;
+	cursor: url('../img/cursor.png'), auto;
 }

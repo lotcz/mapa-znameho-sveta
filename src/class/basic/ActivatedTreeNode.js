@@ -114,6 +114,13 @@ export default class ActivatedTreeNode {
 
 	}
 
+	/**
+	 *
+	 * @param node ModelNode
+	 * @param event string
+	 * @param handler (param) => any
+	 * @param runOnActivate bool
+	 */
 	addAutoEvent(node, event, handler, runOnActivate = false) {
 		this.autoRegisterEvents.push({node: node, name:event, handler: handler, runOnActivate: runOnActivate});
 	}

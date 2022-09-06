@@ -1,9 +1,3 @@
-import "./style/style.css";
-import "./style/editor.css";
-import "./style/party.css";
-import "./style/conversation.css";
-import "./style/map.css";
-
 import GameModel from "./model/game/GameModel";
 import GameController from "./controller/game/GameController";
 import GameRenderer from "./renderer/game/GameRenderer";

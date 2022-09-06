@@ -1,6 +1,7 @@
 import DomRenderer from "../../basic/DomRenderer";
 import NullableNodeRenderer from "../../basic/NullableNodeRenderer";
 import PartyCharacterRenderer from "./PartyCharacterRenderer";
+import Pixies from "../../../class/basic/Pixies";
 
 export default class PartySlotRenderer extends DomRenderer {
 
@@ -17,6 +18,13 @@ export default class PartySlotRenderer extends DomRenderer {
 
 		this.characterRenderer = new NullableNodeRenderer(this.game, this.model.character, (m) => new PartyCharacterRenderer(this.game, m, this.container));
 		this.addChild(this.characterRenderer);
+
+		this.addAutoEvent(
+			this.game.saveGame.get().party.selectedCharacterId,
+			'change',
+			() => this.updateSelection(),
+			true
+		);
 	}
 
 	activateInternal() {
@@ -27,4 +35,18 @@ export default class PartySlotRenderer extends DomRenderer {
 		this.removeElement(this.container);
 	}
 
+	renderInternal() {
+		if (this.model.characterId.isDirty) {
+			this.updateSelection();
+		}
+	}
+
+	updateSelection() {
+		const selected = this.game.saveGame.get().party.selectedCharacterId.equalsTo(this.model.characterId.get());
+		if (selected) {
+			Pixies.addClass(this.container, 'selected');
+		} else {
+			Pixies.removeClass(this.container, 'selected');
+		}
+	}
 }

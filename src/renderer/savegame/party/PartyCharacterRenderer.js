@@ -19,6 +19,8 @@ export default class PartyCharacterRenderer extends DomRenderer {
 	activateInternal() {
 		this.container = this.addElement('div', 'character');
 
+		this.container.addEventListener('click', () => this.game.saveGame.get().party.triggerEvent('character-selected', this.model.id.get()));
+
 		this.renderPortrait();
 	}
 

@@ -6,7 +6,7 @@
 	display: flex;
 
 	color:var(--dark-brown);
-	background-image: url('../../assets/img/texture/paper.jpg');
+	background-image: url('../img/texture/paper.jpg');
 	background-color: sandybrown;
 	text-align: center;
 
@@ -27,4 +27,13 @@
 .party .portrait {
 	width: 120px;
 	height: 120px;
+}
+
+.party .slot.selected {
+	border: 2px solid transparent;
+	border-radius: 2px;
+}
+
+.party .slot.selected {
+	border: 2px solid red;
 }

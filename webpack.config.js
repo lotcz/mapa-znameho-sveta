@@ -16,9 +16,6 @@ module.exports = {
 		port: 8081
 	},
 	plugins: [
-		new HtmlWebpackPlugin({
-			template: './src/index.html',
-		}),
 
 		new WorkboxPlugin.GenerateSW({
 			clientsClaim: true,
@@ -28,7 +25,8 @@ module.exports = {
 		new CopyWebpackPlugin({
 			patterns: [
 				{ from: 'pwa.webmanifest', to: '' },
-				{ from: 'assets/**', to: '' }
+				{ from: 'assets/**', to: '' },
+				{ from: 'src/index.html', to: '' }
 			]
 		})
 
@@ -40,24 +38,6 @@ module.exports = {
 		clean: true,
 	},
 	module: {
-		rules: [
-			{
-				test: /\.(jpg|jpeg|png|woff|woff2|ttf)$/,
-				use: {
-					loader: 'url-loader',
-				},
-			},
-			{
-				test: /\.(mp3|flv|wav)$/,
-				loader: 'file-loader',
-			},
-			{
-				test: /\.css$/,
-				use: [
-					'style-loader',
-					'css-loader'
-				]
-			}
-		]
+
 	}
 };
