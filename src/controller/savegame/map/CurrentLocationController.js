@@ -15,6 +15,15 @@ export default class CurrentLocationController extends ControllerNode {
 		this.model = model;
 
 		this.addChild(new CollectionController(this.game, this.model.connections, (m) => new ConnectionController(this.game, m)));
+
+		this.addAutoEvent(
+			this.model.biotopeId,
+			'change',
+			() => {
+				this.model.biotope.set(this.game.resources.map.biotopes.getById(this.model.biotopeId.get()));
+			},
+			true
+		);
 	}
 
 	activateInternal() {
@@ -22,5 +31,6 @@ export default class CurrentLocationController extends ControllerNode {
 		this.game.saveGame.get().partyCoordinates.set(this.model.coordinates);
 		this.game.saveGame.get().partyTraveling.set(false);
 	}
+
 }
 

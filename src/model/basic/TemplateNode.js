@@ -1,22 +1,23 @@
 import IdentifiedModelNode from "./IdentifiedModelNode";
-import BoolValue from "./BoolValue";
+import IntValue from "./IntValue";
 
 export default class TemplateNode extends IdentifiedModelNode {
 
 	/**
-	 * @type BoolValue
+	 * @type IntValue
 	 */
-	isTemplate;
+	originalId;
 
 	constructor(id = 0) {
 		super(id);
 
-		this.isTemplate = this.addProperty('isTemplate', new BoolValue(true));
+		this.originalId = this.addProperty('originalId', new IntValue());
 	}
 
 	clone() {
 		const n = parent.clone();
-		n.isTemplate.set(false);
+		n.originalId.set(this.id.get());
+		return n;
 	}
 
 }

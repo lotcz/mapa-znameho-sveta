@@ -1,12 +1,11 @@
 import ControllerNode from "../basic/ControllerNode";
-import ControlsController from "../game/ControlsController";
 import MapController from "./map/MapController";
 import {GAME_MODE_BATTLE, GAME_MODE_MAP} from "../../model/savegame/SaveGameModel";
 import BattleController from "./battle/BattleController";
-import * as localForage from "localforage";
-import EditorController from "../editor/EditorController";
 import ConversationController from "./conversation/ConversationController";
 import PartyController from "./party/PartyController";
+
+const REST_SPEED = 0.15; // portion of day per second
 
 export default class SaveGameController extends ControllerNode {
 
@@ -51,6 +50,21 @@ export default class SaveGameController extends ControllerNode {
 	deactivateInternal() {
 		this.model.conversation.removeOnChangeListener(this.conversationChangedHandler);
 		this.model.mode.removeOnChangeListener(this.onGameModeChanged);
+	}
+
+	updateInternal(delta) {
+		// rest
+		const save = this.game.saveGame.get();
+		let resting = save.partyResting.get();
+		if (resting > 0) {
+			let diff = (delta / 1000) * REST_SPEED;
+			if (diff > resting) {
+				diff = resting;
+			}
+			resting -= diff;
+			save.partyResting.set(resting);
+			save.passTime(diff);
+		}
 	}
 
 	updateConversation() {

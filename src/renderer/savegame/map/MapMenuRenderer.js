@@ -35,6 +35,10 @@ export default class MapMenuRenderer extends DomRenderer {
 		const revert = Pixies.createElement(this.buttons, 'button', null, 'Revert', () => {
 			this.game.saveGame.get().forward.set(!this.game.saveGame.get().forward.get());
 		});
+		const sleep = Pixies.createElement(this.buttons, 'button', null, 'Sleep', () => {
+			this.game.saveGame.get().partyResting.set(1);
+		});
+
 		this.updateArt();
 		this.updateLocation();
 	}
@@ -44,7 +48,7 @@ export default class MapMenuRenderer extends DomRenderer {
 	}
 
 	renderInternal() {
-		if (this.model.currentPath.isDirty || this.model.time.isDirty) {
+		if (this.model.currentPath.isDirty || this.model.currentLocation.isDirty || this.model.time.isDirty) {
 			this.time.innerText = Pixies.round(this.model.time.get(), 2);
 			this.updateArt();
 		}
@@ -64,15 +68,17 @@ export default class MapMenuRenderer extends DomRenderer {
 	}
 
 	updateArt() {
-		if (this.model.currentPath.isEmpty() || this.model.currentPath.get().biotope.isEmpty()) {
-			this.clearArt();
-			return;
-		}
 
 		/** @type BiotopeModel */
-		const biotope = this.model.currentPath.get().biotope.get();
+		let biotope;
 
-		if (biotope.images.count() <= 0) {
+		if (this.model.currentLocation.isSet()) {
+			biotope = this.model.currentLocation.get().biotope.get();
+		} else if (this.model.currentPath.isSet()) {
+			biotope = this.model.currentPath.get().biotope.get();
+		}
+
+		if (biotope === undefined || biotope.images.count() <= 0) {
 			this.clearArt();
 			return;
 		}
@@ -112,6 +118,11 @@ export default class MapMenuRenderer extends DomRenderer {
 				const progress = (time - min) / (realMax - min);
 				this.artUpperImg.style.opacity = Pixies.round(progress, 2);
 			});
+		} else {
+			if (this.artUpperImg) {
+				this.artUpperImg = null;
+				Pixies.emptyElement(this.artUpper);
+			}
 		}
 
 	}

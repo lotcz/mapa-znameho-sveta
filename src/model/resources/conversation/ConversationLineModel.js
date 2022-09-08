@@ -27,7 +27,7 @@ export default class ConversationLineModel extends ModelNode {
 		super();
 
 		this.text = this.addProperty('responseText', new DirtyValue('text'));
-		this.portrait = this.addProperty('portrait', new DirtyValue());
+		this.portrait = this.addProperty('portrait', new DirtyValue(null, false));
 		this.isNarrator = this.addProperty('isNarrator', new DirtyValue(false));
 
 		this.isResponse = new DirtyValue(false);

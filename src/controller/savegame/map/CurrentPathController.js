@@ -91,13 +91,8 @@ export default class CurrentPathController extends ControllerNode {
 		this.model.pathProgress.set(progress);
 		save.pathProgress.set(progress);
 
-		let time = save.time.get();
-		time += ((delta / 1000) * TIME_SPEED);
-		if (time > 1) {
-			time = 0;
-		}
-		save.time.set(time);
-
+		const diff = (delta / 1000) * TIME_SPEED;
+		save.passTime(diff);
 	}
 
 }

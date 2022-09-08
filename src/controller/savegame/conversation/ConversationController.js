@@ -39,13 +39,13 @@ export default class ConversationController extends ControllerNode {
 		if (this.model.currentEntry.isSet()) {
 			const entry = this.model.currentEntry.get();
 			entry.entries.forEach((responseEntry) => {
-				const character = this.game.saveGame.get().characters.random();
-				responseEntry.responseCharacter.set(character);
+				const slot = this.game.saveGame.get().party.slots.random();
+				const ch = this.game.saveGame.get().characters.getById(slot.characterId.get());
+				responseEntry.responseCharacter.set(ch);
 			});
 			entry.lines.forEach((line) => {
 				line.portrait.set(this.model.portrait.get());
 			});
-
 			this.model.pastEntries.add(entry);
 		}
 	}

@@ -28,7 +28,7 @@ export default class ConversationEntryModel extends ModelNode {
 	isResponseAvailable;
 
 	/**
-	 * @type NullableNode
+	 * @type NullableNode<CharacterModel>
 	 */
 	responseCharacter;
 
@@ -39,8 +39,8 @@ export default class ConversationEntryModel extends ModelNode {
 		this.lines = this.addProperty('lines', new ModelNodeCollection(() => new ConversationLineModel()));
 		this.entries = this.addProperty('entries', new ModelNodeCollection(() => new ConversationEntryModel()));
 
-		this.isResponseAvailable = new DirtyValue(true);
-		this.responseCharacter = new NullableNode(() => new CharacterModel());
+		this.isResponseAvailable = new DirtyValue(true, false);
+		this.responseCharacter = new NullableNode(null, false);
 	}
 
 }

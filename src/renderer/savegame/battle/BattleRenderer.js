@@ -177,7 +177,6 @@ export default class BattleRenderer extends DomRenderer {
 		this.floor.material.dispose();
 		this.floor.geometry.dispose();
 		this.floor = null;
-		this.scene.dispose();
 		this.scene = null;
 		this.renderer.dispose();
 		this.renderer = null;

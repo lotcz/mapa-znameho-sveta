@@ -82,6 +82,11 @@ export default class SaveGameModel extends ModelNode {
 	partyTraveling;
 
 	/**
+	 * @type FloatValue
+	 */
+	partyResting;
+
+	/**
 	 * @type IntValue
 	 */
 	currentLocationId;
@@ -120,6 +125,7 @@ export default class SaveGameModel extends ModelNode {
 		this.pathProgress = this.addProperty('pathProgress', new FloatValue(0));
 		this.forward = this.addProperty('forward', new BoolValue(true));
 		this.partyTraveling = this.addProperty('partyTraveling', new BoolValue(false, false));
+		this.partyResting = this.addProperty('partyResting', new FloatValue(0, false));
 
 		this.currentPathId = this.addProperty('currentPathId', new IntValue());
 		this.currentPath = this.addProperty('currentPath', new NullableNode(null, false));
@@ -141,4 +147,11 @@ export default class SaveGameModel extends ModelNode {
 		this.conversation = this.addProperty('conversation', new NullableNode());
 	}
 
+	passTime(duration) {
+		let time = this.time.get() + duration;
+		if (time > 1) {
+			time = time - 1;
+		}
+		this.time.set(time);
+	}
 }
