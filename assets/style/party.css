@@ -35,3 +35,26 @@
 .party .selected .portrait {
 	border: 2px solid white;
 }
+
+.party .character {
+	display: flex;
+	flex-direction: row;
+}
+
+.party .stats-bar {
+	display: flex;
+	flex-direction: column-reverse;
+	height: 118px;
+	box-shadow: #311a0a 0 0 4px;
+	margin: 2px 4px;
+	width: 10px;
+}
+
+.party .stats-bar div {
+	width: auto;
+	margin: 1px;
+}
+
+.party .stats-bar .health {
+	background-color: darkred;
+}

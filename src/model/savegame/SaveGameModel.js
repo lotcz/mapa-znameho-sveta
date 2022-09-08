@@ -153,5 +153,17 @@ export default class SaveGameModel extends ModelNode {
 			time = time - 1;
 		}
 		this.time.set(time);
+
+		this.party.slots.forEach((slot) => {
+			let character = slot.character.get();
+			if (!character) {
+				character = this.characters.getById(slot.characterId.get());
+			}
+			if (this.partyResting.get()) {
+				character.stats.health.restore(duration);
+			} else {
+				character.stats.health.consume(duration);
+			}
+		})
 	}
 }

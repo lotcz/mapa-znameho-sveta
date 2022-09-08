@@ -36,7 +36,7 @@ export default class MapMenuRenderer extends DomRenderer {
 			this.game.saveGame.get().forward.set(!this.game.saveGame.get().forward.get());
 		});
 		const sleep = Pixies.createElement(this.buttons, 'button', null, 'Sleep', () => {
-			this.game.saveGame.get().partyResting.set(1);
+			this.game.saveGame.get().partyResting.set(0.4);
 		});
 
 		this.updateArt();
@@ -97,6 +97,9 @@ export default class MapMenuRenderer extends DomRenderer {
 			i = i < biotope.images.count() ? i : 0;
 			upper = biotope.images.get(i);
 			lower = biotope.images.get(i === 0 ? biotope.images.count() - 1 : i - 1);
+			if (upper.uri.equalsTo(lower.uri.get())) {
+				upper = null;
+			}
 		}
 
 		this.game.assets.getAsset(lower.uri.get(), (img) => {
