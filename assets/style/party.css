@@ -41,20 +41,29 @@
 	flex-direction: row;
 }
 
-.party .stats-bar {
+.party .stats {
 	display: flex;
-	flex-direction: column-reverse;
+	flex-direction: row;
 	height: 118px;
 	box-shadow: #311a0a 0 0 4px;
 	margin: 2px 4px;
-	width: 10px;
 }
 
-.party .stats-bar div {
+.party .stat-bar {
+	display: flex;
+	flex-direction: column-reverse;
+	width: 8px;
+	margin: 2px;
+}
+
+.party .stat-bar div {
 	width: auto;
-	margin: 1px;
 }
 
-.party .stats-bar .health {
-	background-color: darkred;
+.party .stat-bar .stat-101 {
+	background-color: red;
+}
+
+.party .stat-bar .stat-102 {
+	background-color: orange;
 }

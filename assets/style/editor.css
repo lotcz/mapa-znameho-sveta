@@ -99,12 +99,21 @@
 .editor .table .scroll,
 .editor form .scroll {
 	display: block;
-	max-height: 300px;
 	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.editor .table .scroll {
+	max-height: 200px;
+}
+
+.editor form .scroll {
+	max-height: 563px;
 }
 
 .editor table td {
 	border-left: 1px gray solid;
+	white-space: nowrap;
 }
 
 .editor table td:last-of-type {
@@ -121,6 +130,26 @@
 	grid-template-columns: 1fr 2fr;
 	gap: 10px;
 	margin-bottom: 10px;
+}
+
+.editor form .fields .row .field {
+	display: flex;
+	align-content: stretch;
+	flex-direction: column;
+}
+
+.editor form .fields .row input {
+	display: block;
+	width: auto;
+	margin-right: 10px;
+}
+
+.editor form .fields .row .vector {
+	flex-direction: row;
+}
+
+.editor form .fields .row .vector input {
+	width: 100px;
 }
 
 .menu a:hover {

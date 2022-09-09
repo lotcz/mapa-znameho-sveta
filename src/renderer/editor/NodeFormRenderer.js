@@ -91,6 +91,7 @@ export default class NodeFormRenderer extends DomRenderer {
 		}
 
 		if (typeof value === 'object' && value.x !== undefined && value.y !== undefined) {
+			Pixies.addClass(container, 'vector');
 			this.renderInput(container, `${name}[]`, value.x);
 			this.renderInput(container, `${name}[]`, value.y);
 			if (value.z !== undefined) {

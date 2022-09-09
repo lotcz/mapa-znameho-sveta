@@ -1,5 +1,6 @@
 import DomRenderer from "../../basic/DomRenderer";
 import Pixies from "../../../class/basic/Pixies";
+import StatFloatRenderer from "./StatFloatRenderer";
 
 export default class PartyCharacterRenderer extends DomRenderer {
 
@@ -24,9 +25,10 @@ export default class PartyCharacterRenderer extends DomRenderer {
 		this.portraitWrapper = Pixies.createElement(this.container, 'div');
 		this.renderPortrait();
 
-		this.stats = Pixies.createElement(this.container, 'div', 'stats-bar');
-		this.health = Pixies.createElement(this.stats, 'div', 'health');
-		this.renderHealth();
+		this.stats = Pixies.createElement(this.container, 'div', 'stats');
+		this.addChild(new StatFloatRenderer(this.game, this.model.stats.health, this.stats));
+		this.addChild(new StatFloatRenderer(this.game, this.model.stats.physical, this.stats));
+
 	}
 
 	deactivateInternal() {
@@ -36,9 +38,6 @@ export default class PartyCharacterRenderer extends DomRenderer {
 	renderInternal() {
 		if (this.model.portrait.isDirty || this.model.name.isDirty) {
 			this.renderPortrait();
-		}
-		if (this.model.stats.isDirty) {
-			this.renderHealth();
 		}
 	}
 
@@ -55,8 +54,4 @@ export default class PartyCharacterRenderer extends DomRenderer {
 		this.text.innerText = this.model.name.get();
 	}
 
-	renderHealth() {
-		const ratio = this.model.stats.health.current.get() / this.model.stats.health.max.get();
-		this.health.style.height = `${Pixies.round(ratio * 100, 2)}%`;
-	}
 }

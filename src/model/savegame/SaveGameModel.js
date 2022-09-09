@@ -160,9 +160,9 @@ export default class SaveGameModel extends ModelNode {
 				character = this.characters.getById(slot.characterId.get());
 			}
 			if (this.partyResting.get()) {
-				character.stats.health.restore(duration);
+				character.stats.physical.restore(duration);
 			} else {
-				character.stats.health.consume(duration);
+				character.stats.physical.consume(duration);
 			}
 		})
 	}
