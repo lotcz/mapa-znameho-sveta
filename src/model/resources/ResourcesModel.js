@@ -1,11 +1,12 @@
 import ModelNodeTable from "../basic/ModelNodeTable";
-import MaterialModel from "./3d/MaterialModel";
+import MaterialModel from "./items/MaterialModel";
 import RaceModel from "./characters/RaceModel";
 import MapModel from "./map/MapModel";
 import CharacterModel from "./characters/CharacterModel";
 import ConversationModel from "./conversation/ConversationModel";
 import ModelNode from "../basic/ModelNode";
-import Model3dModel from "./3d/Model3dModel";
+import Model3dModel from "./items/Model3dModel";
+import ItemModel from "./items/ItemModel";
 
 export default class ResourcesModel extends ModelNode {
 
@@ -35,6 +36,11 @@ export default class ResourcesModel extends ModelNode {
 	characterTemplates;
 
 	/**
+	 * @type ModelNodeTable<ItemModel>
+	 */
+	itemTemplates;
+
+	/**
 	 * @type ModelNodeTable
 	 */
 	conversations;
@@ -48,7 +54,7 @@ export default class ResourcesModel extends ModelNode {
 		this.races = this.addProperty('races', new ModelNodeTable((id) => new RaceModel(id)));
 		this.characterTemplates = this.addProperty('characterTemplates', new ModelNodeTable((id) => new CharacterModel(id)));
 		this.conversations = this.addProperty('conversations', new ModelNodeTable((id) => new ConversationModel(id)));
-
+		this.itemTemplates = this.addProperty('itemTemplates', new ModelNodeTable((id) => new ItemModel(id)));
 	}
 
 }

@@ -5,11 +5,13 @@ import ImageLoader from "./loaders/ImageLoader";
 import GlbLoader from "./loaders/GlbLoader";
 import MaterialLoader from "./loaders/MaterialLoader";
 import Pixies from "./basic/Pixies";
+import ItemImageLoader from "./loaders/ItemImageLoader";
 
 const ASSET_TYPE_LOADERS = {
 	'img': ImageLoader,
 	'glb': GlbLoader,
-	'mat': MaterialLoader
+	'mat': MaterialLoader,
+	'itm': ItemImageLoader
 }
 
 /**

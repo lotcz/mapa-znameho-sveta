@@ -1,0 +1,33 @@
+.inventory {
+	position: absolute;
+	left: 250px;
+	bottom: 20px;
+
+}
+
+.inventory .inner {
+	display: flex;
+	flex-direction: column;
+}
+
+.inventory .portrait {
+	width: 250px;
+}
+
+.inventory .inventory-slots {
+	height: 250px;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+
+}
+
+.inventory .inventory-slots .slot {
+	margin: 5px;
+
+}
+
+.inventory .inventory-slots .slot .inner {
+	padding: 40px;
+
+}

@@ -2,6 +2,8 @@ import DomRenderer from "../../basic/DomRenderer";
 import CollectionRenderer from "../../basic/CollectionRenderer";
 import Pixies from "../../../class/basic/Pixies";
 import PartySlotRenderer from "./PartySlotRenderer";
+import NullableNodeRenderer from "../../basic/NullableNodeRenderer";
+import InventoryRenderer from "./InventoryRenderer";
 
 export default class PartyRenderer extends DomRenderer {
 
@@ -22,6 +24,9 @@ export default class PartyRenderer extends DomRenderer {
 
 		this.charactersRenderer = new CollectionRenderer(this.game, this.model.slots, (m) => new PartySlotRenderer(this.game, m, this.inner));
 		this.addChild(this.charactersRenderer);
+
+		this.inventoryRenderer = new NullableNodeRenderer(this.game, this.model.selectedCharacter, (m) => new InventoryRenderer(this.game, m, this.dom));
+		this.addChild(this.inventoryRenderer);
 
 	}
 

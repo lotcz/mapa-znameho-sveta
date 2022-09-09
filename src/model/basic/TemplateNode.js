@@ -14,10 +14,4 @@ export default class TemplateNode extends IdentifiedModelNode {
 		this.originalId = this.addProperty('originalId', new IntValue());
 	}
 
-	clone() {
-		const n = parent.clone();
-		n.originalId.set(this.id.get());
-		return n;
-	}
-
 }

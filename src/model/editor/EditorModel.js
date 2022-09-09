@@ -30,7 +30,8 @@ export default class EditorModel extends ModelNode {
 			models3d: '3D Models',
 			races: 'Races',
 			characterTemplates: 'Character Templates',
-			conversations: 'Conversations'
+			conversations: 'Conversations',
+			itemTemplates: 'Item Templates',
 		};
 
 		this.mapOptions = {

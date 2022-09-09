@@ -4,6 +4,7 @@ import IntValue from "../../basic/IntValue";
 import BoolValue from "../../basic/BoolValue";
 import Vector3 from "../../basic/Vector3";
 import CharacterStatsModel from "./CharacterStatsModel";
+import InventoryModel from "./InventoryModel";
 
 export default class CharacterModel extends TemplateNode {
 
@@ -42,6 +43,11 @@ export default class CharacterModel extends TemplateNode {
 	 */
 	stats;
 
+	/**
+	 * @type InventoryModel
+	 */
+	inventory;
+
 	constructor(id = 0) {
 		super(id);
 
@@ -54,6 +60,8 @@ export default class CharacterModel extends TemplateNode {
 		this.scale = this.addProperty('scale', new Vector3(1,1,1));
 
 		this.stats = this.addProperty('stats', new CharacterStatsModel());
+
+		this.inventory = this.addProperty('inventory', new InventoryModel());
 	}
 
 }

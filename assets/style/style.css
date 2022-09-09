@@ -74,3 +74,19 @@ html, body {
 .savegame-layer {
 	cursor: url('../img/cursor.png'), auto;
 }
+
+.paper {
+	color:var(--dark-brown);
+	background-image: url('../img/texture/paper.jpg');
+	background-color: sandybrown;
+	border-radius: 10px;
+	box-shadow: #311a0a 0 0 60px;
+	display: flex;
+}
+
+.paper .inner  {
+	border-radius: 10px;
+	padding: 2rem;
+	box-shadow: #311a0a 0 0 40px inset;
+	flex: 1;
+}
