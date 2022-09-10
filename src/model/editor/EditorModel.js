@@ -13,6 +13,11 @@ export default class EditorModel extends ModelNode {
 	 */
 	activeForm;
 
+	/**
+	 * @type NullableNode<ItemDefinitionModel>
+	 */
+	activeItemDefinition;
+
 	resourcesOptions;
 
 	mapOptions;
@@ -24,6 +29,7 @@ export default class EditorModel extends ModelNode {
 
 		this.activeTable = this.addProperty('activeTable', new NullableNode());
 		this.activeForm = this.addProperty('activeForm', new NullableNode());
+		this.activeItemDefinition = this.addProperty('activeItemDefinition', new NullableNode());
 
 		this.resourcesOptions = {
 			materials: 'Materials',
@@ -31,7 +37,7 @@ export default class EditorModel extends ModelNode {
 			races: 'Races',
 			characterTemplates: 'Character Templates',
 			conversations: 'Conversations',
-			itemTemplates: 'Item Templates',
+			itemDefinitions: 'Item Definitions',
 		};
 
 		this.mapOptions = {

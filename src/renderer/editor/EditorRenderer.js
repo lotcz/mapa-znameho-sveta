@@ -4,6 +4,7 @@ import {GAME_MODE_BATTLE, GAME_MODE_MAP} from "../../model/savegame/SaveGameMode
 import NodeTableRenderer from "./NodeTableRenderer";
 import NullableNodeRenderer from "../basic/NullableNodeRenderer";
 import NodeFormRenderer from "./NodeFormRenderer";
+import ItemDefinitionRenderer from "../basic/ItemDefinitionRenderer";
 
 export default class EditorRenderer extends DomRenderer {
 
@@ -25,6 +26,9 @@ export default class EditorRenderer extends DomRenderer {
 
 		this.formRenderer = new NullableNodeRenderer(this.game, this.model.activeForm, (model) => new NodeFormRenderer(this.game, model, this.form));
 		this.addChild(this.formRenderer);
+
+		this.itemDefRenderer = new NullableNodeRenderer(this.game, this.model.activeItemDefinition, (model) => new ItemDefinitionRenderer(this.game, model, this.dock));
+		this.addChild(this.itemDefRenderer);
 
 		this.stopEventPropagationHandler = (e) => {
 			e.stopPropagation();

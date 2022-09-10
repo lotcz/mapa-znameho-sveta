@@ -28,6 +28,12 @@
 }
 
 .inventory .inventory-slots .slot .inner {
-	padding: 40px;
-
+	width: 80px;
+	height: 80px;
+	padding: 0;
 }
+
+.inventory .inventory-slots .slot .inner img {
+	width: 100%;
+}
+

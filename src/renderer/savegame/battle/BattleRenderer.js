@@ -1,8 +1,8 @@
 import * as THREE from "three";
-import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
-import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
-import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
-import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader.js";
+import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer.js";
+import {RenderPass} from "three/examples/jsm/postprocessing/RenderPass.js";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass.js";
+import {FXAAShader} from "three/examples/jsm/shaders/FXAAShader.js";
 import DomRenderer from "../../basic/DomRenderer";
 import Pixies from "../../../class/basic/Pixies";
 import CollectionRenderer from "../../basic/CollectionRenderer";
@@ -140,9 +140,7 @@ export default class BattleRenderer extends DomRenderer {
 
 		this.gui = GUIHelper.createGUI();
 		const coord = GUIHelper.addVector2(this.gui, this.model.coordinates, 'screen coords');
-
 		const til = GUIHelper.addVector2(this.gui, this.currentTile, 'tile');
-
 		const cam = GUIHelper.addScaler(this.gui, this.camera, 'zoom', -10, 10);
 
 		this.game.assets.getAsset(

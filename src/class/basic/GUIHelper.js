@@ -21,6 +21,18 @@ export default class GUIHelper {
 		return folder;
 	}
 
+	static addQuaternion(gui, quat, name) {
+		const min = -Math.PI;
+		const max = Math.PI;
+		const step = Math.PI/180;
+		const folder = gui.addFolder(name);
+		GUIHelper.addScaler(folder, quat, 'x', min, max, step);
+		GUIHelper.addScaler(folder, quat, 'y', min, max, step);
+		GUIHelper.addScaler(folder, quat, 'z', min, max, step);
+		GUIHelper.addScaler(folder, quat, 'w', min, max, step);
+		return folder;
+	}
+
 	static addRotationVector3(gui, object, name) {
 		return GUIHelper.addVector3(gui, object, name, -Math.PI, Math.PI, Math.PI / 180);
 	}

@@ -89,7 +89,8 @@
 }
 
 .editor .table,
-.editor form {
+.editor form,
+.editor .item-def {
 	border: 1px gray solid;
 	border-radius: 5px;
 	margin: 10px;
@@ -150,6 +151,14 @@
 
 .editor form .fields .row .vector input {
 	width: 100px;
+}
+
+.editor .item-def .slot {
+	background-image: url('../img/texture/paper.jpg');
+}
+
+.editor .item-def .slot .inner {
+	display: flex;
 }
 
 .menu a:hover {

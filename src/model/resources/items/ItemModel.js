@@ -1,30 +1,17 @@
-import DirtyValue from "../../basic/DirtyValue";
-import TemplateNode from "../../basic/TemplateNode";
 import IntValue from "../../basic/IntValue";
+import ModelNode from "../../basic/ModelNode";
 
-export default class ItemModel extends TemplateNode {
-
-	/**
-	 * @type DirtyValue
-	 */
-	name;
+export default class ItemModel extends ModelNode {
 
 	/**
 	 * @type IntValue
 	 */
-	modelId;
+	definitionId;
 
-	constructor(id) {
-		super(id);
+	constructor() {
+		super();
 
-		this.name = this.addProperty('name', new DirtyValue(`Item ${id}`));
-		this.modelId = this.addProperty('modelId', new IntValue());
+		this.definitionId = this.addProperty('definitionId', new IntValue());
 	}
 
-	clone() {
-		const n = new ItemModel();
-		n.restoreState(this.getState());
-		n.originalId.set(this.id.get());
-		return n;
-	}
 }

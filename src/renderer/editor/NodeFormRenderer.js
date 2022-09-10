@@ -58,6 +58,15 @@ export default class NodeFormRenderer extends DomRenderer {
 			});
 		}
 
+		if (this.model.constructor.name === 'ItemDefinitionModel') {
+			const start = Pixies.createElement(buttonsLeft, 'button', 'special');
+			start.innerText = 'Edit camera';
+			start.addEventListener('click', (e) => {
+				e.preventDefault();
+				this.game.editor.activeItemDefinition.set(this.model);
+			});
+		}
+
 		if (this.model.constructor.name === 'PathModel') {
 			const start = Pixies.createElement(buttonsLeft, 'button', 'special');
 			start.innerText = 'Add waypoint';

@@ -3,6 +3,7 @@ import Pixies from "../../../class/basic/Pixies";
 import ImageRenderer from "../../basic/ImageRenderer";
 import CollectionRenderer from "../../basic/CollectionRenderer";
 import InventorySlotRenderer from "./InventorySlotRenderer";
+import ItemModel from "../../../model/resources/items/ItemModel";
 
 export default class InventoryRenderer extends DomRenderer {
 
@@ -35,8 +36,16 @@ export default class InventoryRenderer extends DomRenderer {
 
 		Pixies.createElement(this.top, 'button', 'special', 'Axe', () => {
 			const slot = this.model.inventory.slots.first();
-			const item = this.game.resources.itemTemplates.getById(1);
-			slot.item.set(item.clone());
+			const item = new ItemModel();
+			item.definitionId.set(1);
+			slot.item.set(item);
+		});
+
+		Pixies.createElement(this.top, 'button', 'special', 'Sword', () => {
+			const slot = this.model.inventory.slots.get(2);
+			const item = new ItemModel();
+			item.definitionId.set(2);
+			slot.item.set(item);
 		});
 
 		this.portrait = Pixies.createElement(this.top, 'div', 'portrait');
