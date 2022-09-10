@@ -5,6 +5,7 @@ import BattleRenderer from "./battle/BattleRenderer";
 import ConversationRenderer from "./conversation/ConversationRenderer";
 import NullableNodeRenderer from "../basic/NullableNodeRenderer";
 import PartyRenderer from "./party/PartyRenderer";
+import SelectedSlotRenderer from "./party/SelectedSlotRenderer";
 
 export default class SaveGameRenderer extends DomRenderer {
 
@@ -33,8 +34,11 @@ export default class SaveGameRenderer extends DomRenderer {
 
 		this.model = model;
 
-		this.conversationRenderer = new NullableNodeRenderer(this.game, this.model.conversation, (model) => new ConversationRenderer(this.game, model, this.topLayer));
+		this.conversationRenderer = new NullableNodeRenderer(this.game, this.model.conversation, (m) => new ConversationRenderer(this.game, m, this.topLayer));
 		this.addChild(this.conversationRenderer);
+
+		this.selectedItemRenderer = new NullableNodeRenderer(this.game, this.model.selectedInventorySlot, (m) => new SelectedSlotRenderer(this.game, m, this.dom));
+		this.addChild(this.selectedItemRenderer);
 
 		this.updateLoadingHandler = () => this.updateLoading();
 		this.updateGameModeHandler = () => this.updateGameMode();

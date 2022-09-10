@@ -1,12 +1,22 @@
 import DirtyValue from "../basic/DirtyValue";
 import Vector2 from "../basic/Vector2";
 import ModelNode from "../basic/ModelNode";
+import BoolValue from "../basic/BoolValue";
 
 const CLICK_TIMEOUT = 250;
 
 export default class ControlsModel extends ModelNode {
+
+	/**
+	 * @type BoolValue
+	 */
 	isMouseOver;
+
+	/**
+	 * @type Vector2
+	 */
 	mouseCoordinates;
+
 	mouseDownLeft;
 	mouseDownRight;
 	leftClickTime;
@@ -15,7 +25,7 @@ export default class ControlsModel extends ModelNode {
 	constructor() {
 		super();
 
-		this.isMouseOver = this.addProperty('isMouseOver', new DirtyValue(false));
+		this.isMouseOver = this.addProperty('isMouseOver', new BoolValue(false));
 		this.mouseCoordinates = this.addProperty('mouseCoordinates', new Vector2());
 		this.mouseDownLeft = this.addProperty('mouseDownLeft' , new DirtyValue(false));
 		this.mouseDownLeft.addOnChangeListener((params) => this.onMouseLeftChange(params.newValue));

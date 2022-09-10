@@ -37,3 +37,7 @@
 	width: 100%;
 }
 
+.selected-item-slot {
+	position: absolute;
+	pointer-events: none;
+}

@@ -8,7 +8,7 @@ import {FXAAShader} from "three/examples/jsm/shaders/FXAAShader";
 import Vector2 from "../../model/basic/Vector2";
 import GUIHelper from "../../class/basic/GUIHelper";
 
-const IMAGE_SIZE = new Vector2(80, 80);
+export const IMAGE_SIZE = new Vector2(80, 80);
 
 export default class ItemDefinitionRenderer extends DomRenderer {
 

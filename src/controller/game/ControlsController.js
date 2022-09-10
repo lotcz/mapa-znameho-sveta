@@ -60,7 +60,7 @@ export default class ControlsController extends ControllerNode {
 	}
 
 	onMouseMove(e) {
-		this.model.mouseCoordinates.set(e.offsetX, e.offsetY);
+		this.model.mouseCoordinates.set(e.pageX, e.pageY);
 		this.model.isMouseOver.set(true);
 	}
 

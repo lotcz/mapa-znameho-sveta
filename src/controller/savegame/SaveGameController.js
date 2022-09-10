@@ -37,6 +37,40 @@ export default class SaveGameController extends ControllerNode {
 
 		this.conversationChangedHandler = () => this.updateConversation();
 		this.onGameModeChanged = () => this.updateGameMode();
+
+		this.addAutoEvent(
+			this.model,
+			'item-slot-selected',
+			(slot) => {
+				if (this.model.selectedInventorySlot.equalsTo(slot)) {
+					this.model.selectedInventorySlot.set(null);
+					return;
+				}
+				if (this.model.selectedInventorySlot.isSet()) {
+					const oldItem = this.model.selectedInventorySlot.get().item.get();
+					if (slot.item.isSet()) {
+						const newItem = slot.item.get();
+						slot.item.set(oldItem);
+						this.model.selectedInventorySlot.get().item.set(newItem);
+						return;
+					}
+					slot.item.set(oldItem)
+					this.model.selectedInventorySlot.get().item.set(null);
+					this.model.selectedInventorySlot.set(null);
+					return;
+				}
+				if (slot.item.isSet()) {
+					this.model.selectedInventorySlot.set(slot);
+				}
+			});
+
+		this.addAutoEvent(
+			this.game.controls,
+			'right-click',
+			() => {
+				this.model.selectedInventorySlot.set(null);
+			}
+		)
 	}
 
 	activateInternal() {

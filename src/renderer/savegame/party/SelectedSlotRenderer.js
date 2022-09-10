@@ -1,7 +1,8 @@
 import DomRenderer from "../../basic/DomRenderer";
 import Pixies from "../../../class/basic/Pixies";
+import {IMAGE_SIZE} from "../../basic/ItemDefinitionRenderer";
 
-export default class InventorySlotRenderer extends DomRenderer {
+export default class SelectedSlotRenderer extends DomRenderer {
 
 	/**
 	 * @type InventorySlotModel
@@ -13,16 +14,16 @@ export default class InventorySlotRenderer extends DomRenderer {
 
 		this.model = model;
 
-
+		this.addAutoEvent(
+			this.game.controls.mouseCoordinates,
+			'change',
+			() => this.updatePosition(),
+			true
+		);
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', 'slot');
-		this.container.addEventListener('click', () => {
-			this.game.saveGame.get().triggerEvent('item-slot-selected', this.model);
-		});
-
-		this.inner = Pixies.createElement(this.container, 'div', 'inner');
+		this.container = this.addElement('div', 'selected-item-slot');
 		this.renderItem();
 	}
 
@@ -37,15 +38,23 @@ export default class InventorySlotRenderer extends DomRenderer {
 	}
 
 	renderItem() {
-		Pixies.emptyElement(this.inner);
+		Pixies.emptyElement(this.container);
 		if (this.model.item.isSet()) {
 			const item = this.model.item.get();
 			const defId = item.definitionId.get();
 			const itemDef = this.game.resources.itemDefinitions.getById(defId);
 			this.game.assets.getAsset(`itm/${itemDef.id.get()}`, (img) => {
-				this.inner.appendChild(img.cloneNode(true));
+				this.container.appendChild(img.cloneNode(true));
 			});
 		}
+		this.updatePosition();
+	}
+
+	updatePosition() {
+		const position = this.game.controls.mouseCoordinates;
+		const offset = IMAGE_SIZE.multiply(-0.5);
+		this.container.style.left = `${position.x + offset.x}px`;
+		this.container.style.top = `${position.y + offset.y}px`;
 	}
 
 }

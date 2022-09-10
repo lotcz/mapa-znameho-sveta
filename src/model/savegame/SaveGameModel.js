@@ -106,6 +106,11 @@ export default class SaveGameModel extends ModelNode {
 	 */
 	conversation;
 
+	/**
+	 * @type NullableNode<InventorySlotModel>
+	 */
+	selectedInventorySlot;
+
 	constructor() {
 		super();
 
@@ -145,6 +150,8 @@ export default class SaveGameModel extends ModelNode {
 		this.battle = this.addProperty('battle', new NullableNode(() => new BattleModel()));
 
 		this.conversation = this.addProperty('conversation', new NullableNode());
+
+		this.selectedInventorySlot = this.addProperty('selectedInventorySlot', new NullableNode(null, false));
 	}
 
 	passTime(duration) {
