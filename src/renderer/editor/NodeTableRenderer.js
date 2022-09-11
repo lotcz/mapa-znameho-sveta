@@ -2,54 +2,72 @@ import Pixies from "../../class/basic/Pixies";
 import CollectionRenderer from "../basic/CollectionRenderer";
 import TableRowRenderer from "./TableRowRenderer";
 import NodeFormRenderer from "./NodeFormRenderer";
+import NullableNodeRenderer from "../basic/NullableNodeRenderer";
+import DomRenderer from "../basic/DomRenderer";
 
-export default class NodeTableRenderer extends CollectionRenderer {
+export default class NodeTableRenderer extends DomRenderer {
 
 	/**
-	 * @type ModelNodeTable
+	 * @type ModelNodeTable|ModelNodeCollection
 	 */
 	model;
 
-	dom;
-
 	name;
 
-	constructor(game, model, dom, name = null) {
-		super(game, model, null);
+	constructor(game, model, dom) {
+		super(game, model, dom);
 
 		this.model = model;
 		this.dom = dom;
-		this.name = name;
 		this.container = null;
-		this.formRenderer = null;
 
-		this.onFormClosedHandler = () => this.hideForm();
-		this.onNodeDeleteHandler = (node) => this.onNodeDelete(node);
+		this.addChild(
+			new NullableNodeRenderer(
+				this.game,
+				this.model.selectedNode,
+				(m) => new NodeFormRenderer(this.game, m, this.dom, this.model)
+			)
+		);
+
+		this.addChild(
+			new CollectionRenderer(
+				this.game,
+				this.model,
+				(m) => new TableRowRenderer(game, m, this.tbody, this.model)
+			)
+		);
 	}
 
 	activateInternal() {
 		this.container = Pixies.createElement(this.dom, 'div', 'table bg');
-		this.container.addEventListener('mousemove', (e) => e.stopPropagation());
-		this.container.addEventListener('click', (e) => {
-			e.stopPropagation();
-			e.preventDefault();
-		});
 
 		this.buttons = Pixies.createElement(this.container, 'div', 'buttons');
 		const buttonsLeft = Pixies.createElement(this.buttons, 'div');
 		const buttonsRight = Pixies.createElement(this.buttons, 'div');
 
-		this.addButton = Pixies.createElement(buttonsLeft, 'button');
-		this.addButton.innerText = 'Add';
-		this.addButton.addEventListener('click', () => this.addRow());
-
-		this.closeButton = Pixies.createElement(buttonsRight, 'button');
-		this.closeButton.innerText = 'Close';
-		this.closeButton.addEventListener('click', () => {
-			if (this.game.editor.activeTable.equalsTo(this.model)) {
-				this.game.editor.triggerEvent('table-closed');
+		Pixies.createElement(
+			buttonsLeft,
+			'button',
+			null,
+			'Add',
+			(e) => {
+				e.preventDefault();
+				this.model.selectedNode.set(this.model.add());
 			}
-		});
+		);
+
+		Pixies.createElement(
+			buttonsRight,
+			'button',
+			null,
+			'Close',
+			(e) => {
+				e.preventDefault();
+				if (this.game.editor.activeTable.equalsTo(this.model)) {
+					this.game.editor.triggerEvent('table-closed');
+				}
+			}
+		);
 
 		this.scrollable = Pixies.createElement(this.container, 'div', 'scroll');
 		this.table = Pixies.createElement(this.scrollable, 'table');
@@ -65,48 +83,20 @@ export default class NodeTableRenderer extends CollectionRenderer {
 		if (dummy) {
 			const thead = Pixies.createElement(this.table, 'thead');
 			const header = Pixies.createElement(thead, 'tr');
-			dummy.properties.forEach((name, value) => {
+			dummy.properties.forEach((name) => {
 				const cell = Pixies.createElement(header, 'th');
 				cell.innerText = name;
 			});
 		}
 
 		this.tbody = Pixies.createElement(this.table, 'tbody');
-		this.rendererFactory = (item) => new TableRowRenderer(game, item, this.tbody, this.name);
 
 		super.activateInternal();
 	}
 
 	deactivateInternal() {
 		super.deactivateInternal();
-		this.hideForm();
 		Pixies.destroyElement(this.container);
-	}
-
-	addRow() {
-		const item = this.model.add();
-		this.showForm(item);
-	}
-
-	showForm(node) {
-		this.hideForm();
-		this.formRenderer = new NodeFormRenderer(this.game, node, this.dom);
-		this.addChild(this.formRenderer);
-		node.addEventListener('form-closed', this.onFormClosedHandler);
-		node.addEventListener('node-delete', this.onNodeDeleteHandler);
-	}
-
-	hideForm() {
-		if (this.formRenderer) {
-			this.removeChild(this.formRenderer);
-			this.formRenderer.model.removeEventListener('form-closed', this.onFormClosedHandler);
-			this.formRenderer.model.removeEventListener('node-delete', this.onNodeDeleteHandler);
-		}
-		this.formRenderer = null;
-	}
-
-	onNodeDelete(node) {
-		this.game.editor.triggerEvent('node-delete', {table: this.model, node: node});
 	}
 
 }

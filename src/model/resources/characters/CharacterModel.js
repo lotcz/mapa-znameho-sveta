@@ -31,6 +31,11 @@ export default class CharacterModel extends TemplateNode {
 	/**
 	 * @type IntValue
 	 */
+	hairModelId;
+
+	/**
+	 * @type IntValue
+	 */
 	hairMaterialId;
 
 	/**
@@ -57,6 +62,7 @@ export default class CharacterModel extends TemplateNode {
 		this.portrait = this.addProperty('portrait', new DirtyValue('img/portrait/adelan/female-1.jpg'));
 
 		this.hairMaterialId = this.addProperty('hairMaterialId', new IntValue(0));
+		this.hairModelId = this.addProperty('hairModelId', new IntValue(0));
 		this.scale = this.addProperty('scale', new Vector3(1,1,1));
 
 		this.stats = this.addProperty('stats', new CharacterStatsModel());

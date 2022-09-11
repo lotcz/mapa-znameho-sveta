@@ -43,7 +43,7 @@ export default class ConversationRenderer extends DomRenderer {
 
 		const header = Pixies.createElement(this.inner, 'div', 'header');
 		const title = Pixies.createElement(header, 'h2', 'title');
-		title.innerText = this.model.title.get();
+		title.innerText = this.model.name.get();
 
 		const info = Pixies.createElement(header, 'div', 'info');
 
@@ -59,7 +59,7 @@ export default class ConversationRenderer extends DomRenderer {
 		description.innerText = this.model.description.get();
 
 		if (this.game.isInDebugMode.get()) {
-			Pixies.magicEditor(title, (value) => this.model.title.set(value));
+			Pixies.magicEditor(title, (value) => this.model.name.set(value));
 			Pixies.magicEditor(description, (value) => this.model.description.set(value), true);
 
 			const buttons = Pixies.createElement(info, 'div');

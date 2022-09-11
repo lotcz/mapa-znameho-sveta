@@ -1,6 +1,7 @@
 import DomRenderer from "../basic/DomRenderer";
 import Pixies from "../../class/basic/Pixies";
 import NodeTableRenderer from "./NodeTableRenderer";
+import TableLookupRenderer from "./TableLookupRenderer";
 
 export default class NodeFormRenderer extends DomRenderer {
 
@@ -9,11 +10,11 @@ export default class NodeFormRenderer extends DomRenderer {
 	 */
 	model;
 
-	constructor(game, model, dom) {
+	constructor(game, model, dom, collection = null) {
 		super(game, model, dom);
 
 		this.model = model;
-		this.name = name;
+		this.collection = collection;
 		this.container = null;
 		this.fields = null;
 	}
@@ -32,30 +33,48 @@ export default class NodeFormRenderer extends DomRenderer {
 			this.save();
 		});
 
-		const del = Pixies.createElement(buttonsLeft, 'button', 'red', 'Del',
+		if (this.collection) {
+			Pixies.createElement(buttonsLeft, 'button', null, 'Clone',
+				(e) => {
+					e.preventDefault();
+					this.game.editor.triggerEvent('node-clone', {table: this.collection, node: this.model});
+				}
+			);
+			Pixies.createElement(buttonsLeft, 'button', 'red', 'Delete',
+				(e) => {
+					e.preventDefault();
+					this.game.editor.triggerEvent('node-delete', {table: this.collection, node: this.model});
+				}
+			);
+		}
+
+		Pixies.createElement(
+			buttonsRight,
+			'button',
+			null,
+			'Close',
 			(e) => {
 				e.preventDefault();
-				this.model.triggerEvent('node-delete', this.model);
+				if (this.game.editor.activeForm.equalsTo(this.model)) {
+					this.game.editor.triggerEvent('form-closed');
+				}
+				if (this.collection) {
+					this.collection.selectedNode.set(null);
+				}
 			}
 		);
 
-		const close = Pixies.createElement(buttonsRight, 'button');
-		close.innerText = 'Close';
-		close.addEventListener('click', (e) => {
-			e.preventDefault();
-			if (this.game.editor.activeForm.equalsTo(this.model)) {
-				this.game.editor.triggerEvent('form-closed');
-			}
-			this.model.triggerEvent('form-closed');
-		});
-
 		if (this.model.constructor.name === 'ConversationModel') {
-			const start = Pixies.createElement(buttonsLeft, 'button', 'special');
-			start.innerText = 'Start';
-			start.addEventListener('click', (e) => {
-				e.preventDefault();
-				this.game.saveGame.get().conversation.set(this.model);
-			});
+			Pixies.createElement(
+				buttonsLeft,
+				'button',
+				'special',
+				'Start',
+				(e) => {
+					e.preventDefault();
+					this.game.saveGame.get().conversation.set(this.model);
+				}
+			);
 		}
 
 		if (this.model.constructor.name === 'ItemDefinitionModel') {
@@ -134,6 +153,23 @@ export default class NodeFormRenderer extends DomRenderer {
 
 		if (typeof value === 'object' && value.value !== undefined) {
 			this.renderInput(container, name, value.value);
+			if (value.constructor.name === 'IntValue' && TableLookupRenderer.isTableLookupField(name)) {
+				Pixies.addClass(container, 'with-lookup');
+				Pixies.createElement(
+					container,
+					'button',
+					'lookup-button',
+					'Select...',
+					(e) => {
+						e.preventDefault();
+						const lookupRenderer = new TableLookupRenderer(this.game, value, container, name);
+						value.addEventListener('table-closed', () => {
+							lookupRenderer.deactivate();
+						});
+						lookupRenderer.activate();
+					}
+				);
+			}
 			return;
 		}
 

@@ -82,8 +82,7 @@ export default class BattleItemSlotRenderer extends RendererNode {
 	}
 
 	updateBonePosition() {
-		let position = null;
-		let rotation = null;
+		let position, rotation;
 		if (this.model.name === 'rightHand') {
 			position = this.definition.altMountingPosition;
 			rotation = this.definition.altMountingRotation;

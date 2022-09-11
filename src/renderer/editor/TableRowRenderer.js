@@ -8,26 +8,36 @@ export default class TableRowRenderer extends DomRenderer {
 	 */
 	model;
 
-	name;
+	/**
+	 * @type ModelNodeTable|ModelNodeCollection
+	 */
+	table;
 
-	constructor(game, model, dom, name = null) {
+	constructor(game, model, dom, collection) {
 		super(game, model, dom);
 
 		this.model = model;
-		this.name = name;
+		this.collection = collection;
+
 		this.container = null;
+
+		this.addAutoEvent(
+			this.collection.selectedNode,
+			'change',
+			() => {
+				if (this.collection.selectedNode.equalsTo(this.model)) {
+					Pixies.addClass(this.container, 'active');
+				} else {
+					Pixies.removeClass(this.container, 'active');
+				}
+			},
+			true
+		);
 	}
 
 	activateInternal() {
 		this.container = this.addElement('tr');
-
-		this.container.addEventListener('click',
-			() => {
-				/** @type NodeTableRenderer */
-				const tableRenderer = this.parent;
-				tableRenderer.showForm(this.model);
-			}
-		);
+		this.container.addEventListener('click', () => this.collection.selectedNode.set(this.model));
 
 		this.updateRow();
 	}

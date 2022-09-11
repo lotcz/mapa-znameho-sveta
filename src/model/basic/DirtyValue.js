@@ -22,7 +22,7 @@ export default class DirtyValue extends ModelNode {
 	}
 
 	isEmpty() {
-		return this.value === null || this.value === undefined;
+		return this.value === null || this.value === undefined || Number.isNaN(this.value);
 	}
 
 	isSet() {

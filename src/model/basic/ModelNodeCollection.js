@@ -1,6 +1,7 @@
 import ModelNode from "./ModelNode";
 import Collection from "../../class/basic/Collection";
 import Pixies from "../../class/basic/Pixies";
+import NullableNode from "./NullableNode";
 
 export default class ModelNodeCollection extends ModelNode {
 
@@ -11,6 +12,11 @@ export default class ModelNodeCollection extends ModelNode {
 
 	nodeFactory;
 
+	/**
+	 * @type NullableNode
+	 */
+	selectedNode;
+
 	constructor(nodeFactory, persistent = true) {
 		super(persistent);
 
@@ -19,6 +25,8 @@ export default class ModelNodeCollection extends ModelNode {
 		this.children.addOnAddListener((child) => this.onChildAdded(child));
 		this.children.addOnRemoveListener((child) => this.onChildRemoved(child));
 		this.childDirtyHandler = (ch) => this.onChildDirty(ch);
+
+		this.selectedNode = this.addProperty('selectedNode', new NullableNode(null, false));
 	}
 
 	/**
@@ -141,6 +149,9 @@ export default class ModelNodeCollection extends ModelNode {
 	onChildRemoved(child) {
 		this.makeDirty();
 		child.removeOnDirtyListener(this.childDirtyHandler);
+		if (this.selectedNode.equalsTo(child)) {
+			this.selectedNode.set(null);
+		}
 	}
 
 	onChildDirty(child) {
@@ -160,7 +171,7 @@ export default class ModelNodeCollection extends ModelNode {
 			return;
 		}
 		for (let i = 0, max = state.length; i < max; i++) {
-			const child = this.nodeFactory(state[i]);
+			const child = this.nodeFactory();
 			child.restoreState(state[i]);
 			this.children.add(child);
 		}
