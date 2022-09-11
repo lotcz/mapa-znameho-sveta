@@ -25,7 +25,7 @@ export default class PartyRenderer extends DomRenderer {
 		this.charactersRenderer = new CollectionRenderer(this.game, this.model.slots, (m) => new PartySlotRenderer(this.game, m, this.inner));
 		this.addChild(this.charactersRenderer);
 
-		this.inventoryRenderer = new NullableNodeRenderer(this.game, this.model.selectedCharacter, (m) => new InventoryRenderer(this.game, m, this.dom));
+		this.inventoryRenderer = new NullableNodeRenderer(this.game, this.model.selectedInventoryCharacter, (m) => new InventoryRenderer(this.game, m, this.dom));
 		this.addChild(this.inventoryRenderer);
 
 	}

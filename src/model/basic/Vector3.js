@@ -1,4 +1,5 @@
 import ModelNode from "./ModelNode";
+import {Vector3 as ThreeVector3} from "three";
 
 export default class Vector3 extends ModelNode {
 	x;
@@ -85,6 +86,10 @@ export default class Vector3 extends ModelNode {
 
 	restoreStateInternal(state) {
 		this.setFromArray(state);
+	}
+
+	getThree() {
+		return new ThreeVector3(this.x, this.y, this.z);
 	}
 
 }

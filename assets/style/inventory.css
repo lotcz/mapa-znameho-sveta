@@ -1,13 +1,12 @@
 .inventory {
 	position: absolute;
-	left: 250px;
+	left: 260px;
 	bottom: 20px;
 
 }
 
 .inventory .inner {
 	display: flex;
-	flex-direction: column;
 }
 
 .inventory .portrait {
@@ -19,22 +18,58 @@
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-
+	padding: 20px
 }
 
-.inventory .inventory-slots .slot {
+.inventory .slot {
 	margin: 5px;
 
 }
 
-.inventory .inventory-slots .slot .inner {
+.inventory .slot .inner {
+	box-shadow: #311a0a 0 0 40px;
 	width: 80px;
 	height: 80px;
 	padding: 0;
 }
 
-.inventory .inventory-slots .slot .inner img {
+.inventory .slot .inner img {
 	width: 100%;
+}
+
+.inventory .inventory-items {
+	margin-left: 20px;
+}
+
+.inventory .inventory-character {
+	position: relative;
+	display: block;
+	height: 600px;
+	width: 350px;
+	margin: 20px;
+	background-image: url('../img/ui/inventory-female.png');
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.inventory .inventory-character .slot {
+	position: absolute;
+}
+
+.inventory .inventory-character .slot.head {
+	top: 0;
+	left: 20%;
+}
+
+.inventory .inventory-character .slot.leftHand {
+	top: 40%;
+	right: 0;
+}
+
+.inventory .inventory-character .slot.rightHand {
+	top: 45%;
+	left: 0;
 }
 
 .selected-item-slot {

@@ -263,7 +263,7 @@ export default class BattleRenderer extends DomRenderer {
 	}
 
 	updateCameraSize() {
-		const pxPerUnit =  this.model.battleMap.get().tileSize.get();
+		const pxPerUnit = this.model.battleMap.get().tileSize.get();
 		const horizontal = (this.game.viewBoxSize.x / 2) / pxPerUnit;
 		const vertical = (this.game.viewBoxSize.y / 2) / pxPerUnit;
 		this.camera.left = - horizontal;
@@ -281,7 +281,6 @@ export default class BattleRenderer extends DomRenderer {
 	updateCameraPosition() {
 		const xz = this.model.battleMap.get().screenCoordsToPosition(this.model.coordinates);
 		const center = new Vector3(xz.x, 0, xz.y);
-		//console.log(Math.floor(xz.x), Math.floor(xz.y));
 		const position = center.add(new Vector3(-100, 100, -100));
 		this.camera.position.set(position.x, position.y, position.z);
 		this.camera.lookAt(center.x, center.y, center.z);

@@ -17,7 +17,7 @@ export default class InventorySlotRenderer extends DomRenderer {
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', 'slot');
+		this.container = this.addElement('div', ['slot', this.model.name]);
 		this.container.addEventListener('click', () => {
 			this.game.saveGame.get().triggerEvent('item-slot-selected', this.model);
 		});

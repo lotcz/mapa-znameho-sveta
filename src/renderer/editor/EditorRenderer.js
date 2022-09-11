@@ -4,7 +4,8 @@ import {GAME_MODE_BATTLE, GAME_MODE_MAP} from "../../model/savegame/SaveGameMode
 import NodeTableRenderer from "./NodeTableRenderer";
 import NullableNodeRenderer from "../basic/NullableNodeRenderer";
 import NodeFormRenderer from "./NodeFormRenderer";
-import ItemDefinitionRenderer from "../basic/ItemDefinitionRenderer";
+import ItemImageRenderer from "./ItemImageRenderer";
+import ItemMountingRenderer from "./ItemMountingRenderer";
 
 export default class EditorRenderer extends DomRenderer {
 
@@ -27,8 +28,11 @@ export default class EditorRenderer extends DomRenderer {
 		this.formRenderer = new NullableNodeRenderer(this.game, this.model.activeForm, (model) => new NodeFormRenderer(this.game, model, this.form));
 		this.addChild(this.formRenderer);
 
-		this.itemDefRenderer = new NullableNodeRenderer(this.game, this.model.activeItemDefinition, (model) => new ItemDefinitionRenderer(this.game, model, this.dock));
-		this.addChild(this.itemDefRenderer);
+		this.itemImageRenderer = new NullableNodeRenderer(this.game, this.model.activeItemImageDefinition, (model) => new ItemImageRenderer(this.game, model, this.item));
+		this.addChild(this.itemImageRenderer);
+
+		this.itemMountingRenderer = new NullableNodeRenderer(this.game, this.model.activeItemMounting, (model) => new ItemMountingRenderer(this.game, model, this.item));
+		this.addChild(this.itemMountingRenderer);
 
 		this.stopEventPropagationHandler = (e) => {
 			e.stopPropagation();
@@ -46,9 +50,10 @@ export default class EditorRenderer extends DomRenderer {
 		this.tables = Pixies.createElement(this.dock, 'div', 'table-selection bg');
 		this.table = Pixies.createElement(this.dock, 'div', 'active-table');
 		this.form = Pixies.createElement(this.dock, 'div', 'active-form');
+		this.item = Pixies.createElement(this.dock, 'div', 'active-item');
 
 		const events = ['click', 'mousemove', 'mousedown', 'mouseup', 'wheel'];
-		const elements = [this.nav, this.tables, this.table, this.form];
+		const elements = [this.nav, this.tables, this.table, this.form, this.item];
 		for (const eli in elements) {
 			for (const evi in events) {
 				this.addAutoEvent(elements[eli], events[evi], this.stopEventPropagationHandler);

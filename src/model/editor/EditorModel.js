@@ -16,7 +16,12 @@ export default class EditorModel extends ModelNode {
 	/**
 	 * @type NullableNode<ItemDefinitionModel>
 	 */
-	activeItemDefinition;
+	activeItemImageDefinition;
+
+	/**
+	 * @type NullableNode<ItemDefinitionModel>
+	 */
+	activeItemMounting;
 
 	resourcesOptions;
 
@@ -29,7 +34,8 @@ export default class EditorModel extends ModelNode {
 
 		this.activeTable = this.addProperty('activeTable', new NullableNode());
 		this.activeForm = this.addProperty('activeForm', new NullableNode());
-		this.activeItemDefinition = this.addProperty('activeItemDefinition', new NullableNode());
+		this.activeItemImageDefinition = this.addProperty('activeItemDefinition', new NullableNode());
+		this.activeItemMounting = this.addProperty('activeItemMounting', new NullableNode());
 
 		this.resourcesOptions = {
 			materials: 'Materials',

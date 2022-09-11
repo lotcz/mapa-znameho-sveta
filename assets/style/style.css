@@ -13,6 +13,16 @@
 	display: none !important;
 }
 
+.row {
+	display: flex;
+	flex-direction: row;
+}
+
+.column {
+	display: flex;
+	flex-direction: column;
+}
+
 .menu, svg {
 	-webkit-user-select: none;
 	-khtml-user-select: none;

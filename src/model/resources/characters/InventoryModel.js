@@ -1,23 +1,48 @@
 import ModelNode from "../../basic/ModelNode";
-import ModelNodeCollection from "../../basic/ModelNodeCollection";
 import InventorySlotModel from "./InventorySlotModel";
 
 export default class InventoryModel extends ModelNode {
 
 	/**
-	 * @type ModelNodeCollection<InventorySlotModel>
+	 * @type InventorySlotModel
 	 */
-	slots;
+	head;
+
+	/**
+	 * @type InventorySlotModel
+	 */
+	leftHand;
+
+	/**
+	 * @type InventorySlotModel
+	 */
+	rightHand;
+
+	/**
+	 * @type InventorySlotModel
+	 */
+	slot1;
+
+	/**
+	 * @type InventorySlotModel
+	 */
+	slot2;
+
+	/**
+	 * @type InventorySlotModel
+	 */
+	slot3;
 
 	constructor() {
 		super();
 
-		this.slots = this.addProperty('slots', new ModelNodeCollection(() => new InventorySlotModel()));
+		this.head = this.addProperty('head', new InventorySlotModel(['head'], 'head'));
+		this.leftHand = this.addProperty('leftHand', new InventorySlotModel(['all'], 'leftHand'));
+		this.rightHand = this.addProperty('rightHand', new InventorySlotModel(['all'], 'rightHand'));
 
-		// init
-		for (let i = 0, max = 10; i < max; i++) {
-			this.slots.add(new InventorySlotModel());
-		}
+		this.slot1 = this.addProperty('slot1', new InventorySlotModel(['all']));
+		this.slot2 = this.addProperty('slot2', new InventorySlotModel(['all']));
+		this.slot3 = this.addProperty('slot3', new InventorySlotModel(['all']));
 	}
 
 }

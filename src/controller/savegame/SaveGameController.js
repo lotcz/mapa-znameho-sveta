@@ -48,6 +48,10 @@ export default class SaveGameController extends ControllerNode {
 				}
 				if (this.model.selectedInventorySlot.isSet()) {
 					const oldItem = this.model.selectedInventorySlot.get().item.get();
+					const def = this.game.resources.itemDefinitions.getById(oldItem.definitionId.get());
+					if (!slot.accepts(def.type.get())) {
+						return;
+					}
 					if (slot.item.isSet()) {
 						const newItem = slot.item.get();
 						slot.item.set(oldItem);
@@ -68,7 +72,11 @@ export default class SaveGameController extends ControllerNode {
 			this.game.controls,
 			'right-click',
 			() => {
-				this.model.selectedInventorySlot.set(null);
+				if (this.model.selectedInventorySlot.isSet()) {
+					this.model.selectedInventorySlot.set(null);
+					return;
+				}
+				this.model.party.selectedInventoryCharacter.set(null);
 			}
 		)
 	}

@@ -2,6 +2,7 @@ import * as THREE from "three";
 import RendererNode from "../../basic/RendererNode";
 import AnimationHelper from "../../../class/animating/AnimationHelper";
 import * as SkeletonUtils from "three/examples/jsm/utils/SkeletonUtils.js";
+import BattleItemSlotRenderer from "./BattleItemSlotRenderer";
 
 export default class BattleCharacterRenderer extends RendererNode {
 
@@ -14,11 +15,6 @@ export default class BattleCharacterRenderer extends RendererNode {
 	 * @type {AnimationHelper|null}
 	 */
 	animation;
-
-	/**
-	 * @type CharacterModel
-	 */
-	character;
 
 	constructor(game, model, scene) {
 		super(game, model);
@@ -61,18 +57,26 @@ export default class BattleCharacterRenderer extends RendererNode {
 								mesh.receiveShadow = false;
 							}
 						});
+						const scale = race.scale;
+						this.animation.mesh.scale.set(scale.x, scale.y, scale.z);
 						this.group.add(this.animation.mesh);
-						this.model.position.makeDirty();
+
+						this.resetChildren();
+						this.addChild(new BattleItemSlotRenderer(this.game, character.inventory.head, this.animation.mesh));
+						this.addChild(new BattleItemSlotRenderer(this.game, character.inventory.leftHand, this.animation.mesh));
+						this.addChild(new BattleItemSlotRenderer(this.game, character.inventory.rightHand, this.animation.mesh));
+						this.updatePosition();
+						this.updateRotation();
+						this.switchAnimation();
+						this.animation.update();
 					}
 				}
 			);
 		});
-
 	}
 
 	deactivateInternal() {
-		//this.skinMaterial.dispose();
-		//this.skinMaterial = null;
+		this.resetChildren();
 		if (this.animation) {
 			this.animation.mesh.traverse((mesh) => {
 				if (mesh.geometry) {
@@ -86,29 +90,35 @@ export default class BattleCharacterRenderer extends RendererNode {
 	}
 
 	renderInternal() {
-
 		if (this.model.position.isDirty) {
-			this.group.position.set(this.model.position.x, 0, this.model.position.y);
+			this.updatePosition();
 		}
 
 		if (this.model.rotation.isDirty) {
-			this.group.rotation.set(0, this.model.rotation.get(), 0);
+			this.updateRotation();
 		}
 
 		if (this.model.state.isDirty) {
-			this.switchAnimation(this.model.state.get());
+			this.switchAnimation();
 		}
 
 		if (this.animation) {
 			this.animation.update();
 		}
+
 	}
 
-	switchAnimation(name) {
+	switchAnimation() {
 		if (this.animation) {
-			this.animation.activateAction(name, 250, false);
+			this.animation.activateAction(this.model.state.get(), 250, false);
 		}
 	}
 
+	updatePosition() {
+		this.group.position.set(this.model.position.x, 0, this.model.position.y);
+	}
 
+	updateRotation() {
+		this.group.rotation.set(0, this.model.rotation.get(), 0);
+	}
 }

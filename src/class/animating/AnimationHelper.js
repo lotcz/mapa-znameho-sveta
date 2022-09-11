@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 export default class AnimationHelper {
 
@@ -39,7 +38,7 @@ export default class AnimationHelper {
 	update() {
 		if (this.mixer && this.currentAction) {
 			const now = performance.now();
-			const delta = (this.lastUpdated) ? (now - this.lastUpdated) : 25;
+			const delta = (this.lastUpdated) ? (now - this.lastUpdated) : 1;
 			this.lastUpdated = now;
 			this.mixer.update(this.speed * delta / 1000);
 		}

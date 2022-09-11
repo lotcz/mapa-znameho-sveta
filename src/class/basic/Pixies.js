@@ -80,9 +80,13 @@ export default class Pixies {
 
 	static addClass(element, css) {
 		if (Array.isArray((css)) && css.length > 0) {
-			css.forEach((c) => element.classList.add(c));
+			css.forEach((cls) => {
+				if (typeof cls === 'string' && cls.length > 0) element.classList.add(cls);
+			});
 		} else if (css) {
-			css.split(' ').forEach((cls) =>	element.classList.add(cls));
+			css.split(' ').forEach((cls) =>	{
+				if (typeof cls === 'string' && cls.length > 0) element.classList.add(cls);
+			});
 		}
 	}
 

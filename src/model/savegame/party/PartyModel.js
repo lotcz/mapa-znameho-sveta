@@ -27,6 +27,11 @@ export default class PartyModel extends ModelNode {
 	selectedCharacter;
 
 	/**
+	 * @type NullableNode<CharacterModel>
+	 */
+	selectedInventoryCharacter;
+
+	/**
 	 * @type ModelNodeCollection<PartySlotModel>
 	 */
 	slots;
@@ -39,6 +44,7 @@ export default class PartyModel extends ModelNode {
 
 		this.selectedCharacterId = this.addProperty('selectedCharacterId', new IntValue(0));
 		this.selectedCharacter = this.addProperty('selectedCharacter', new NullableNode(null, false));
+		this.selectedInventoryCharacter = this.addProperty('selectedInventoryCharacter', new NullableNode(null, false));
 
 		this.slots = this.addProperty('slots', new ModelNodeCollection(() => new PartySlotModel()));
 	}

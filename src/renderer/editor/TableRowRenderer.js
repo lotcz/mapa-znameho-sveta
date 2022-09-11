@@ -49,7 +49,10 @@ export default class TableRowRenderer extends DomRenderer {
 					} else if (value.x !== undefined && value.y !== undefined) {
 						text = '[' + Pixies.round(value.x, 2)+ ',' + Pixies.round(value.y, 2);
 						if (value.z !== undefined) {
-							text += ',' + value.z;
+							text += ',' + Pixies.round(value.z, 2);
+						}
+						if (value.w !== undefined) {
+							text += ',' + Pixies.round(value.w, 2);
 						}
 						text += ']';
 					} else {

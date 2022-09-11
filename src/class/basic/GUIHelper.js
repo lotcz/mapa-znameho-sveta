@@ -43,7 +43,7 @@ export default class GUIHelper {
 
 	static addScaler(gui, object, property, min, max, step, onChange = null) {
 		const item = gui.add(object, property, min, max, step).listen();
-		item.onChange(() => {
+		item.onChange((value) => {
 			if (onChange) onChange();
 			if (object.makeDirty) object.makeDirty();
 		});

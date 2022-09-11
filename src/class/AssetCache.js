@@ -6,11 +6,15 @@ import GlbLoader from "./loaders/GlbLoader";
 import MaterialLoader from "./loaders/MaterialLoader";
 import Pixies from "./basic/Pixies";
 import ItemImageLoader from "./loaders/ItemImageLoader";
+import Model3dLoader from "./loaders/Model3dLoader";
+import ItemModelLoader from "./loaders/ItemModelLoader";
 
 const ASSET_TYPE_LOADERS = {
 	'img': ImageLoader,
 	'glb': GlbLoader,
 	'mat': MaterialLoader,
+	'm3d': Model3dLoader,
+	'it3': ItemModelLoader,
 	'itm': ItemImageLoader
 }
 

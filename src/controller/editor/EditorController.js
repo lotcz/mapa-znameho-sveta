@@ -48,23 +48,12 @@ export default class EditorController extends ControllerNode {
 			(param) => this.runOnUpdate(() => this.downloadResources(param))
 		);
 
-		//this.onResourcesChanged = () => this.model.makeDirty();
-
-		//this.addAutoEvent(this.model, 'row-selected', (node) => this.runOnUpdate(() => this.nodeSelected(node)));
 	}
 
-	activateInternal() {
-
-
-		//this.game.resources.addOnDirtyListener(this.onResourcesChanged);
-		//this.game.saveGame.addOnDirtyListener(this.onResourcesChanged);
-	}
-
-	deactivateInternal() {
-
-
-		//this.game.resources.removeOnDirtyListener(this.onResourcesChanged);
-		//this.game.saveGame.removeOnDirtyListener(this.onResourcesChanged);
+	updateInternal(delta) {
+		if (this.model.activeItemMounting.isSet()) {
+			this.model.activeItemMounting.get().makeDirty();
+		}
 	}
 
 	/**
@@ -85,7 +74,7 @@ export default class EditorController extends ControllerNode {
 					console.log(data.get(name), name);
 				}
 			} else if (data.has(`${name}[]`)) {
-				if (typeof value === 'object' && (value.constructor.name === 'Vector2' || value.constructor.name === 'Vector3')) {
+				if (typeof value === 'object' && typeof value.setFromArray === 'function') {
 					const arr = data.getAll(`${name}[]`);
 					value.setFromArray(arr);
 				}

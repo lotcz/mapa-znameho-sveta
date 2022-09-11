@@ -39,6 +39,9 @@ export default class PartyController extends ControllerNode {
 			this.model,
 			'character-selected',
 			(id) => {
+				if (this.model.selectedCharacterId.equalsTo(id)) {
+					this.model.selectedInventoryCharacter.set(this.model.selectedCharacter.get());
+				}
 				this.model.selectedCharacterId.set(id);
 			}
 		);

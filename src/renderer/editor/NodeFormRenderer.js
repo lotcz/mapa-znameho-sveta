@@ -59,12 +59,26 @@ export default class NodeFormRenderer extends DomRenderer {
 		}
 
 		if (this.model.constructor.name === 'ItemDefinitionModel') {
-			const start = Pixies.createElement(buttonsLeft, 'button', 'special');
-			start.innerText = 'Edit camera';
-			start.addEventListener('click', (e) => {
-				e.preventDefault();
-				this.game.editor.activeItemDefinition.set(this.model);
-			});
+			Pixies.createElement(
+				buttonsLeft,
+				'button',
+				'special',
+				'Edit image',
+			 	(e) => {
+					e.preventDefault();
+					this.game.editor.activeItemImageDefinition.set(this.model);
+				}
+			);
+			Pixies.createElement(
+				buttonsLeft,
+				'button',
+				'special',
+				'Edit mounting',
+				(e) => {
+					e.preventDefault();
+					this.game.editor.activeItemMounting.set(this.model);
+				}
+			);
 		}
 
 		if (this.model.constructor.name === 'PathModel') {
@@ -105,6 +119,9 @@ export default class NodeFormRenderer extends DomRenderer {
 			this.renderInput(container, `${name}[]`, value.y);
 			if (value.z !== undefined) {
 				this.renderInput(container, `${name}[]`, value.z);
+				if (value.w !== undefined) {
+					this.renderInput(container, `${name}[]`, value.w);
+				}
 			}
 			return;
 		}

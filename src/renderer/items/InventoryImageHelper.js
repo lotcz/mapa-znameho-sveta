@@ -1,4 +1,3 @@
-import DomRenderer from "./DomRenderer";
 import Pixies from "../../class/basic/Pixies";
 import * as THREE from "three";
 import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer";
@@ -6,70 +5,20 @@ import {RenderPass} from "three/examples/jsm/postprocessing/RenderPass";
 import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 import {FXAAShader} from "three/examples/jsm/shaders/FXAAShader";
 import Vector2 from "../../model/basic/Vector2";
-import GUIHelper from "../../class/basic/GUIHelper";
 
 export const IMAGE_SIZE = new Vector2(80, 80);
 
-export default class ItemDefinitionRenderer extends DomRenderer {
+export default class ItemInventoryImageHelper {
 
 	/**
-	 * @type ItemDefinitionModel
+	 *
+	 * @param dom Element
+	 * @param itemDef ItemDefinitionModel
+	 * @param mesh Mesh
+	 * @param onFinish (Image) => any
+	 * @param onFail (string) => any
 	 */
-	model;
-
-	constructor(game, model, dom) {
-		super(game, model, dom);
-
-		this.model = model;
-		this.container = null;
-	}
-
-	activateInternal() {
-		this.container = this.addElement('div', 'bg item-def');
-		this.slot = Pixies.createElement(this.container, 'div', 'slot');
-		this.inner = Pixies.createElement(this.slot, 'div', 'inner');
-
-		this.gui = GUIHelper.createGUI();
-		const position = GUIHelper.addVector3(this.gui, this.model.cameraPosition, 'camera position', -10, 10, 0.1);
-		position.open();
-		const quaternion = GUIHelper.addQuaternion(this.gui, this.model.cameraQuaternion, 'camera quaternion');
-		quaternion.open();
-
-		this.updateImage();
-	}
-
-	deactivateInternal() {
-		this.removeElement(this.container);
-		this.gui.destroy();
-		this.gui = null;
-	}
-
-	renderInternal() {
-		this.updateImage();
-	}
-
-	updateImage() {
-		const itemDef = this.model;
-		const modelId = itemDef.modelId.get();
-		const model = this.game.resources.models3d.getById(modelId);
-		if (!model) {
-			console.log('No model to render');
-			return;
-		}
-		this.game.assets.getAsset(model.uri.get(), (gltf) => {
-			ItemDefinitionRenderer.renderImage(
-				this.inner,
-				itemDef,
-				gltf,
-				(img) => {
-					Pixies.emptyElement(this.inner);
-					this.inner.appendChild(img);
-				},
-				(msg) => console.log('Model loading failed', model.uri.get(), msg));
-		});
-	}
-
-	static renderImage(dom, itemDef, gltf, onFinish, onFail) {
+	static renderImage(dom, itemDef, mesh, onFinish, onFail) {
 		const container = Pixies.createElement(dom, 'div', 'hidden');
 		const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true});
 		container.appendChild(renderer.domElement);
@@ -113,8 +62,7 @@ export default class ItemDefinitionRenderer extends DomRenderer {
 		effectFXAA.material.transparent = true;
 		composer.addPass( effectFXAA );
 
-		const mesh = gltf.scene.clone();
-		scene.add(mesh);
+		scene.add(mesh.clone());
 
 		const horizontal = itemDef.cameraSize.get();
 		const vertical = itemDef.cameraSize.get();

@@ -1,6 +1,6 @@
 import DomRenderer from "../../basic/DomRenderer";
 import Pixies from "../../../class/basic/Pixies";
-import {IMAGE_SIZE} from "../../basic/ItemDefinitionRenderer";
+import {IMAGE_SIZE} from "../../editor/ItemImageRenderer";
 
 export default class SelectedSlotRenderer extends DomRenderer {
 
