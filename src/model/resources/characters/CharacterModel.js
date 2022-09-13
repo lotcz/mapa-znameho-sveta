@@ -59,6 +59,11 @@ export default class CharacterModel extends TemplateNode {
 	 */
 	hairSlot;
 
+	/**
+	 * @type InventorySlotModel
+	 */
+	dropSlot;
+
 	constructor(id = 0) {
 		super(id);
 
@@ -74,7 +79,9 @@ export default class CharacterModel extends TemplateNode {
 		this.stats = this.addProperty('stats', new CharacterStatsModel());
 
 		this.inventory = this.addProperty('inventory', new InventoryModel());
+
 		this.hairSlot =  this.addProperty('hairSlot', new InventorySlotModel(['head'], 'head'));
+		this.dropSlot =  this.addProperty('dropSlot', new InventorySlotModel(['all'], 'drop'));
 	}
 
 }

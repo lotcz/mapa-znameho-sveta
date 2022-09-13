@@ -7,6 +7,8 @@
 
 .inventory .inner {
 	display: flex;
+	flex-direction: row;
+	align-items: stretch;
 }
 
 .inventory .portrait {
@@ -14,7 +16,12 @@
 }
 
 .inventory .inventory-slots {
-	height: 250px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.inventory .inventory-slots > div {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
@@ -70,6 +77,15 @@
 .inventory .inventory-character .slot.rightHand {
 	top: 45%;
 	left: 0;
+}
+
+.inventory .inventory-character .slot.clothing {
+	top: 33%;
+	left: 40%;
+}
+
+.inventory .slot.drop .inner {
+	background-color: rgba(200, 0, 0, 0.2);
 }
 
 .selected-item-slot {

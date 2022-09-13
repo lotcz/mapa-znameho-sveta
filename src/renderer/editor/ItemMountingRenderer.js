@@ -114,9 +114,16 @@ export default class ItemMountingRenderer extends DomRenderer {
 
 		const item = new ItemModel();
 		item.definitionId.set(this.model.id.get());
+
 		if (this.model.type.equalsTo('head')) {
 			character.inventory.head.item.set(item);
-		} else {
+		}
+
+		if (this.model.type.equalsTo('clothing')) {
+			character.inventory.clothing.item.set(item);
+		}
+
+		if (this.model.type.equalsTo('weapon') || this.model.type.equalsTo('item')) {
 			character.inventory.leftHand.item.set(item);
 			character.inventory.rightHand.item.set(item);
 		}

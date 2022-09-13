@@ -47,6 +47,12 @@ export default class SaveGameController extends ControllerNode {
 					return;
 				}
 				if (this.model.selectedInventorySlot.isSet()) {
+					if (slot.name === 'drop') {
+						this.model.selectedInventorySlot.get().item.set(null);
+						this.model.selectedInventorySlot.set(null);
+						return;
+					}
+
 					const oldItem = this.model.selectedInventorySlot.get().item.get();
 					const def = this.game.resources.itemDefinitions.getById(oldItem.definitionId.get());
 					if (!slot.accepts(def.type.get())) {

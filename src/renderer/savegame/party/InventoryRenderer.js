@@ -62,11 +62,16 @@ export default class InventoryRenderer extends DomRenderer {
 		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.head, this.inventoryCharacter));
 		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.leftHand, this.inventoryCharacter));
 		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.rightHand, this.inventoryCharacter));
+		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.clothing, this.inventoryCharacter));
 
 		this.inventorySlots = Pixies.createElement(this.inner, 'div', 'inventory-slots');
-		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.slot1, this.inventorySlots));
-		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.slot2, this.inventorySlots));
-		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.slot3, this.inventorySlots));
+		this.inventorySlotsTop = Pixies.createElement(this.inventorySlots, 'div', 'inventory-slots-top');
+		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.slot1, this.inventorySlotsTop));
+		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.slot2, this.inventorySlotsTop));
+		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.slot3, this.inventorySlotsTop));
+
+		this.inventorySlotsBottom = Pixies.createElement(this.inventorySlots, 'div', 'inventory-slots-bottom');
+		this.addChild(new InventorySlotRenderer(this.game, this.model.dropSlot, this.inventorySlotsBottom));
 	}
 
 	deactivateInternal() {

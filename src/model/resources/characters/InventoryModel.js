@@ -21,6 +21,11 @@ export default class InventoryModel extends ModelNode {
 	/**
 	 * @type InventorySlotModel
 	 */
+	clothing;
+
+	/**
+	 * @type InventorySlotModel
+	 */
 	slot1;
 
 	/**
@@ -39,6 +44,7 @@ export default class InventoryModel extends ModelNode {
 		this.head = this.addProperty('head', new InventorySlotModel(['head'], 'head'));
 		this.leftHand = this.addProperty('leftHand', new InventorySlotModel(['all'], 'leftHand'));
 		this.rightHand = this.addProperty('rightHand', new InventorySlotModel(['all'], 'rightHand'));
+		this.clothing = this.addProperty('clothing', new InventorySlotModel(['clothing'], 'clothing'));
 
 		this.slot1 = this.addProperty('slot1', new InventorySlotModel(['all']));
 		this.slot2 = this.addProperty('slot2', new InventorySlotModel(['all']));

@@ -65,6 +65,7 @@ export default class BattleCharacterRenderer extends RendererNode {
 						this.addChild(new BattleItemSlotRenderer(this.game, character.inventory.head, this.animation.mesh));
 						this.addChild(new BattleItemSlotRenderer(this.game, character.inventory.leftHand, this.animation.mesh));
 						this.addChild(new BattleItemSlotRenderer(this.game, character.inventory.rightHand, this.animation.mesh));
+						this.addChild(new BattleItemSlotRenderer(this.game, character.inventory.clothing, this.animation.mesh));
 
 						this.updatePosition();
 						this.updateRotation();

@@ -4,7 +4,8 @@ import {Object3D} from "three";
 const BONES = {
 	head: 'mixamorigHead',
 	leftHand: 'mixamorigLeftHand',
-	rightHand: 'mixamorigRightHand'
+	rightHand: 'mixamorigRightHand',
+	clothing: 'mixamorigSpine'
 }
 
 export default class BattleItemSlotRenderer extends RendererNode {
@@ -28,6 +29,13 @@ export default class BattleItemSlotRenderer extends RendererNode {
 		this.mesh = null;
 		this.definition = null;
 		this.defChangedHandler = () => this.updateBonePosition();
+
+		this.addAutoEvent(
+			this.model.item,
+			'change',
+			() => this.updateMesh(),
+			false
+		);
 	}
 
 	activateInternal() {
@@ -43,13 +51,6 @@ export default class BattleItemSlotRenderer extends RendererNode {
 	deactivateInternal() {
 		this.clearDefinitionListener();
 		this.destroyMesh();
-	}
-
-	renderInternal() {
-		if (this.model.item.isDirty) {
-			console.log('item dirty');
-			this.updateMesh();
-		}
 	}
 
 	updateMesh() {

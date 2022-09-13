@@ -43,6 +43,7 @@ export default class InventorySlotRenderer extends DomRenderer {
 			const defId = item.definitionId.get();
 			const itemDef = this.game.resources.itemDefinitions.getById(defId);
 			this.game.assets.getAsset(`itm/${itemDef.id.get()}`, (img) => {
+				Pixies.emptyElement(this.inner);
 				this.inner.appendChild(img.cloneNode(true));
 			});
 		}
