@@ -47,6 +47,7 @@ export default class BattleItemSlotRenderer extends RendererNode {
 
 	renderInternal() {
 		if (this.model.item.isDirty) {
+			console.log('item dirty');
 			this.updateMesh();
 		}
 	}
@@ -66,6 +67,24 @@ export default class BattleItemSlotRenderer extends RendererNode {
 				this.meshWrapper.add(this.mesh);
 				this.bone.add(this.meshWrapper);
 
+				console.log('updating item slot');
+
+				if (item.primaryMaterialId.isSet()) {
+					this.game.assets.getAsset(
+						`mat/${item.primaryMaterialId.get()}`,
+						(material) => {
+							this.mesh.traverse((mesh) => {
+								if (mesh.material && mesh.geometry) {
+									mesh.material.dispose();
+									mesh.material = material;
+									mesh.castShadow = true;
+									mesh.receiveShadow = false;
+								}
+							});
+						}
+					);
+				}
+
 				this.clearDefinitionListener();
 				this.definition = this.game.resources.itemDefinitions.getById(item.definitionId.get());
 				this.definition.addOnDirtyListener(this.defChangedHandler);
@@ -82,6 +101,10 @@ export default class BattleItemSlotRenderer extends RendererNode {
 	}
 
 	updateBonePosition() {
+		if (!this.definition) {
+			return;
+		}
+
 		let position, rotation;
 		if (this.model.name === 'rightHand') {
 			position = this.definition.altMountingPosition;

@@ -3,6 +3,7 @@ import Pixies from "../../../class/basic/Pixies";
 import ImageRenderer from "../../basic/ImageRenderer";
 import InventorySlotRenderer from "./InventorySlotRenderer";
 import ItemModel from "../../../model/resources/items/ItemModel";
+import TableLookupRenderer from "../../editor/TableLookupRenderer";
 
 export default class InventoryRenderer extends DomRenderer {
 
@@ -38,25 +39,23 @@ export default class InventoryRenderer extends DomRenderer {
 		);
 
 		this.buttons = Pixies.createElement(this.stats, 'div', 'row');
-		Pixies.createElement(this.buttons, 'button', 'special', 'Axe', () => {
+
+		Pixies.createElement(this.buttons, 'button', 'special', 'Add item', () => {
 			const slot = this.model.inventory.slot1;
 			const item = new ItemModel();
-			item.definitionId.set(1);
-			slot.item.set(item);
-		});
+			let renderer = new TableLookupRenderer(this.game, item.definitionId, this.buttons, 'definitionId');
 
-		Pixies.createElement(this.buttons, 'button', 'special', 'Sword', () => {
-			const slot = this.model.inventory.slot3;
-			const item = new ItemModel();
-			item.definitionId.set(2);
-			slot.item.set(item);
-		});
+			item.definitionId.addEventListener(
+				'table-closed',
+				() => {
+					if (renderer) {
+						slot.item.set(item);
+						renderer.deactivate();
+						renderer = null;
+					}
+				});
+			renderer.activate();
 
-		Pixies.createElement(this.buttons, 'button', 'special', 'Hair', () => {
-			const slot = this.model.inventory.head;
-			const item = new ItemModel();
-			item.definitionId.set(3);
-			slot.item.set(item);
 		});
 
 		this.inventoryCharacter = Pixies.createElement(this.inner, 'div', 'inventory-character ');

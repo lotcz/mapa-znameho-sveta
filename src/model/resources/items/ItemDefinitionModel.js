@@ -23,6 +23,16 @@ export default class ItemDefinitionModel extends IdentifiedModelNode {
 	modelId;
 
 	/**
+	 * @type IntValue
+	 */
+	primaryMaterialId;
+
+	/**
+	 * @type IntValue
+	 */
+	secondaryMaterialId;
+
+	/**
 	 * @type Vector3
 	 */
 	scale;
@@ -68,6 +78,9 @@ export default class ItemDefinitionModel extends IdentifiedModelNode {
 		this.name = this.addProperty('name', new DirtyValue(`Item ${id}`));
 		this.type = this.addProperty('type', new DirtyValue('item'));
 		this.modelId = this.addProperty('modelId', new IntValue());
+		this.primaryMaterialId = this.addProperty('primaryMaterialId', new IntValue());
+		this.secondaryMaterialId = this.addProperty('secondaryMaterialId', new IntValue());
+
 		this.scale = this.addProperty('scale', new Vector3(1,1,1));
 
 		this.cameraQuaternion = this.addProperty('cameraQuaternion', new Quaternion());

@@ -2,7 +2,7 @@ import Pixies from "../../class/basic/Pixies";
 import Vector2 from "../../model/basic/Vector2";
 import GUIHelper from "../../class/basic/GUIHelper";
 import DomRenderer from "../basic/DomRenderer";
-import ItemInventoryImageHelper from "../items/InventoryImageHelper";
+import ItemInventoryImageHelper from "../basic/InventoryImageHelper";
 
 export const IMAGE_SIZE = new Vector2(80, 80);
 
@@ -21,7 +21,7 @@ export default class ItemImageRenderer extends DomRenderer {
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', 'bg item-def');
+		this.container = this.addElement('div', 'bg item-def force-foreground');
 		this.buttons = Pixies.createElement(this.container,'div', 'buttons');
 		this.close = Pixies.createElement(this.buttons, 'button', null, 'Close', () => this.game.editor.activeItemImageDefinition.set(null));
 

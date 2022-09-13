@@ -4,6 +4,7 @@ import {CHARACTER_STATE_IDLE, CHARACTER_STATE_RUN} from "../../../model/savegame
 import AnimatedRotation from "../../../class/animating/AnimatedRotation";
 import PathFinder from "../../../class/PathFinder";
 import Pixies from "../../../class/basic/Pixies";
+import ItemModel from "../../../model/resources/items/ItemModel";
 
 const TRAVEL_SPEED = 3.25 / 1000; // position units per milisecond
 const ROTATION_SPEED = (Math.PI * 4) / 1000; // radians per milisecond
@@ -33,12 +34,30 @@ export default class BattleCharacterController extends ControllerNode {
 		this.rotationAnimation = null;
 
 		this.goToHandler = (p) => this.goTo(p);
+		this.headGearChangedHandler = () => this.updateHair();
 
 		this.addAutoEvent(
 			this.model.characterId,
 			'change',
 			() => {
 				this.model.character.set(this.game.saveGame.get().characters.getById(this.model.characterId.get()));
+			},
+			true
+		);
+
+		this.addAutoEvent(
+			this.model.character,
+			'change',
+			(param) => {
+				const old = param ? param.oldValue : null;
+				if (old) {
+					old.inventory.head.item.removeOnChangeListener(this.headGearChangedHandler);
+				}
+				if (this.model.character.isSet()) {
+					const character = this.model.character.get();
+					character.inventory.head.item.addOnChangeListener(this.headGearChangedHandler);
+					this.updateHair();
+				}
 			},
 			true
 		);
@@ -50,6 +69,10 @@ export default class BattleCharacterController extends ControllerNode {
 
 	deactivateInternal() {
 		this.model.removeEventListener('go-to', this.goToHandler);
+
+		const character = this.model.character.get();
+		if (character) character.inventory.head.item.removeOnChangeListener(this.headGearChangedHandler);
+
 		this.positionAnimation = null;
 		this.rotationAnimation = null;
 	}
@@ -152,6 +175,19 @@ export default class BattleCharacterController extends ControllerNode {
 			this.startMovement(winner);
 		} else {
 			console.log('nowhere to step');
+		}
+	}
+
+	updateHair() {
+		const character = this.model.character.get();
+		if (character.inventory.head.item.isEmpty() && character.hairItemDefinitionId.get() > 0) {
+			console.log('updating hair');
+			const item = new ItemModel();
+			item.definitionId.set(character.hairItemDefinitionId.get());
+			item.primaryMaterialId.set(character.hairMaterialId.get());
+			character.hairSlot.item.set(item);
+		} else {
+			character.hairSlot.item.set(null);
 		}
 	}
 

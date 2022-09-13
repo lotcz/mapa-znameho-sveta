@@ -95,7 +95,7 @@ export default class ModelNode extends Node {
 	}
 
 	cleanAll() {
-		this.clean();
+		this.isDirty = false;
 		this.properties.forEach((name, property) => property.cleanAll());
 	}
 

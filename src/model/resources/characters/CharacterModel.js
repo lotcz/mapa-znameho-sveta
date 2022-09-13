@@ -5,6 +5,7 @@ import BoolValue from "../../basic/BoolValue";
 import Vector3 from "../../basic/Vector3";
 import CharacterStatsModel from "./CharacterStatsModel";
 import InventoryModel from "./InventoryModel";
+import InventorySlotModel from "./InventorySlotModel";
 
 export default class CharacterModel extends TemplateNode {
 
@@ -31,7 +32,7 @@ export default class CharacterModel extends TemplateNode {
 	/**
 	 * @type IntValue
 	 */
-	hairModelId;
+	hairItemDefinitionId;
 
 	/**
 	 * @type IntValue
@@ -53,6 +54,11 @@ export default class CharacterModel extends TemplateNode {
 	 */
 	inventory;
 
+	/**
+	 * @type InventorySlotModel
+	 */
+	hairSlot;
+
 	constructor(id = 0) {
 		super(id);
 
@@ -62,12 +68,13 @@ export default class CharacterModel extends TemplateNode {
 		this.portrait = this.addProperty('portrait', new DirtyValue('img/portrait/adelan/female-1.jpg'));
 
 		this.hairMaterialId = this.addProperty('hairMaterialId', new IntValue(0));
-		this.hairModelId = this.addProperty('hairModelId', new IntValue(0));
+		this.hairItemDefinitionId = this.addProperty('hairItemDefinitionId', new IntValue(0));
 		this.scale = this.addProperty('scale', new Vector3(1,1,1));
 
 		this.stats = this.addProperty('stats', new CharacterStatsModel());
 
 		this.inventory = this.addProperty('inventory', new InventoryModel());
+		this.hairSlot =  this.addProperty('hairSlot', new InventorySlotModel(['head'], 'head'));
 	}
 
 }

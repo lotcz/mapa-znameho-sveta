@@ -23,7 +23,6 @@ export default class BattleCharacterRenderer extends RendererNode {
 		this.scene = scene;
 
 		this.animation = null;
-
 	}
 
 	activateInternal() {
@@ -62,9 +61,11 @@ export default class BattleCharacterRenderer extends RendererNode {
 						this.group.add(this.animation.mesh);
 
 						this.resetChildren();
+						this.addChild(new BattleItemSlotRenderer(this.game, character.hairSlot, this.animation.mesh));
 						this.addChild(new BattleItemSlotRenderer(this.game, character.inventory.head, this.animation.mesh));
 						this.addChild(new BattleItemSlotRenderer(this.game, character.inventory.leftHand, this.animation.mesh));
 						this.addChild(new BattleItemSlotRenderer(this.game, character.inventory.rightHand, this.animation.mesh));
+
 						this.updatePosition();
 						this.updateRotation();
 						this.switchAnimation();
@@ -85,6 +86,7 @@ export default class BattleCharacterRenderer extends RendererNode {
 			});
 			this.group.remove(this.animation.mesh);
 		}
+
 		this.scene.remove(this.group);
 		this.group = null;
 	}
@@ -105,7 +107,6 @@ export default class BattleCharacterRenderer extends RendererNode {
 		if (this.animation) {
 			this.animation.update();
 		}
-
 	}
 
 	switchAnimation() {
@@ -121,4 +122,5 @@ export default class BattleCharacterRenderer extends RendererNode {
 	updateRotation() {
 		this.group.rotation.set(0, this.model.rotation.get(), 0);
 	}
+
 }

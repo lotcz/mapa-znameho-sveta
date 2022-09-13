@@ -34,7 +34,7 @@ export default class ItemMountingRenderer extends DomRenderer {
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', 'bg item-def');
+		this.container = this.addElement('div', 'bg item-def force-foreground');
 		this.buttons = Pixies.createElement(this.container,'div', 'buttons');
 		this.close = Pixies.createElement(this.buttons, 'button', null, 'Close', () => this.game.editor.activeItemMounting.set(null));
 
