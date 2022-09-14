@@ -3,8 +3,8 @@ import Vector2 from "../basic/Vector2";
 import DirtyValue from "../basic/DirtyValue";
 import ControlsModel from "./ControlsModel";
 import AssetCache from "../../class/AssetCache";
-import ResourcesModel from "../resources/ResourcesModel";
-import SaveGameModel from "../savegame/SaveGameModel";
+import ResourcesModel from "./ResourcesModel";
+import SaveGameModel from "./SaveGameModel";
 import EditorModel from "../editor/EditorModel";
 import NullableNode from "../basic/NullableNode";
 

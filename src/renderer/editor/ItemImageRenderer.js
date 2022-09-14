@@ -2,7 +2,7 @@ import Pixies from "../../class/basic/Pixies";
 import Vector2 from "../../model/basic/Vector2";
 import GUIHelper from "../../class/basic/GUIHelper";
 import DomRenderer from "../basic/DomRenderer";
-import ItemInventoryImageHelper from "../basic/InventoryImageHelper";
+import ItemInventoryImageHelper from "../game/party/InventoryImageHelper";
 
 export const IMAGE_SIZE = new Vector2(80, 80);
 

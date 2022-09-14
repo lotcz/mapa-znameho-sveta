@@ -1,8 +1,8 @@
 import Pixies from "../../class/basic/Pixies";
 import GUIHelper from "../../class/basic/GUIHelper";
 import DomRenderer from "../basic/DomRenderer";
-import BattleCharacterModel from "../../model/savegame/battle/BattleCharacterModel";
-import BattleCharacterRenderer from "../savegame/battle/BattleCharacterRenderer";
+import BattleCharacterModel from "../../model/game/battle/BattleCharacterModel";
+import BattleCharacterRenderer from "../game/battle/BattleCharacterRenderer";
 import * as THREE from "three";
 import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer";
 import {RenderPass} from "three/examples/jsm/postprocessing/RenderPass";
@@ -11,8 +11,8 @@ import {FXAAShader} from "three/examples/jsm/shaders/FXAAShader";
 import Vector2 from "../../model/basic/Vector2";
 import Vector3 from "../../model/basic/Vector3";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-import ItemModel from "../../model/resources/items/ItemModel";
-import CharacterModel from "../../model/resources/characters/CharacterModel";
+import ItemModel from "../../model/game/items/ItemModel";
+import CharacterModel from "../../model/game/party/characters/CharacterModel";
 
 const PREVIEW_SIZE = new Vector2(250, 250);
 

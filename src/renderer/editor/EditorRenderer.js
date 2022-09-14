@@ -1,6 +1,6 @@
 import DomRenderer from "../basic/DomRenderer";
 import Pixies from "../../class/basic/Pixies";
-import {GAME_MODE_BATTLE, GAME_MODE_MAP} from "../../model/savegame/SaveGameModel";
+import {GAME_MODE_BATTLE, GAME_MODE_MAP} from "../../model/game/SaveGameModel";
 import NodeTableRenderer from "./NodeTableRenderer";
 import NullableNodeRenderer from "../basic/NullableNodeRenderer";
 import NodeFormRenderer from "./NodeFormRenderer";
