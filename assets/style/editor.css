@@ -106,6 +106,8 @@
 
 .editor .table .scroll {
 	max-height: 200px;
+	max-width: 700px;
+	overflow-x: auto;
 }
 
 .editor form .scroll {
