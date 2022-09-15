@@ -3,6 +3,7 @@ import RendererNode from "../../basic/RendererNode";
 import AnimationHelper from "../../../class/animating/AnimationHelper";
 import * as SkeletonUtils from "three/examples/jsm/utils/SkeletonUtils.js";
 import BattleItemSlotRenderer from "./BattleItemSlotRenderer";
+import CollectionRenderer from "../../basic/CollectionRenderer";
 
 export default class BattleCharacterRenderer extends RendererNode {
 
@@ -23,6 +24,7 @@ export default class BattleCharacterRenderer extends RendererNode {
 		this.scene = scene;
 
 		this.animation = null;
+
 	}
 
 	activateInternal() {
@@ -66,6 +68,14 @@ export default class BattleCharacterRenderer extends RendererNode {
 						this.addChild(new BattleItemSlotRenderer(this.game, character.inventory.leftHand, this.animation.mesh));
 						this.addChild(new BattleItemSlotRenderer(this.game, character.inventory.rightHand, this.animation.mesh));
 						this.addChild(new BattleItemSlotRenderer(this.game, character.inventory.clothing, this.animation.mesh));
+
+						this.addChild(
+							new CollectionRenderer(
+								this.game,
+								character.additionalItemsSlots,
+								(m) => new BattleItemSlotRenderer(this.game, m, this.animation.mesh)
+							)
+						);
 
 						this.updatePosition();
 						this.updateRotation();

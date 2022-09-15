@@ -1,14 +1,13 @@
 import Pixies from "../../class/basic/Pixies";
 import DomRenderer from "../basic/DomRenderer";
 import * as THREE from "three";
-import {SphereGeometry} from "three";
+import {BoxGeometry, SphereGeometry} from "three";
 import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer";
 import {RenderPass} from "three/examples/jsm/postprocessing/RenderPass";
 import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 import {FXAAShader} from "three/examples/jsm/shaders/FXAAShader";
 import Vector2 from "../../model/basic/Vector2";
 import Vector3 from "../../model/basic/Vector3";
-import GUIHelper from "../../class/basic/GUIHelper";
 
 const PREVIEW_SIZE = new Vector2(350, 350);
 
@@ -50,8 +49,8 @@ export default class MaterialPreviewRenderer extends DomRenderer {
 		this.renderer.setSize(PREVIEW_SIZE.x, PREVIEW_SIZE.y);
 		this.scene = new THREE.Scene();
 
-		const horizontal = 5;
-		const vertical = 5;
+		const horizontal = 3;
+		const vertical = 3;
 
 		this.camera = new THREE.OrthographicCamera(-horizontal, horizontal, -vertical, vertical);
 		this.camera.updateProjectionMatrix();
@@ -97,34 +96,7 @@ export default class MaterialPreviewRenderer extends DomRenderer {
 		this.effectFXAA.material.uniforms[ 'resolution' ].value.x = 1 / ( PREVIEW_SIZE.x * pixelRatio );
 		this.effectFXAA.material.uniforms[ 'resolution' ].value.y = 1 / ( PREVIEW_SIZE.y * pixelRatio );
 
-		this.game.assets.getAsset(
-			`mat/${this.model.id.get()}`,
-			(mat) => {
-				const material = mat.clone();
-				this.ball = new THREE.Mesh(
-					new SphereGeometry(),
-					material
-				);
-				this.scene.add(this.ball);
-
-				const guiControls = new function() {
-					this.color = material.color.getStyle();
-				}();
-
-				this.gui = GUIHelper.createGUI();
-				this.gui.addColor(guiControls, "color")
-					.listen()
-					.onChange((e) => {
-						material.color.setStyle(e);
-						this.updatePreview();
-						const color = '#' + material.color.getHexString();
-						this.model.color.set(color);
-					});
-
-				this.updatePreview();
-			}
-		)
-
+		this.updatePreview();
 	}
 
 	deactivateInternal() {
@@ -147,14 +119,36 @@ export default class MaterialPreviewRenderer extends DomRenderer {
 	}
 
 	updatePreview() {
-		if (!this.ball) {
-			return;
-		}
+		this.game.assets.resetMaterial(this.model.id.get());
+		this.game.assets.loadMaterial(
+			this.model.id.get(),
+			(material) => {
+				if (this.ball) {
+					this.ball.removeFromParent();
+				}
+				this.ball = new THREE.Mesh(
+					new SphereGeometry(),
+					material
+				);
+				this.scene.add(this.ball);
+
+				if (this.box) {
+					this.box.removeFromParent();
+				}
+				this.box = new THREE.Mesh(
+					new BoxGeometry(),
+					material
+				);
+				this.box.position.set(-10, -10, -10);
+				this.scene.add(this.box);
+				this.composer.render();
+			}
+		)
 		//this.orbitControls.update();
 		//this.battleCharacter.position.makeDirty();
 		//this.battleCharacter.rotation.makeDirty();
 		//this.battleCharacterRenderer.render();
-		this.composer.render();
+
 	}
 
 }

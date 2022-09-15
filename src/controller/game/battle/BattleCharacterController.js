@@ -5,6 +5,7 @@ import AnimatedRotation from "../../../class/animating/AnimatedRotation";
 import PathFinder from "../../../class/PathFinder";
 import Pixies from "../../../class/basic/Pixies";
 import ItemModel from "../../../model/game/items/ItemModel";
+import BattleItemSlotController from "./BattleItemSlotController";
 
 const TRAVEL_SPEED = 3.25 / 1000; // position units per milisecond
 const ROTATION_SPEED = (Math.PI * 4) / 1000; // radians per milisecond
@@ -49,6 +50,7 @@ export default class BattleCharacterController extends ControllerNode {
 			this.model.character,
 			'change',
 			(param) => {
+				this.resetChildren();
 				const old = param ? param.oldValue : null;
 				if (old) {
 					old.inventory.head.item.removeOnChangeListener(this.headGearChangedHandler);
@@ -57,10 +59,13 @@ export default class BattleCharacterController extends ControllerNode {
 					const character = this.model.character.get();
 					character.inventory.head.item.addOnChangeListener(this.headGearChangedHandler);
 					this.updateHair();
+
+					this.addChild(new BattleItemSlotController(this.game, character.inventory.clothing));
 				}
 			},
 			true
 		);
+
 	}
 
 	activateInternal() {

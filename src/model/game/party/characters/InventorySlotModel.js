@@ -1,8 +1,14 @@
 import ModelNode from "../../../basic/ModelNode";
 import NullableNode from "../../../basic/NullableNode";
 import ItemModel from "../../items/ItemModel";
+import ModelNodeCollection from "../../../basic/ModelNodeCollection";
 
 export default class InventorySlotModel extends ModelNode {
+
+	/**
+	 * @type string
+	 */
+	name;
 
 	/**
 	 * @type NullableNode<ItemModel>
@@ -10,9 +16,9 @@ export default class InventorySlotModel extends ModelNode {
 	item;
 
 	/**
-	 * @type string
+	 * @type ModelNodeCollection<InventorySlotModel>
 	 */
-	name;
+	additionalItemsSlots;
 
 	constructor(accepts = [], name = '') {
 		super();
@@ -24,6 +30,9 @@ export default class InventorySlotModel extends ModelNode {
 			if (accepts.includes('all')) return true;
 			return accepts.includes(type);
 		}
+
+		this.additionalItemsSlots = this.addProperty('additionalItemsSlots', new ModelNodeCollection(null, false));
+
 	}
 
 }

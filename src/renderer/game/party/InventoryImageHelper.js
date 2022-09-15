@@ -46,10 +46,6 @@ export default class ItemInventoryImageHelper {
 		directLight.shadow.mapSize.height = 1024;
 		scene.add(directLight);
 
-		//this.scene.add(new THREE.CameraHelper(this.directLight.shadow.camera));
-		//this.orbitControls = new OrbitControls( this.camera, this.renderer.domElement );
-		//this.orbitControls.update();
-
 		const composer = new EffectComposer( renderer );
 		const renderPass = new RenderPass( scene, camera );
 		renderPass.clearColor = new THREE.Color( 0, 0, 0 );
@@ -62,7 +58,10 @@ export default class ItemInventoryImageHelper {
 		effectFXAA.material.transparent = true;
 		composer.addPass( effectFXAA );
 
-		scene.add(mesh.clone());
+		const m = mesh.clone();
+		const r = itemDef.itemRotation;
+		m.rotation.set(r.x, r.y, r.z);
+		scene.add(m);
 
 		const horizontal = itemDef.cameraSize.get();
 		const vertical = itemDef.cameraSize.get();
@@ -74,8 +73,7 @@ export default class ItemInventoryImageHelper {
 
 		const position = itemDef.cameraPosition;
 		camera.position.set(position.x, position.y, position.z);
-		const quat = itemDef.cameraQuaternion;
-		camera.setRotationFromQuaternion(new THREE.Quaternion(quat.x, quat.y, quat.z, quat.w));
+		camera.lookAt(0, 0, 0);
 		composer.render();
 
 		const image = new Image();

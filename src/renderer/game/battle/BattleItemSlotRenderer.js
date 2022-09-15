@@ -1,11 +1,14 @@
 import RendererNode from "../../basic/RendererNode";
 import {Object3D} from "three";
+import CollectionRenderer from "../../basic/CollectionRenderer";
 
 const BONES = {
 	head: 'mixamorigHead',
 	leftHand: 'mixamorigLeftHand',
 	rightHand: 'mixamorigRightHand',
-	clothing: 'mixamorigSpine'
+	clothing: 'mixamorigSpine',
+	leftLeg: 'mixamorigLeftUpLeg',
+	rightLeg: 'mixamorigRightUpLeg'
 }
 
 export default class BattleItemSlotRenderer extends RendererNode {
@@ -29,6 +32,14 @@ export default class BattleItemSlotRenderer extends RendererNode {
 		this.mesh = null;
 		this.definition = null;
 		this.defChangedHandler = () => this.updateBonePosition();
+
+		this.addChild(
+			new CollectionRenderer(
+				this.game,
+				this.model.additionalItemsSlots,
+				(m) => new BattleItemSlotRenderer(this.game, m, characterMesh)
+			)
+		);
 
 		this.addAutoEvent(
 			this.model.item,
@@ -59,6 +70,14 @@ export default class BattleItemSlotRenderer extends RendererNode {
 			return;
 		}
 		const item = this.model.item.get();
+
+		const itemDef = this.game.resources.itemDefinitions.getById(item.definitionId.get());
+		if (
+			itemDef.hideWhenAddingItems.get() &&
+			itemDef.additionalItems.count() > 0 &&
+			itemDef.additionalSlotName.equalsTo(this.model.name)
+			) return;
+
 		this.game.assets.loadItemModel3d(
 			item.definitionId.get(),
 			(mesh) => {
@@ -67,8 +86,6 @@ export default class BattleItemSlotRenderer extends RendererNode {
 				this.mesh = mesh.clone();
 				this.meshWrapper.add(this.mesh);
 				this.bone.add(this.meshWrapper);
-
-				console.log('updating item slot');
 
 				if (item.primaryMaterialId.isSet()) {
 					this.game.assets.loadMaterial(
@@ -107,7 +124,7 @@ export default class BattleItemSlotRenderer extends RendererNode {
 		}
 
 		let position, rotation;
-		if (this.model.name === 'rightHand') {
+		if (this.model.name.startsWith('right')) {
 			position = this.definition.altMountingPosition;
 			rotation = this.definition.altMountingRotation;
 		} else {

@@ -1,9 +1,11 @@
 import DirtyValue from "../../basic/DirtyValue";
 import IntValue from "../../basic/IntValue";
 import IdentifiedModelNode from "../../basic/IdentifiedModelNode";
-import Quaternion from "../../basic/Quaternion";
 import FloatValue from "../../basic/FloatValue";
 import Vector3 from "../../basic/Vector3";
+import ModelNodeCollection from "../../basic/ModelNodeCollection";
+import BoolValue from "../../basic/BoolValue";
+import AdditionalItemModel from "./AdditionalItemModel";
 
 export default class ItemDefinitionModel extends IdentifiedModelNode {
 
@@ -38,9 +40,9 @@ export default class ItemDefinitionModel extends IdentifiedModelNode {
 	scale;
 
 	/**
-	 * @type Quaternion
+	 * @type Vector3
 	 */
-	cameraQuaternion;
+	itemRotation;
 
 	/**
 	 * @type Vector3
@@ -72,6 +74,21 @@ export default class ItemDefinitionModel extends IdentifiedModelNode {
 	 */
 	altMountingPosition;
 
+	/**
+	 * @type DirtyValue
+	 */
+	additionalSlotName;
+
+	/**
+	 * @type BoolValue
+	 */
+	hideWhenAddingItems;
+
+	/**
+	 * @type ModelNodeCollection
+	 */
+	additionalItems;
+
 	constructor(id) {
 		super(id);
 
@@ -83,7 +100,7 @@ export default class ItemDefinitionModel extends IdentifiedModelNode {
 
 		this.scale = this.addProperty('scale', new Vector3(1,1,1));
 
-		this.cameraQuaternion = this.addProperty('cameraQuaternion', new Quaternion());
+		this.itemRotation = this.addProperty('itemRotation', new Vector3());
 		this.cameraPosition = this.addProperty('cameraPosition', new Vector3());
 		this.cameraSize = this.addProperty('cameraSize', new FloatValue(20));
 
@@ -91,6 +108,10 @@ export default class ItemDefinitionModel extends IdentifiedModelNode {
 		this.mountingPosition = this.addProperty('mountingPosition', new Vector3());
 		this.altMountingRotation = this.addProperty('altMountingRotation', new Vector3());
 		this.altMountingPosition = this.addProperty('altMountingPosition', new Vector3());
+
+		this.additionalSlotName = this.addProperty('additionalSlotName', new DirtyValue(''));
+		this.hideWhenAddingItems = this.addProperty('hideWhenAddingItems', new BoolValue());
+		this.additionalItems = this.addProperty('additionalItems', new ModelNodeCollection(() => new AdditionalItemModel()));
 	}
 
 }

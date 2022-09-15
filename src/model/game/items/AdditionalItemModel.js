@@ -1,24 +1,24 @@
 import IntValue from "../../basic/IntValue";
 import ModelNode from "../../basic/ModelNode";
+import DirtyValue from "../../basic/DirtyValue";
 
-export default class ItemModel extends ModelNode {
+export default class AdditionalItemModel extends ModelNode {
+
+	/**
+	 * @type DirtyValue
+	 */
+	slotName;
 
 	/**
 	 * @type IntValue
 	 */
 	definitionId;
 
-	/**
-	 * @type IntValue
-	 * Used for rendering hair
-	 */
-	primaryMaterialId;
-
 	constructor() {
 		super();
 
+		this.slotName = this.addProperty('slotName', new DirtyValue(''));
 		this.definitionId = this.addProperty('definitionId', new IntValue());
-		this.primaryMaterialId = this.addProperty('primaryMaterialId', new IntValue());
 	}
 
 }

@@ -37,7 +37,7 @@ export default class TableLookupRenderer extends DomRenderer {
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', 'table table-lookup bg');
+		this.container = this.addElement('div', 'table table-lookup bg force-foreground');
 
 		this.buttons = Pixies.createElement(this.container, 'div', 'buttons');
 		Pixies.createElement(

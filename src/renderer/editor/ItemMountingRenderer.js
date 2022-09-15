@@ -13,6 +13,7 @@ import Vector3 from "../../model/basic/Vector3";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import ItemModel from "../../model/game/items/ItemModel";
 import CharacterModel from "../../model/game/party/characters/CharacterModel";
+import AdditionalItemModel from "../../model/game/items/AdditionalItemModel";
 
 const PREVIEW_SIZE = new Vector2(250, 250);
 
@@ -34,7 +35,7 @@ export default class ItemMountingRenderer extends DomRenderer {
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', 'bg item-def force-foreground');
+		this.container = this.addElement('div', 'bg item-def');
 		this.buttons = Pixies.createElement(this.container,'div', 'buttons');
 		this.close = Pixies.createElement(this.buttons, 'button', null, 'Close', () => this.game.editor.activeItemMounting.set(null));
 
@@ -43,11 +44,11 @@ export default class ItemMountingRenderer extends DomRenderer {
 		this.gui = GUIHelper.createGUI();
 		const position = GUIHelper.addVector3(this.gui, this.model.mountingPosition, 'mounting position', -30, 30, 0.1);
 		position.open();
-		const quaternion = GUIHelper.addVector3(this.gui, this.model.mountingRotation, 'mounting quaternion', -Math.PI, Math.PI, Math.PI/180);
+		const quaternion = GUIHelper.addRotationVector3(this.gui, this.model.mountingRotation, 'mounting rotation');
 		quaternion.open();
 		const position2 = GUIHelper.addVector3(this.gui, this.model.altMountingPosition, 'alt mounting position', -30, 30, 0.1);
 		position2.open();
-		const quaternion2 = GUIHelper.addVector3(this.gui, this.model.altMountingRotation, 'alt mounting quaternion', -Math.PI, Math.PI, Math.PI/180);
+		const quaternion2 = GUIHelper.addRotationVector3(this.gui, this.model.altMountingRotation, 'alt mounting rotation');
 		quaternion2.open();
 
 		this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -115,6 +116,8 @@ export default class ItemMountingRenderer extends DomRenderer {
 		const item = new ItemModel();
 		item.definitionId.set(this.model.id.get());
 
+		let placeInHands = true;
+
 		if (this.model.type.equalsTo('head')) {
 			character.inventory.head.item.set(item);
 		}
@@ -123,7 +126,19 @@ export default class ItemMountingRenderer extends DomRenderer {
 			character.inventory.clothing.item.set(item);
 		}
 
-		if (this.model.type.equalsTo('weapon') || this.model.type.equalsTo('item')) {
+		if (this.model.type.equalsTo('legs')) {
+			const ai = new AdditionalItemModel();
+			ai.definitionId.set(item.definitionId.get());
+			ai.slotName.set('leftLeg');
+			character.additionalItems.add(ai);
+			const ai2 = new AdditionalItemModel();
+			ai2.definitionId.set(item.definitionId.get());
+			ai2.slotName.set('rightLeg');
+			character.additionalItems.add(ai2);
+			placeInHands = false;
+		}
+
+		if (placeInHands) {
 			character.inventory.leftHand.item.set(item);
 			character.inventory.rightHand.item.set(item);
 		}

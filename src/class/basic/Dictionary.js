@@ -1,4 +1,5 @@
 import Node from "./Node";
+
 const DEBUG_HASH_TABLE = false;
 
 export default class Dictionary extends Node {
@@ -46,7 +47,7 @@ export default class Dictionary extends Node {
 		}
 		const element = this.get(key);
 		delete this.keyValues[key];
-		this.triggerEvent('remove', {key: key, value: value});
+		this.triggerEvent('remove', {key: key, value: element});
 		return element;
 	}
 
