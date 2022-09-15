@@ -50,7 +50,7 @@ export default class ItemImageRenderer extends DomRenderer {
 	updateImage() {
 		const itemDef = this.model;
 
-		this.game.assets.getAsset(`it3/${itemDef.id.get()}`, (mesh) => {
+		this.game.assets.loadItemModel3d(itemDef.id.get(), (mesh) => {
 			ItemInventoryImageHelper.renderImage(
 				window.document.body,
 				itemDef, mesh,

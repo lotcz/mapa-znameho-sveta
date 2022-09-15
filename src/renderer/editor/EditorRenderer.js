@@ -6,6 +6,7 @@ import NullableNodeRenderer from "../basic/NullableNodeRenderer";
 import NodeFormRenderer from "./NodeFormRenderer";
 import ItemImageRenderer from "./ItemImageRenderer";
 import ItemMountingRenderer from "./ItemMountingRenderer";
+import MaterialPreviewRenderer from "./MaterialPreviewRenderer";
 
 export default class EditorRenderer extends DomRenderer {
 
@@ -33,6 +34,9 @@ export default class EditorRenderer extends DomRenderer {
 
 		this.itemMountingRenderer = new NullableNodeRenderer(this.game, this.model.activeItemMounting, (model) => new ItemMountingRenderer(this.game, model, this.item));
 		this.addChild(this.itemMountingRenderer);
+
+		this.materialPreviewRenderer = new NullableNodeRenderer(this.game, this.model.activeMaterial, (model) => new MaterialPreviewRenderer(this.game, model, this.item));
+		this.addChild(this.materialPreviewRenderer);
 
 		this.stopEventPropagationHandler = (e) => {
 			e.stopPropagation();

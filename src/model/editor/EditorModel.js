@@ -23,6 +23,11 @@ export default class EditorModel extends ModelNode {
 	 */
 	activeItemMounting;
 
+	/**
+	 * @type NullableNode<MaterialModel>
+	 */
+	activeMaterial;
+
 	resourcesOptions;
 
 	mapOptions;
@@ -36,6 +41,7 @@ export default class EditorModel extends ModelNode {
 		this.activeForm = this.addProperty('activeForm', new NullableNode());
 		this.activeItemImageDefinition = this.addProperty('activeItemDefinition', new NullableNode());
 		this.activeItemMounting = this.addProperty('activeItemMounting', new NullableNode());
+		this.activeMaterial = this.addProperty('activeMaterial', new NullableNode());
 
 		this.resourcesOptions = {
 			materials: 'Materials',

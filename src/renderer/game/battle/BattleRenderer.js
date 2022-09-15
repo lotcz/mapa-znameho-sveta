@@ -11,6 +11,8 @@ import Vector3 from "../../../model/basic/Vector3";
 import Vector2 from "../../../model/basic/Vector2";
 import GUIHelper from "../../../class/basic/GUIHelper";
 
+const DEBUG_BATTLE_RENDERER = false;
+
 export default class BattleRenderer extends DomRenderer {
 
 	/**
@@ -138,10 +140,12 @@ export default class BattleRenderer extends DomRenderer {
 			}
 		);
 
-		this.gui = GUIHelper.createGUI();
-		const coord = GUIHelper.addVector2(this.gui, this.model.coordinates, 'screen coords');
-		const til = GUIHelper.addVector2(this.gui, this.currentTile, 'tile');
-		const cam = GUIHelper.addScaler(this.gui, this.camera, 'zoom', -10, 10);
+		if (DEBUG_BATTLE_RENDERER) {
+			this.gui = GUIHelper.createGUI();
+			const coord = GUIHelper.addVector2(this.gui, this.model.coordinates, 'screen coords');
+			const til = GUIHelper.addVector2(this.gui, this.currentTile, 'tile');
+			const cam = GUIHelper.addScaler(this.gui, this.camera, 'zoom', -10, 10);
+		}
 
 		this.game.assets.getAsset(
 			'img/palm-tree.png',
@@ -166,8 +170,10 @@ export default class BattleRenderer extends DomRenderer {
 
 	deactivateInternal() {
 		this.game.viewBoxSize.removeOnChangeListener(this.onViewBoxChangeHandler);
-		this.gui.destroy();
-		this.gui = null;
+		if (this.gui) {
+			this.gui.destroy();
+			this.gui = null;
+		}
 		this.ambientLight.dispose();
 		this.ambientLight = null;
 		this.directLight.dispose();

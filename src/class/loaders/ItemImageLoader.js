@@ -11,7 +11,7 @@ export default class ItemImageLoader extends AssetLoader {
 
 		const id = Pixies.extractId(this.uri);
 
-		this.assets.getAsset(`it3/${id}`, (mesh) => {
+		this.assets.loadItemModel3d(id, (mesh) => {
 			const itemDef = this.assets.resources.itemDefinitions.getById(id);
 			ItemInventoryImageHelper.renderImage(window.document.body, itemDef, mesh, (img) => this.finish(img), (msg) => this.fail(msg));
 		});

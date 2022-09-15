@@ -1,25 +1,21 @@
 import Pixies from "../../class/basic/Pixies";
-import GUIHelper from "../../class/basic/GUIHelper";
 import DomRenderer from "../basic/DomRenderer";
-import BattleCharacterModel from "../../model/game/battle/BattleCharacterModel";
-import BattleCharacterRenderer from "../game/battle/BattleCharacterRenderer";
 import * as THREE from "three";
+import {SphereGeometry} from "three";
 import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer";
 import {RenderPass} from "three/examples/jsm/postprocessing/RenderPass";
 import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 import {FXAAShader} from "three/examples/jsm/shaders/FXAAShader";
 import Vector2 from "../../model/basic/Vector2";
 import Vector3 from "../../model/basic/Vector3";
-import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-import ItemModel from "../../model/game/items/ItemModel";
-import CharacterModel from "../../model/game/party/characters/CharacterModel";
+import GUIHelper from "../../class/basic/GUIHelper";
 
-const PREVIEW_SIZE = new Vector2(250, 250);
+const PREVIEW_SIZE = new Vector2(350, 350);
 
-export default class ItemMountingRenderer extends DomRenderer {
+export default class MaterialPreviewRenderer extends DomRenderer {
 
 	/**
-	 * @type ItemDefinitionModel
+	 * @type MaterialModel
 	 */
 	model;
 
@@ -29,17 +25,16 @@ export default class ItemMountingRenderer extends DomRenderer {
 		this.model = model;
 		this.container = null;
 		this.scene = null;
-		this.battleCharacter = null;
-		this.battleCharacterRenderer = null;
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', 'bg item-def force-foreground');
+		this.container = this.addElement('div', 'bg item-def');
 		this.buttons = Pixies.createElement(this.container,'div', 'buttons');
-		this.close = Pixies.createElement(this.buttons, 'button', null, 'Close', () => this.game.editor.activeItemMounting.set(null));
+		this.close = Pixies.createElement(this.buttons, 'button', null, 'Close', () => this.game.editor.activeMaterial.set(null));
 
-		this.slot = Pixies.createElement(this.container, 'div', 'slot');
-
+		this.paper = Pixies.createElement(this.container, 'div', 'paper');
+		this.inner = Pixies.createElement(this.paper, 'div', 'inner');
+/*
 		this.gui = GUIHelper.createGUI();
 		const position = GUIHelper.addVector3(this.gui, this.model.mountingPosition, 'mounting position', -30, 30, 0.1);
 		position.open();
@@ -49,19 +44,16 @@ export default class ItemMountingRenderer extends DomRenderer {
 		position2.open();
 		const quaternion2 = GUIHelper.addVector3(this.gui, this.model.altMountingRotation, 'alt mounting quaternion', -Math.PI, Math.PI, Math.PI/180);
 		quaternion2.open();
-
+*/
 		this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-		this.slot.appendChild(this.renderer.domElement);
+		this.inner.appendChild(this.renderer.domElement);
 		this.renderer.setSize(PREVIEW_SIZE.x, PREVIEW_SIZE.y);
 		this.scene = new THREE.Scene();
 
-		this.camera = new THREE.OrthographicCamera(-50,50, 50, -50);
-		const horizontal = 2;
-		const vertical = 2;
-		this.camera.left = - horizontal;
-		this.camera.right = horizontal;
-		this.camera.bottom = - vertical;
-		this.camera.top = vertical;
+		const horizontal = 5;
+		const vertical = 5;
+
+		this.camera = new THREE.OrthographicCamera(-horizontal, horizontal, -vertical, vertical);
 		this.camera.updateProjectionMatrix();
 
 		const camPosition = new Vector3(-100, 100, -100);
@@ -84,10 +76,10 @@ export default class ItemMountingRenderer extends DomRenderer {
 		this.directLight.shadow.mapSize.width = 1024;
 		this.directLight.shadow.mapSize.height = 1024;
 		this.scene.add(this.directLight);
-
+/*
 		this.orbitControls = new OrbitControls( this.camera, this.renderer.domElement );
 		this.orbitControls.update();
-
+*/
 		this.composer = new EffectComposer(this.renderer);
 		this.composer.setSize(PREVIEW_SIZE.x, PREVIEW_SIZE.y);
 
@@ -105,33 +97,34 @@ export default class ItemMountingRenderer extends DomRenderer {
 		this.effectFXAA.material.uniforms[ 'resolution' ].value.x = 1 / ( PREVIEW_SIZE.x * pixelRatio );
 		this.effectFXAA.material.uniforms[ 'resolution' ].value.y = 1 / ( PREVIEW_SIZE.y * pixelRatio );
 
-		this.battleCharacter = new BattleCharacterModel();
-		const characterTemp = this.game.resources.characterTemplates.getById(1);
-		const character = new CharacterModel();
-		character.restoreState(characterTemp.getState());
-		this.battleCharacter.character.set(character);
-		this.battleCharacter.rotation.set(-Math.PI);
+		this.game.assets.getAsset(
+			`mat/${this.model.id.get()}`,
+			(mat) => {
+				const material = mat.clone();
+				this.ball = new THREE.Mesh(
+					new SphereGeometry(),
+					material
+				);
+				this.scene.add(this.ball);
 
-		const item = new ItemModel();
-		item.definitionId.set(this.model.id.get());
+				const guiControls = new function() {
+					this.color = material.color.getStyle();
+				}();
 
-		if (this.model.type.equalsTo('head')) {
-			character.inventory.head.item.set(item);
-		}
+				this.gui = GUIHelper.createGUI();
+				this.gui.addColor(guiControls, "color")
+					.listen()
+					.onChange((e) => {
+						material.color.setStyle(e);
+						this.updatePreview();
+						const color = '#' + material.color.getHexString();
+						this.model.color.set(color);
+					});
 
-		if (this.model.type.equalsTo('clothing')) {
-			character.inventory.clothing.item.set(item);
-		}
+				this.updatePreview();
+			}
+		)
 
-		if (this.model.type.equalsTo('weapon') || this.model.type.equalsTo('item')) {
-			character.inventory.leftHand.item.set(item);
-			character.inventory.rightHand.item.set(item);
-		}
-
-		this.battleCharacterRenderer = new BattleCharacterRenderer(this.game, this.battleCharacter, this.scene);
-		this.battleCharacterRenderer.activate();
-
-		this.updatePreview();
 	}
 
 	deactivateInternal() {
@@ -143,8 +136,10 @@ export default class ItemMountingRenderer extends DomRenderer {
 		this.renderer.dispose();
 		this.renderer = false;
 		this.removeElement(this.container);
-		this.gui.destroy();
-		this.gui = null;
+		if (this.gui) {
+			this.gui.destroy();
+			this.gui = null;
+		}
 	}
 
 	renderInternal() {
@@ -152,7 +147,10 @@ export default class ItemMountingRenderer extends DomRenderer {
 	}
 
 	updatePreview() {
-		this.orbitControls.update();
+		if (!this.ball) {
+			return;
+		}
+		//this.orbitControls.update();
 		//this.battleCharacter.position.makeDirty();
 		//this.battleCharacter.rotation.makeDirty();
 		//this.battleCharacterRenderer.render();

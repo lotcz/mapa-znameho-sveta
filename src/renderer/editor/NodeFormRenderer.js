@@ -100,6 +100,19 @@ export default class NodeFormRenderer extends DomRenderer {
 			);
 		}
 
+		if (this.model.constructor.name === 'MaterialModel') {
+			Pixies.createElement(
+				buttonsLeft,
+				'button',
+				'special',
+				'Preview',
+				(e) => {
+					e.preventDefault();
+					this.game.editor.activeMaterial.set(this.model);
+				}
+			);
+		}
+
 		if (this.model.constructor.name === 'PathModel') {
 			const start = Pixies.createElement(buttonsLeft, 'button', 'special');
 			start.innerText = 'Add waypoint';

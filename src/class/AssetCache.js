@@ -7,14 +7,14 @@ import MaterialLoader from "./loaders/MaterialLoader";
 import Pixies from "./basic/Pixies";
 import ItemImageLoader from "./loaders/ItemImageLoader";
 import Model3dLoader from "./loaders/Model3dLoader";
-import ItemModelLoader from "./loaders/ItemModelLoader";
+import ItemModel3dLoader from "./loaders/ItemModel3dLoader";
 
 const ASSET_TYPE_LOADERS = {
 	'img': ImageLoader,
 	'glb': GlbLoader,
 	'mat': MaterialLoader,
 	'm3d': Model3dLoader,
-	'it3': ItemModelLoader,
+	'it3': ItemModel3dLoader,
 	'itm': ItemImageLoader
 }
 
@@ -51,14 +51,21 @@ export default class AssetCache {
 		this.isLoading.set(!this.loaders.isEmpty());
 	}
 
+	resetCache(name = null) {
+		if (name) {
+			this.cache.remove(name);
+		} else {
+			this.cache.reset();
+		}
+	}
+
 	getAsset(uri, onLoaded = null) {
 		if (this.cache.exists(uri)) {
 			onLoaded(this.cache.get(uri));
 		} else {
-
 			const existingLoader = this.loaders.find((l) => l.uri === uri);
 			if (existingLoader) {
-				existingLoader.addLoaderEventsListeners(onLoaded,null);
+				existingLoader.addLoaderEventsListeners(onLoaded);
 				return;
 			}
 
@@ -78,8 +85,8 @@ export default class AssetCache {
 					} else {
 						this.cache.add(uri, resource);
 					}
-					if (onLoaded) onLoaded(resource);
 					this.loaders.remove(loader);
+					if (onLoaded) onLoaded(resource);
 				},
 				(msg) => {
 					console.error(`Error when loading resource ${uri} - ${msg}`);
@@ -89,4 +96,23 @@ export default class AssetCache {
 		}
 	}
 
+	loadMaterial(materialId, onLoaded) {
+		this.getAsset(`mat/${materialId}`, onLoaded);
+	}
+
+	resetMaterial(materialId) {
+		this.resetCache(`mat/${materialId}`);
+	}
+
+	loadModel3d(modelId, onLoaded) {
+		this.getAsset(`m3d/${modelId}`, onLoaded);
+	}
+
+	loadItemModel3d(itemDefId, onLoaded) {
+		this.getAsset(`it3/${itemDefId}`, onLoaded);
+	}
+
+	loadItemImage(itemDefId, onLoaded) {
+		this.getAsset(`itm/${itemDefId}`, onLoaded);
+	}
 }

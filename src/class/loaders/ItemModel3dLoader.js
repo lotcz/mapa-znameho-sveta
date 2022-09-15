@@ -5,26 +5,34 @@ import {Object3D} from "three";
 /**
  * Loads a 3d model for item
  */
-export default class ItemModelLoader extends AssetLoader {
-
-	primaryLoaded = true;
-	secondaryLoaded = true;
+export default class ItemModel3dLoader extends AssetLoader {
 
 	loadInternal() {
+
+		this.primaryLoaded = true;
+		this.secondaryLoaded = true;
+		this.isFinished = false;
 
 		const id = Pixies.extractId(this.uri);
 		const itemDef = this.assets.resources.itemDefinitions.getById(id);
 
-		this.assets.getAsset(`m3d/${itemDef.modelId.get()}`, (mesh) => {
+		if (itemDef.primaryMaterialId.isSet()) {
+			this.primaryLoaded = false;
+		}
+
+		if (itemDef.secondaryMaterialId.isSet()) {
+			this.secondaryLoaded = false;
+		}
+
+		this.assets.loadModel3d(itemDef.modelId.get(), (mesh) => {
 			const itemMesh = mesh.clone();
-			const wrapper = new Object3D();
-			wrapper.add(itemMesh);
-			wrapper.scale.set(itemDef.scale.x, itemDef.scale.y, itemDef.scale.z);
+			this.wrapper = new Object3D();
+			this.wrapper.add(itemMesh);
+			this.wrapper.scale.set(itemDef.scale.x, itemDef.scale.y, itemDef.scale.z);
 
 			if (itemDef.primaryMaterialId.isSet()) {
-				this.primaryLoaded = false;
-				this.assets.getAsset(
-					`mat/${itemDef.primaryMaterialId.get()}`,
+				this.assets.loadMaterial(
+					itemDef.primaryMaterialId.get(),
 					(material) => {
 						itemMesh.traverse((msh) => {
 							if (msh.material && msh.geometry && msh.material.name === 'PrimaryMaterial') {
@@ -35,15 +43,14 @@ export default class ItemModelLoader extends AssetLoader {
 							}
 						});
 						this.primaryLoaded = true;
-						this.checkFinished(wrapper);
+						this.checkFinished();
 					}
 				);
 			}
 
 			if (itemDef.secondaryMaterialId.isSet()) {
-				this.secondaryLoaded = false;
-				this.assets.getAsset(
-					`mat/${itemDef.secondaryMaterialId.get()}`,
+				this.assets.loadMaterial(
+					itemDef.secondaryMaterialId.get(),
 					(material) => {
 						itemMesh.traverse((msh) => {
 							if (msh.material && msh.geometry && msh.material.name === 'SecondaryMaterial') {
@@ -54,18 +61,19 @@ export default class ItemModelLoader extends AssetLoader {
 							}
 						});
 						this.secondaryLoaded = true;
-						this.checkFinished(wrapper);
+						this.checkFinished();
 					}
 				);
 			}
 
-			this.checkFinished(wrapper);
+			this.checkFinished();
 		});
 	}
 
-	checkFinished(wrapper) {
-		if (this.primaryLoaded && this.secondaryLoaded) {
-			this.finish(wrapper);
+	checkFinished() {
+		if (this.primaryLoaded && this.secondaryLoaded && !this.isFinished) {
+			this.isFinished = true;
+			this.finish(this.wrapper);
 		}
 	}
 }

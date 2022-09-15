@@ -59,8 +59,8 @@ export default class BattleItemSlotRenderer extends RendererNode {
 			return;
 		}
 		const item = this.model.item.get();
-		this.game.assets.getAsset(
-			`it3/${item.definitionId.get()}`,
+		this.game.assets.loadItemModel3d(
+			item.definitionId.get(),
 			(mesh) => {
 				this.destroyMesh();
 				this.meshWrapper = new Object3D();
@@ -71,8 +71,8 @@ export default class BattleItemSlotRenderer extends RendererNode {
 				console.log('updating item slot');
 
 				if (item.primaryMaterialId.isSet()) {
-					this.game.assets.getAsset(
-						`mat/${item.primaryMaterialId.get()}`,
+					this.game.assets.loadMaterial(
+						item.primaryMaterialId.get(),
 						(material) => {
 							this.mesh.traverse((mesh) => {
 								if (mesh.material && mesh.geometry) {
