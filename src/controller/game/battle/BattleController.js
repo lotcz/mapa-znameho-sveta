@@ -16,8 +16,12 @@ export default class BattleController extends ControllerNode {
 		this.dragging = false;
 		this.scrolling = false;
 
-		this.charactersController = this.addChild(
-			new CollectionController(this.game, this.model.characters, (model) => new BattleCharacterController(game, model))
+		this.addChild(
+			new CollectionController(
+				this.game,
+				this.model.characters,
+				(model) => new BattleCharacterController(game, model)
+			)
 		);
 
 		this.mouseMoveHandler = () => this.onMouseMove();

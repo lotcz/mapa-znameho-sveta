@@ -35,7 +35,7 @@
 	color: gray;
 }
 
-.editor .table-selection {
+.editor .table-selection .inner {
 	padding: 10px;
 }
 

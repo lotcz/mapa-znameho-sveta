@@ -55,7 +55,7 @@ export default class GameController extends ControllerNode {
 		this.updateDebugMenu();
 		this.model.isInDebugMode.addOnChangeListener(this.updateDebugMenuHandler);
 
-		this.model.saveGame.addEventListener('save', this.onSaveGameHandler);
+		this.model.addEventListener('save-game', this.onSaveGameHandler);
 
 		this.loadResourcesFromStorage().then(() => {
 			this.model.resources.addOnDirtyListener(() => this.isResourcesDirty = true);

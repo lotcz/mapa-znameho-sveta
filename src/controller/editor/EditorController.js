@@ -1,4 +1,6 @@
 import ControllerNode from "../basic/ControllerNode";
+import EditorSaveGameController from "./EditorSaveGameController";
+import NullableNodeController from "../basic/NullableNodeController";
 
 export default class EditorController extends ControllerNode {
 
@@ -11,6 +13,14 @@ export default class EditorController extends ControllerNode {
 		super(game, model);
 
 		this.model = model;
+
+		this.addChild(
+			new NullableNodeController(
+				this.game,
+				this.game.saveGame,
+				(m) => new EditorSaveGameController(this.game, m)
+			)
+		);
 
 		this.addAutoEvent(
 			this.model,
@@ -52,6 +62,13 @@ export default class EditorController extends ControllerNode {
 			this.model,
 			'download-resources',
 			(param) => this.runOnUpdate(() => this.downloadResources(param))
+		);
+
+		this.addAutoEvent(
+			this.model,
+			'switch-options',
+			(param) => this.runOnUpdate(
+				() => this.model.isOptionsVisible.set(!this.model.isOptionsVisible.get()))
 		);
 
 	}

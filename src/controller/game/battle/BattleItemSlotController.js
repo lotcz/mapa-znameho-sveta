@@ -28,7 +28,6 @@ export default class BattleItemSlotController extends ControllerNode {
 				}
 				itemDef.additionalItems.forEach(
 					(ai) => {
-						console.log(ai, 'addi');
 						const item = new ItemModel();
 						item.definitionId.set(ai.definitionId.get());
 						const slot = new InventorySlotModel(['all'], ai.slotName.get());

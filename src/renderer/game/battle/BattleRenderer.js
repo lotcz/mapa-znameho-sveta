@@ -10,6 +10,8 @@ import BattleCharacterRenderer from "./BattleCharacterRenderer";
 import Vector3 from "../../../model/basic/Vector3";
 import Vector2 from "../../../model/basic/Vector2";
 import GUIHelper from "../../../class/basic/GUIHelper";
+import BattleSpriteRenderer from "./BattleSpriteRenderer";
+import NullableNodeRenderer from "../../basic/NullableNodeRenderer";
 
 const DEBUG_BATTLE_RENDERER = false;
 
@@ -34,7 +36,29 @@ export default class BattleRenderer extends DomRenderer {
 
 		this.scene = null;
 
-		this.charactersRenderer = this.addChild(new CollectionRenderer(this.game, this.model.characters, (m) => new BattleCharacterRenderer(this.game, m, this.scene)));
+		this.addChild(
+			new CollectionRenderer(
+				this.game,
+				this.model.characters,
+				(m) => new BattleCharacterRenderer(this.game, m, this.scene)
+			)
+		);
+
+		this.addChild(
+			new NullableNodeRenderer(
+				this.game,
+				this.game.editor.activeBattleSprite,
+				(m) => new BattleSpriteRenderer(this.game, m, this.scene)
+			)
+		);
+
+		this.addChild(
+			new CollectionRenderer(
+				this.game,
+				this.model.battleMap.get().sprites,
+				(m) => new BattleSpriteRenderer(this.game, m, this.scene)
+			)
+		);
 
 		this.onViewBoxChangeHandler = () => this.onViewBoxSizeChanged();
 
@@ -146,23 +170,6 @@ export default class BattleRenderer extends DomRenderer {
 			const til = GUIHelper.addVector2(this.gui, this.currentTile, 'tile');
 			const cam = GUIHelper.addScaler(this.gui, this.camera, 'zoom', -10, 10);
 		}
-
-		this.game.assets.getAsset(
-			'img/palm-tree.png',
-			(img) => {
-				const texture = new THREE.Texture();
-				texture.image = img;
-				texture.needsUpdate = true;
-				texture.wrapS = THREE.RepeatWrapping;
-				texture.wrapT = THREE.RepeatWrapping;
-				texture.repeat.set(1, 1);
-				const sprite = new THREE.Mesh(new THREE.PlaneGeometry(5, 5), new THREE.MeshBasicMaterial({transparent: true, map:texture}));
-				sprite.position.set(-27, 2.5, -25);
-				const target = sprite.position.clone().add(new THREE.Vector3(-1,1, -1));
-				sprite.lookAt(target.x, target.y, target.z);
-				this.scene.add(sprite);
-			}
-		);
 
 		this.updateCameraPosition();
 		this.updateCameraZoom();

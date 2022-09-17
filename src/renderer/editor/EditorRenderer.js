@@ -1,12 +1,12 @@
 import DomRenderer from "../basic/DomRenderer";
 import Pixies from "../../class/basic/Pixies";
-import {GAME_MODE_BATTLE, GAME_MODE_MAP} from "../../model/game/SaveGameModel";
 import NodeTableRenderer from "./NodeTableRenderer";
 import NullableNodeRenderer from "../basic/NullableNodeRenderer";
 import NodeFormRenderer from "./NodeFormRenderer";
 import ItemImageRenderer from "./ItemImageRenderer";
 import ItemMountingRenderer from "./ItemMountingRenderer";
 import MaterialPreviewRenderer from "./MaterialPreviewRenderer";
+import EditorSaveGameMenuRenderer from "./EditorSaveGameMenuRenderer";
 
 export default class EditorRenderer extends DomRenderer {
 
@@ -23,6 +23,14 @@ export default class EditorRenderer extends DomRenderer {
 		this.container = null;
 		this.menu = null;
 
+		this.addChild(
+			new NullableNodeRenderer(
+				this.game,
+				this.game.saveGame,
+				(model) => new EditorSaveGameMenuRenderer(this.game, model, this.buttonsRight)
+			)
+		);
+
 		this.tableRenderer = new NullableNodeRenderer(this.game, this.model.activeTable, (model) => new NodeTableRenderer(this.game, model, this.table));
 		this.addChild(this.tableRenderer);
 
@@ -38,18 +46,32 @@ export default class EditorRenderer extends DomRenderer {
 		this.materialPreviewRenderer = new NullableNodeRenderer(this.game, this.model.activeMaterial, (model) => new MaterialPreviewRenderer(this.game, model, this.item));
 		this.addChild(this.materialPreviewRenderer);
 
-		this.stopEventPropagationHandler = (e) => {
-			e.stopPropagation();
-			//e.preventDefault();
-		}
+		this.materialPreviewRenderer = new NullableNodeRenderer(this.game, this.model.activeMaterial, (model) => new MaterialPreviewRenderer(this.game, model, this.item));
+		this.addChild(this.materialPreviewRenderer);
 
+		this.stopEventPropagationHandler = (e) => e.stopPropagation();
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', ['editor']);
-		this.nav = Pixies.createElement(this.container, 'nav', 'bg');
+		this.container = this.addElement('div', 'editor');
+		this.nav = Pixies.createElement(this.container, 'nav', 'bg row');
 
-		this.gameMode = Pixies.createElement(this.nav, 'div', 'game-mode');
+		const buttons = Pixies.createElement(this.nav, 'div', 'buttons row');
+		const buttonsLeft = Pixies.createElement(buttons, 'div');
+		this.switch = Pixies.createElement(buttonsLeft,'input');
+		this.switch.setAttribute('type', 'checkbox');
+		this.switch.setAttribute('name', 'switch');
+		this.switch.addEventListener('change', () => this.model.triggerEvent('switch-options'));
+
+		Pixies.createElement(
+			buttonsLeft,
+			'button',
+			'special',
+			'Download Resources',
+			() => this.model.triggerEvent('download-resources')
+		);
+		this.buttonsRight = Pixies.createElement(this.nav, 'div');
+
 		this.dock = Pixies.createElement(this.container, 'div', 'dock');
 		this.tables = Pixies.createElement(this.dock, 'div', 'table-selection bg');
 		this.table = Pixies.createElement(this.dock, 'div', 'active-table');
@@ -64,7 +86,6 @@ export default class EditorRenderer extends DomRenderer {
 			}
 		}
 
-		this.updateMode();
 		this.updateTables();
 	}
 
@@ -73,62 +94,24 @@ export default class EditorRenderer extends DomRenderer {
 	}
 
 	renderInternal() {
-		if (this.model.activeTable.isDirty) {
+		if (this.model.activeTable.isDirty || this.model.isOptionsVisible.isDirty) {
 			this.updateTables();
 		}
-		if (this.game.saveGame.get().mode.isDirty) {
-			this.updateMode();
-		}
-	}
-
-	updateMode() {
-		Pixies.emptyElement(this.gameMode);
-		const buttons = Pixies.createElement(this.gameMode, 'div', 'buttons');
-		const buttonsLeft = Pixies.createElement(buttons, 'div');
-		const mapButton = Pixies.createElement(buttonsLeft, 'button', this.game.saveGame.get().mode.equalsTo(GAME_MODE_MAP) ? 'active' : null);
-		mapButton.innerText = 'MAP';
-		mapButton.addEventListener('click', () => this.game.saveGame.get().mode.set(GAME_MODE_MAP));
-		const battleButton = Pixies.createElement(buttonsLeft, 'button', this.game.saveGame.get().mode.equalsTo(GAME_MODE_BATTLE) ? 'active' : null);
-		battleButton.innerText = 'BATTLE';
-		battleButton.addEventListener('click', () => this.game.saveGame.get().mode.set(GAME_MODE_BATTLE));
-
-		const buttonsMiddle = Pixies.createElement(buttons, 'div');
-		const saveButton = Pixies.createElement(
-			buttonsMiddle,
-			'button',
-			null,
-			'Save',
-			() => this.game.saveGame.triggerEvent('save')
-		);
-
-		const downloadButton = Pixies.createElement(
-			buttonsMiddle,
-			'button',
-			'special',
-			'Download Resources',
-			() => this.model.triggerEvent('download-resources')
-		);
-
-		const buttonsRight = Pixies.createElement(buttons, 'div');
-		const switchButton = Pixies.createElement(
-			buttonsRight,
-			'button',
-			null,
-			'Switch',
-			() => Pixies.toggleClass(this.dom, 'full')
-		);
 	}
 
 	updateTables() {
 		Pixies.emptyElement(this.tables);
-		this.addMenuSection(this.model.resourcesOptions, 'Resources');
-		this.addMenuSection(this.model.mapOptions, 'Map');
-		this.addMenuSection(this.model.saveGameOptions, 'SaveGame');
+		this.switch.checked = this.model.isOptionsVisible.get();
+		if (!this.model.isOptionsVisible.get()) return;
+		const wrapper = Pixies.createElement(this.tables, 'div', 'inner');
+		this.addMenuSection(wrapper, this.model.resourcesOptions, 'Resources');
+		this.addMenuSection(wrapper, this.model.mapOptions, 'Map');
+		this.addMenuSection(wrapper, this.model.saveGameOptions, 'SaveGame');
 	}
 
-	addMenuSection(options, name) {
-		const h = Pixies.createElement(this.tables, 'h3', null, name);
-		const menu = Pixies.createElement(this.tables, 'ul', 'menu');
+	addMenuSection(wrapper, options, name) {
+		Pixies.createElement(wrapper, 'h3', null, name);
+		const menu = Pixies.createElement(wrapper, 'ul', 'menu');
 		Object.keys(options).forEach((key) => this.addMenuLink(menu, options, key));
 	}
 

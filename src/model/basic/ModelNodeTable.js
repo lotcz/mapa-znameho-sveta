@@ -26,7 +26,8 @@ export default class ModelNodeTable extends ModelNodeCollection {
 
 	add(node) {
 		if (!node) {
-			node = this.nodeFactory(this.maxId() + 1);
+			const id = this.maxId() + 1;
+			node = this.nodeFactory(id);
 		}
 		super.add(node);
 		return node;

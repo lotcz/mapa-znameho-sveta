@@ -7,6 +7,7 @@ import ConversationModel from "./conversation/ConversationModel";
 import ModelNode from "../basic/ModelNode";
 import Model3dModel from "./items/Model3dModel";
 import ItemDefinitionModel from "./items/ItemDefinitionModel";
+import SpriteModel from "./battle/SpriteModel";
 
 export default class ResourcesModel extends ModelNode {
 
@@ -19,6 +20,11 @@ export default class ResourcesModel extends ModelNode {
 	 * @type ModelNodeTable
 	 */
 	materials;
+
+	/**
+	 * @type ModelNodeTable
+	 */
+	sprites;
 
 	/**
 	 * @type ModelNodeTable<Model3dModel>
@@ -50,6 +56,7 @@ export default class ResourcesModel extends ModelNode {
 
 		this.map = this.addProperty('map', new MapModel());
 		this.materials = this.addProperty('materials', new ModelNodeTable((id) => new MaterialModel(id)));
+		this.sprites = this.addProperty('sprites', new ModelNodeTable((id) => new SpriteModel(id)));
 		this.models3d = this.addProperty('models3d', new ModelNodeTable((id) => new Model3dModel(id)));
 		this.races = this.addProperty('races', new ModelNodeTable((id) => new RaceModel(id)));
 		this.characterTemplates = this.addProperty('characterTemplates', new ModelNodeTable((id) => new CharacterModel(id)));

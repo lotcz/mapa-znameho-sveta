@@ -26,6 +26,7 @@ export default class AssetLoader extends Node {
 	loadInternal() {
 		// do something
 		// then call this.finish(result) or this.fail(msg)
+		this.fail('No loadInternal method override!');
 	}
 
 	finish(result) {

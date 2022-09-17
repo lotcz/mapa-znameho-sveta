@@ -8,6 +8,7 @@ import Pixies from "./basic/Pixies";
 import ItemImageLoader from "./loaders/ItemImageLoader";
 import Model3dLoader from "./loaders/Model3dLoader";
 import ItemModel3dLoader from "./loaders/ItemModel3dLoader";
+import SpriteLoader from "./loaders/SpriteLoader";
 
 const ASSET_TYPE_LOADERS = {
 	'img': ImageLoader,
@@ -15,7 +16,8 @@ const ASSET_TYPE_LOADERS = {
 	'mat': MaterialLoader,
 	'm3d': Model3dLoader,
 	'it3': ItemModel3dLoader,
-	'itm': ItemImageLoader
+	'itm': ItemImageLoader,
+	'spr': SpriteLoader
 }
 
 /**
@@ -45,6 +47,7 @@ export default class AssetCache {
 		this.loaders.addOnAddListener(() => this.updateLoadingState());
 		this.loaders.addOnRemoveListener(() => this.updateLoadingState());
 		this.isLoading = new DirtyValue(false);
+
 	}
 
 	updateLoadingState() {
@@ -59,13 +62,20 @@ export default class AssetCache {
 		}
 	}
 
-	getAsset(uri, onLoaded = null) {
+	getAsset(uri, onLoaded = null, onError = null) {
+		const onFailHandler = (msg) => {
+			console.error(`Loading of asset '${uri}' failed: ${msg}`);
+			if (onError) {
+				onError(msg);
+			}
+		}
+
 		if (this.cache.exists(uri)) {
 			onLoaded(this.cache.get(uri));
 		} else {
 			const existingLoader = this.loaders.find((l) => l.uri === uri);
 			if (existingLoader) {
-				existingLoader.addLoaderEventsListeners(onLoaded);
+				existingLoader.addLoaderEventsListeners(onLoaded, onFailHandler);
 				return;
 			}
 
@@ -88,10 +98,7 @@ export default class AssetCache {
 					this.loaders.remove(loader);
 					if (onLoaded) onLoaded(resource);
 				},
-				(msg) => {
-					console.error(`Error when loading resource ${uri} - ${msg}`);
-					this.loaders.remove(loader);
-				}
+				onFailHandler
 			);
 		}
 	}
@@ -114,5 +121,9 @@ export default class AssetCache {
 
 	loadItemImage(itemDefId, onLoaded) {
 		this.getAsset(`itm/${itemDefId}`, onLoaded);
+	}
+
+	loadSprite(spriteId, onLoaded) {
+		this.getAsset(`spr/${spriteId}`, onLoaded);
 	}
 }

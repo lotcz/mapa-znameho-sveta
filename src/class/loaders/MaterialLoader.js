@@ -7,12 +7,12 @@ import Pixies from "../basic/Pixies";
  */
 export default class MaterialLoader extends AssetLoader {
 
-	load(onLoaded, onError) {
+	loadInternal() {
 
 		const id = Pixies.extractId(this.uri);
 		const definition = this.assets.resources.materials.getById(id);
 		if (!definition) {
-			onError(`material ID ${this.uri} not found`);
+			this.fail(`material ID ${this.uri} not found`);
 			return;
 		}
 
@@ -34,11 +34,11 @@ export default class MaterialLoader extends AssetLoader {
 						definition.repeatY.get()
 					);
 					params.map = texture;
-					onLoaded(this.createMaterial(definition.threeType.get(), params));
+					this.finish(this.createMaterial(definition.threeType.get(), params));
 				}
 			);
 		} else {
-			onLoaded(this.createMaterial(definition.threeType.get(), params));
+			this.finish(this.createMaterial(definition.threeType.get(), params));
 		}
 	}
 
