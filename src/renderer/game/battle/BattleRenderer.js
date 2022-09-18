@@ -11,7 +11,6 @@ import Vector3 from "../../../model/basic/Vector3";
 import Vector2 from "../../../model/basic/Vector2";
 import GUIHelper from "../../../class/basic/GUIHelper";
 import BattleSpriteRenderer from "./BattleSpriteRenderer";
-import NullableNodeRenderer from "../../basic/NullableNodeRenderer";
 
 const DEBUG_BATTLE_RENDERER = false;
 
@@ -45,14 +44,6 @@ export default class BattleRenderer extends DomRenderer {
 		);
 
 		this.addChild(
-			new NullableNodeRenderer(
-				this.game,
-				this.game.editor.activeBattleSprite,
-				(m) => new BattleSpriteRenderer(this.game, m, this.scene)
-			)
-		);
-
-		this.addChild(
 			new CollectionRenderer(
 				this.game,
 				this.model.battleMap.get().sprites,
@@ -61,7 +52,6 @@ export default class BattleRenderer extends DomRenderer {
 		);
 
 		this.onViewBoxChangeHandler = () => this.onViewBoxSizeChanged();
-
 	}
 
 	activateInternal() {

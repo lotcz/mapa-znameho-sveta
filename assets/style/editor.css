@@ -29,7 +29,6 @@
 	font-size: 10pt;
 }
 
-
 .editor .bg {
 	background-color: black;
 	color: gray;
@@ -209,4 +208,15 @@
 	z-index: 9999999;
 	top: 20%;
 	left: 40%;
+}
+
+.editor .battle-menu {
+	position: fixed;
+	right: 20px;
+	top: 20px;
+	padding-left: 10px;
+}
+
+.editor .battle-menu input[type=text] {
+	width: 50px;
 }

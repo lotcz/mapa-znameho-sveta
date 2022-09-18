@@ -1,6 +1,5 @@
 import ControllerNode from "../basic/ControllerNode";
-import CollectionController from "../basic/CollectionController";
-import EditorBattleSpriteController from "./EditorBattleSpriteController";
+import BattleEditorModel from "../../model/editor/BattleEditorModel";
 
 export default class EditorBattleMapController extends ControllerNode {
 
@@ -11,23 +10,17 @@ export default class EditorBattleMapController extends ControllerNode {
 
 	constructor(game, model) {
 		super(game, model);
-
 		this.model = model;
 
-		this.addChild(
-			new CollectionController(
-				this.game,
-				this.model.sprites,
-				(m) => new EditorBattleSpriteController(this.game, m)
-			)
-		);
 
-		this.addAutoEvent(
-			this.model,
-			'table-selected',
-			(name) => this.runOnUpdate(() => this.model.activeTable.set(this.game.getTableByName(name)))
-		);
+	}
 
+	activateInternal() {
+		this.game.editor.battleEditor.set(new BattleEditorModel(this.model));
+	}
+
+	deactivateInternal() {
+		this.game.editor.battleEditor.set(null);
 	}
 
 }
