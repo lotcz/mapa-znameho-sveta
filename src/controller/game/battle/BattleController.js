@@ -1,6 +1,8 @@
 import ControllerNode from "../../basic/ControllerNode";
 import CollectionController from "../../basic/CollectionController";
 import BattleCharacterController from "./BattleCharacterController";
+import NullableNodeController from "../../basic/NullableNodeController";
+import BattleMapController from "./BattleMapController";
 
 export default class BattleController extends ControllerNode {
 
@@ -20,7 +22,15 @@ export default class BattleController extends ControllerNode {
 			new CollectionController(
 				this.game,
 				this.model.characters,
-				(model) => new BattleCharacterController(game, model)
+				(m) => new BattleCharacterController(game, m)
+			)
+		);
+
+		this.addChild(
+			new NullableNodeController(
+				this.game,
+				this.model.battleMap,
+				(m) => new BattleMapController(game, m)
 			)
 		);
 
@@ -32,7 +42,7 @@ export default class BattleController extends ControllerNode {
 			this.model.battleMapId,
 			'change',
 			() => {
-				this.model.battleMap.set(this.game.resources.map.battleMaps.getById(this.model.battleMapId.get()));
+				this.model.battleMap.set(this.game.resources.map.battleMaps.getById(this.model.battleMapId));
 			},
 			true
 		);

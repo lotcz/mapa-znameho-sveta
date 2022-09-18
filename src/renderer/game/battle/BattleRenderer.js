@@ -11,6 +11,8 @@ import Vector3 from "../../../model/basic/Vector3";
 import Vector2 from "../../../model/basic/Vector2";
 import GUIHelper from "../../../class/basic/GUIHelper";
 import BattleSpriteRenderer from "./BattleSpriteRenderer";
+import BattleSpecialRenderer from "./BattleSpecialRenderer";
+import {SVG} from "@svgdotjs/svg.js";
 
 const DEBUG_BATTLE_RENDERER = false;
 
@@ -51,6 +53,14 @@ export default class BattleRenderer extends DomRenderer {
 			)
 		);
 
+		this.addChild(
+			new CollectionRenderer(
+				this.game,
+				this.model.battleMap.get().specials,
+				(m) => new BattleSpecialRenderer(this.game, m, this.drawBackground, this.drawForeground)
+			)
+		);
+
 		this.onViewBoxChangeHandler = () => this.onViewBoxSizeChanged();
 	}
 
@@ -63,9 +73,19 @@ export default class BattleRenderer extends DomRenderer {
 			this.model.isMouseOver.set(false);
 		});
 
+		// CANVAS
 		this.bgCanvas = Pixies.createElement(this.container, 'canvas');
 		this.context2d = this.bgCanvas.getContext('2d');
 
+		// SVG
+		this.draw = SVG().addTo(this.container);
+		this.draw.addClass('battle-specials-svg');
+		this.drawBackground = this.draw.group();
+		this.drawForeground = this.draw.group();
+		this.updateSvgSize();
+		this.updateSvgViewBox();
+
+		// THREE
 		this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 		this.container.appendChild(this.renderer.domElement);
 		this.renderer.setSize(this.game.viewBoxSize.x, this.game.viewBoxSize.y);
@@ -123,6 +143,7 @@ export default class BattleRenderer extends DomRenderer {
 
 		this.updateCanvasSize();
 		this.updateRendererSize();
+
 		this.game.viewBoxSize.addOnChangeListener(this.onViewBoxChangeHandler);
 
 		this.currentTile = new Vector2();
@@ -135,22 +156,6 @@ export default class BattleRenderer extends DomRenderer {
 				this.updateCameraZoom();
 				this.renderBgImage();
 				this.renderInternal();
-			}
-		);
-
-		this.game.assets.getAsset(
-			'img/texture/dirt.png',
-			(img) => {
-				const texture = new THREE.Texture();
-				texture.image = img;
-				texture.needsUpdate = true;
-				texture.wrapS = THREE.RepeatWrapping;
-				texture.wrapT = THREE.RepeatWrapping;
-				texture.repeat.set(1, 1);
-				const matTest = new THREE.MeshLambertMaterial({color: '#90a090', map:texture});
-				const mt = new THREE.Mesh(new THREE.SphereGeometry(1, 8, 8), matTest);
-				mt.position.set(-26, 0.5, -1);
-				this.scene.add(mt);
 			}
 		);
 
@@ -188,6 +193,9 @@ export default class BattleRenderer extends DomRenderer {
 		this.bgCanvas = null;
 		this.canvas = null;
 		this.context2d = null;
+		this.draw.remove();
+		this.draw = null;
+		Pixies.destroyElement(this.draw);
 		Pixies.destroyElement(this.container);
 		this.container = null;
 	}
@@ -196,6 +204,7 @@ export default class BattleRenderer extends DomRenderer {
 
 		if (this.model.coordinates.isDirty || this.model.zoom.isDirty) {
 			this.renderBgImage();
+			this.updateSvgViewBox();
 		}
 
 		if (this.model.coordinates.isDirty) {
@@ -247,6 +256,7 @@ export default class BattleRenderer extends DomRenderer {
 		this.updateCanvasSize();
 		this.renderBgImage();
 		this.updateRendererSize();
+		this.updateSvgSize();
 	}
 
 	updateCanvasSize() {
@@ -279,6 +289,7 @@ export default class BattleRenderer extends DomRenderer {
 	updateCameraZoom() {
 		this.camera.zoom = this.model.zoom.get();
 		this.camera.updateProjectionMatrix();
+
 	}
 
 	updateCameraPosition() {
@@ -289,4 +300,16 @@ export default class BattleRenderer extends DomRenderer {
 		this.camera.lookAt(center.x, center.y, center.z);
 	}
 
+	updateSvgSize() {
+		this.draw.size(this.game.viewBoxSize.x, this.game.viewBoxSize.y);
+	}
+
+	updateSvgViewBox() {
+		this.draw.viewbox(
+			this.model.coordinates.x - (0.5 * this.game.viewBoxSize.x / this.model.zoom.get()),
+			this.model.coordinates.y - (0.5 * this.game.viewBoxSize.y / this.model.zoom.get()),
+			this.game.viewBoxSize.x / this.model.zoom.get(),
+			this.game.viewBoxSize.y / this.model.zoom.get(),
+		);
+	}
 }

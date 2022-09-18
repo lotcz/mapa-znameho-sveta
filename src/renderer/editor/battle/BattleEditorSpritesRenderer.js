@@ -9,13 +9,10 @@ export default class BattleEditorSpritesRenderer extends DomRenderer {
 	 */
 	model;
 
-	name;
-
 	constructor(game, model, dom) {
 		super(game, model, dom);
 
 		this.model = model;
-		this.dom = dom;
 		this.container = null;
 
 		this.addAutoEvent(
@@ -30,7 +27,7 @@ export default class BattleEditorSpritesRenderer extends DomRenderer {
 		this.container = Pixies.createElement(this.dom, 'div', 'column');
 
 		const top = Pixies.createElement(this.container, 'div');
-		const createSprite = Pixies.createElement(top, 'div', 'row');
+		const createSprite = Pixies.createElement(top, 'div');
 		this.spriteId = Pixies.createElement(createSprite, 'input');
 		this.spriteId.setAttribute('type', 'text');
 

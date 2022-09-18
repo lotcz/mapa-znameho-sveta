@@ -92,6 +92,10 @@ export default class Collection extends Node {
 		return this.items.map(transform);
 	}
 
+	reduce(callback, initial) {
+		return this.items.reduce(callback, initial);
+	}
+
 	sort(sortFunc) {
 		return this.items.sort(sortFunc);
 	}

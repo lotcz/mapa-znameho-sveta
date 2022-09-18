@@ -214,7 +214,7 @@
 	position: fixed;
 	right: 20px;
 	top: 20px;
-	padding-left: 10px;
+	padding: 10px;
 }
 
 .editor .battle-menu input[type=text] {

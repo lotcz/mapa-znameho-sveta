@@ -108,8 +108,10 @@ export default class BattleCharacterController extends ControllerNode {
 	}
 
 	getBlocks() {
-		const characters = this.game.saveGame.get().battle.get().characters.filter((ch) => ch !== this.model).map((ch) => ch.position);
-		const sprites = this.game.saveGame.get().battle.get().battleMap.get().sprites.map((s) => s.position);
+		const battle = this.game.saveGame.get().battle.get();
+		const characters = battle.characters.filter((ch) => ch !== this.model).map((ch) => ch.position);
+		const battleMap = battle.battleMap.get();
+		const sprites = battleMap.getBlocks();
 		return characters.concat(sprites);
 	}
 

@@ -2,7 +2,14 @@ import ControllerNode from "../basic/ControllerNode";
 import NullableNodeController from "../basic/NullableNodeController";
 import EditorBattleMapController from "./EditorBattleMapController";
 import BattleSpriteModel from "../../model/game/battle/BattleSpriteModel";
-import {MODE_ACTION_ADD, MODE_ACTION_DELETE} from "../../model/editor/BattleEditorModel";
+import {
+	MODE_ACTION_ADD,
+	MODE_ACTION_DELETE,
+	MODE_TYPE_3D,
+	MODE_TYPE_SPECIAL,
+	MODE_TYPE_SPRITE
+} from "../../model/editor/BattleEditorModel";
+import BattleSpecialModel from "../../model/game/battle/BattleSpecialModel";
 
 export default class EditorBattleController extends ControllerNode {
 
@@ -56,19 +63,57 @@ export default class EditorBattleController extends ControllerNode {
 		const position = this.model.battleMap.get().screenCoordsToPosition(coords);
 		const tile = position.round();
 
+		const battleEditorModel = this.game.editor.battleEditor.get();
+		const editorModeType = battleEditorModel.modeType.get();
+		const editorModeAction = battleEditorModel.modeAction.get();
+
+		switch (editorModeType) {
+			case MODE_TYPE_SPRITE:
+				this.processClickSprites(tile, editorModeAction);
+				break;
+			case MODE_TYPE_SPECIAL:
+				this.processClickSpecial(tile, editorModeAction);
+				break;
+			case MODE_TYPE_3D:
+				//this.processClickSprites(tile, editorModeAction);
+				break;
+		}
+
+	}
+
+	processClickSprites(tile, action) {
 		const sprite = this.model.battleMap.get().sprites.find((ch) => ch.position.round().equalsTo(tile));
 		if (sprite) {
-			if (this.game.editor.battleEditor.get().modeAction.equalsTo(MODE_ACTION_DELETE)) {
+			if (action === MODE_ACTION_DELETE) {
 				console.log('deleting sprite', sprite);
 				this.model.battleMap.get().sprites.remove(sprite);
 			}
 		} else {
 			const id = this.game.editor.battleEditor.get().spriteId.get();
-			if (id && this.game.editor.battleEditor.get().modeAction.equalsTo(MODE_ACTION_ADD)) {
+			if (id && (action === MODE_ACTION_ADD)) {
 				const battleSprite = new BattleSpriteModel();
 				battleSprite.position.set(tile);
 				battleSprite.spriteId.set(id);
 				this.model.battleMap.get().sprites.add(battleSprite);
+			}
+		}
+	}
+
+	processClickSpecial(tile, action) {
+		const special = this.model.battleMap.get().specials.find((s) => s.position.round().equalsTo(tile));
+		if (special) {
+			if (action === MODE_ACTION_DELETE) {
+				console.log('deleting special', special);
+				this.model.battleMap.get().specials.remove(special);
+			}
+		} else {
+			if (action === MODE_ACTION_ADD) {
+				const battleEditorModel = this.game.editor.battleEditor.get();
+				const editorSpecialType = battleEditorModel.specialType.get();
+				const special = new BattleSpecialModel();
+				special.position.set(tile);
+				special.type.set(editorSpecialType);
+				this.model.battleMap.get().specials.add(special);
 			}
 		}
 	}

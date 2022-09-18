@@ -4,6 +4,7 @@ import IdentifiedModelNode from "../../basic/IdentifiedModelNode";
 import IntValue from "../../basic/IntValue";
 import ModelNodeCollection from "../../basic/ModelNodeCollection";
 import BattleSpriteModel from "./BattleSpriteModel";
+import BattleSpecialModel, {SPECIAL_TYPE_BLOCK} from "./BattleSpecialModel";
 
 export default class BattleMapModel extends IdentifiedModelNode {
 
@@ -30,9 +31,14 @@ export default class BattleMapModel extends IdentifiedModelNode {
 	start;
 
 	/**
-	 * @type ModelNodeCollection
+	 * @type ModelNodeCollection<BattleSpriteModel>
 	 */
 	sprites;
+
+	/**
+	 * @type ModelNodeCollection<BattleSpecialModel>
+	 */
+	specials;
 
 	constructor(id) {
 		super(id);
@@ -44,7 +50,14 @@ export default class BattleMapModel extends IdentifiedModelNode {
 		this.start = this.addProperty('start', new Vector2(-102, -25));
 
 		this.sprites = this.addProperty('sprites', new ModelNodeCollection(() => new BattleSpriteModel()));
+		this.blocksSpritesCache = null;
+		this.sprites.addOnAddListener(() => this.blocksSpritesCache = null);
+		this.sprites.addOnRemoveListener(() => this.blocksSpritesCache = null);
 
+		this.specials = this.addProperty('specials', new ModelNodeCollection(() => new BattleSpecialModel()));
+		this.blocksSpecialsCache = null;
+		this.specials.addOnAddListener(() => this.blocksSpecialsCache = null);
+		this.specials.addOnRemoveListener(() => this.blocksSpecialsCache = null);
 	}
 
 	/**
@@ -53,15 +66,28 @@ export default class BattleMapModel extends IdentifiedModelNode {
 	 */
 	screenCoordsToPosition(coords) {
 		const w = this.tileSize.get();
-		const result = new Vector2();
-
 		const tileWidthHalf = 0.815 * 0.5 * Math.sqrt(3) * w;
 		const tileHeightHalf = 0.815 * 0.5 * w;
 
-		result.x = 0.5 * ((-coords.x / tileWidthHalf) + (-coords.y / tileHeightHalf));
-		result.y = 0.5 * ((coords.x / tileWidthHalf) + (-coords.y / tileHeightHalf));
+		const position = new Vector2();
+		position.x = 0.5 * ((-coords.x / tileWidthHalf) + (-coords.y / tileHeightHalf));
+		position.y = 0.5 * ((coords.x / tileWidthHalf) + (-coords.y / tileHeightHalf));
+		return position;
+	}
 
-		return result;
+	/**
+	 * @param {Vector2} position
+	 * @returns {Vector2}
+	 */
+	positionToScreenCoords(position) {
+		const w = this.tileSize.get();
+		const tileWidthHalf = 0.815 * 0.5 * Math.sqrt(3) * w;
+		const tileHeightHalf = 0.815 * 0.5 * w;
+
+		const coords = new Vector2();
+		coords.y = (position.y - position.x) * tileHeightHalf;
+		coords.x = (-position.y - position.x) * tileWidthHalf;
+		return coords;
 	}
 
 	/**
@@ -73,4 +99,33 @@ export default class BattleMapModel extends IdentifiedModelNode {
 		return position.round();
 	}
 
+	getBlocks() {
+		const sprites = this.getBlocksSprites();
+		const specials = this.getBlocksSpecials();
+		return sprites.concat(specials);
+	}
+
+	getBlocksSprites() {
+		if (this.blocksSpritesCache === null) {
+			this.blocksSpritesCache = this.sprites.reduce(
+				(prev, current) => {
+					const sprite = current.sprite.get();
+					if (sprite) {
+						const spriteBlocks = sprite.blocks.map((b) => b.position.add(current.position));
+						return prev.concat(spriteBlocks);
+					}
+					return prev;
+				},
+				[]
+			);
+		}
+		return this.blocksSpritesCache;
+	}
+
+	getBlocksSpecials() {
+		if (this.blocksSpecialsCache === null) {
+			this.blocksSpecialsCache = this.specials.filter((s) => s.type.equalsTo(SPECIAL_TYPE_BLOCK)).map((s => s.position));
+		}
+		return this.blocksSpecialsCache;
+	}
 }

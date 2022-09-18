@@ -1,8 +1,9 @@
 import Vector2 from "../../basic/Vector2";
-import BoolValue from "../../basic/BoolValue";
 import Vector3 from "../../basic/Vector3";
 import IdentifiedModelNode from "../../basic/IdentifiedModelNode";
 import DirtyValue from "../../basic/DirtyValue";
+import ModelNodeCollection from "../../basic/ModelNodeCollection";
+import BlockModel from "./BlockModel";
 
 export default class SpriteModel extends IdentifiedModelNode {
 
@@ -27,9 +28,9 @@ export default class SpriteModel extends IdentifiedModelNode {
 	size;
 
 	/**
-	 * @type BoolValue
+	 * @type ModelNodeCollection
 	 */
-	isBlocking;
+	blocks;
 
 	constructor(id) {
 		super(id);
@@ -38,8 +39,7 @@ export default class SpriteModel extends IdentifiedModelNode {
 		this.uri = this.addProperty('uri', new DirtyValue('img/texture/dirt.png'));
 		this.coordinates = this.addProperty('coordinates', new Vector3());
 		this.size = this.addProperty('size', new Vector2());
-		this.isBlocking = this.addProperty('isBlocking', new BoolValue(true));
-
+		this.blocks = this.addProperty('blocks', new ModelNodeCollection(() => new BlockModel()));
 	}
 
 }

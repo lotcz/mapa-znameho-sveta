@@ -1,8 +1,9 @@
 import Pixies from "../../../class/basic/Pixies";
 import DomRenderer from "../../basic/DomRenderer";
 import ConditionalNodeRenderer from "../../basic/ConditionalNodeRenderer";
-import {MODE_ACTIONS, MODE_TYPE_SPRITE, MODE_TYPES} from "../../../model/editor/BattleEditorModel";
+import {MODE_ACTIONS, MODE_TYPE_SPECIAL, MODE_TYPE_SPRITE, MODE_TYPES} from "../../../model/editor/BattleEditorModel";
 import BattleEditorSpritesRenderer from "./BattleEditorSpritesRenderer";
+import BattleEditorSpecialsRenderer from "./BattleEditorSpecialsRenderer";
 
 export default class BattleEditorRenderer extends DomRenderer {
 
@@ -10,8 +11,6 @@ export default class BattleEditorRenderer extends DomRenderer {
 	 * @type BattleEditorModel
 	 */
 	model;
-
-	name;
 
 	constructor(game, model, dom) {
 		super(game, model, dom);
@@ -26,6 +25,15 @@ export default class BattleEditorRenderer extends DomRenderer {
 				this.model.modeType,
 				() => this.model.modeType.equalsTo(MODE_TYPE_SPRITE),
 				() => new BattleEditorSpritesRenderer(this.game, this.model, this.bottom)
+			)
+		);
+
+		this.addChild(
+			new ConditionalNodeRenderer(
+				this.game,
+				this.model.modeType,
+				() => this.model.modeType.equalsTo(MODE_TYPE_SPECIAL),
+				() => new BattleEditorSpecialsRenderer(this.game, this.model, this.bottom)
 			)
 		);
 

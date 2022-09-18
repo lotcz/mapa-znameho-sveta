@@ -2,6 +2,7 @@ import ModelNode from "../basic/ModelNode";
 import NullableNode from "../basic/NullableNode";
 import IntValue from "../basic/IntValue";
 import DirtyValue from "../basic/DirtyValue";
+import {SPECIAL_TYPE_BLOCK} from "../game/battle/BattleSpecialModel";
 
 export const MODE_TYPE_SPRITE = 'sprite';
 export const MODE_TYPE_3D = '3d';
@@ -50,6 +51,11 @@ export default class BattleEditorModel extends ModelNode {
 	 */
 	spriteId;
 
+	/**
+	 * @type DirtyValue
+	 */
+	specialType;
+
 	constructor(battle) {
 		super();
 
@@ -59,6 +65,8 @@ export default class BattleEditorModel extends ModelNode {
 		this.battle = this.addProperty('battle', battle);
 		this.activeBattleSprite = this.addProperty('activeBattleSprite', new NullableNode());
 		this.spriteId = this.addProperty('spriteId', new IntValue());
+
+		this.specialType = this.addProperty('specialType', new DirtyValue(SPECIAL_TYPE_BLOCK));
 
 	}
 

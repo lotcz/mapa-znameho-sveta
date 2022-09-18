@@ -9,7 +9,13 @@ export default class ModelNodeTable extends ModelNodeCollection {
 		if (id === null || id === undefined || id === '') {
 			return null;
 		}
-		const i = parseInt(id);
+		if (typeof id === 'object' && id.constructor.name === 'IntValue') {
+			return this.getById(id.get());
+		}
+		const i = Number(id);
+		if (i === Number.NaN || i <= 0) {
+			return null;
+		}
 		return this.children.find((ch) => ch.id.equalsTo(i));
 	}
 

@@ -12,8 +12,6 @@ export default class NodeTableRenderer extends DomRenderer {
 	 */
 	model;
 
-	name;
-
 	constructor(game, model, dom) {
 		super(game, model, dom);
 
