@@ -36,9 +36,7 @@ export default class BattleSpecialRenderer extends SvgRenderer {
 	}
 
 	updatePosition() {
-		const coordsAbs = this.game.saveGame.get().battle.get().battleMap.get().positionToScreenCoords(this.model.position);
-		const coords = coordsAbs.subtract(this.game.viewBoxSize);
-		console.log('updating special', coords);
+		const coords = this.game.saveGame.get().battle.get().battleMap.get().positionToScreenCoords(this.model.position);
 		this.group.center(coords.x, coords.y);
 	}
 

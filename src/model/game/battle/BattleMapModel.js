@@ -85,8 +85,8 @@ export default class BattleMapModel extends IdentifiedModelNode {
 		const tileHeightHalf = 0.815 * 0.5 * w;
 
 		const coords = new Vector2();
-		coords.y = (position.y - position.x) * tileHeightHalf;
-		coords.x = (-position.y - position.x) * tileWidthHalf;
+		coords.x = (position.y - position.x) * tileWidthHalf;
+		coords.y = (-position.y - position.x) * tileHeightHalf;
 		return coords;
 	}
 

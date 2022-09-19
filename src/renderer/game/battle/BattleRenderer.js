@@ -53,13 +53,15 @@ export default class BattleRenderer extends DomRenderer {
 			)
 		);
 
-		this.addChild(
-			new CollectionRenderer(
-				this.game,
-				this.model.battleMap.get().specials,
-				(m) => new BattleSpecialRenderer(this.game, m, this.drawBackground, this.drawForeground)
-			)
-		);
+		if (this.game.isInDebugMode.get()) {
+			this.addChild(
+				new CollectionRenderer(
+					this.game,
+					this.model.battleMap.get().specials,
+					(m) => new BattleSpecialRenderer(this.game, m, this.drawBackground, this.drawForeground)
+				)
+			);
+		}
 
 		this.onViewBoxChangeHandler = () => this.onViewBoxSizeChanged();
 	}
