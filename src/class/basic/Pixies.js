@@ -182,53 +182,6 @@ export default class Pixies {
 		return arr.filter((value, index, self) => self.indexOf(value) === index);
 	}
 
-	/*
-	DEBUGGER
-
-	let cycles = 0;
-	let session = null;
-
-	if (cycles <= 0) {
-		cycles = 1000;
-		if (session) Pixies.finishDebugSession(session);
-		session = Pixies.startDebugSession(`Rendering ${cycles} cycles.`);
-		Pixies.pauseDebugSession(session);
-	}
-	cycles--;
-
-	Pixies.resumeDebugSession(session);
-	...
-	Pixies.pauseDebugSession(session);
-
-	 */
-
-	static startDebugSession(name) {
-		const now = performance.now();
-		return {
-			name: name,
-			start: now,
-			beginning: now,
-			elapsed: 0
-		};
-	}
-
-	static finishDebugSession(session) {
-		const now = performance.now();
-		const duration = session.elapsed + (session.start ? now - session.start : 0);
-		const total = now - session.beginning;
-		console.log(`${session.name}' took ${Math.round(duration * 100 / total)} % (${duration} / ${total} ms.`);
-		session.start = null;
-	}
-
-	static pauseDebugSession(session) {
-		session.elapsed += performance.now() - session.start;
-		session.start = null;
-	}
-
-	static resumeDebugSession(session) {
-		session.start = performance.now();
-	}
-
 	static instantEditor(element, setter, textarea = false) {
 		if (element.dataset.instantEditor === '1') {
 			return;

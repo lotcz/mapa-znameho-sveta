@@ -7,12 +7,10 @@ export default class BattleSpecialRenderer extends SvgRenderer {
 	 */
 	model;
 
-	constructor(game, model, drawBg, drawFg) {
-		super(game, model, drawBg);
+	constructor(game, model, draw) {
+		super(game, model, draw);
 
 		this.model = model;
-		this.drawFg = drawFg;
-
 		this.group = null;
 	}
 

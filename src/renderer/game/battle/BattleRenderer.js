@@ -10,9 +10,9 @@ import BattleCharacterRenderer from "./BattleCharacterRenderer";
 import Vector3 from "../../../model/basic/Vector3";
 import Vector2 from "../../../model/basic/Vector2";
 import GUIHelper from "../../../class/basic/GUIHelper";
-import BattleSpriteRenderer from "./BattleSpriteRenderer";
-import BattleSpecialRenderer from "./BattleSpecialRenderer";
 import {SVG} from "@svgdotjs/svg.js";
+import NullableNodeRenderer from "../../basic/NullableNodeRenderer";
+import BattleMapRenderer from "./BattleMapRenderer";
 
 const DEBUG_BATTLE_RENDERER = false;
 
@@ -46,22 +46,19 @@ export default class BattleRenderer extends DomRenderer {
 		);
 
 		this.addChild(
-			new CollectionRenderer(
+			new NullableNodeRenderer(
 				this.game,
-				this.model.battleMap.get().sprites,
-				(m) => new BattleSpriteRenderer(this.game, m, this.scene)
+				this.model.battleMap,
+				(m) => {
+					return new BattleMapRenderer(
+						this.game,
+						m,
+						this.scene,
+						this.drawBackground
+					);
+				}
 			)
 		);
-
-		if (this.game.isInDebugMode.get()) {
-			this.addChild(
-				new CollectionRenderer(
-					this.game,
-					this.model.battleMap.get().specials,
-					(m) => new BattleSpecialRenderer(this.game, m, this.drawBackground, this.drawForeground)
-				)
-			);
-		}
 
 		this.onViewBoxChangeHandler = () => this.onViewBoxSizeChanged();
 	}
@@ -81,7 +78,7 @@ export default class BattleRenderer extends DomRenderer {
 
 		// SVG
 		this.draw = SVG().addTo(this.container);
-		this.draw.addClass('battle-specials-svg');
+		this.draw.addClass('battle-svg');
 		this.drawBackground = this.draw.group();
 		this.drawForeground = this.draw.group();
 		this.updateSvgSize();
@@ -231,7 +228,6 @@ export default class BattleRenderer extends DomRenderer {
 	}
 
 	renderBgImage() {
-		//debugger;
 		if (!this.context2d) {
 			console.log('no context for bg rendering');
 			return;

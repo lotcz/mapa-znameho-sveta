@@ -37,30 +37,26 @@ export default class BattleEditorRenderer extends DomRenderer {
 			)
 		);
 
-		this.addAutoEvent(
-			this.model.modeAction,
-			'change',
-			() => this.updateModeAction(),
-			true
-		);
-
-		this.addAutoEvent(
-			this.model.modeType,
-			'change',
-			() => this.updateModeType(),
-			true
-		);
-
 	}
 
 	activateInternal() {
 		this.container = Pixies.createElement(this.dom, 'div', 'battle-menu bg column');
 
 		this.top = Pixies.createElement(this.container, 'div');
+		this.menu = Pixies.createElement(this.top, 'div');
 		this.brushSize = Pixies.createElement(this.top, 'div');
 		this.modeAction = Pixies.createElement(this.top, 'div');
 		this.modeType = Pixies.createElement(this.top, 'div');
 		this.bottom = Pixies.createElement(this.container, 'div');
+
+		const switches = Pixies.createElement(this.menu, 'div', 'row');
+		const label = Pixies.createElement(switches, 'label', null, 'Helpers');
+		label.setAttribute('for', 'show_helpers');
+		const check = Pixies.createElement(switches, 'input', null);
+		check.setAttribute('type', 'checkbox');
+		check.setAttribute('id', 'show_helpers');
+		check.checked = this.model.showHelpers.get();
+		check.addEventListener('change', () => this.model.showHelpers.set(check.checked));
 
 		for (let i = 0; i <= 5; i++) {
 			const r = Pixies.createElement(this.brushSize, 'input');
@@ -77,6 +73,8 @@ export default class BattleEditorRenderer extends DomRenderer {
 			l.innerText = String(i);
 		}
 
+		this.updateModeAction();
+		this.updateModeType();
 	}
 
 	deactivateInternal() {

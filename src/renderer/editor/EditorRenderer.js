@@ -6,8 +6,7 @@ import NodeFormRenderer from "./NodeFormRenderer";
 import ItemImageRenderer from "./ItemImageRenderer";
 import ItemMountingRenderer from "./ItemMountingRenderer";
 import MaterialPreviewRenderer from "./MaterialPreviewRenderer";
-import SaveGameMenuRenderer from "./SaveGameMenuRenderer";
-import BattleEditorRenderer from "./battle/BattleEditorRenderer";
+import EditorSaveGameRenderer from "./EditorSaveGameRenderer";
 
 export default class EditorRenderer extends DomRenderer {
 
@@ -22,21 +21,12 @@ export default class EditorRenderer extends DomRenderer {
 		this.model = model;
 
 		this.container = null;
-		this.menu = null;
 
 		this.addChild(
 			new NullableNodeRenderer(
 				this.game,
 				this.game.saveGame,
-				(m) => new SaveGameMenuRenderer(this.game, m, this.buttonsRight)
-			)
-		);
-
-		this.addChild(
-			new NullableNodeRenderer(
-				this.game,
-				this.model.battleEditor,
-				(m) => new BattleEditorRenderer(this.game, m, this.container)
+				(m) => new EditorSaveGameRenderer(this.game, m, this.container, this.buttonsRight)
 			)
 		);
 

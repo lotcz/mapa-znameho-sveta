@@ -1,6 +1,7 @@
 import ModelNode from "../basic/ModelNode";
 import NullableNode from "../basic/NullableNode";
 import BoolValue from "../basic/BoolValue";
+import BattleEditorModel from "./BattleEditorModel";
 
 export default class EditorModel extends ModelNode {
 
@@ -30,7 +31,7 @@ export default class EditorModel extends ModelNode {
 	activeMaterial;
 
 	/**
-	 * @type NullableNode<BattleEditorModel>
+	 * @type BattleEditorModel
 	 */
 	battleEditor;
 
@@ -53,7 +54,7 @@ export default class EditorModel extends ModelNode {
 		this.activeItemImageDefinition = this.addProperty('activeItemDefinition', new NullableNode());
 		this.activeItemMounting = this.addProperty('activeItemMounting', new NullableNode());
 		this.activeMaterial = this.addProperty('activeMaterial', new NullableNode());
-		this.battleEditor = this.addProperty('battleEditor', new NullableNode());
+		this.battleEditor = this.addProperty('battleEditor', new BattleEditorModel());
 
 		this.isOptionsVisible = this.addProperty('isOptionsVisible', new BoolValue(true));
 

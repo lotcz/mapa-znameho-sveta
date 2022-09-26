@@ -3,6 +3,7 @@ import NullableNode from "../basic/NullableNode";
 import IntValue from "../basic/IntValue";
 import DirtyValue from "../basic/DirtyValue";
 import {SPECIAL_TYPE_BLOCK} from "../game/battle/BattleSpecialModel";
+import BoolValue from "../basic/BoolValue";
 
 export const MODE_TYPE_SPRITE = 'sprite';
 export const MODE_TYPE_3D = '3d';
@@ -25,6 +26,11 @@ export const MODE_TYPES = [
 ];
 
 export default class BattleEditorModel extends ModelNode {
+
+	/**
+	 * @type BoolValue
+	 */
+	showHelpers;
 
 	/**
 	 * @type DirtyValue
@@ -61,13 +67,13 @@ export default class BattleEditorModel extends ModelNode {
 	 */
 	brushSize;
 
-	constructor(battle) {
+	constructor() {
 		super();
 
+		this.showHelpers = this.addProperty('showHelpers', new BoolValue(false));
 		this.modeType = this.addProperty('modeType', new DirtyValue(MODE_TYPE_SPRITE));
 		this.modeAction = this.addProperty('modeAction', new DirtyValue(MODE_ACTION_SELECT));
 
-		this.battle = this.addProperty('battle', battle);
 		this.activeBattleSprite = this.addProperty('activeBattleSprite', new NullableNode());
 		this.spriteId = this.addProperty('spriteId', new IntValue());
 

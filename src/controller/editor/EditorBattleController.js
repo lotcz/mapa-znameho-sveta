@@ -1,6 +1,4 @@
 import ControllerNode from "../basic/ControllerNode";
-import NullableNodeController from "../basic/NullableNodeController";
-import EditorBattleMapController from "./EditorBattleMapController";
 import BattleSpriteModel from "../../model/game/battle/BattleSpriteModel";
 import {
 	MODE_ACTION_ADD,
@@ -24,14 +22,6 @@ export default class EditorBattleController extends ControllerNode {
 		super(game, model);
 
 		this.model = model;
-
-		this.addChild(
-			new NullableNodeController(
-				this.game,
-				this.model.battleMap,
-				(m) => new EditorBattleMapController(this.game,	m)
-			)
-		);
 
 		this.addAutoEvent(
 			this.game.controls,
@@ -65,7 +55,7 @@ export default class EditorBattleController extends ControllerNode {
 		const position = this.model.battleMap.get().screenCoordsToPosition(coords);
 		const tile = position.round();
 
-		const battleEditorModel = this.game.editor.battleEditor.get();
+		const battleEditorModel = this.game.editor.battleEditor;
 		const editorModeType = battleEditorModel.modeType.get();
 		const editorModeAction = battleEditorModel.modeAction.get();
 
@@ -91,7 +81,7 @@ export default class EditorBattleController extends ControllerNode {
 				this.model.battleMap.get().sprites.remove(sprite);
 			}
 		} else {
-			const id = this.game.editor.battleEditor.get().spriteId.get();
+			const id = this.game.editor.battleEditor.spriteId.get();
 			if (id && (action === MODE_ACTION_ADD)) {
 				const battleSprite = new BattleSpriteModel();
 				battleSprite.position.set(tile);
@@ -102,7 +92,7 @@ export default class EditorBattleController extends ControllerNode {
 	}
 
 	processClickSpecial(tile, action) {
-		const battleEditorModel = this.game.editor.battleEditor.get();
+		const battleEditorModel = this.game.editor.battleEditor;
 		const startX = tile.x - battleEditorModel.brushSize.get();
 		const endX = tile.x + battleEditorModel.brushSize.get();
 		const startY = tile.y - battleEditorModel.brushSize.get();
