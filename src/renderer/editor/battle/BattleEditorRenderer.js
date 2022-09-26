@@ -57,9 +57,25 @@ export default class BattleEditorRenderer extends DomRenderer {
 		this.container = Pixies.createElement(this.dom, 'div', 'battle-menu bg column');
 
 		this.top = Pixies.createElement(this.container, 'div');
+		this.brushSize = Pixies.createElement(this.top, 'div');
 		this.modeAction = Pixies.createElement(this.top, 'div');
 		this.modeType = Pixies.createElement(this.top, 'div');
 		this.bottom = Pixies.createElement(this.container, 'div');
+
+		for (let i = 0; i <= 5; i++) {
+			const r = Pixies.createElement(this.brushSize, 'input');
+			r.setAttribute('type', 'radio');
+			r.setAttribute('name', 'brushSize');
+			r.setAttribute('id',  `bs-${i}`);
+			r.setAttribute('value', String(i));
+			r.checked = this.model.brushSize.equalsTo(i);
+			r.addEventListener('change',  () => {
+				this.model.brushSize.set(i);
+			});
+			const l = Pixies.createElement(this.brushSize, 'label');
+			l.setAttribute('for', `bs-${i}`);
+			l.innerText = String(i);
+		}
 
 	}
 

@@ -56,6 +56,11 @@ export default class BattleEditorModel extends ModelNode {
 	 */
 	specialType;
 
+	/**
+	 * @type IntValue
+	 */
+	brushSize;
+
 	constructor(battle) {
 		super();
 
@@ -68,6 +73,7 @@ export default class BattleEditorModel extends ModelNode {
 
 		this.specialType = this.addProperty('specialType', new DirtyValue(SPECIAL_TYPE_BLOCK));
 
+		this.brushSize = this.addProperty('brushSize', new IntValue(1));
 	}
 
 }

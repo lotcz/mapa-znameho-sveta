@@ -5,11 +5,13 @@ import BattleSpriteModel from "../../model/game/battle/BattleSpriteModel";
 import {
 	MODE_ACTION_ADD,
 	MODE_ACTION_DELETE,
+	MODE_ACTION_SELECT,
 	MODE_TYPE_3D,
 	MODE_TYPE_SPECIAL,
 	MODE_TYPE_SPRITE
 } from "../../model/editor/BattleEditorModel";
 import BattleSpecialModel from "../../model/game/battle/BattleSpecialModel";
+import {Vector2} from "three";
 
 export default class EditorBattleController extends ControllerNode {
 
@@ -100,21 +102,42 @@ export default class EditorBattleController extends ControllerNode {
 	}
 
 	processClickSpecial(tile, action) {
-		const special = this.model.battleMap.get().specials.find((s) => s.position.round().equalsTo(tile));
-		if (special) {
-			if (action === MODE_ACTION_DELETE) {
-				console.log('deleting special', special);
-				this.model.battleMap.get().specials.remove(special);
-			}
-		} else {
-			if (action === MODE_ACTION_ADD) {
-				const battleEditorModel = this.game.editor.battleEditor.get();
+		const battleEditorModel = this.game.editor.battleEditor.get();
+		const startX = tile.x - battleEditorModel.brushSize.get();
+		const endX = tile.x + battleEditorModel.brushSize.get();
+		const startY = tile.y - battleEditorModel.brushSize.get();
+		const endY = tile.y + battleEditorModel.brushSize.get();
+
+		switch (action) {
+			case MODE_ACTION_ADD:
 				const editorSpecialType = battleEditorModel.specialType.get();
-				const special = new BattleSpecialModel();
-				special.position.set(tile);
-				special.type.set(editorSpecialType);
-				this.model.battleMap.get().specials.add(special);
-			}
+				for (let x = startX; x <= endX; x++) {
+					for (let y = startY; y <= endY; y++) {
+						const pos = new Vector2(x, y);
+						const existing = this.model.battleMap.get().specials.find((s) => s.position.round().equalsTo(pos));
+						if (!existing) {
+							const special = new BattleSpecialModel();
+							special.position.set(pos);
+							special.type.set(editorSpecialType);
+							this.model.battleMap.get().specials.add(special);
+						}
+					}
+				}
+				break;
+			case MODE_ACTION_DELETE:
+				for (let x = startX; x <= endX; x++) {
+					for (let y = startY; y <= endY; y++) {
+						const pos = new Vector2(x, y);
+						const existing = this.model.battleMap.get().specials.find((s) => s.position.round().equalsTo(pos));
+						if (existing) {
+							this.model.battleMap.get().specials.remove(existing);
+						}
+					}
+				}
+				break;
+			case MODE_ACTION_SELECT:
+
+				break;
 		}
 	}
 
