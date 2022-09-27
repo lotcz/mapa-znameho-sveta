@@ -28,6 +28,16 @@ export default class Sprite3dModel extends IdentifiedModelNode {
 	scale;
 
 	/**
+	 * @type IntValue
+	 */
+	primaryMaterialId;
+
+	/**
+	 * @type IntValue
+	 */
+	secondaryMaterialId;
+
+	/**
 	 * @type ModelNodeCollection
 	 */
 	blocks;
@@ -39,6 +49,8 @@ export default class Sprite3dModel extends IdentifiedModelNode {
 		this.modelId = this.addProperty('modelId', new IntValue());
 		this.coordinates = this.addProperty('coordinates', new Vector3());
 		this.scale = this.addProperty('scale', new Vector3(1,1,1));
+		this.primaryMaterialId = this.addProperty('primaryMaterialId', new IntValue());
+		this.secondaryMaterialId = this.addProperty('secondaryMaterialId', new IntValue());
 		this.blocks = this.addProperty('blocks', new ModelNodeCollection(() => new BlockModel()));
 	}
 
