@@ -64,21 +64,22 @@ export default class BattleRenderer extends DomRenderer {
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', ['battle', 'container-host']);
-		this.container.addEventListener('mouseover', (e) => {
+		this.container = this.addElement('div', 'battle container-host');
+		this.container.addEventListener('mouseover', () => {
 			this.model.isMouseOver.set(true);
 		});
-		this.container.addEventListener('mouseout', (e) => {
+		this.container.addEventListener('mouseout', () => {
 			this.model.isMouseOver.set(false);
 		});
 
 		// CANVAS
-		this.bgCanvas = Pixies.createElement(this.container, 'canvas');
+		this.bgCanvas = Pixies.createElement(this.container, 'canvas', 'container');
 		this.context2d = this.bgCanvas.getContext('2d');
 
 		// SVG
 		this.draw = SVG().addTo(this.container);
 		this.draw.addClass('battle-svg');
+		this.draw.addClass('container');
 		this.drawBackground = this.draw.group();
 		this.drawForeground = this.draw.group();
 		this.updateSvgSize();
@@ -87,7 +88,8 @@ export default class BattleRenderer extends DomRenderer {
 		// THREE
 		this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 		this.container.appendChild(this.renderer.domElement);
-		this.renderer.setSize(this.game.viewBoxSize.x, this.game.viewBoxSize.y);
+		Pixies.addClass(this.renderer.domElement, 'container');
+		this.renderer.setSize(this.game.mainLayerSize.x, this.game.mainLayerSize.y);
 		this.renderer.shadowMap.enabled = true;
 		this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
@@ -137,13 +139,13 @@ export default class BattleRenderer extends DomRenderer {
 		this.composer.addPass( renderPass );
 
 		this.effectFXAA = new ShaderPass( FXAAShader );
-		this.effectFXAA.uniforms[ 'resolution' ].value.set(1 / this.game.viewBoxSize.x,1 / this.game.viewBoxSize.y);
+		this.effectFXAA.uniforms[ 'resolution' ].value.set(1 / this.game.mainLayerSize.x,1 / this.game.mainLayerSize.y);
 		this.composer.addPass( this.effectFXAA );
 
 		this.updateCanvasSize();
 		this.updateRendererSize();
 
-		this.game.viewBoxSize.addOnChangeListener(this.onViewBoxChangeHandler);
+		this.game.mainLayerSize.addOnChangeListener(this.onViewBoxChangeHandler);
 
 		this.currentTile = new Vector2();
 
@@ -170,7 +172,7 @@ export default class BattleRenderer extends DomRenderer {
 	}
 
 	deactivateInternal() {
-		this.game.viewBoxSize.removeOnChangeListener(this.onViewBoxChangeHandler);
+		this.game.mainLayerSize.removeOnChangeListener(this.onViewBoxChangeHandler);
 		if (this.gui) {
 			this.gui.destroy();
 			this.gui = null;
@@ -215,8 +217,8 @@ export default class BattleRenderer extends DomRenderer {
 		}
 
 		if (this.model.isMouseOver.get()) {
-			const corner = this.model.coordinates.subtract(this.game.viewBoxSize.multiply(0.5 / this.model.zoom.get()));
-			const coords = corner.add(this.game.controls.mouseCoordinates.multiply(1 / this.model.zoom.get()));
+			const corner = this.model.coordinates.subtract(this.game.mainLayerSize.multiply(0.5 / this.model.zoom.get()));
+			const coords = corner.add(this.game.mainLayerMouseCoordinates.multiply(1 / this.model.zoom.get()));
 			const tile = this.model.battleMap.get().screenCoordsToTile(coords);
 			this.box.position.x = tile.x;
 			this.box.position.z = tile.y;
@@ -239,14 +241,14 @@ export default class BattleRenderer extends DomRenderer {
 		this.context2d.clearRect(0, 0, this.context2d.canvas.width, this.context2d.canvas.height);
 		this.context2d.drawImage(
 			this.bgImage,
-			this.model.coordinates.x - (0.5 * this.game.viewBoxSize.x / this.model.zoom.get()),
-			this.model.coordinates.y - (0.5 * this.game.viewBoxSize.y / this.model.zoom.get()),
-			this.game.viewBoxSize.x / this.model.zoom.get(),
-			this.game.viewBoxSize.y / this.model.zoom.get(),
+			this.model.coordinates.x - (0.5 * this.game.mainLayerSize.x / this.model.zoom.get()),
+			this.model.coordinates.y - (0.5 * this.game.mainLayerSize.y / this.model.zoom.get()),
+			this.game.mainLayerSize.x / this.model.zoom.get(),
+			this.game.mainLayerSize.y / this.model.zoom.get(),
 			0,
 			0,
-			this.game.viewBoxSize.x,
-			this.game.viewBoxSize.y
+			this.game.mainLayerSize.x,
+			this.game.mainLayerSize.y
 		);
 	}
 
@@ -258,25 +260,25 @@ export default class BattleRenderer extends DomRenderer {
 	}
 
 	updateCanvasSize() {
-		this.bgCanvas.width = this.game.viewBoxSize.x;
-		this.bgCanvas.height = this.game.viewBoxSize.y;
+		this.bgCanvas.width = this.game.mainLayerSize.x;
+		this.bgCanvas.height = this.game.mainLayerSize.y;
 	}
 
 	updateRendererSize() {
-		this.renderer.setSize(this.game.viewBoxSize.x, this.game.viewBoxSize.y);
-		this.composer.setSize(this.game.viewBoxSize.x, this.game.viewBoxSize.y);
+		this.renderer.setSize(this.game.mainLayerSize.x, this.game.mainLayerSize.y);
+		this.composer.setSize(this.game.mainLayerSize.x, this.game.mainLayerSize.y);
 
 		const pixelRatio = this.renderer.getPixelRatio();
-		this.effectFXAA.material.uniforms[ 'resolution' ].value.x = 1 / (  this.game.viewBoxSize.x * pixelRatio );
-		this.effectFXAA.material.uniforms[ 'resolution' ].value.y = 1 / (  this.game.viewBoxSize.y * pixelRatio );
+		this.effectFXAA.material.uniforms[ 'resolution' ].value.x = 1 / (  this.game.mainLayerSize.x * pixelRatio );
+		this.effectFXAA.material.uniforms[ 'resolution' ].value.y = 1 / (  this.game.mainLayerSize.y * pixelRatio );
 
 		this.updateCameraSize();
 	}
 
 	updateCameraSize() {
 		const pxPerUnit = this.model.battleMap.get().tileSize.get();
-		const horizontal = (this.game.viewBoxSize.x / 2) / pxPerUnit;
-		const vertical = (this.game.viewBoxSize.y / 2) / pxPerUnit;
+		const horizontal = (this.game.mainLayerSize.x / 2) / pxPerUnit;
+		const vertical = (this.game.mainLayerSize.y / 2) / pxPerUnit;
 		this.camera.left = - horizontal;
 		this.camera.right = horizontal;
 		this.camera.bottom = - vertical;
@@ -299,15 +301,15 @@ export default class BattleRenderer extends DomRenderer {
 	}
 
 	updateSvgSize() {
-		this.draw.size(this.game.viewBoxSize.x, this.game.viewBoxSize.y);
+		this.draw.size(this.game.mainLayerSize.x, this.game.mainLayerSize.y);
 	}
 
 	updateSvgViewBox() {
 		this.draw.viewbox(
-			this.model.coordinates.x - (0.5 * this.game.viewBoxSize.x / this.model.zoom.get()),
-			this.model.coordinates.y - (0.5 * this.game.viewBoxSize.y / this.model.zoom.get()),
-			this.game.viewBoxSize.x / this.model.zoom.get(),
-			this.game.viewBoxSize.y / this.model.zoom.get(),
+			this.model.coordinates.x - (0.5 * this.game.mainLayerSize.x / this.model.zoom.get()),
+			this.model.coordinates.y - (0.5 * this.game.mainLayerSize.y / this.model.zoom.get()),
+			this.game.mainLayerSize.x / this.model.zoom.get(),
+			this.game.mainLayerSize.y / this.model.zoom.get(),
 		);
 	}
 }

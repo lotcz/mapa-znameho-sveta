@@ -50,18 +50,14 @@ export default class BattleController extends ControllerNode {
 
 	activateInternal() {
 		this.model.coordinates.makeDirty();
-
 		this.game.controls.mouseCoordinates.addOnChangeListener(this.mouseMoveHandler);
 		this.game.controls.addEventListener('zoom', this.zoomHandler);
 		this.game.controls.addOnLeftClickListener(this.clickHandler);
-
-
 	}
 
 	deactivateInternal() {
 		this.game.controls.mouseCoordinates.removeOnChangeListener(this.mouseMoveHandler);
 		this.game.controls.removeEventListener('zoom', this.zoomHandler);
-
 		this.game.controls.removeOnLeftClickListener(this.clickHandler);
 	}
 
@@ -78,11 +74,11 @@ export default class BattleController extends ControllerNode {
 	onMouseMove() {
 		if (this.game.controls.mouseDownRight.get()) {
 			if (this.scrolling) {
-				const offset = this.game.controls.mouseCoordinates.subtract(this.scrolling);
+				const offset = this.game.mainLayerMouseCoordinates.subtract(this.scrolling);
 				const mapCoords = this.model.coordinates.subtract(offset.multiply(1/this.model.zoom.get()));
 				this.model.coordinates.set(mapCoords);
 			}
-			this.scrolling = this.game.controls.mouseCoordinates.clone();
+			this.scrolling = this.game.mainLayerMouseCoordinates.clone();
 		}
 
 	}
@@ -97,8 +93,8 @@ export default class BattleController extends ControllerNode {
 			return;
 		}
 
-		const corner = this.model.coordinates.subtract(this.game.viewBoxSize.multiply(0.5 / this.model.zoom.get()));
-		const coords = corner.add(this.game.controls.mouseCoordinates.multiply(1/this.model.zoom.get()));
+		const corner = this.model.coordinates.subtract(this.game.mainLayerSize.multiply(0.5 / this.model.zoom.get()));
+		const coords = corner.add(this.game.mainLayerMouseCoordinates.multiply(1/this.model.zoom.get()));
 		const position = this.model.battleMap.get().screenCoordsToPosition(coords);
 		const tile = position.round();
 

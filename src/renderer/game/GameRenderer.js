@@ -21,8 +21,7 @@ export default class GameRenderer extends DomRenderer {
 
 		this.model = model;
 		this.loading = null;
-		this.addClass('game');
-
+		this.addClass('game container-host');
 		this.editorRenderer = null;
 
 		this.saveGameRenderer = new NullableNodeRenderer(this.game, this.model.saveGame, (model) => new SaveGameRenderer(this.game, model, this.saveGameLayer));
@@ -36,8 +35,8 @@ export default class GameRenderer extends DomRenderer {
 		const initLoading = document.getElementById('initial_loading');
 		if (initLoading) Pixies.destroyElement(initLoading);
 
-		this.saveGameLayer = this.addElement('div', ['savegame-layer', 'container-host']);
-		this.editorLayer = this.addElement('div', ['editor-layer']);
+		this.saveGameLayer = this.addElement('div', 'savegame-layer container container-host row');
+		this.editorLayer = this.addElement('div', 'editor-layer');
 
 		this.updateLoading();
 		this.model.assets.isLoading.addOnChangeListener(this.updateLoadingHandler);

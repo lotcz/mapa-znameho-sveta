@@ -98,7 +98,7 @@ export default class MapController extends ControllerNode {
 		this.game.addEventListener('helperMouseOver', this.helperMouseOverHandler);
 		this.game.addEventListener('helperMouseOut', this.helperMouseOutHandler);
 
-		this.game.controls.mouseCoordinates.addOnChangeListener(this.mouseMoveHandler);
+		this.game.mainLayerMouseCoordinates.addOnChangeListener(this.mouseMoveHandler);
 		this.game.controls.addEventListener('zoom', this.zoomHandler);
 
 		this.map.addOnDirtyListener(this.resourcesChangedHandler);
@@ -108,7 +108,7 @@ export default class MapController extends ControllerNode {
 		this.game.removeEventListener('helperMouseOver', this.helperMouseOverHandler);
 		this.game.removeEventListener('helperMouseOut', this.helperMouseOutHandler);
 
-		this.game.controls.mouseCoordinates.removeOnChangeListener(this.mouseMoveHandler);
+		this.game.mainLayerMouseCoordinates.removeOnChangeListener(this.mouseMoveHandler);
 		this.game.controls.removeEventListener('zoom', this.zoomHandler);
 
 		this.map.removeOnDirtyListener(this.resourcesChangedHandler);
@@ -132,7 +132,7 @@ export default class MapController extends ControllerNode {
 		if (this.game.controls.mouseDownLeft.get()) {
 			this.model.partyTraveling.set(false);
 			if (this.dragging) {
-				const mapCoords = this.model.coordinates.add(this.game.controls.mouseCoordinates.multiply(this.model.zoom.get()));
+				const mapCoords = this.model.coordinates.add(this.game.mainLayerMouseCoordinates.multiply(this.model.zoom.get()));
 				this.dragging.set(mapCoords);
 			} else if (this.focusedHelper.isSet()) {
 				this.dragging = this.focusedHelper.get();
@@ -142,12 +142,12 @@ export default class MapController extends ControllerNode {
 		if (this.game.controls.mouseDownRight.get()) {
 			this.model.partyTraveling.set(false);
 			if (this.scrolling) {
-				const offset = this.game.controls.mouseCoordinates.subtract(this.scrolling);
+				const offset = this.game.mainLayerMouseCoordinates.subtract(this.scrolling);
 				const mapCoords = this.model.coordinates.subtract(offset.multiply(this.model.zoom.get()));
 				this.model.coordinates.set(mapCoords);
-				this.scrolling = this.game.controls.mouseCoordinates.clone();
+				this.scrolling = this.game.mainLayerMouseCoordinates.clone();
 			} else {
-				this.scrolling = this.game.controls.mouseCoordinates.clone();
+				this.scrolling = this.game.mainLayerMouseCoordinates.clone();
 			}
 		}
 	}

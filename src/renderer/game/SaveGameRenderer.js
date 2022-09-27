@@ -6,6 +6,8 @@ import ConversationRenderer from "./conversation/ConversationRenderer";
 import NullableNodeRenderer from "../basic/NullableNodeRenderer";
 import PartyRenderer from "./party/PartyRenderer";
 import SelectedSlotRenderer from "./party/SelectedSlotRenderer";
+import Pixies from "../../class/basic/Pixies";
+import Vector2 from "../../model/basic/Vector2";
 
 export default class SaveGameRenderer extends DomRenderer {
 
@@ -33,6 +35,9 @@ export default class SaveGameRenderer extends DomRenderer {
 		super(game, model, dom);
 
 		this.model = model;
+		this.container = null;
+		this.mainLayer = null;
+		this.topLayer = null;
 
 		this.conversationRenderer = new NullableNodeRenderer(this.game, this.model.conversation, (m) => new ConversationRenderer(this.game, m, this.topLayer));
 		this.addChild(this.conversationRenderer);
@@ -40,16 +45,40 @@ export default class SaveGameRenderer extends DomRenderer {
 		this.selectedItemRenderer = new NullableNodeRenderer(this.game, this.model.selectedInventorySlot, (m) => new SelectedSlotRenderer(this.game, m, this.dom));
 		this.addChild(this.selectedItemRenderer);
 
+		this.addAutoEvent(
+			window,
+			'resize',
+			() => {
+				const size = new Vector2(this.mainLayer.offsetWidth, this.mainLayer.offsetHeight);
+				this.model.triggerEvent('resize', size);
+			},
+			true
+		);
+
 		this.updateLoadingHandler = () => this.updateLoading();
 		this.updateGameModeHandler = () => this.updateGameMode();
 		this.updateDebugMenuHandler = () => this.updateDebugMenu();
 	}
 
 	activateInternal() {
-		this.mainLayer = this.addElement('div', ['main', 'container-host']);
-		this.topLayer = this.addElement('div', ['top-layer']);
+		this.container = this.addElement('div', 'savegame-container container container-host');
+		const bottomLayer = Pixies.createElement(this.container, 'div', 'bottom-layer container container-host row stretch');
+		this.topLayer = Pixies.createElement(this.container, 'div', 'top-layer ');
 
-		this.partyRenderer = new PartyRenderer(this.game, this.model.party, this.topLayer);
+		const party = Pixies.createElement(bottomLayer, 'div', 'savegame-party column');
+		this.mainLayer = Pixies.createElement(bottomLayer, 'div', 'main row stretch');
+		this.mainLayer.addEventListener(
+			'mousemove',
+			(e) => {
+				const bcr = this.mainLayer.getBoundingClientRect();
+				const position = new Vector2(e.pageX - bcr.left, e.pageY - bcr.top);
+				this.model.triggerEvent('mousemove', position);
+			});
+
+		if (this.partyRenderer) {
+			this.removeChild(this.partyRenderer);
+		}
+		this.partyRenderer = new PartyRenderer(this.game, this.model.party, party, this.topLayer);
 		this.addChild(this.partyRenderer);
 
 		this.updateGameMode();
@@ -59,8 +88,8 @@ export default class SaveGameRenderer extends DomRenderer {
 
 	deactivateInternal() {
 		this.model.mode.removeOnChangeListener(this.updateGameModeHandler);
-		this.removeElement(this.mainLayer);
-		this.removeElement(this.topLayer);
+		this.removeElement(this.container);
+		this.container = null;
 	}
 
 	updateGameMode() {

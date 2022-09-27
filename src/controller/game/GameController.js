@@ -13,11 +13,6 @@ export default class GameController extends ControllerNode {
 	model;
 
 	/**
-	 * @type ControlsController
-	 */
-	controlsController;
-
-	/**
 	 * @type NullableNodeController
 	 */
 	saveGameController;
@@ -30,33 +25,54 @@ export default class GameController extends ControllerNode {
 		this.isResourcesDirty = false;
 		this.resourcesTimeOut = null;
 
-		this.controlsController = new ControlsController(this.game, this.model.controls);
-		this.addChild(this.controlsController);
+		this.addChild(new ControlsController(this.game, this.model.controls));
+		this.addChild(
+			new NullableNodeController(
+				this.game,
+				this.model.saveGame,
+				(model) => new SaveGameController(this.game, model)
+			)
+		);
 
-		this.saveGameController = new NullableNodeController(this.game, this.model.saveGame, (model) => new SaveGameController(this.game, model));
-		this.addChild(this.saveGameController);
+		this.addAutoEvent(
+			window,
+			'resize',
+			() => {
+				this.runOnUpdate(() => this.model.viewBoxSize.set(window.innerWidth, window.innerHeight));
+			},
+			true
+		);
 
-		this.onResizeHandler = () => this.onResize();
-		this.onDebugKeyHandler = () => this.onDebugKey();
-		this.updateDebugMenuHandler = () => this.updateDebugMenu();
-		this.onSaveGameHandler = () => 	{
-			this.saveGameToStorage().then(() => {
-				console.log('game saved');
-			});
-		}
+		this.addAutoEvent(
+			this.model.controls,
+			'debug-key',
+			() => {
+				this.model.isInDebugMode.set(!this.model.isInDebugMode.get());
+			}
+		);
+
+		this.addAutoEvent(
+			this.model.isInDebugMode,
+			'change',
+			() => {
+				this.updateDebugMenu();
+			},
+			true
+		);
+
+		this.addAutoEvent(
+			this.model,
+			'save-game',
+			() => {
+				this.saveGameToStorage().then(() => {
+					console.log('game saved');
+				});
+			}
+		);
+
 	}
 
 	activateInternal() {
-		this.onResize();
-		window.addEventListener('resize', this.onResizeHandler);
-
-		this.model.controls.addOnDebugKeyListener(this.onDebugKeyHandler);
-
-		this.updateDebugMenu();
-		this.model.isInDebugMode.addOnChangeListener(this.updateDebugMenuHandler);
-
-		this.model.addEventListener('save-game', this.onSaveGameHandler);
-
 		this.loadResourcesFromStorage().then(() => {
 			this.model.resources.addOnDirtyListener(() => this.isResourcesDirty = true);
 			console.log('resources loaded');
@@ -64,21 +80,13 @@ export default class GameController extends ControllerNode {
 				console.log('game loaded');
 			});
 		});
-
-	}
-
-	deactivateInternal() {
-		window.removeEventListener('resize', this.onResizeHandler);
-		this.model.controls.removeOnDebugKeyListener(this.onDebugKeyHandler);
-		this.model.isInDebugMode.removeOnChangeListener(this.updateDebugMenuHandler);
-		this.model.saveGame.removeEventListener('save', this.onSaveGameHandler);
 	}
 
 	updateInternal(delta) {
 		super.updateInternal(delta);
 		if (this.resourcesTimeOut !== null) this.resourcesTimeOut -= delta;
 		if (this.isResourcesDirty) {
-			if (this.resourcesTimeOut === null) this.resourcesTimeOut = 1000;
+			if (this.resourcesTimeOut === null) this.resourcesTimeOut = 3000;
 			if (this.resourcesTimeOut <= 0) {
 				this.saveResourcesToStorage().then(() => {
 					this.isResourcesDirty = false;
@@ -98,14 +106,6 @@ export default class GameController extends ControllerNode {
 			this.editorController = new EditorController(this.game, this.model.editor);
 			this.addChild(this.editorController);
 		}
-	}
-
-	onResize() {
-		this.model.viewBoxSize.set(window.innerWidth, window.innerHeight);
-	}
-
-	onDebugKey() {
-		this.model.isInDebugMode.set(!this.model.isInDebugMode.get());
 	}
 
 	async loadResourcesFromStorage() {

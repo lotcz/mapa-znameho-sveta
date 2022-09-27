@@ -75,9 +75,27 @@ export default class SaveGameController extends ControllerNode {
 			});
 
 		this.addAutoEvent(
+			this.model,
+			'resize',
+			(size) => {
+				this.runOnUpdate(() => this.game.mainLayerSize.set(size));
+			}
+		);
+
+		this.addAutoEvent(
+			this.model,
+			'mousemove',
+			(position) => {
+				this.runOnUpdate(() => this.game.mainLayerMouseCoordinates.set(position));
+			}
+		);
+
+		this.addAutoEvent(
 			this.game.controls,
 			'right-click',
 			() => {
+				// drop item or deselect party character
+
 				if (this.model.selectedInventorySlot.isSet()) {
 					this.model.selectedInventorySlot.set(null);
 					return;

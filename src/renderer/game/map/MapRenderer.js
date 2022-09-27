@@ -44,12 +44,13 @@ export default class MapRenderer extends DomRenderer {
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', ['map', 'container-host']);
-		this.canvas = Pixies.createElement(this.container, 'canvas');
+		this.container = this.addElement('div', 'map container-host');
+		this.canvas = Pixies.createElement(this.container, 'canvas', 'container');
 		this.context2d = this.canvas.getContext("2d");
 
 		this.draw = SVG().addTo(this.container);
 		this.draw.addClass('map-svg');
+		this.draw.addClass('container');
 		this.pathsGroup = this.draw.group();
 		this.locationsGroup = this.draw.group();
 		this.currentGroup = this.draw.group();
@@ -64,7 +65,7 @@ export default class MapRenderer extends DomRenderer {
 				}
 				this.mapImage = img;
 				this.updateSize();
-				this.game.viewBoxSize.addOnChangeListener(this.onViewBoxChangeHandler);
+				this.game.mainLayerSize.addOnChangeListener(this.onViewBoxChangeHandler);
 			}
 		);
 
@@ -76,7 +77,7 @@ export default class MapRenderer extends DomRenderer {
 	}
 
 	deactivateInternal() {
-		this.game.viewBoxSize.removeOnChangeListener(this.onViewBoxChangeHandler);
+		this.game.mainLayerSize.removeOnChangeListener(this.onViewBoxChangeHandler);
 		this.resetChildren();
 		this.draw.remove();
 		this.draw = null;
@@ -92,9 +93,9 @@ export default class MapRenderer extends DomRenderer {
 	}
 
 	updateSize() {
-		this.draw.size(this.game.viewBoxSize.x, this.game.viewBoxSize.y);
-		this.canvas.width = this.game.viewBoxSize.x;
-		this.canvas.height = this.game.viewBoxSize.y;
+		this.draw.size(this.game.mainLayerSize.x, this.game.mainLayerSize.y);
+		this.canvas.width = this.game.mainLayerSize.x;
+		this.canvas.height = this.game.mainLayerSize.y;
 		this.updateZoom();
 	}
 
@@ -102,8 +103,8 @@ export default class MapRenderer extends DomRenderer {
 		this.draw.viewbox(
 			this.model.coordinates.x,
 			this.model.coordinates.y,
-			this.game.viewBoxSize.x * this.model.zoom.get(),
-			this.game.viewBoxSize.y * this.model.zoom.get()
+			this.game.mainLayerSize.x * this.model.zoom.get(),
+			this.game.mainLayerSize.y * this.model.zoom.get()
 		);
 		this.updateMapImage();
 	}
@@ -118,12 +119,12 @@ export default class MapRenderer extends DomRenderer {
 			this.mapImage,
 			this.model.coordinates.x,
 			this.model.coordinates.y,
-			this.game.viewBoxSize.x * this.model.zoom.get(),
-			this.game.viewBoxSize.y * this.model.zoom.get(),
+			this.game.mainLayerSize.x * this.model.zoom.get(),
+			this.game.mainLayerSize.y * this.model.zoom.get(),
 			0,
 			0,
-			this.game.viewBoxSize.x,
-			this.game.viewBoxSize.y
+			this.game.mainLayerSize.x,
+			this.game.mainLayerSize.y
 		);
 	}
 
