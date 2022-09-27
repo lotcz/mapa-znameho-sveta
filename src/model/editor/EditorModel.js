@@ -62,6 +62,7 @@ export default class EditorModel extends ModelNode {
 			materials: 'Materials',
 			sprites: 'Sprites',
 			models3d: '3D Models',
+			sprites3d: '3D Sprites',
 			races: 'Races',
 			characterTemplates: 'Character Templates',
 			conversations: 'Conversations',

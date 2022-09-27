@@ -10,6 +10,7 @@ import {
 } from "../../model/editor/BattleEditorModel";
 import BattleSpecialModel from "../../model/game/battle/BattleSpecialModel";
 import {Vector2} from "three";
+import BattleSprite3dModel from "../../model/game/battle/BattleSprite3dModel";
 
 export default class EditorBattleController extends ControllerNode {
 
@@ -50,8 +51,8 @@ export default class EditorBattleController extends ControllerNode {
 			return;
 		}
 
-		const corner = this.model.coordinates.subtract(this.game.viewBoxSize.multiply(0.5 / this.model.zoom.get()));
-		const coords = corner.add(this.game.controls.mouseCoordinates.multiply(1/this.model.zoom.get()));
+		const corner = this.model.coordinates.subtract(this.game.mainLayerSize.multiply(0.5 / this.model.zoom.get()));
+		const coords = corner.add(this.game.mainLayerMouseCoordinates.multiply(1/this.model.zoom.get()));
 		const position = this.model.battleMap.get().screenCoordsToPosition(coords);
 		const tile = position.round();
 
@@ -67,7 +68,7 @@ export default class EditorBattleController extends ControllerNode {
 				this.processClickSpecial(tile, editorModeAction);
 				break;
 			case MODE_TYPE_3D:
-				//this.processClickSprites(tile, editorModeAction);
+				this.processClickSprites3d(tile, editorModeAction);
 				break;
 		}
 
@@ -88,6 +89,29 @@ export default class EditorBattleController extends ControllerNode {
 				battleSprite.spriteId.set(id);
 				this.model.battleMap.get().sprites.add(battleSprite);
 			}
+		}
+	}
+
+	processClickSprites3d(tile, action) {
+		const sprite = this.model.battleMap.get().sprites3d.find((ch) => ch.position.round().equalsTo(tile));
+
+		switch (action) {
+			case MODE_ACTION_ADD:
+				if (sprite) {
+					break;
+				}
+				const id = this.game.editor.battleEditor.sprite3dId.get();
+				if (id) {
+					const battleSprite = new BattleSprite3dModel();
+					battleSprite.position.set(tile);
+					battleSprite.sprite3dId.set(id);
+					this.model.battleMap.get().sprites3d.add(battleSprite);
+				}
+				break;
+			case MODE_ACTION_DELETE:
+				console.log('deleting 3D sprite', sprite);
+				this.model.battleMap.get().sprites3d.remove(sprite);
+				break;
 		}
 	}
 

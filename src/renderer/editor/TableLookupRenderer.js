@@ -15,6 +15,7 @@ const FIELD_TABLE_MAPPINGS = {
 	primaryMaterialId: 'materials',
 	secondaryMaterialId: 'materials',
 	spriteId: 'sprites',
+	sprite3dId: 'sprites3d',
 	biotopeId: 'biotopes',
 	startLocationId: 'locations',
 	endLocationId: 'locations',

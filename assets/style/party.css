@@ -1,29 +1,24 @@
 .party {
 	display: flex;
-
 	color:var(--dark-brown);
 	background-image: url('../img/texture/paper.jpg');
 	background-color: sandybrown;
 	text-align: center;
-
-	border-radius: 10px;
 	box-shadow: #311a0a 0 0 60px;
 }
 
 .party .inner  {
-	border-radius: 10px;
 	padding: 2rem;
 	box-shadow: #311a0a 0 0 40px inset;
 	display: flex;
 	flex: 1;
 	flex-direction: column;
-	justify-content: space-between;
+	justify-content: flex-start;
 }
 
 .party .portrait {
 	width: 120px;
 	height: 120px;
-
 	border: 2px solid transparent;
 	border-radius: 5px;
 }

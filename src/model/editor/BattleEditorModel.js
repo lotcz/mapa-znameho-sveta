@@ -58,6 +58,11 @@ export default class BattleEditorModel extends ModelNode {
 	spriteId;
 
 	/**
+	 * @type IntValue
+	 */
+	sprite3dId;
+
+	/**
 	 * @type DirtyValue
 	 */
 	specialType;
@@ -76,6 +81,7 @@ export default class BattleEditorModel extends ModelNode {
 
 		this.activeBattleSprite = this.addProperty('activeBattleSprite', new NullableNode());
 		this.spriteId = this.addProperty('spriteId', new IntValue());
+		this.sprite3dId = this.addProperty('sprite3dId', new IntValue());
 
 		this.specialType = this.addProperty('specialType', new DirtyValue(SPECIAL_TYPE_BLOCK));
 

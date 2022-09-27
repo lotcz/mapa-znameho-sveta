@@ -5,6 +5,7 @@ import IntValue from "../../basic/IntValue";
 import ModelNodeCollection from "../../basic/ModelNodeCollection";
 import BattleSpriteModel from "./BattleSpriteModel";
 import BattleSpecialModel, {SPECIAL_TYPE_BLOCK} from "./BattleSpecialModel";
+import BattleSprite3dModel from "./BattleSprite3dModel";
 
 export default class BattleMapModel extends IdentifiedModelNode {
 
@@ -36,6 +37,11 @@ export default class BattleMapModel extends IdentifiedModelNode {
 	sprites;
 
 	/**
+	 * @type ModelNodeCollection<BattleSprite3dModel>
+	 */
+	sprites3d;
+
+	/**
 	 * @type ModelNodeCollection<BattleSpecialModel>
 	 */
 	specials;
@@ -53,6 +59,11 @@ export default class BattleMapModel extends IdentifiedModelNode {
 		this.blocksSpritesCache = null;
 		this.sprites.addOnAddListener(() => this.blocksSpritesCache = null);
 		this.sprites.addOnRemoveListener(() => this.blocksSpritesCache = null);
+
+		this.sprites3d = this.addProperty('sprites3d', new ModelNodeCollection(() => new BattleSprite3dModel()));
+		this.blocksSprites3dCache = null;
+		this.sprites3d.addOnAddListener(() => this.blocksSprites3dCache = null);
+		this.sprites3d.addOnRemoveListener(() => this.blocksSprites3dCache = null);
 
 		this.specials = this.addProperty('specials', new ModelNodeCollection(() => new BattleSpecialModel()));
 		this.blocksSpecialsCache = null;
@@ -101,8 +112,9 @@ export default class BattleMapModel extends IdentifiedModelNode {
 
 	getBlocks() {
 		const sprites = this.getBlocksSprites();
+		const sprites3d = this.getBlocksSprites3d();
 		const specials = this.getBlocksSpecials();
-		return sprites.concat(specials);
+		return sprites.concat(sprites3d).concat(specials);
 	}
 
 	getBlocksSprites() {
@@ -120,6 +132,23 @@ export default class BattleMapModel extends IdentifiedModelNode {
 			);
 		}
 		return this.blocksSpritesCache;
+	}
+
+	getBlocksSprites3d() {
+		if (this.blocksSprites3dCache === null) {
+			this.blocksSprites3dCache = this.sprites3d.reduce(
+				(prev, current) => {
+					const sprite = current.sprite.get();
+					if (sprite) {
+						const spriteBlocks = sprite.blocks.map((b) => b.position.add(current.position));
+						return prev.concat(spriteBlocks);
+					}
+					return prev;
+				},
+				[]
+			);
+		}
+		return this.blocksSprites3dCache;
 	}
 
 	getBlocksSpecials() {

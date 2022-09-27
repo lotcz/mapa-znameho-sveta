@@ -32,7 +32,7 @@ export default class PartyRenderer extends DomRenderer {
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', 'party');
+		this.container = this.addElement('div', 'party flex-1');
 		this.inner = Pixies.createElement(this.container, 'div', 'inner');
 
 		this.container.addEventListener('click', (e) => {
