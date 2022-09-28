@@ -27,6 +27,7 @@ export default class PartyModel extends ModelNode {
 	selectedCharacter;
 
 	/**
+	 * Dictates whether inventory is visible
 	 * @type NullableNode<CharacterModel>
 	 */
 	selectedInventoryCharacter;

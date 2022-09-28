@@ -13,8 +13,8 @@ export default class ItemModel3dLoader extends AssetLoader {
 		this.secondaryLoaded = true;
 		this.isFinished = false;
 
-		const id = Pixies.extractId(this.uri);
-		const itemDef = this.assets.resources.itemDefinitions.getById(id);
+		const itemDefId = Pixies.extractId(this.uri);
+		const itemDef = this.assets.resources.itemDefinitions.getById(itemDefId);
 
 		if (itemDef.primaryMaterialId.isSet()) {
 			this.primaryLoaded = false;

@@ -13,6 +13,7 @@ import GUIHelper from "../../../class/basic/GUIHelper";
 import {SVG} from "@svgdotjs/svg.js";
 import NullableNodeRenderer from "../../basic/NullableNodeRenderer";
 import BattleMapRenderer from "./BattleMapRenderer";
+import BattleItemRenderer from "./BattleItemRenderer";
 
 const DEBUG_BATTLE_RENDERER = false;
 
@@ -42,6 +43,14 @@ export default class BattleRenderer extends DomRenderer {
 				this.game,
 				this.model.characters,
 				(m) => new BattleCharacterRenderer(this.game, m, this.scene)
+			)
+		);
+
+		this.addChild(
+			new CollectionRenderer(
+				this.game,
+				this.model.items,
+				(m) => new BattleItemRenderer(this.game, m, this.scene)
 			)
 		);
 

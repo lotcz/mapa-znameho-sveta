@@ -1,8 +1,8 @@
-import DirtyValue from "../../basic/DirtyValue";
-import Vector2 from "../../basic/Vector2";
-import IdentifiedModelNode from "../../basic/IdentifiedModelNode";
-import IntValue from "../../basic/IntValue";
-import ModelNodeCollection from "../../basic/ModelNodeCollection";
+import DirtyValue from "../../../basic/DirtyValue";
+import Vector2 from "../../../basic/Vector2";
+import IdentifiedModelNode from "../../../basic/IdentifiedModelNode";
+import IntValue from "../../../basic/IntValue";
+import ModelNodeCollection from "../../../basic/ModelNodeCollection";
 import BattleSpriteModel from "./BattleSpriteModel";
 import BattleSpecialModel, {SPECIAL_TYPE_BLOCK} from "./BattleSpecialModel";
 import BattleSprite3dModel from "./BattleSprite3dModel";

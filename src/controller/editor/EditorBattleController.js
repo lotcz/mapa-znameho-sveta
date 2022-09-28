@@ -1,5 +1,5 @@
 import ControllerNode from "../basic/ControllerNode";
-import BattleSpriteModel from "../../model/game/battle/BattleSpriteModel";
+import BattleSpriteModel from "../../model/game/battle/battlemap/BattleSpriteModel";
 import {
 	MODE_ACTION_ADD,
 	MODE_ACTION_DELETE,
@@ -8,9 +8,9 @@ import {
 	MODE_TYPE_SPECIAL,
 	MODE_TYPE_SPRITE
 } from "../../model/editor/BattleEditorModel";
-import BattleSpecialModel from "../../model/game/battle/BattleSpecialModel";
+import BattleSpecialModel from "../../model/game/battle/battlemap/BattleSpecialModel";
 import {Vector2} from "three";
-import BattleSprite3dModel from "../../model/game/battle/BattleSprite3dModel";
+import BattleSprite3dModel from "../../model/game/battle/battlemap/BattleSprite3dModel";
 
 export default class EditorBattleController extends ControllerNode {
 

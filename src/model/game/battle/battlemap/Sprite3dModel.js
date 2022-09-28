@@ -1,9 +1,9 @@
-import Vector3 from "../../basic/Vector3";
-import IdentifiedModelNode from "../../basic/IdentifiedModelNode";
-import DirtyValue from "../../basic/DirtyValue";
-import ModelNodeCollection from "../../basic/ModelNodeCollection";
+import Vector3 from "../../../basic/Vector3";
+import IdentifiedModelNode from "../../../basic/IdentifiedModelNode";
+import DirtyValue from "../../../basic/DirtyValue";
+import ModelNodeCollection from "../../../basic/ModelNodeCollection";
 import BlockModel from "./BlockModel";
-import IntValue from "../../basic/IntValue";
+import IntValue from "../../../basic/IntValue";
 
 export default class Sprite3dModel extends IdentifiedModelNode {
 

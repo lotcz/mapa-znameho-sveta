@@ -3,7 +3,7 @@ import PathModel from "./PathModel";
 import ModelNodeTable from "../../basic/ModelNodeTable";
 import LocationModel from "./LocationModel";
 import BiotopeModel from "./BiotopeModel";
-import BattleMapModel from "../battle/BattleMapModel";
+import BattleMapModel from "../battle/battlemap/BattleMapModel";
 
 export default class MapModel extends ModelNode {
 

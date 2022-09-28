@@ -9,6 +9,7 @@ const FIELD_TABLE_MAPPINGS = {
 	female3dModelId: 'models3d',
 	hairItemDefinitionId: 'itemDefinitions',
 	definitionId: 'itemDefinitions',
+	itemDefId: 'itemDefinitions',
 	materialId: 'materials',
 	skinMaterialId: 'materials',
 	hairMaterialId: 'materials',

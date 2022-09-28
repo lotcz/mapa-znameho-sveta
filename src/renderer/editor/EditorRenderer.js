@@ -45,9 +45,6 @@ export default class EditorRenderer extends DomRenderer {
 		this.materialPreviewRenderer = new NullableNodeRenderer(this.game, this.model.activeMaterial, (model) => new MaterialPreviewRenderer(this.game, model, this.item));
 		this.addChild(this.materialPreviewRenderer);
 
-		this.materialPreviewRenderer = new NullableNodeRenderer(this.game, this.model.activeMaterial, (model) => new MaterialPreviewRenderer(this.game, model, this.item));
-		this.addChild(this.materialPreviewRenderer);
-
 		this.stopEventPropagationHandler = (e) => e.stopPropagation();
 	}
 

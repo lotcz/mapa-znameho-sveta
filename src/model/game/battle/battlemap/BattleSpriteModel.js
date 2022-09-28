@@ -1,7 +1,7 @@
-import ModelNode from "../../basic/ModelNode";
-import Vector2 from "../../basic/Vector2";
-import IntValue from "../../basic/IntValue";
-import NullableNode from "../../basic/NullableNode";
+import ModelNode from "../../../basic/ModelNode";
+import Vector2 from "../../../basic/Vector2";
+import IntValue from "../../../basic/IntValue";
+import NullableNode from "../../../basic/NullableNode";
 
 export default class BattleSpriteModel extends ModelNode {
 

@@ -1,5 +1,5 @@
-import Vector2 from "../../basic/Vector2";
-import ModelNode from "../../basic/ModelNode";
+import Vector2 from "../../../basic/Vector2";
+import ModelNode from "../../../basic/ModelNode";
 
 export default class BlockModel extends ModelNode {
 

@@ -7,8 +7,8 @@ import ConversationModel from "./conversation/ConversationModel";
 import ModelNode from "../basic/ModelNode";
 import Model3dModel from "./items/Model3dModel";
 import ItemDefinitionModel from "./items/ItemDefinitionModel";
-import SpriteModel from "./battle/SpriteModel";
-import Sprite3dModel from "./battle/Sprite3dModel";
+import SpriteModel from "./battle/battlemap/SpriteModel";
+import Sprite3dModel from "./battle/battlemap/Sprite3dModel";
 
 export default class ResourcesModel extends ModelNode {
 

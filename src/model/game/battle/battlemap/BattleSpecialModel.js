@@ -1,6 +1,6 @@
-import ModelNode from "../../basic/ModelNode";
-import Vector2 from "../../basic/Vector2";
-import DirtyValue from "../../basic/DirtyValue";
+import ModelNode from "../../../basic/ModelNode";
+import Vector2 from "../../../basic/Vector2";
+import DirtyValue from "../../../basic/DirtyValue";
 
 export const SPECIAL_TYPE_BLOCK = 'block';
 export const SPECIAL_TYPE_EXIT = 'exit';

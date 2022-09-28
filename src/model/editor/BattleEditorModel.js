@@ -2,7 +2,7 @@ import ModelNode from "../basic/ModelNode";
 import NullableNode from "../basic/NullableNode";
 import IntValue from "../basic/IntValue";
 import DirtyValue from "../basic/DirtyValue";
-import {SPECIAL_TYPE_BLOCK} from "../game/battle/BattleSpecialModel";
+import {SPECIAL_TYPE_BLOCK} from "../game/battle/battlemap/BattleSpecialModel";
 import BoolValue from "../basic/BoolValue";
 
 export const MODE_TYPE_SPRITE = 'sprite';
