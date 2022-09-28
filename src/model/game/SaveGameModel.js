@@ -9,6 +9,7 @@ import PartyModel from "./party/PartyModel";
 import IntValue from "../basic/IntValue";
 import FloatValue from "../basic/FloatValue";
 import BoolValue from "../basic/BoolValue";
+import ModelNodeCollection from "../basic/ModelNodeCollection";
 
 export const GAME_MODE_MAP = 'map';
 export const GAME_MODE_BATTLE = 'battle';
@@ -29,6 +30,11 @@ export default class SaveGameModel extends ModelNode {
 	 * @type ModelNodeTable
 	 */
 	characters;
+
+	/**
+	 * @type ModelNodeCollection<BattleModel>
+	 */
+	battles;
 
 	/**
 	 * @type PartyModel
@@ -99,7 +105,7 @@ export default class SaveGameModel extends ModelNode {
 	/**
 	 * @type NullableNode
 	 */
-	battle;
+	currentBattle;
 
 	/**
 	 * @type NullableNode
@@ -117,6 +123,9 @@ export default class SaveGameModel extends ModelNode {
 		this.mode = this.addProperty('mode', new DirtyValue(GAME_MODE_MAP));
 		this.time = this.addProperty('time', new FloatValue(0));
 		this.characters = this.addProperty('characters', new ModelNodeTable((id) => new CharacterModel(id)));
+		this.battles = this.addProperty('battles', new ModelNodeCollection(() => new BattleModel()));
+		this.currentBattle = this.addProperty('currentBattle', new NullableNode(() => new BattleModel()));
+
 		this.party = this.addProperty('party', new PartyModel());
 
 		this.coordinates = this.addProperty('coordinates', new Vector2());
@@ -146,8 +155,6 @@ export default class SaveGameModel extends ModelNode {
 
 		this.currentLocationId = this.addProperty('currentLocationId', new IntValue());
 		this.currentLocation = this.addProperty('currentLocation', new NullableNode(null, false));
-
-		this.battle = this.addProperty('battle', new NullableNode(() => new BattleModel()));
 
 		this.conversation = this.addProperty('conversation', new NullableNode());
 

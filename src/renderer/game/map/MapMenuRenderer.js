@@ -56,7 +56,7 @@ export default class MapMenuRenderer extends DomRenderer {
 
 	updateLocation() {
 		const battle = Pixies.createElement(this.buttons, 'button', 'special', 'To Battle', () => {
-			this.game.saveGame.get().triggerEvent('to-battle');
+			this.model.triggerEvent('to-battle');
 		});
 	}
 
@@ -70,7 +70,7 @@ export default class MapMenuRenderer extends DomRenderer {
 	updateArt() {
 
 		/** @type BiotopeModel */
-		let biotope;
+		let biotope = null;
 
 		if (this.model.currentLocation.isSet()) {
 			biotope = this.model.currentLocation.get().biotope.get();
@@ -78,7 +78,7 @@ export default class MapMenuRenderer extends DomRenderer {
 			biotope = this.model.currentPath.get().biotope.get();
 		}
 
-		if (biotope === undefined || biotope.images.count() <= 0) {
+		if (biotope === null || biotope.images.count() <= 0) {
 			this.clearArt();
 			return;
 		}

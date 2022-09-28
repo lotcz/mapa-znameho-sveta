@@ -78,7 +78,8 @@ export default class EditorModel extends ModelNode {
 
 		this.saveGameOptions = {
 			characters: 'Characters',
-			slots: 'Party Slots'
+			slots: 'Party Slots',
+			battles: 'Battles'
 		};
 
 	}

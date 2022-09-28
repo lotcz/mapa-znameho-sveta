@@ -18,7 +18,7 @@ export default class EditorSaveGameController extends ControllerNode {
 		this.addChild(
 			new NullableNodeController(
 				this.game,
-				this.model.battle,
+				this.model.currentBattle,
 				(m) => new EditorBattleController(this.game, m)
 			)
 		);

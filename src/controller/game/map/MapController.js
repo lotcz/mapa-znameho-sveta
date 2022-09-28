@@ -159,8 +159,15 @@ export default class MapController extends ControllerNode {
 	toBattle() {
 		const location = this.model.currentLocation.get();
 		const battleMapId = location.battleMapId.get();
-		const battle = new BattleModel();
-		battle.battleMapId.set(battleMapId);
+
+		const save = this.game.saveGame.get();
+		let battle = save.battles.find((b) => b.battleMapId.equalsTo(battleMapId));
+
+		if (!battle) {
+			battle = new BattleModel();
+			battle.battleMapId.set(battleMapId);
+			save.battles.add(battle);
+		}
 
 		const map = this.game.resources.map.battleMaps.getById(battleMapId);
 		battle.battleMap.set(map);
@@ -174,7 +181,7 @@ export default class MapController extends ControllerNode {
 			battle.characters.add(character);
 		});
 
-		this.model.battle.set(battle);
+		this.model.currentBattle.set(battle);
 		this.model.mode.set(GAME_MODE_BATTLE);
 	}
 

@@ -102,11 +102,11 @@ export default class SaveGameRenderer extends DomRenderer {
 				this.mainRenderer = new MapRenderer(this.game, this.model, this.mainLayer);
 				break;
 			case GAME_MODE_BATTLE:
-				if (this.model.battle.isEmpty()) {
+				if (this.model.currentBattle.isEmpty()) {
 					console.log('no battle to fight!');
 					return;
 				}
-				this.mainRenderer = new BattleRenderer(this.game, this.model.battle.get(), this.mainLayer);
+				this.mainRenderer = new BattleRenderer(this.game, this.model.currentBattle.get(), this.mainLayer);
 				break;
 			default:
 				console.warn(`Unknown game mode ${mode}`);

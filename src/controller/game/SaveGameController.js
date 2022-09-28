@@ -56,7 +56,7 @@ export default class SaveGameController extends ControllerNode {
 							const battleItem = new BattleItemModel();
 							battleItem.item.set(oldItem);
 							const character = this.model.party.selectedInventoryCharacter.get();
-							const battle = this.model.battle.get();
+							const battle = this.model.currentBattle.get();
 							const battleCharacter = battle.characters.find((chr) => chr.characterId.equalsTo(character.id));
 							battleItem.position.set(battleCharacter.position);
 							battle.items.add(battleItem);
@@ -168,12 +168,12 @@ export default class SaveGameController extends ControllerNode {
 				this.mainController = this.addChild(new MapController(this.game, this.model));
 				break;
 			case GAME_MODE_BATTLE:
-				if (this.model.battle.isEmpty()) {
+				if (this.model.currentBattle.isEmpty()) {
 					this.model.mode.set(GAME_MODE_MAP);
 					console.log('no battle to fight!');
 					return;
 				}
-				this.mainController = this.addChild(new BattleController(this.game, this.model.battle.get()));
+				this.mainController = this.addChild(new BattleController(this.game, this.model.currentBattle.get()));
 				break;
 		}
 	}
