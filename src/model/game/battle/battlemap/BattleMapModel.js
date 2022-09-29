@@ -6,6 +6,7 @@ import ModelNodeCollection from "../../../basic/ModelNodeCollection";
 import BattleSpriteModel from "./BattleSpriteModel";
 import BattleSpecialModel, {SPECIAL_TYPE_BLOCK} from "./BattleSpecialModel";
 import BattleSprite3dModel from "./BattleSprite3dModel";
+import PathFinder from "../../../../class/PathFinder";
 
 export default class BattleMapModel extends IdentifiedModelNode {
 
@@ -55,20 +56,21 @@ export default class BattleMapModel extends IdentifiedModelNode {
 
 		this.start = this.addProperty('start', new Vector2(-102, -25));
 
+		this.blocksCache = null;
 		this.sprites = this.addProperty('sprites', new ModelNodeCollection(() => new BattleSpriteModel()));
 		this.blocksSpritesCache = null;
-		this.sprites.addOnAddListener(() => this.blocksSpritesCache = null);
-		this.sprites.addOnRemoveListener(() => this.blocksSpritesCache = null);
+		this.sprites.addOnAddListener(() => this.blocksCache = this.blocksSpritesCache = null);
+		this.sprites.addOnRemoveListener(() => this.blocksCache = this.blocksSpritesCache = null);
 
 		this.sprites3d = this.addProperty('sprites3d', new ModelNodeCollection(() => new BattleSprite3dModel()));
 		this.blocksSprites3dCache = null;
-		this.sprites3d.addOnAddListener(() => this.blocksSprites3dCache = null);
-		this.sprites3d.addOnRemoveListener(() => this.blocksSprites3dCache = null);
+		this.sprites3d.addOnAddListener(() => this.blocksCache = this.blocksSprites3dCache = null);
+		this.sprites3d.addOnRemoveListener(() => this.blocksCache = this.blocksSprites3dCache = null);
 
 		this.specials = this.addProperty('specials', new ModelNodeCollection(() => new BattleSpecialModel()));
 		this.blocksSpecialsCache = null;
-		this.specials.addOnAddListener(() => this.blocksSpecialsCache = null);
-		this.specials.addOnRemoveListener(() => this.blocksSpecialsCache = null);
+		this.specials.addOnAddListener(() => this.blocksCache = this.blocksSpecialsCache = null);
+		this.specials.addOnRemoveListener(() => this.blocksCache = this.blocksSpecialsCache = null);
 	}
 
 	/**
@@ -110,11 +112,18 @@ export default class BattleMapModel extends IdentifiedModelNode {
 		return position.round();
 	}
 
+	isTileBlocked(position) {
+		return PathFinder.isTileBlocked(position, this.getBlocks());
+	}
+
 	getBlocks() {
-		const sprites = this.getBlocksSprites();
-		const sprites3d = this.getBlocksSprites3d();
-		const specials = this.getBlocksSpecials();
-		return sprites.concat(sprites3d).concat(specials);
+		if (!this.blocksCache) {
+			const sprites = this.getBlocksSprites();
+			const sprites3d = this.getBlocksSprites3d();
+			const specials = this.getBlocksSpecials();
+			this.blocksCache = sprites.concat(sprites3d).concat(specials);
+		}
+		return this.blocksCache;
 	}
 
 	getBlocksSprites() {

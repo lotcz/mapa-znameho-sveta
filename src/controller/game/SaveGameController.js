@@ -143,6 +143,8 @@ export default class SaveGameController extends ControllerNode {
 			resting -= diff;
 			save.partyResting.set(resting);
 			save.passTime(diff);
+		} else {
+			save.partyResting.set(0);
 		}
 	}
 

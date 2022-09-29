@@ -1,4 +1,9 @@
 import SvgRenderer from "../../basic/SvgRenderer";
+import {
+	SPECIAL_TYPE_BLOCK,
+	SPECIAL_TYPE_EXIT,
+	SPECIAL_TYPE_SPAWN
+} from "../../../model/game/battle/battlemap/BattleSpecialModel";
 
 export default class BattleSpecialRenderer extends SvgRenderer {
 
@@ -17,7 +22,21 @@ export default class BattleSpecialRenderer extends SvgRenderer {
 	activateInternal() {
 		this.group = this.draw.group();
 
-		this.circle = this.group.circle(50).stroke({width: 12, color: 'red'});
+		let color = 'red';
+
+		switch (this.model.type.get()) {
+			case SPECIAL_TYPE_BLOCK:
+				color = 'gray';
+				break;
+			case SPECIAL_TYPE_EXIT:
+				color = 'yellow';
+				break;
+			case SPECIAL_TYPE_SPAWN:
+				color = 'blue';
+				break;
+		}
+
+		this.circle = this.group.circle(50).stroke({width: 12, color:  color});
 
 		this.updatePosition();
 	}

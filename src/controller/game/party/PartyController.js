@@ -45,6 +45,18 @@ export default class PartyController extends ControllerNode {
 				this.model.selectedCharacterId.set(id);
 			}
 		);
+
+		this.addAutoEvent(
+			this.model.selectedCharacterId,
+			'change',
+			(id) => {
+				const save = this.game.saveGame.get();
+				if (!save) return;
+				const battle = save.currentBattle.get();
+				if (battle) battle.characters.selectedNode.set(battle.characters.find((chr) => chr.characterId.equalsTo(this.model.selectedCharacterId)));
+			},
+			true
+		);
 	}
 
 }

@@ -3,6 +3,7 @@ import CollectionController from "../../basic/CollectionController";
 import BattleCharacterController from "./BattleCharacterController";
 import NullableNodeController from "../../basic/NullableNodeController";
 import BattleMapController from "./BattleMapController";
+import {GAME_MODE_MAP} from "../../../model/game/SaveGameModel";
 
 export default class BattleController extends ControllerNode {
 
@@ -46,6 +47,21 @@ export default class BattleController extends ControllerNode {
 			},
 			true
 		);
+
+		this.addAutoEvent(
+			this.model,
+			'leave-battle',
+			() => {
+				const save = this.game.saveGame.get();
+				// delete party characters from battle
+				const partyCharacters = this.model.characters.filter((chr) => save.party.hasCharacter(chr.characterId));
+				partyCharacters.forEach((chr) => this.model.characters.remove(chr));
+
+				save.mode.set(GAME_MODE_MAP);
+				save.currentBattle.set(null);
+			}
+		);
+
 	}
 
 	activateInternal() {

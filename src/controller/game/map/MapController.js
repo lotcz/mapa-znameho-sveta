@@ -170,10 +170,13 @@ export default class MapController extends ControllerNode {
 		}
 
 		const map = this.game.resources.map.battleMaps.getById(battleMapId);
-		battle.battleMap.set(map);
+		//battle.battleMap.set(map);
 
-		const slots = this.game.saveGame.get().party.slots;
-		slots.forEach((slot) => {
+		// delete party characters from battle
+		const partyCharacters = battle.characters.filter((chr) => save.party.hasCharacter(chr.characterId));
+		partyCharacters.forEach((chr) => battle.characters.remove(chr));
+
+		save.party.slots.forEach((slot) => {
 			const character = new BattleCharacterModel();
 			character.characterId.set(slot.characterId.get());
 			const position = map.start.add(new Vector2(Pixies.random(-5, 5), Pixies.random(-5, 5))).round();

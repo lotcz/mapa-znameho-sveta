@@ -50,4 +50,8 @@ export default class PartyModel extends ModelNode {
 		this.slots = this.addProperty('slots', new ModelNodeCollection(() => new PartySlotModel()));
 	}
 
+	hasCharacter(characterId) {
+		return this.slots.find((s) => s.characterId.equalsTo(characterId));
+	}
+
 }

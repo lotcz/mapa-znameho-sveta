@@ -135,9 +135,9 @@ export default class BattleCharacterController extends ControllerNode {
 		}
 
 		console.log(path);
+		this.model.targetPosition.set(position);
 
 		this.pathToGo = path;
-
 		this.startMovement(this.pathToGo.shift());
 
 	}
@@ -163,6 +163,7 @@ export default class BattleCharacterController extends ControllerNode {
 		const blocks = this.getBlocks();
 		if (this.checkBlocks(blocks)) {
 			this.model.state.set(CHARACTER_STATE_IDLE);
+			this.model.targetPosition.set(null);
 		}
 	}
 

@@ -85,7 +85,7 @@ export default class BattleEditorModel extends ModelNode {
 
 		this.specialType = this.addProperty('specialType', new DirtyValue(SPECIAL_TYPE_BLOCK));
 
-		this.brushSize = this.addProperty('brushSize', new IntValue(1));
+		this.brushSize = this.addProperty('brushSize', new IntValue(0));
 	}
 
 }
