@@ -29,7 +29,14 @@ export default class BattleCursorRenderer extends SvgRenderer {
 		this.group = this.draw.group();
 		const size = this.model.battleMap.get().tileSize.get();
 		this.circle = this.group.circle(size);
-		this.circle.fill('rgba(255, 0, 0, 0.5)').stroke({width: 0});
+		const radial = this.draw.gradient(
+			'radial',
+			function(add) {
+				add.stop(0, 'rgba(255, 0, 0, 0.5)');
+				add.stop(1, 'rgba(255, 0, 0, 0)');
+			}
+		);
+		this.circle.fill(radial).stroke({width: 0});
 		this.updateCursor();
 	}
 

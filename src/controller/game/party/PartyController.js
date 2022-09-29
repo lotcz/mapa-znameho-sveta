@@ -49,7 +49,7 @@ export default class PartyController extends ControllerNode {
 		this.addAutoEvent(
 			this.model.selectedCharacterId,
 			'change',
-			(id) => {
+			() => {
 				const save = this.game.saveGame.get();
 				if (!save) return;
 				const battle = save.currentBattle.get();

@@ -17,6 +17,8 @@ export default class BattleSpecialRenderer extends SvgRenderer {
 
 		this.model = model;
 		this.group = null;
+
+		this.battleMap = this.game.saveGame.get().currentBattle.get().battleMap.get();
 	}
 
 	activateInternal() {
@@ -36,7 +38,8 @@ export default class BattleSpecialRenderer extends SvgRenderer {
 				break;
 		}
 
-		this.circle = this.group.circle(50).stroke({width: 12, color:  color});
+		const size = this.battleMap.tileSize.get();
+		this.circle = this.group.ellipse(size, size / 2).stroke({width: 5, color:  color});
 
 		this.updatePosition();
 	}

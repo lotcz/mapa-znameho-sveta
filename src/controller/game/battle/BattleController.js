@@ -69,6 +69,9 @@ export default class BattleController extends ControllerNode {
 		this.game.controls.mouseCoordinates.addOnChangeListener(this.mouseMoveHandler);
 		this.game.controls.addEventListener('zoom', this.zoomHandler);
 		this.game.controls.addOnLeftClickListener(this.clickHandler);
+
+		const save = this.game.saveGame.get();
+		this.model.characters.selectedNode.set(this.model.characters.find((chr) => chr.characterId.equalsTo(save.party.selectedCharacterId)));
 	}
 
 	deactivateInternal() {

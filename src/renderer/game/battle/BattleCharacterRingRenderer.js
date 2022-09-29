@@ -30,8 +30,17 @@ export default class BattleCharacterRingRenderer extends SvgRenderer {
 		this.group = this.draw.group();
 
 		const size = this.battleMap.tileSize.get();
-		this.circle = this.group.ellipse(size, size / 2);
-		this.circle.fill('transparent').stroke({width: 3, color: 'green'});
+		const width = size / 25;
+		this.circle = this.group.ellipse(size - (2 * width), (size / 2) - (2 * width));
+		const radial = this.draw.gradient(
+			'radial',
+			function(add) {
+				add.stop(0, 'rgba(0, 255, 0, 0)');
+				add.stop(0.5, 'rgba(0, 255, 0, 0)');
+				add.stop(1, 'green');
+			}
+		);
+		this.circle.fill(radial).stroke({width: width, color: 'green'});
 		this.updatePosition();
 	}
 

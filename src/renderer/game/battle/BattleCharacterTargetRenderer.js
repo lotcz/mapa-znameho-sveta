@@ -19,8 +19,9 @@ export default class BattleCharacterTargetRenderer extends SvgRenderer {
 	activateInternal() {
 		this.group = this.draw.group();
 		const size = this.battleMap.tileSize.get();
-		this.circle = this.group.ellipse(size - 8, (size / 2) - 8);
-		this.circle.fill('transparent').stroke({width: 3, color: 'white'});
+		const width = size / 25;
+		this.circle = this.group.ellipse(size - (2 * width), (size / 2) - (2 * width));
+		this.circle.fill('transparent').stroke({width: width, color: 'white'});
 		this.updatePosition();
 	}
 
