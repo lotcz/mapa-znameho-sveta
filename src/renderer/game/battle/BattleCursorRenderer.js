@@ -12,31 +12,15 @@ export default class BattleCursorRenderer extends SvgRenderer {
 
 		this.model = model;
 		this.group = null;
-
-		this.addAutoEvent(
-			this.game.mainLayerMouseCoordinates,
-			'change',
-			() => {
-				if (this.model.isMouseOver.get()) {
-					this.updateCursor();
-				}
-			},
-			true
-		);
 	}
 
 	activateInternal() {
 		this.group = this.draw.group();
 		const size = this.model.battleMap.get().tileSize.get();
-		this.circle = this.group.circle(size);
-		const radial = this.draw.gradient(
-			'radial',
-			function(add) {
-				add.stop(0, 'rgba(255, 0, 0, 0.5)');
-				add.stop(1, 'rgba(255, 0, 0, 0)');
-			}
-		);
-		this.circle.fill(radial).stroke({width: 0});
+		const width = size / 25;
+		this.circle = this.group.ellipse(size - (2 * width), (size / 2) - (2 * width));
+		this.circle.fill('rgba(255, 255, 255, 0.3)');
+		this.circle.stroke({width: width, color: 'white'});
 		this.updateCursor();
 	}
 
@@ -53,19 +37,17 @@ export default class BattleCursorRenderer extends SvgRenderer {
 				this.group.hide();
 			}
 		}
+		if (this.model.isMouseOver.get()) {
+			if (this.model.mouseHoveringTile.isDirty) {
+				this.updateCursor();
+			}
+		}
 	}
 
 	updateCursor() {
-		const corner = this.model.coordinates.subtract(this.game.mainLayerSize.multiply(0.5 / this.model.zoom.get()));
-		const coords = corner.add(this.game.mainLayerMouseCoordinates.multiply(1 / this.model.zoom.get()));
 		const battleMap = this.model.battleMap.get();
-		const tile = battleMap.screenCoordsToTile(coords);
-		if (battleMap.isTileBlocked(tile)) {
-			this.group.show();
-			this.group.center(coords.x, coords.y);
-		} else {
-			this.group.hide();
-		}
+		const tileCoords = battleMap.positionToScreenCoords(this.model.mouseHoveringTile);
+		this.group.center(tileCoords.x, tileCoords.y);
 	}
 
 }

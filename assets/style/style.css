@@ -109,6 +109,10 @@ html, body {
 	cursor: url('../img/cursor.png'), auto;
 }
 
+.savegame-layer .no-go {
+	cursor: url('../img/cursor-red.png'), auto;
+}
+
 .paper {
 	color:var(--dark-brown);
 	background-image: url('../img/texture/paper.jpg');

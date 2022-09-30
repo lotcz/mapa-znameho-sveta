@@ -5,8 +5,8 @@ export default class Vector2 extends ModelNode {
 	x;
 	y;
 
-	constructor(x, y) {
-		super();
+	constructor(x, y, persistent) {
+		super(persistent);
 
 		this.x = 0;
 		this.y = 0;

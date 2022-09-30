@@ -47,6 +47,21 @@ export default class BattleModel extends ModelNode {
 	 */
 	isMouseOver;
 
+	/**
+	 * @type Vector2
+	 */
+	mouseCoordinates;
+
+	/**
+	 * @type Vector2
+	 */
+	mouseHoveringTile;
+
+	/**
+	 * @type BoolValue
+	 */
+	isHoveringNoGo;
+
 	constructor() {
 		super();
 
@@ -60,6 +75,9 @@ export default class BattleModel extends ModelNode {
 		this.zoom = this.addProperty('zoom', new FloatValue(1));
 
 		this.isMouseOver = this.addProperty('isMouseOver', new BoolValue(false, false));
+		this.mouseCoordinates = this.addProperty('mouseCoordinates', new Vector2(0, 0, false));
+		this.mouseHoveringTile = this.addProperty('mouseHoveringTile', new Vector2(0, 0, false));
+		this.isHoveringNoGo = this.addProperty('isHoveringNoGo', new BoolValue(false, false));
 	}
 
 }

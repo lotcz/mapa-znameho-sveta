@@ -32,7 +32,7 @@ export default class BattleCharacterRingRenderer extends SvgRenderer {
 		const size = this.battleMap.tileSize.get();
 		const width = size / 25;
 		this.circle = this.group.ellipse(size - (2 * width), (size / 2) - (2 * width));
-		const radial = this.draw.gradient(
+		this.radial = this.draw.gradient(
 			'radial',
 			function(add) {
 				add.stop(0, 'rgba(0, 255, 0, 0)');
@@ -40,13 +40,15 @@ export default class BattleCharacterRingRenderer extends SvgRenderer {
 				add.stop(1, 'green');
 			}
 		);
-		this.circle.fill(radial).stroke({width: width, color: 'green'});
+		this.circle.fill(this.radial).stroke({width: width, color: 'green'});
 		this.updatePosition();
 	}
 
 	deactivateInternal() {
 		this.group.remove();
 		this.group = null;
+		this.radial.remove();
+		this.radial = null;
 	}
 
 	renderInternal() {

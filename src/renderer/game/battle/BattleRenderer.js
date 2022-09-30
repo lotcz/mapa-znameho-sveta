@@ -77,6 +77,20 @@ export default class BattleRenderer extends DomRenderer {
 			)
 		);
 
+		this.addAutoEvent(
+			this.game.isInDebugMode,
+			'change',
+			() => {
+				if (this.cursorRenderer) this.removeChild(this.cursorRenderer);
+				this.cursorRenderer = null;
+				if (this.game.isInDebugMode.get()) {
+					this.cursorRenderer = new BattleCursorRenderer(this.game, this.model, this.drawForeground);
+					this.addChild(this.cursorRenderer);
+				}
+			},
+			true
+		);
+
 		this.onViewBoxChangeHandler = () => this.onViewBoxSizeChanged();
 	}
 
@@ -99,10 +113,6 @@ export default class BattleRenderer extends DomRenderer {
 		this.draw.addClass('container');
 		this.drawBackground = this.draw.group();
 		this.drawForeground = this.draw.group();
-
-		if (this.cursorRenderer) this.removeChild(this.cursorRenderer);
-		this.cursorRenderer = new BattleCursorRenderer(this.game, this.model, this.drawForeground);
-		this.addChild(this.cursorRenderer);
 
 		this.updateSvgSize();
 		this.updateSvgViewBox();
@@ -215,6 +225,13 @@ export default class BattleRenderer extends DomRenderer {
 			this.updateCameraZoom();
 		}
 
+		if (this.model.isHoveringNoGo.isDirty) {
+			if (this.model.isHoveringNoGo.get()) {
+				Pixies.addClass(this.container, 'no-go');
+			} else {
+				Pixies.removeClass(this.container, 'no-go');
+			}
+		}
 		this.composer.render();
 	}
 

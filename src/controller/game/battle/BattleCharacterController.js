@@ -135,7 +135,7 @@ export default class BattleCharacterController extends ControllerNode {
 		}
 
 		console.log(path);
-		this.model.targetPosition.set(position);
+		this.model.targetPosition.set(position.clone());
 
 		this.pathToGo = path;
 		this.startMovement(this.pathToGo.shift());
