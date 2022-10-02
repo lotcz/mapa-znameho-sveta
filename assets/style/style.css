@@ -110,7 +110,7 @@ html, body {
 }
 
 .savegame-layer .no-go {
-	cursor: url('../img/cursor-red.png'), auto;
+	cursor: url('../img/cursor-red.png'), not-allowed;
 }
 
 .paper {

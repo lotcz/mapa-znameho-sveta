@@ -62,6 +62,11 @@ export default class BattleModel extends ModelNode {
 	 */
 	isHoveringNoGo;
 
+	/**
+	 * @type BoolValue
+	 */
+	isHoveringPartyCharacter;
+
 	constructor() {
 		super();
 
@@ -78,6 +83,7 @@ export default class BattleModel extends ModelNode {
 		this.mouseCoordinates = this.addProperty('mouseCoordinates', new Vector2(0, 0, false));
 		this.mouseHoveringTile = this.addProperty('mouseHoveringTile', new Vector2(0, 0, false));
 		this.isHoveringNoGo = this.addProperty('isHoveringNoGo', new BoolValue(false, false));
+		this.isHoveringPartyCharacter = this.addProperty('isHoveringPartyCharacter', new BoolValue(false, false));
 	}
 
 }

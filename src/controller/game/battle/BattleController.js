@@ -142,8 +142,12 @@ export default class BattleController extends ControllerNode {
 
 	onHoveringTileChanged() {
 		const battleMap = this.model.battleMap.get();
-		const blocked = battleMap.isTileBlocked(this.model.mouseHoveringTile);
+		const tile = this.model.mouseHoveringTile;
+		const blocked = battleMap.isTileBlocked(tile);
 		this.model.isHoveringNoGo.set(blocked);
+
+		const occupant = this.model.characters.find((ch) => ch.position.round().equalsTo(tile));
+		this.model.isHoveringPartyCharacter.set(occupant);
 	}
 
 	onZoom(param) {

@@ -12,6 +12,7 @@ export default class ConditionalNodeRenderer extends RendererNode {
 		this.model = model;
 		this.condition = condition;
 		this.rendererFactory = rendererFactory;
+		this.renderer = null;
 
 		this.addAutoEvent(
 			this.model,
@@ -22,10 +23,15 @@ export default class ConditionalNodeRenderer extends RendererNode {
 	}
 
 	updateRenderer() {
+		this.renderer = null;
 		this.resetChildren();
 		if (this.condition()) {
-			this.addChild(this.rendererFactory());
+			this.renderer = this.addChild(this.rendererFactory());
 		}
 	}
 
+	isModelDirty() {
+		if (!this.renderer) return false;
+		return this.renderer.model.isDirty;
+	}
 }

@@ -14,6 +14,7 @@ import BattleMapRenderer from "./BattleMapRenderer";
 import BattleItemRenderer from "./BattleItemRenderer";
 import BattleCursorRenderer from "./BattleCursorRenderer";
 import BattleCharacterRingRenderer from "./BattleCharacterRingRenderer";
+import ConditionalNodeRenderer from "../../basic/ConditionalNodeRenderer";
 
 const DEBUG_BATTLE_RENDERER = false;
 
@@ -77,18 +78,25 @@ export default class BattleRenderer extends DomRenderer {
 			)
 		);
 
+		this.addChild(
+			new ConditionalNodeRenderer(
+				this.game,
+				this.model.isHoveringPartyCharacter,
+				() => this.model.isHoveringPartyCharacter.get() || this.game.isInDebugMode.get(),
+				() => new BattleCursorRenderer(
+					this.game,
+					this.model,
+					this.drawForeground
+				)
+			)
+		);
+
 		this.addAutoEvent(
 			this.game.isInDebugMode,
 			'change',
 			() => {
-				if (this.cursorRenderer) this.removeChild(this.cursorRenderer);
-				this.cursorRenderer = null;
-				if (this.game.isInDebugMode.get()) {
-					this.cursorRenderer = new BattleCursorRenderer(this.game, this.model, this.drawForeground);
-					this.addChild(this.cursorRenderer);
-				}
-			},
-			true
+				this.model.isHoveringPartyCharacter.triggerEvent('change');
+			}
 		);
 
 		this.onViewBoxChangeHandler = () => this.onViewBoxSizeChanged();

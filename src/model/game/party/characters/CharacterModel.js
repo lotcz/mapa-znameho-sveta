@@ -83,7 +83,7 @@ export default class CharacterModel extends TemplateNode {
 		this.name = this.addProperty('name', new DirtyValue('Jinka'));
 		this.raceId = this.addProperty('raceId', new IntValue());
 		this.sex = this.addProperty('sex', new BoolValue(true));
-		this.portrait = this.addProperty('portrait', new DirtyValue('img/portrait/kalinga/female-1.jpeg'));
+		this.portrait = this.addProperty('portrait', new DirtyValue('img/portrait/kalinga/female-1.jpg'));
 
 		this.hairMaterialId = this.addProperty('hairMaterialId', new IntValue());
 		this.hairItemDefinitionId = this.addProperty('hairItemDefinitionId', new IntValue());

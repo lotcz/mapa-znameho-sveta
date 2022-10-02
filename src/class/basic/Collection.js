@@ -1,6 +1,9 @@
 import Node from "./Node";
 
 export default class Collection extends Node {
+	/**
+	 * @type array
+	 */
 	items;
 
 	constructor() {
