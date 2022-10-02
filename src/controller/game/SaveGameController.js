@@ -4,6 +4,7 @@ import {GAME_MODE_BATTLE, GAME_MODE_MAP} from "../../model/game/SaveGameModel";
 import BattleController from "./battle/BattleController";
 import ConversationController from "./conversation/ConversationController";
 import PartyController from "./party/PartyController";
+import BattleItemModel from "../../model/game/battle/BattleItemModel";
 
 const REST_SPEED = 0.15; // portion of day per second
 
@@ -46,14 +47,26 @@ export default class SaveGameController extends ControllerNode {
 					this.model.selectedInventorySlot.set(null);
 					return;
 				}
+
 				if (this.model.selectedInventorySlot.isSet()) {
+					const oldItem = this.model.selectedInventorySlot.get().item.get();
+
 					if (slot.name === 'drop') {
+						if (oldItem && this.model.mode.equalsTo(GAME_MODE_BATTLE)) {
+							const battleItem = new BattleItemModel();
+							battleItem.item.set(oldItem);
+							const character = this.model.party.selectedInventoryCharacter.get();
+							const battle = this.model.currentBattle.get();
+							const battleCharacter = battle.characters.find((chr) => chr.characterId.equalsTo(character.id));
+							battleItem.position.set(battleCharacter.position);
+							battle.items.add(battleItem);
+						}
+
 						this.model.selectedInventorySlot.get().item.set(null);
 						this.model.selectedInventorySlot.set(null);
 						return;
 					}
 
-					const oldItem = this.model.selectedInventorySlot.get().item.get();
 					const def = this.game.resources.itemDefinitions.getById(oldItem.definitionId.get());
 					if (!slot.accepts(def.type.get())) {
 						return;
@@ -75,9 +88,27 @@ export default class SaveGameController extends ControllerNode {
 			});
 
 		this.addAutoEvent(
+			this.model,
+			'resize',
+			(size) => {
+				this.runOnUpdate(() => this.game.mainLayerSize.set(size));
+			}
+		);
+
+		this.addAutoEvent(
+			this.model,
+			'mousemove',
+			(position) => {
+				this.runOnUpdate(() => this.game.mainLayerMouseCoordinates.set(position));
+			}
+		);
+
+		this.addAutoEvent(
 			this.game.controls,
 			'right-click',
 			() => {
+				// drop item or deselect party character
+
 				if (this.model.selectedInventorySlot.isSet()) {
 					this.model.selectedInventorySlot.set(null);
 					return;
@@ -112,6 +143,8 @@ export default class SaveGameController extends ControllerNode {
 			resting -= diff;
 			save.partyResting.set(resting);
 			save.passTime(diff);
+		} else {
+			save.partyResting.set(0);
 		}
 	}
 
@@ -137,12 +170,12 @@ export default class SaveGameController extends ControllerNode {
 				this.mainController = this.addChild(new MapController(this.game, this.model));
 				break;
 			case GAME_MODE_BATTLE:
-				if (this.model.battle.isEmpty()) {
+				if (this.model.currentBattle.isEmpty()) {
 					this.model.mode.set(GAME_MODE_MAP);
 					console.log('no battle to fight!');
 					return;
 				}
-				this.mainController = this.addChild(new BattleController(this.game, this.model.battle.get()));
+				this.mainController = this.addChild(new BattleController(this.game, this.model.currentBattle.get()));
 				break;
 		}
 	}

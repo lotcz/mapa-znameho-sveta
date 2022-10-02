@@ -26,7 +26,7 @@ export default class RendererNode extends ActivatedTreeNode {
 		if (!this.isActivated) {
 			return;
 		}
-		if (!this.model.isDirty) {
+		if (!this.isModelDirty()) {
 			return;
 		}
 		this.renderInternal();
@@ -40,5 +40,9 @@ export default class RendererNode extends ActivatedTreeNode {
 	 * Override this
 	 */
 	renderInternal() {}
+
+	isModelDirty() {
+		return this.model.isDirty;
+	}
 
 }

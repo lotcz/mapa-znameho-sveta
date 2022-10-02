@@ -17,21 +17,22 @@ export default class PartyRenderer extends DomRenderer {
 	 */
 	charactersRenderer;
 
-	constructor(game, model, dom) {
+	constructor(game, model, dom, topLayer) {
 		super(game, model, dom);
 
 		this.model = model;
+		this.topLayer = topLayer;
 
 		this.charactersRenderer = new CollectionRenderer(this.game, this.model.slots, (m) => new PartySlotRenderer(this.game, m, this.inner));
 		this.addChild(this.charactersRenderer);
 
-		this.inventoryRenderer = new NullableNodeRenderer(this.game, this.model.selectedInventoryCharacter, (m) => new InventoryRenderer(this.game, m, this.dom));
+		this.inventoryRenderer = new NullableNodeRenderer(this.game, this.model.selectedInventoryCharacter, (m) => new InventoryRenderer(this.game, m, this.topLayer));
 		this.addChild(this.inventoryRenderer);
 
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', 'party');
+		this.container = this.addElement('div', 'party flex-1');
 		this.inner = Pixies.createElement(this.container, 'div', 'inner');
 
 		this.container.addEventListener('click', (e) => {

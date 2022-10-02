@@ -27,6 +27,7 @@ export default class PartyModel extends ModelNode {
 	selectedCharacter;
 
 	/**
+	 * Dictates whether inventory is visible
 	 * @type NullableNode<CharacterModel>
 	 */
 	selectedInventoryCharacter;
@@ -47,6 +48,10 @@ export default class PartyModel extends ModelNode {
 		this.selectedInventoryCharacter = this.addProperty('selectedInventoryCharacter', new NullableNode(null, false));
 
 		this.slots = this.addProperty('slots', new ModelNodeCollection(() => new PartySlotModel()));
+	}
+
+	hasCharacter(characterId) {
+		return this.slots.find((s) => s.characterId.equalsTo(characterId));
 	}
 
 }

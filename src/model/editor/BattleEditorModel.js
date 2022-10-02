@@ -2,7 +2,7 @@ import ModelNode from "../basic/ModelNode";
 import NullableNode from "../basic/NullableNode";
 import IntValue from "../basic/IntValue";
 import DirtyValue from "../basic/DirtyValue";
-import {SPECIAL_TYPE_BLOCK} from "../game/battle/BattleSpecialModel";
+import {SPECIAL_TYPE_BLOCK} from "../game/battle/battlemap/BattleSpecialModel";
 import BoolValue from "../basic/BoolValue";
 
 export const MODE_TYPE_SPRITE = 'sprite';
@@ -58,6 +58,11 @@ export default class BattleEditorModel extends ModelNode {
 	spriteId;
 
 	/**
+	 * @type IntValue
+	 */
+	sprite3dId;
+
+	/**
 	 * @type DirtyValue
 	 */
 	specialType;
@@ -76,10 +81,11 @@ export default class BattleEditorModel extends ModelNode {
 
 		this.activeBattleSprite = this.addProperty('activeBattleSprite', new NullableNode());
 		this.spriteId = this.addProperty('spriteId', new IntValue());
+		this.sprite3dId = this.addProperty('sprite3dId', new IntValue());
 
 		this.specialType = this.addProperty('specialType', new DirtyValue(SPECIAL_TYPE_BLOCK));
 
-		this.brushSize = this.addProperty('brushSize', new IntValue(1));
+		this.brushSize = this.addProperty('brushSize', new IntValue(0));
 	}
 
 }

@@ -9,6 +9,7 @@ import ItemImageLoader from "./loaders/ItemImageLoader";
 import Model3dLoader from "./loaders/Model3dLoader";
 import ItemModel3dLoader from "./loaders/ItemModel3dLoader";
 import SpriteLoader from "./loaders/SpriteLoader";
+import Sprite3dLoader from "./loaders/Sprite3dLoader";
 
 const ASSET_TYPE_LOADERS = {
 	'img': ImageLoader,
@@ -17,7 +18,8 @@ const ASSET_TYPE_LOADERS = {
 	'm3d': Model3dLoader,
 	'it3': ItemModel3dLoader,
 	'itm': ItemImageLoader,
-	'spr': SpriteLoader
+	'spr': SpriteLoader,
+	'sp3': Sprite3dLoader
 }
 
 /**
@@ -117,6 +119,10 @@ export default class AssetCache {
 
 	loadItemModel3d(itemDefId, onLoaded) {
 		this.getAsset(`it3/${itemDefId}`, onLoaded);
+	}
+
+	loadSprite3d(sprite3dId, onLoaded) {
+		this.getAsset(`sp3/${sprite3dId}`, onLoaded);
 	}
 
 	loadItemImage(itemDefId, onLoaded) {

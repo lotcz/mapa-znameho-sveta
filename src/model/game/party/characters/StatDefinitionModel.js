@@ -12,6 +12,9 @@ export const HEALTH_STAT = 101;
 export const PHYSICAL_STAT = 102;
 export const MENTAL_STAT = 103;
 
+// other
+export const STAT_ITEM_CONDITION = 1001;
+
 export default class StatDefinitionModel extends IdentifiedModelNode {
 
 	/**

@@ -3,6 +3,7 @@ import CollectionController from "../../basic/CollectionController";
 import BattleCharacterController from "./BattleCharacterController";
 import NullableNodeController from "../../basic/NullableNodeController";
 import BattleMapController from "./BattleMapController";
+import {GAME_MODE_MAP} from "../../../model/game/SaveGameModel";
 
 export default class BattleController extends ControllerNode {
 
@@ -34,10 +35,6 @@ export default class BattleController extends ControllerNode {
 			)
 		);
 
-		this.mouseMoveHandler = () => this.onMouseMove();
-		this.zoomHandler = (param) => this.onZoom(param);
-		this.clickHandler = (param) => this.onClick(param);
-
 		this.addAutoEvent(
 			this.model.battleMapId,
 			'change',
@@ -46,22 +43,67 @@ export default class BattleController extends ControllerNode {
 			},
 			true
 		);
+
+		this.addAutoEvent(
+			this.game.mainLayerMouseCoordinates,
+			'change',
+			() => this.onMouseMove(),
+			true
+		);
+
+		this.addAutoEvent(
+			this.model.mouseCoordinates,
+			'change',
+			() => this.onMouseCoordinatesChanged(),
+			true
+		);
+
+		this.addAutoEvent(
+			this.model.mouseHoveringTile,
+			'change',
+			() => this.onHoveringTileChanged(),
+			true
+		);
+
+		this.addAutoEvent(
+			this.game.controls,
+			'left-click',
+			() => this.onClick()
+		);
+
+		this.zoomHandler = (param) => this.onZoom(param);
+		this.clickHandler = (param) => this.onClick(param);
+
+
+
+		this.addAutoEvent(
+			this.model,
+			'leave-battle',
+			() => {
+				const save = this.game.saveGame.get();
+				// delete party characters from battle
+				const partyCharacters = this.model.characters.filter((chr) => save.party.hasCharacter(chr.characterId));
+				partyCharacters.forEach((chr) => this.model.characters.remove(chr));
+
+				save.mode.set(GAME_MODE_MAP);
+				save.currentBattle.set(null);
+			}
+		);
+
 	}
 
 	activateInternal() {
 		this.model.coordinates.makeDirty();
 
-		this.game.controls.mouseCoordinates.addOnChangeListener(this.mouseMoveHandler);
 		this.game.controls.addEventListener('zoom', this.zoomHandler);
 		this.game.controls.addOnLeftClickListener(this.clickHandler);
 
-
+		const save = this.game.saveGame.get();
+		this.model.characters.selectedNode.set(this.model.characters.find((chr) => chr.characterId.equalsTo(save.party.selectedCharacterId)));
 	}
 
 	deactivateInternal() {
-		this.game.controls.mouseCoordinates.removeOnChangeListener(this.mouseMoveHandler);
 		this.game.controls.removeEventListener('zoom', this.zoomHandler);
-
 		this.game.controls.removeOnLeftClickListener(this.clickHandler);
 	}
 
@@ -76,15 +118,36 @@ export default class BattleController extends ControllerNode {
 	}
 
 	onMouseMove() {
+		const corner = this.model.coordinates.subtract(this.game.mainLayerSize.multiply(0.5 / this.model.zoom.get()));
+		const coords = corner.add(this.game.mainLayerMouseCoordinates.multiply(1 / this.model.zoom.get()));
+		this.model.mouseCoordinates.set(coords);
+	}
+
+	onMouseCoordinatesChanged() {
+		const battleMap = this.model.battleMap.get();
+		const tile = battleMap.screenCoordsToTile(this.model.mouseCoordinates);
+		this.model.mouseHoveringTile.set(tile);
+
 		if (this.game.controls.mouseDownRight.get()) {
 			if (this.scrolling) {
-				const offset = this.game.controls.mouseCoordinates.subtract(this.scrolling);
-				const mapCoords = this.model.coordinates.subtract(offset.multiply(1/this.model.zoom.get()));
+				const offset = this.model.mouseCoordinates.subtract(this.scrolling);
+				const mapCoords = this.model.coordinates.subtract(offset);
 				this.model.coordinates.set(mapCoords);
+				const mouseCoords = this.model.mouseCoordinates.subtract(offset);
+				this.model.mouseCoordinates.set(mouseCoords);
 			}
-			this.scrolling = this.game.controls.mouseCoordinates.clone();
+			this.scrolling = this.model.mouseCoordinates.clone();
 		}
+	}
 
+	onHoveringTileChanged() {
+		const battleMap = this.model.battleMap.get();
+		const tile = this.model.mouseHoveringTile;
+		const blocked = battleMap.isTileBlocked(tile);
+		this.model.isHoveringNoGo.set(blocked);
+
+		const occupant = this.model.characters.find((ch) => ch.position.round().equalsTo(tile));
+		this.model.isHoveringPartyCharacter.set(occupant);
 	}
 
 	onZoom(param) {
@@ -97,10 +160,7 @@ export default class BattleController extends ControllerNode {
 			return;
 		}
 
-		const corner = this.model.coordinates.subtract(this.game.viewBoxSize.multiply(0.5 / this.model.zoom.get()));
-		const coords = corner.add(this.game.controls.mouseCoordinates.multiply(1/this.model.zoom.get()));
-		const position = this.model.battleMap.get().screenCoordsToPosition(coords);
-		const tile = position.round();
+		const tile = this.model.mouseHoveringTile
 
 		const occupant = this.model.characters.find((ch) => ch.position.round().equalsTo(tile));
 		if (occupant) {

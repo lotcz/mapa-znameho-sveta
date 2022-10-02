@@ -13,7 +13,7 @@ export default class LocationController extends ControllerNode {
 		this.model = model;
 
 		if (this.model.coordinates.size() === 0) {
-			this.model.coordinates.set(this.game.saveGame.get().coordinates.add(this.game.viewBoxSize.multiply(0.5 * this.game.saveGame.get().zoom.get())));
+			this.model.coordinates.set(this.game.saveGame.get().coordinates.add(this.game.mainLayerSize.multiply(0.5 * this.game.saveGame.get().zoom.get())));
 			this.updateWaypoints();
 		}
 

@@ -13,6 +13,11 @@ import ResourcesJson from "../../resources.json";
 export default class GameModel extends ModelNode {
 
 	/**
+	 * @type DirtyValue
+	 */
+	isInDebugMode;
+
+	/**
 	 * @type AssetCache
 	 */
 	assets;
@@ -38,9 +43,14 @@ export default class GameModel extends ModelNode {
 	viewBoxSize;
 
 	/**
-	 * @type DirtyValue
+	 * @type Vector2
 	 */
-	isInDebugMode;
+	mainLayerSize;
+
+	/**
+	 * @type Vector2
+	 */
+	mainLayerMouseCoordinates;
 
 	/**
 	 * @type NullableNode
@@ -50,17 +60,18 @@ export default class GameModel extends ModelNode {
 	constructor() {
 		super();
 
+		this.isInDebugMode = this.addProperty('isInDebugMode', new DirtyValue(true));
 		this.resources = this.addProperty('resources', new ResourcesModel());
 		this.resources.restoreState(ResourcesJson);
 		this.assets = new AssetCache(this.resources);
 		this.controls = this.addProperty('controls', new ControlsModel());
 		this.editor = this.addProperty('editor', new EditorModel());
 		this.viewBoxSize = this.addProperty('viewBoxSize', new Vector2());
-		this.isInDebugMode = this.addProperty('isInDebugMode', new DirtyValue(true));
+		this.mainLayerSize = this.addProperty('mainLayerSize', new Vector2());
+		this.mainLayerMouseCoordinates = this.addProperty('mainLayerMouseCoordinates', new Vector2());
 
 		this.saveGame = this.addProperty('saveGame', new NullableNode(() => new SaveGameModel()));
 		this.saveGame.set(new SaveGameModel());
-
 	}
 
 	getTableByName(name) {

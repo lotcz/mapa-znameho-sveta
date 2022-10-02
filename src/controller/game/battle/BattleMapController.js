@@ -1,6 +1,7 @@
 import ControllerNode from "../../basic/ControllerNode";
 import CollectionController from "../../basic/CollectionController";
 import BattleSpriteController from "./BattleSpriteController";
+import BattleSprite3dController from "./BattleSprite3dController";
 
 export default class BattleMapController extends ControllerNode {
 
@@ -19,6 +20,14 @@ export default class BattleMapController extends ControllerNode {
 				this.game,
 				this.model.sprites,
 				(m) => new BattleSpriteController(this.game, m)
+			)
+		);
+
+		this.addChild(
+			new CollectionController(
+				this.game,
+				this.model.sprites3d,
+				(m) => new BattleSprite3dController(this.game, m)
 			)
 		);
 

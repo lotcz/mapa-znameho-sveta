@@ -108,7 +108,7 @@ export default class BattleCharacterController extends ControllerNode {
 	}
 
 	getBlocks() {
-		const battle = this.game.saveGame.get().battle.get();
+		const battle = this.game.saveGame.get().currentBattle.get();
 		const characters = battle.characters.filter((ch) => ch !== this.model).map((ch) => ch.position);
 		const battleMap = battle.battleMap.get();
 		const sprites = battleMap.getBlocks();
@@ -134,10 +134,10 @@ export default class BattleCharacterController extends ControllerNode {
 			return;
 		}
 
-		console.log(path);
+		//console.log(path);
+		this.model.targetPosition.set(position.clone());
 
 		this.pathToGo = path;
-
 		this.startMovement(this.pathToGo.shift());
 
 	}
@@ -163,6 +163,7 @@ export default class BattleCharacterController extends ControllerNode {
 		const blocks = this.getBlocks();
 		if (this.checkBlocks(blocks)) {
 			this.model.state.set(CHARACTER_STATE_IDLE);
+			this.model.targetPosition.set(null);
 		}
 	}
 

@@ -3,6 +3,7 @@ import CollectionRenderer from "../../basic/CollectionRenderer";
 import BattleSpecialRenderer from "./BattleSpecialRenderer";
 import RendererNode from "../../basic/RendererNode";
 import BattleSpriteRenderer from "./BattleSpriteRenderer";
+import BattleSprite3dRenderer from "./BattleSprite3dRenderer";
 
 export default class BattleMapRenderer extends RendererNode {
 
@@ -23,6 +24,14 @@ export default class BattleMapRenderer extends RendererNode {
 				this.game,
 				this.model.sprites,
 				(m) => new BattleSpriteRenderer(this.game, m, this.scene)
+			)
+		);
+
+		this.addChild(
+			new CollectionRenderer(
+				this.game,
+				this.model.sprites3d,
+				(m) => new BattleSprite3dRenderer(this.game, m, this.scene)
 			)
 		);
 

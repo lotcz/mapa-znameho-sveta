@@ -8,11 +8,13 @@ import Pixies from "../../../class/basic/Pixies";
 import CollectionRenderer from "../../basic/CollectionRenderer";
 import BattleCharacterRenderer from "./BattleCharacterRenderer";
 import Vector3 from "../../../model/basic/Vector3";
-import Vector2 from "../../../model/basic/Vector2";
-import GUIHelper from "../../../class/basic/GUIHelper";
 import {SVG} from "@svgdotjs/svg.js";
 import NullableNodeRenderer from "../../basic/NullableNodeRenderer";
 import BattleMapRenderer from "./BattleMapRenderer";
+import BattleItemRenderer from "./BattleItemRenderer";
+import BattleCursorRenderer from "./BattleCursorRenderer";
+import BattleCharacterRingRenderer from "./BattleCharacterRingRenderer";
+import ConditionalNodeRenderer from "../../basic/ConditionalNodeRenderer";
 
 const DEBUG_BATTLE_RENDERER = false;
 
@@ -38,10 +40,26 @@ export default class BattleRenderer extends DomRenderer {
 		this.scene = null;
 
 		this.addChild(
+			new NullableNodeRenderer(
+				this.game,
+				this.model.characters.selectedNode,
+				(m) => new BattleCharacterRingRenderer(this.game, m, this.drawForeground)
+			)
+		);
+
+		this.addChild(
 			new CollectionRenderer(
 				this.game,
 				this.model.characters,
 				(m) => new BattleCharacterRenderer(this.game, m, this.scene)
+			)
+		);
+
+		this.addChild(
+			new CollectionRenderer(
+				this.game,
+				this.model.items,
+				(m) => new BattleItemRenderer(this.game, m, this.scene)
 			)
 		);
 
@@ -60,34 +78,58 @@ export default class BattleRenderer extends DomRenderer {
 			)
 		);
 
+		this.addChild(
+			new ConditionalNodeRenderer(
+				this.game,
+				this.model.isHoveringPartyCharacter,
+				() => this.model.isHoveringPartyCharacter.get() || this.game.isInDebugMode.get(),
+				() => new BattleCursorRenderer(
+					this.game,
+					this.model,
+					this.drawForeground
+				)
+			)
+		);
+
+		this.addAutoEvent(
+			this.game.isInDebugMode,
+			'change',
+			() => {
+				this.model.isHoveringPartyCharacter.triggerEvent('change');
+			}
+		);
+
 		this.onViewBoxChangeHandler = () => this.onViewBoxSizeChanged();
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', ['battle', 'container-host']);
-		this.container.addEventListener('mouseover', (e) => {
+		this.container = this.addElement('div', 'battle container-host');
+		this.container.addEventListener('mouseover', () => {
 			this.model.isMouseOver.set(true);
 		});
-		this.container.addEventListener('mouseout', (e) => {
+		this.container.addEventListener('mouseout', () => {
 			this.model.isMouseOver.set(false);
 		});
 
 		// CANVAS
-		this.bgCanvas = Pixies.createElement(this.container, 'canvas');
+		this.bgCanvas = Pixies.createElement(this.container, 'canvas', 'container');
 		this.context2d = this.bgCanvas.getContext('2d');
 
 		// SVG
 		this.draw = SVG().addTo(this.container);
 		this.draw.addClass('battle-svg');
+		this.draw.addClass('container');
 		this.drawBackground = this.draw.group();
 		this.drawForeground = this.draw.group();
+
 		this.updateSvgSize();
 		this.updateSvgViewBox();
 
 		// THREE
 		this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 		this.container.appendChild(this.renderer.domElement);
-		this.renderer.setSize(this.game.viewBoxSize.x, this.game.viewBoxSize.y);
+		Pixies.addClass(this.renderer.domElement, 'container');
+		this.renderer.setSize(this.game.mainLayerSize.x, this.game.mainLayerSize.y);
 		this.renderer.shadowMap.enabled = true;
 		this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
@@ -111,8 +153,6 @@ export default class BattleRenderer extends DomRenderer {
 		this.directLight.shadow.mapSize.height = 1024;
 		this.scene.add(this.directLight);
 
-		//this.scene.add(new THREE.CameraHelper(this.directLight.shadow.camera));
-
 		const shadowMaterial = new THREE.ShadowMaterial({color:'#000000'})
 		shadowMaterial.opacity = 0.5;
 		shadowMaterial.side = THREE.FrontSide;
@@ -123,29 +163,19 @@ export default class BattleRenderer extends DomRenderer {
 		this.floor.rotation.set(-Math.PI / 2, 0, 0);
 		this.scene.add(this.floor);
 
-		this.box = new THREE.Mesh(new THREE.PlaneGeometry(1, 1, 1), new THREE.MeshLambertMaterial({color: '#a080b0', opacity: 0.5, transparent: true}));
-		this.box.rotation.set(-Math.PI / 2, 0, 0);
-		this.box.position.y = 0.0001;
-		this.scene.add(this.box);
-
-		//this.orbitControls = new OrbitControls( this.camera, this.renderer.domElement );
-		//this.orbitControls.update();
-
 		this.composer = new EffectComposer( this.renderer );
 
 		const renderPass = new RenderPass( this.scene, this.camera );
 		this.composer.addPass( renderPass );
 
 		this.effectFXAA = new ShaderPass( FXAAShader );
-		this.effectFXAA.uniforms[ 'resolution' ].value.set(1 / this.game.viewBoxSize.x,1 / this.game.viewBoxSize.y);
+		this.effectFXAA.uniforms[ 'resolution' ].value.set(1 / this.game.mainLayerSize.x,1 / this.game.mainLayerSize.y);
 		this.composer.addPass( this.effectFXAA );
 
 		this.updateCanvasSize();
 		this.updateRendererSize();
 
-		this.game.viewBoxSize.addOnChangeListener(this.onViewBoxChangeHandler);
-
-		this.currentTile = new Vector2();
+		this.game.mainLayerSize.addOnChangeListener(this.onViewBoxChangeHandler);
 
 		this.game.assets.getAsset(
 			this.model.battleMap.get().backgroundImage.get(),
@@ -154,23 +184,13 @@ export default class BattleRenderer extends DomRenderer {
 				this.updateCameraPosition();
 				this.updateCameraZoom();
 				this.renderBgImage();
-				this.renderInternal();
+				this.composer.render();
 			}
 		);
-
-		if (DEBUG_BATTLE_RENDERER) {
-			this.gui = GUIHelper.createGUI();
-			const coord = GUIHelper.addVector2(this.gui, this.model.coordinates, 'screen coords');
-			const til = GUIHelper.addVector2(this.gui, this.currentTile, 'tile');
-			const cam = GUIHelper.addScaler(this.gui, this.camera, 'zoom', -10, 10);
-		}
-
-		this.updateCameraPosition();
-		this.updateCameraZoom();
 	}
 
 	deactivateInternal() {
-		this.game.viewBoxSize.removeOnChangeListener(this.onViewBoxChangeHandler);
+		this.game.mainLayerSize.removeOnChangeListener(this.onViewBoxChangeHandler);
 		if (this.gui) {
 			this.gui.destroy();
 			this.gui = null;
@@ -200,7 +220,6 @@ export default class BattleRenderer extends DomRenderer {
 	}
 
 	renderInternal() {
-
 		if (this.model.coordinates.isDirty || this.model.zoom.isDirty) {
 			this.renderBgImage();
 			this.updateSvgViewBox();
@@ -214,17 +233,14 @@ export default class BattleRenderer extends DomRenderer {
 			this.updateCameraZoom();
 		}
 
-		if (this.model.isMouseOver.get()) {
-			const corner = this.model.coordinates.subtract(this.game.viewBoxSize.multiply(0.5 / this.model.zoom.get()));
-			const coords = corner.add(this.game.controls.mouseCoordinates.multiply(1 / this.model.zoom.get()));
-			const tile = this.model.battleMap.get().screenCoordsToTile(coords);
-			this.box.position.x = tile.x;
-			this.box.position.z = tile.y;
-			this.currentTile.set(tile);
+		if (this.model.isHoveringNoGo.isDirty) {
+			if (this.model.isHoveringNoGo.get()) {
+				Pixies.addClass(this.container, 'no-go');
+			} else {
+				Pixies.removeClass(this.container, 'no-go');
+			}
 		}
-
 		this.composer.render();
-
 	}
 
 	renderBgImage() {
@@ -239,14 +255,14 @@ export default class BattleRenderer extends DomRenderer {
 		this.context2d.clearRect(0, 0, this.context2d.canvas.width, this.context2d.canvas.height);
 		this.context2d.drawImage(
 			this.bgImage,
-			this.model.coordinates.x - (0.5 * this.game.viewBoxSize.x / this.model.zoom.get()),
-			this.model.coordinates.y - (0.5 * this.game.viewBoxSize.y / this.model.zoom.get()),
-			this.game.viewBoxSize.x / this.model.zoom.get(),
-			this.game.viewBoxSize.y / this.model.zoom.get(),
+			this.model.coordinates.x - (0.5 * this.game.mainLayerSize.x / this.model.zoom.get()),
+			this.model.coordinates.y - (0.5 * this.game.mainLayerSize.y / this.model.zoom.get()),
+			this.game.mainLayerSize.x / this.model.zoom.get(),
+			this.game.mainLayerSize.y / this.model.zoom.get(),
 			0,
 			0,
-			this.game.viewBoxSize.x,
-			this.game.viewBoxSize.y
+			this.game.mainLayerSize.x,
+			this.game.mainLayerSize.y
 		);
 	}
 
@@ -258,25 +274,25 @@ export default class BattleRenderer extends DomRenderer {
 	}
 
 	updateCanvasSize() {
-		this.bgCanvas.width = this.game.viewBoxSize.x;
-		this.bgCanvas.height = this.game.viewBoxSize.y;
+		this.bgCanvas.width = this.game.mainLayerSize.x;
+		this.bgCanvas.height = this.game.mainLayerSize.y;
 	}
 
 	updateRendererSize() {
-		this.renderer.setSize(this.game.viewBoxSize.x, this.game.viewBoxSize.y);
-		this.composer.setSize(this.game.viewBoxSize.x, this.game.viewBoxSize.y);
+		this.renderer.setSize(this.game.mainLayerSize.x, this.game.mainLayerSize.y);
+		this.composer.setSize(this.game.mainLayerSize.x, this.game.mainLayerSize.y);
 
 		const pixelRatio = this.renderer.getPixelRatio();
-		this.effectFXAA.material.uniforms[ 'resolution' ].value.x = 1 / (  this.game.viewBoxSize.x * pixelRatio );
-		this.effectFXAA.material.uniforms[ 'resolution' ].value.y = 1 / (  this.game.viewBoxSize.y * pixelRatio );
+		this.effectFXAA.material.uniforms[ 'resolution' ].value.x = 1 / (  this.game.mainLayerSize.x * pixelRatio );
+		this.effectFXAA.material.uniforms[ 'resolution' ].value.y = 1 / (  this.game.mainLayerSize.y * pixelRatio );
 
 		this.updateCameraSize();
 	}
 
 	updateCameraSize() {
 		const pxPerUnit = this.model.battleMap.get().tileSize.get();
-		const horizontal = (this.game.viewBoxSize.x / 2) / pxPerUnit;
-		const vertical = (this.game.viewBoxSize.y / 2) / pxPerUnit;
+		const horizontal = (this.game.mainLayerSize.x / 2) / pxPerUnit;
+		const vertical = (this.game.mainLayerSize.y / 2) / pxPerUnit;
 		this.camera.left = - horizontal;
 		this.camera.right = horizontal;
 		this.camera.bottom = - vertical;
@@ -299,15 +315,15 @@ export default class BattleRenderer extends DomRenderer {
 	}
 
 	updateSvgSize() {
-		this.draw.size(this.game.viewBoxSize.x, this.game.viewBoxSize.y);
+		this.draw.size(this.game.mainLayerSize.x, this.game.mainLayerSize.y);
 	}
 
 	updateSvgViewBox() {
 		this.draw.viewbox(
-			this.model.coordinates.x - (0.5 * this.game.viewBoxSize.x / this.model.zoom.get()),
-			this.model.coordinates.y - (0.5 * this.game.viewBoxSize.y / this.model.zoom.get()),
-			this.game.viewBoxSize.x / this.model.zoom.get(),
-			this.game.viewBoxSize.y / this.model.zoom.get(),
+			this.model.coordinates.x - (0.5 * this.game.mainLayerSize.x / this.model.zoom.get()),
+			this.model.coordinates.y - (0.5 * this.game.mainLayerSize.y / this.model.zoom.get()),
+			this.game.mainLayerSize.x / this.model.zoom.get(),
+			this.game.mainLayerSize.y / this.model.zoom.get(),
 		);
 	}
 }

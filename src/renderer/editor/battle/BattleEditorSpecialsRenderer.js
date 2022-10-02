@@ -1,6 +1,6 @@
 import Pixies from "../../../class/basic/Pixies";
 import DomRenderer from "../../basic/DomRenderer";
-import {SPECIAL_TYPES} from "../../../model/game/battle/BattleSpecialModel";
+import {SPECIAL_TYPES} from "../../../model/game/battle/battlemap/BattleSpecialModel";
 
 export default class BattleEditorSpecialsRenderer extends DomRenderer {
 
