@@ -3,6 +3,7 @@ import ModelNodeCollection from "../../basic/ModelNodeCollection";
 import PartySlotModel from "./PartySlotModel";
 import IntValue from "../../basic/IntValue";
 import NullableNode from "../../basic/NullableNode";
+import BoolValue from "../../basic/BoolValue";
 
 export default class PartyModel extends ModelNode {
 
@@ -27,10 +28,9 @@ export default class PartyModel extends ModelNode {
 	selectedCharacter;
 
 	/**
-	 * Dictates whether inventory is visible
-	 * @type NullableNode<CharacterModel>
+	 * @type BoolValue
 	 */
-	selectedInventoryCharacter;
+	isInventoryVisible;
 
 	/**
 	 * @type ModelNodeCollection<PartySlotModel>
@@ -43,9 +43,9 @@ export default class PartyModel extends ModelNode {
 		this.mainCharacterId = this.addProperty('mainCharacterId', new IntValue(0));
 		this.mainCharacter = this.addProperty('mainCharacter', new NullableNode(null, false));
 
-		this.selectedCharacterId = this.addProperty('selectedCharacterId', new IntValue(0));
+		this.selectedCharacterId = this.addProperty('selectedCharacterId', new IntValue());
 		this.selectedCharacter = this.addProperty('selectedCharacter', new NullableNode(null, false));
-		this.selectedInventoryCharacter = this.addProperty('selectedInventoryCharacter', new NullableNode(null, false));
+		this.isInventoryVisible = this.addProperty('isInventoryVisible', new BoolValue(false));
 
 		this.slots = this.addProperty('slots', new ModelNodeCollection(() => new PartySlotModel()));
 	}

@@ -55,7 +55,7 @@ export default class SaveGameController extends ControllerNode {
 						if (oldItem && this.model.mode.equalsTo(GAME_MODE_BATTLE)) {
 							const battleItem = new BattleItemModel();
 							battleItem.item.set(oldItem);
-							const character = this.model.party.selectedInventoryCharacter.get();
+							const character = this.model.party.selectedCharacter.get();
 							const battle = this.model.currentBattle.get();
 							const battleCharacter = battle.characters.find((chr) => chr.characterId.equalsTo(character.id));
 							battleItem.position.set(battleCharacter.position);
@@ -108,12 +108,11 @@ export default class SaveGameController extends ControllerNode {
 			'right-click',
 			() => {
 				// drop item or deselect party character
-
 				if (this.model.selectedInventorySlot.isSet()) {
 					this.model.selectedInventorySlot.set(null);
 					return;
 				}
-				this.model.party.selectedInventoryCharacter.set(null);
+				this.model.party.isInventoryVisible.set(false);
 			}
 		)
 	}

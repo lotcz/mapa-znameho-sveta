@@ -164,7 +164,12 @@ export default class BattleController extends ControllerNode {
 
 		const occupant = this.model.characters.find((ch) => ch.position.round().equalsTo(tile));
 		if (occupant) {
-			this.switchCharacter(occupant.characterId.get());
+			const save = this.game.saveGame.get();
+			if (save.party.selectedCharacterId.equalsTo(occupant.characterId.get())) {
+				save.party.isInventoryVisible.set(true);
+			} else {
+				save.party.selectedCharacterId.set(occupant.characterId.get());
+			}
 		} else {
 			const character = this.getSelectedBattleCharacter()
 			if (character) {
@@ -173,9 +178,6 @@ export default class BattleController extends ControllerNode {
 		}
 	}
 
-	switchCharacter(characterId) {
-		this.game.saveGame.get().party.selectedCharacterId.set(characterId);
-	}
 
 	getBattleCharacter(characterId) {
 		if (!characterId) {
