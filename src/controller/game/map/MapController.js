@@ -160,23 +160,22 @@ export default class MapController extends ControllerNode {
 		const location = this.model.currentLocation.get();
 		const battleMapId = location.battleMapId.get();
 
-		const save = this.game.saveGame.get();
-		let battle = save.battles.find((b) => b.battleMapId.equalsTo(battleMapId));
+		let battle = this.model.battles.find((b) => b.battleMapId.equalsTo(battleMapId));
 
 		if (!battle) {
 			battle = new BattleModel();
 			battle.battleMapId.set(battleMapId);
-			save.battles.add(battle);
+			this.model.battles.add(battle);
 		}
 
 		const map = this.game.resources.map.battleMaps.getById(battleMapId);
 		//battle.battleMap.set(map);
 
 		// delete party characters from battle
-		const partyCharacters = battle.characters.filter((chr) => save.party.hasCharacter(chr.characterId));
+		const partyCharacters = battle.characters.filter((chr) => this.model.party.hasCharacter(chr.characterId));
 		partyCharacters.forEach((chr) => battle.characters.remove(chr));
 
-		save.party.slots.forEach((slot) => {
+		this.model.party.slots.forEach((slot) => {
 			const character = new BattleCharacterModel();
 			character.characterId.set(slot.characterId.get());
 			const position = map.start.add(new Vector2(Pixies.random(-5, 5), Pixies.random(-5, 5))).round();
@@ -184,7 +183,8 @@ export default class MapController extends ControllerNode {
 			battle.characters.add(character);
 		});
 
-		this.model.currentBattle.set(battle);
+		this.model.currentBattleMapId.set(battleMapId);
+		//this.model.currentBattle.set(battle);
 		this.model.mode.set(GAME_MODE_BATTLE);
 	}
 

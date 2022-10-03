@@ -103,7 +103,12 @@ export default class SaveGameModel extends ModelNode {
 	currentLocation;
 
 	/**
-	 * @type NullableNode
+	 * @type IntValue
+	 */
+	currentBattleMapId;
+
+	/**
+	 * @type NullableNode<BattleModel>
 	 */
 	currentBattle;
 
@@ -124,7 +129,19 @@ export default class SaveGameModel extends ModelNode {
 		this.time = this.addProperty('time', new FloatValue(0));
 		this.characters = this.addProperty('characters', new ModelNodeTable((id) => new CharacterModel(id)));
 		this.battles = this.addProperty('battles', new ModelNodeCollection(() => new BattleModel()));
-		this.currentBattle = this.addProperty('currentBattle', new NullableNode(() => new BattleModel()));
+		this.currentBattleMapId = this.addProperty('currentBattleMapId', new IntValue());
+		this.currentBattle = this.addProperty('currentBattle', new NullableNode(null, false));
+		this.currentBattleMapId.addOnChangeListener(
+			() => {
+				const battle = this.battles.find((b) => b.battleMapId.equalsTo(this.currentBattleMapId));
+				if (!battle) {
+					console.log('Battle map not found');
+					this.currentBattle.set(null);
+					return;
+				}
+				this.currentBattle.set(battle);
+			}
+		);
 
 		this.party = this.addProperty('party', new PartyModel());
 
