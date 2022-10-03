@@ -72,9 +72,6 @@ export default class BattleController extends ControllerNode {
 		);
 
 		this.zoomHandler = (param) => this.onZoom(param);
-		this.clickHandler = (param) => this.onClick(param);
-
-
 
 		this.addAutoEvent(
 			this.model,
@@ -96,7 +93,6 @@ export default class BattleController extends ControllerNode {
 		this.model.coordinates.makeDirty();
 
 		this.game.controls.addEventListener('zoom', this.zoomHandler);
-		this.game.controls.addOnLeftClickListener(this.clickHandler);
 
 		const save = this.game.saveGame.get();
 		this.model.characters.selectedNode.set(this.model.characters.find((chr) => chr.characterId.equalsTo(save.party.selectedCharacterId)));
@@ -104,7 +100,6 @@ export default class BattleController extends ControllerNode {
 
 	deactivateInternal() {
 		this.game.controls.removeEventListener('zoom', this.zoomHandler);
-		this.game.controls.removeOnLeftClickListener(this.clickHandler);
 	}
 
 	updateInternal(delta) {
@@ -165,11 +160,7 @@ export default class BattleController extends ControllerNode {
 		const occupant = this.model.characters.find((ch) => ch.position.round().equalsTo(tile));
 		if (occupant) {
 			const save = this.game.saveGame.get();
-			if (save.party.selectedCharacterId.equalsTo(occupant.characterId.get())) {
-				save.party.isInventoryVisible.set(true);
-			} else {
-				save.party.selectedCharacterId.set(occupant.characterId.get());
-			}
+			save.party.triggerEvent('character-selected', occupant.characterId.get());
 		} else {
 			const character = this.getSelectedBattleCharacter()
 			if (character) {
