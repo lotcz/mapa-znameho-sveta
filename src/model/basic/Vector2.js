@@ -30,7 +30,12 @@ export default class Vector2 extends ModelNode {
 		return (v) ? this.x === v.x && this.y === v.y : false;
 	}
 
-	set(x, y) {
+	/**
+	 *
+	 * @param x Number|Vector2
+	 * @param y Number|undefined
+	 */
+	set(x, y = undefined) {
 		if (y === undefined && typeof x === 'object') {
 			this.set(x.x, x.y);
 			return;

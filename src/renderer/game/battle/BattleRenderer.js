@@ -240,6 +240,7 @@ export default class BattleRenderer extends DomRenderer {
 				Pixies.removeClass(this.container, 'no-go');
 			}
 		}
+
 		this.composer.render();
 	}
 

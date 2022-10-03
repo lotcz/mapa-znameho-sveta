@@ -1,11 +1,16 @@
-/**
-	Base for controller and renderer nodes.
- */
 import Pixies from "./Pixies";
 
 export default class ActivatedTreeNode {
 	children;
+
+	/**
+	 * @type ActivatedTreeNode
+	 */
 	parent;
+
+	/**
+	 * @type boolean
+	 */
 	isActivated;
 
 	/**
@@ -63,6 +68,12 @@ export default class ActivatedTreeNode {
 			if (result) {
 				return result;
 			}
+		}
+	}
+
+	removeMyself() {
+		if (this.parent) {
+			this.parent.removeChild(this);
 		}
 	}
 

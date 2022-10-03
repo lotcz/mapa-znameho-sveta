@@ -46,6 +46,10 @@ export default class TableRowRenderer extends DomRenderer {
 		this.removeElement(this.container);
 	}
 
+	renderInternal() {
+		this.updateRow();
+	}
+
 	updateRow() {
 		Pixies.emptyElement(this.container);
 
@@ -75,10 +79,6 @@ export default class TableRowRenderer extends DomRenderer {
 			cell.innerText = text;
 		});
 
-	}
-
-	renderInternal() {
-		this.updateRow();
 	}
 
 }

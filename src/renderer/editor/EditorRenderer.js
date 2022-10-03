@@ -45,6 +45,12 @@ export default class EditorRenderer extends DomRenderer {
 		this.materialPreviewRenderer = new NullableNodeRenderer(this.game, this.model.activeMaterial, (model) => new MaterialPreviewRenderer(this.game, model, this.item));
 		this.addChild(this.materialPreviewRenderer);
 
+		this.addAutoEvent(
+			this.model.activeTable,
+			'change',
+			() => this.updateTables()
+		);
+
 		this.stopEventPropagationHandler = (e) => e.stopPropagation();
 	}
 
@@ -90,7 +96,7 @@ export default class EditorRenderer extends DomRenderer {
 	}
 
 	renderInternal() {
-		if (this.model.activeTable.isDirty || this.model.isOptionsVisible.isDirty) {
+		if (this.model.isOptionsVisible.isDirty) {
 			this.updateTables();
 		}
 	}

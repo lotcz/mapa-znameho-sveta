@@ -4,6 +4,8 @@ import BattleCharacterController from "./BattleCharacterController";
 import NullableNodeController from "../../basic/NullableNodeController";
 import BattleMapController from "./BattleMapController";
 import {GAME_MODE_MAP} from "../../../model/game/SaveGameModel";
+import AnimationVector2Controller from "../../basic/AnimationVector2Controller";
+import SelectedBattleCharacterController from "./SelectedBattleCharacterController";
 
 export default class BattleController extends ControllerNode {
 
@@ -24,6 +26,14 @@ export default class BattleController extends ControllerNode {
 				this.game,
 				this.model.characters,
 				(m) => new BattleCharacterController(game, m)
+			)
+		);
+
+		this.addChild(
+			new NullableNodeController(
+				this.game,
+				this.model.characters.selectedNode,
+				(m) => new SelectedBattleCharacterController(game, m)
 			)
 		);
 
@@ -71,7 +81,25 @@ export default class BattleController extends ControllerNode {
 			() => this.onClick()
 		);
 
-		this.zoomHandler = (param) => this.onZoom(param);
+		this.addAutoEvent(
+			this.game.controls,
+			'zoom',
+			(param) => this.onZoom(param)
+		);
+
+		this.addAutoEvent(
+			this.model.characters.selectedNode,
+			'change',
+			() => {
+				const character = this.model.characters.selectedNode.get();
+				if (character) {
+					const battleMap = this.model.battleMap.get();
+					const coords = battleMap.positionToScreenCoords(character.position);
+					this.addChild(new AnimationVector2Controller(this.game, this.model.coordinates, coords, 500));
+				}
+			},
+			true
+		);
 
 		this.addAutoEvent(
 			this.model,
@@ -92,14 +120,8 @@ export default class BattleController extends ControllerNode {
 	activateInternal() {
 		this.model.coordinates.makeDirty();
 
-		this.game.controls.addEventListener('zoom', this.zoomHandler);
-
 		const save = this.game.saveGame.get();
 		this.model.characters.selectedNode.set(this.model.characters.find((chr) => chr.characterId.equalsTo(save.party.selectedCharacterId)));
-	}
-
-	deactivateInternal() {
-		this.game.controls.removeEventListener('zoom', this.zoomHandler);
 	}
 
 	updateInternal(delta) {
@@ -168,7 +190,6 @@ export default class BattleController extends ControllerNode {
 			}
 		}
 	}
-
 
 	getBattleCharacter(characterId) {
 		if (!characterId) {
