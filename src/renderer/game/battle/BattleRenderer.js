@@ -253,7 +253,7 @@ export default class BattleRenderer extends DomRenderer {
 			console.log('no image loaded for bg rendering');
 			return;
 		}
-		this.context2d.clearRect(0, 0, this.context2d.canvas.width, this.context2d.canvas.height);
+		//this.context2d.clearRect(0, 0, this.context2d.canvas.width, this.context2d.canvas.height);
 		this.context2d.drawImage(
 			this.bgImage,
 			this.model.coordinates.x - (0.5 * this.game.mainLayerSize.x / this.model.zoom.get()),

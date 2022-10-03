@@ -190,7 +190,7 @@ export default class PathFinder {
 
 	static isTileBlocked(v, blocks) {
 		const t = v.round();
-		return blocks.some((b) => t.equalsTo(b.round()));
+		return blocks.some((b) => t.equalsTo(b));
 	}
 
 	static pathLength(start, path) {

@@ -1,9 +1,11 @@
 import GameModel from "./model/game/GameModel";
 import GameController from "./controller/game/GameController";
 import GameRenderer from "./renderer/game/GameRenderer";
+import Stats from 'three/examples/jsm/libs/stats.module'
 
 const MAX_DELTA = 500;
 const DEBUG_MASTER = true;
+const SHOW_STATS = false;
 
 const game = new GameModel();
 
@@ -17,11 +19,15 @@ if (DEBUG_MASTER) {
 	window['game'] = game;
 }
 
-let lastTime = null;
+const stats = SHOW_STATS ? new Stats() : false;
+if (stats) {
+	document.body.appendChild(stats.dom);
+}
+
+let lastTime = performance.now();
 
 const updateLoop = function () {
 	const time = performance.now();
-	if (!lastTime) lastTime = time;
 	const delta = (time - lastTime);
 	lastTime = time;
 
@@ -32,6 +38,11 @@ const updateLoop = function () {
 			renderer.render();
 		}
 	}
+
+	if (stats) {
+		stats.update();
+	}
+
 	requestAnimationFrame(updateLoop);
 }
 

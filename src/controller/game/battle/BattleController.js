@@ -132,12 +132,17 @@ export default class BattleController extends ControllerNode {
 		if (!this.game.controls.mouseDownRight.get()) {
 			this.scrolling = false;
 		}
+		this.mouseMoved = false;
 	}
 
 	onMouseMove() {
-		const corner = this.model.coordinates.subtract(this.game.mainLayerSize.multiply(0.5 / this.model.zoom.get()));
-		const coords = corner.add(this.game.mainLayerMouseCoordinates.multiply(1 / this.model.zoom.get()));
-		this.model.mouseCoordinates.set(coords);
+		if (this.mouseMoved) return;
+		this.runOnUpdate( () => {
+			const corner = this.model.coordinates.subtract(this.game.mainLayerSize.multiply(0.5 / this.model.zoom.get()));
+			const coords = corner.add(this.game.mainLayerMouseCoordinates.multiply(1 / this.model.zoom.get()));
+			this.model.mouseCoordinates.set(coords);
+		});
+		this.mouseMoved = true;
 	}
 
 	onMouseCoordinatesChanged() {
