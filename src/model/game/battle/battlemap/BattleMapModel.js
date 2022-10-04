@@ -22,15 +22,16 @@ export default class BattleMapModel extends IdentifiedModelNode {
 	backgroundImage;
 
 	/**
+	 * @type Vector2
+	 * size of bg image in pixels
+	 */
+	size;
+
+	/**
 	 * @type IntValue
 	 * size of one battle tile in pixels, as it would be in background image when scale is 1 and not in isometric view
 	 */
 	tileSize;
-
-	/**
-	 * @type Vector2
-	 */
-	start;
 
 	/**
 	 * @type ModelNodeCollection<BattleSpriteModel>
@@ -52,9 +53,9 @@ export default class BattleMapModel extends IdentifiedModelNode {
 
 		this.name = this.addProperty('name', new DirtyValue(`Battle Map ${id}`));
 		this.backgroundImage = this.addProperty('backgroundImage', new DirtyValue('img/camp.jpg'));
-		this.tileSize = this.addProperty('tileSize', new IntValue(70/*62.77*/));
+		this.tileSize = this.addProperty('tileSize', new IntValue(70));
 
-		this.start = this.addProperty('start', new Vector2(-102, -25));
+		this.size = this.addProperty('size', new Vector2());
 
 		this.blocksCache = null;
 		this.sprites = this.addProperty('sprites', new ModelNodeCollection(() => new BattleSpriteModel()));

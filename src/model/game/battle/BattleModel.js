@@ -37,6 +37,12 @@ export default class BattleModel extends ModelNode {
 	coordinates;
 
 	/**
+	 * @type Vector2
+	 * current coordinates of top left corner, in px of background image
+	 */
+	cornerCoordinates;
+
+	/**
 	 * @type FloatValue
 	 * Scale of currently displayed battlemap
 	 */
@@ -76,7 +82,8 @@ export default class BattleModel extends ModelNode {
 		this.characters = this.addProperty('characters', new ModelNodeCollection(() => new BattleCharacterModel()));
 		this.items = this.addProperty('items', new ModelNodeCollection(() => new BattleItemModel()));
 
-		this.coordinates = this.addProperty('coordinates', new Vector2(800, 700));
+		this.coordinates = this.addProperty('coordinates', new Vector2());
+		this.cornerCoordinates = this.addProperty('cornerCoordinates', new Vector2());
 		this.zoom = this.addProperty('zoom', new FloatValue(1));
 
 		this.isMouseOver = this.addProperty('isMouseOver', new BoolValue(false, false));

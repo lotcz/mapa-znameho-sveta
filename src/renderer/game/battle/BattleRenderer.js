@@ -244,6 +244,8 @@ export default class BattleRenderer extends DomRenderer {
 		this.composer.render();
 	}
 
+
+
 	renderBgImage() {
 		if (!this.context2d) {
 			console.log('no context for bg rendering');
@@ -253,11 +255,11 @@ export default class BattleRenderer extends DomRenderer {
 			console.log('no image loaded for bg rendering');
 			return;
 		}
-		//this.context2d.clearRect(0, 0, this.context2d.canvas.width, this.context2d.canvas.height);
+		this.context2d.clearRect(0, 0, this.context2d.canvas.width, this.context2d.canvas.height);
 		this.context2d.drawImage(
 			this.bgImage,
-			this.model.coordinates.x - (0.5 * this.game.mainLayerSize.x / this.model.zoom.get()),
-			this.model.coordinates.y - (0.5 * this.game.mainLayerSize.y / this.model.zoom.get()),
+			this.model.cornerCoordinates.x,
+			this.model.cornerCoordinates.y,
 			this.game.mainLayerSize.x / this.model.zoom.get(),
 			this.game.mainLayerSize.y / this.model.zoom.get(),
 			0,
@@ -304,7 +306,6 @@ export default class BattleRenderer extends DomRenderer {
 	updateCameraZoom() {
 		this.camera.zoom = this.model.zoom.get();
 		this.camera.updateProjectionMatrix();
-
 	}
 
 	updateCameraPosition() {
@@ -321,8 +322,8 @@ export default class BattleRenderer extends DomRenderer {
 
 	updateSvgViewBox() {
 		this.draw.viewbox(
-			this.model.coordinates.x - (0.5 * this.game.mainLayerSize.x / this.model.zoom.get()),
-			this.model.coordinates.y - (0.5 * this.game.mainLayerSize.y / this.model.zoom.get()),
+			this.model.cornerCoordinates.x,
+			this.model.cornerCoordinates.y,
 			this.game.mainLayerSize.x / this.model.zoom.get(),
 			this.game.mainLayerSize.y / this.model.zoom.get(),
 		);
