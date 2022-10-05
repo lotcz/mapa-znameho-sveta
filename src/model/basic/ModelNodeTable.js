@@ -31,10 +31,11 @@ export default class ModelNodeTable extends ModelNodeCollection {
 	}
 
 	add(node) {
+		const id = this.maxId() + 1;
 		if (!node) {
-			const id = this.maxId() + 1;
 			node = this.nodeFactory(id);
 		}
+		node.id.set(id);
 		super.add(node);
 		return node;
 	}

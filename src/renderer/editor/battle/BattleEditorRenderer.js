@@ -4,6 +4,7 @@ import ConditionalNodeRenderer from "../../basic/ConditionalNodeRenderer";
 import {
 	MODE_ACTIONS,
 	MODE_TYPE_3D,
+	MODE_TYPE_NPC,
 	MODE_TYPE_SPECIAL,
 	MODE_TYPE_SPRITE,
 	MODE_TYPES
@@ -11,6 +12,7 @@ import {
 import BattleEditorSpritesRenderer from "./BattleEditorSpritesRenderer";
 import BattleEditorSpecialsRenderer from "./BattleEditorSpecialsRenderer";
 import BattleEditorSprites3dRenderer from "./BattleEditorSprites3dRenderer";
+import BattleEditorNpcsRenderer from "./BattleEditorNpcsRenderer";
 
 export default class BattleEditorRenderer extends DomRenderer {
 
@@ -50,6 +52,15 @@ export default class BattleEditorRenderer extends DomRenderer {
 				this.model.modeType,
 				() => this.model.modeType.equalsTo(MODE_TYPE_3D),
 				() => new BattleEditorSprites3dRenderer(this.game, this.model, this.bottom)
+			)
+		);
+
+		this.addChild(
+			new ConditionalNodeRenderer(
+				this.game,
+				this.model.modeType,
+				() => this.model.modeType.equalsTo(MODE_TYPE_NPC),
+				() => new BattleEditorNpcsRenderer(this.game, this.model, this.bottom)
 			)
 		);
 

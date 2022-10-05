@@ -57,7 +57,7 @@ export default class SaveGameController extends ControllerNode {
 							battleItem.item.set(oldItem);
 							const character = this.model.party.selectedCharacter.get();
 							const battle = this.model.currentBattle.get();
-							const battleCharacter = battle.characters.find((chr) => chr.characterId.equalsTo(character.id));
+							const battleCharacter = battle.partyCharacters.find((chr) => chr.characterId.equalsTo(character.id));
 							battleItem.position.set(battleCharacter.position);
 							battle.items.add(battleItem);
 						}

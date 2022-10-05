@@ -118,4 +118,11 @@ export default class CharacterModel extends TemplateNode {
 		}
 		this.additionalItemsSlots.remove(slot);
 	}
+
+	clone() {
+		const ch = new CharacterModel();
+		ch.restoreState(this.getState());
+		ch.originalId.set(this.id.get());
+		return ch;
+	}
 }

@@ -5,12 +5,14 @@ import {
 	MODE_ACTION_DELETE,
 	MODE_ACTION_SELECT,
 	MODE_TYPE_3D,
+	MODE_TYPE_NPC,
 	MODE_TYPE_SPECIAL,
 	MODE_TYPE_SPRITE
 } from "../../model/editor/BattleEditorModel";
 import BattleSpecialModel from "../../model/game/battle/battlemap/BattleSpecialModel";
 import {Vector2} from "three";
 import BattleSprite3dModel from "../../model/game/battle/battlemap/BattleSprite3dModel";
+import BattleNpcSpawnModel from "../../model/game/battle/battlemap/BattleNpcSpawnModel";
 
 export default class EditorBattleController extends ControllerNode {
 
@@ -69,6 +71,9 @@ export default class EditorBattleController extends ControllerNode {
 				break;
 			case MODE_TYPE_3D:
 				this.processClickSprites3d(tile, editorModeAction);
+				break;
+			case MODE_TYPE_NPC:
+				this.processClickNpcSpawn(tile, editorModeAction);
 				break;
 		}
 
@@ -151,6 +156,29 @@ export default class EditorBattleController extends ControllerNode {
 				break;
 			case MODE_ACTION_SELECT:
 
+				break;
+		}
+	}
+
+	processClickNpcSpawn(tile, action) {
+		const spawn = this.model.battleMap.get().npcSpawns.find((s) => s.position.round().equalsTo(tile));
+
+		switch (action) {
+			case MODE_ACTION_ADD:
+				if (spawn) {
+					break;
+				}
+				const id = this.game.editor.battleEditor.characterTemplateId.get();
+				if (id) {
+					const npcSpawn = new BattleNpcSpawnModel();
+					npcSpawn.position.set(tile);
+					npcSpawn.characterTemplateId.set(id);
+					this.model.battleMap.get().npcSpawns.add(npcSpawn);
+				}
+				break;
+			case MODE_ACTION_DELETE:
+				console.log('deleting NPC spawn', spawn);
+				this.model.battleMap.get().npcSpawns.remove(spawn);
 				break;
 		}
 	}

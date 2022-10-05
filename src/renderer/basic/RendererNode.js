@@ -23,16 +23,16 @@ export default class RendererNode extends ActivatedTreeNode {
 	}
 
 	render() {
-		if (!this.isActivated) {
+		if (!this.model.isDirty) {
 			return;
 		}
-		if (!this.isModelDirty()) {
+		if (!this.isActivated) {
 			return;
 		}
 		this.renderInternal();
 		this.children.forEach((c) => c.render());
 		if (this.isRoot()) {
-			this.model.cleanAll();
+			this.model.clean();
 		}
 	}
 
@@ -40,9 +40,5 @@ export default class RendererNode extends ActivatedTreeNode {
 	 * Override this
 	 */
 	renderInternal() {}
-
-	isModelDirty() {
-		return this.model.isDirty;
-	}
 
 }

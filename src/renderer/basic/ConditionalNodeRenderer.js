@@ -30,8 +30,9 @@ export default class ConditionalNodeRenderer extends RendererNode {
 		}
 	}
 
-	isModelDirty() {
-		if (!this.renderer) return false;
-		return this.renderer.model.isDirty;
+	render() {
+		if (this.renderer) {
+			this.renderer.render();
+		}
 	}
 }

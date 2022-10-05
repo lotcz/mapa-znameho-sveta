@@ -4,6 +4,7 @@ import DomRenderer from "../basic/DomRenderer";
 const FIELD_TABLE_MAPPINGS = {
 	raceId: 'races',
 	characterId: 'characters',
+	characterTemplateId: 'characterTemplates',
 	modelId: 'models3d',
 	male3dModelId: 'models3d',
 	female3dModelId: 'models3d',

@@ -28,8 +28,14 @@ export default class BattleCharacterRenderer extends RendererNode {
 	}
 
 	activateInternal() {
-		const character = this.model.character.get();
 		this.group = new THREE.Group();
+
+		const character = this.model.character.get();
+		if (!character) {
+			console.error('Character not found');
+			return;
+		}
+
 		const scale = character.scale;
 		this.group.scale.set(scale.x, scale.y, scale.z);
 

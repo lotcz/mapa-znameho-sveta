@@ -41,7 +41,12 @@ export default class BattleCharacterController extends ControllerNode {
 			this.model.characterId,
 			'change',
 			() => {
-				this.model.character.set(this.game.saveGame.get().characters.getById(this.model.characterId.get()));
+				const character = this.game.saveGame.get().characters.getById(this.model.characterId.get());
+				if (!character) {
+					console.error('Character not found', this.model.characterId.get());
+					return;
+				}
+				this.model.character.set(character);
 			},
 			true
 		);

@@ -222,3 +222,8 @@
 .editor .battle-menu input[type=text] {
 	width: 50px;
 }
+
+.editor .battle-menu input[type=radio] {
+	margin: 0;
+	padding: 5px;
+}

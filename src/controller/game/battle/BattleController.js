@@ -39,6 +39,14 @@ export default class BattleController extends ControllerNode {
 		);
 
 		this.addChild(
+			new CollectionController(
+				this.game,
+				this.model.npcCharacters,
+				(m) => new BattleCharacterController(game, m)
+			)
+		);
+
+		this.addChild(
 			new NullableNodeController(
 				this.game,
 				this.model.battleMap,
@@ -136,7 +144,7 @@ export default class BattleController extends ControllerNode {
 			() => {
 				const save = this.game.saveGame.get();
 				save.mode.set(GAME_MODE_MAP);
-				save.currentBattle.set(null);
+				save.currentBattleMapId.set(null);
 			}
 		);
 

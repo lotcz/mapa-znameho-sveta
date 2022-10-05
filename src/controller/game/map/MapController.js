@@ -11,6 +11,7 @@ import {GAME_MODE_BATTLE} from "../../../model/game/SaveGameModel";
 import Vector2 from "../../../model/basic/Vector2";
 import Pixies from "../../../class/basic/Pixies";
 import BattlePartyCharacterModel from "../../../model/game/battle/BattlePartyCharacterModel";
+import BattleNpcCharacterModel from "../../../model/game/battle/BattleNpcCharacterModel";
 
 export default class MapController extends ControllerNode {
 
@@ -159,16 +160,35 @@ export default class MapController extends ControllerNode {
 	toBattle() {
 		const location = this.model.currentLocation.get();
 		const battleMapId = location.battleMapId.get();
+		const map = this.game.resources.map.battleMaps.getById(battleMapId);
 
 		let battle = this.model.battles.find((b) => b.battleMapId.equalsTo(battleMapId));
 
+		// create battle
 		if (!battle) {
 			battle = new BattleModel();
 			battle.battleMapId.set(battleMapId);
+
+			// create NPCs
+			map.npcSpawns.forEach(
+				(spawn) => {
+					const template = this.game.resources.characterTemplates.getById(spawn.characterTemplateId);
+					if (!template) {
+						console.log('No character template found ', spawn.characterTemplateId.get());
+						return;
+					}
+					const character = this.model.characters.add(template.clone());
+					const npc = new BattleNpcCharacterModel();
+					npc.characterId.set(character.id.get());
+					npc.position.set(spawn.position);
+					battle.npcCharacters.add(npc);
+				}
+			);
+
 			this.model.battles.add(battle);
 		}
 
-		const map = this.game.resources.map.battleMaps.getById(battleMapId);
+		// create party
 		const center = map.screenCoordsToPosition(map.size.multiply(0.5));
 		battle.partyCharacters.reset();
 		this.model.party.slots.forEach((slot) => {
@@ -180,6 +200,7 @@ export default class MapController extends ControllerNode {
 		});
 
 		this.model.currentBattleMapId.set(battleMapId);
+
 		//this.model.currentBattle.set(battle);
 		this.model.mode.set(GAME_MODE_BATTLE);
 	}

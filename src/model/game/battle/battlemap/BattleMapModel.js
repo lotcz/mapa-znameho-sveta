@@ -7,6 +7,8 @@ import BattleSpriteModel from "./BattleSpriteModel";
 import BattleSpecialModel, {SPECIAL_TYPE_BLOCK} from "./BattleSpecialModel";
 import BattleSprite3dModel from "./BattleSprite3dModel";
 import PathFinder from "../../../../class/PathFinder";
+import BoolValue from "../../../basic/BoolValue";
+import BattleNpcSpawnModel from "./BattleNpcSpawnModel";
 
 export default class BattleMapModel extends IdentifiedModelNode {
 
@@ -14,6 +16,11 @@ export default class BattleMapModel extends IdentifiedModelNode {
 	 * @type DirtyValue
 	 */
 	name;
+
+	/**
+	 * @type BoolValue
+	 */
+	isPersistent;
 
 	/**
 	 * @type DirtyValue
@@ -48,10 +55,16 @@ export default class BattleMapModel extends IdentifiedModelNode {
 	 */
 	specials;
 
+	/**
+	 * @type ModelNodeCollection<BattleNpcSpawnModel>
+	 */
+	npcSpawns;
+
 	constructor(id) {
 		super(id);
 
 		this.name = this.addProperty('name', new DirtyValue(`Battle Map ${id}`));
+		this.isPersistent = this.addProperty('isPersistent', new BoolValue(true));
 		this.backgroundImage = this.addProperty('backgroundImage', new DirtyValue('img/camp.jpg'));
 		this.tileSize = this.addProperty('tileSize', new IntValue(70));
 
@@ -72,6 +85,8 @@ export default class BattleMapModel extends IdentifiedModelNode {
 		this.blocksSpecialsCache = null;
 		this.specials.addOnAddListener(() => this.blocksCache = this.blocksSpecialsCache = null);
 		this.specials.addOnRemoveListener(() => this.blocksCache = this.blocksSpecialsCache = null);
+
+		this.npcSpawns = this.addProperty('npcSpawns', new ModelNodeCollection(() => new BattleNpcSpawnModel()));
 	}
 
 	/**

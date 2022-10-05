@@ -4,6 +4,7 @@ import BattleSpecialRenderer from "./BattleSpecialRenderer";
 import RendererNode from "../../basic/RendererNode";
 import BattleSpriteRenderer from "./BattleSpriteRenderer";
 import BattleSprite3dRenderer from "./BattleSprite3dRenderer";
+import BattleNpcSpawnRenderer from "./BattleNpcSpawnRenderer";
 
 export default class BattleMapRenderer extends RendererNode {
 
@@ -35,7 +36,7 @@ export default class BattleMapRenderer extends RendererNode {
 			)
 		);
 
-		const specialsRenderer = this.addChild(
+		this.addChild(
 			new ConditionalNodeRenderer(
 				this.game,
 				this.game.editor.battleEditor.showHelpers,
@@ -49,7 +50,27 @@ export default class BattleMapRenderer extends RendererNode {
 				}
 			)
 		);
-		this.addAutoEvent(this.game.isInDebugMode, 'change', () => specialsRenderer.updateRenderer(), false);
+
+		this.addChild(
+			new ConditionalNodeRenderer(
+				this.game,
+				this.game.editor.battleEditor.showHelpers,
+				() => this.game.isInDebugMode.get() && this.game.editor.battleEditor.showHelpers.get(),
+				() => {
+					return new CollectionRenderer(
+						this.game,
+						this.model.npcSpawns,
+						(m) => new BattleNpcSpawnRenderer(this.game, m, this.draw)
+					)
+				}
+			)
+		);
+
+		this.addAutoEvent(
+			this.game.isInDebugMode,
+			'change',
+			() => this.game.editor.battleEditor.showHelpers.triggerEvent('change')
+		);
 
 	}
 
