@@ -1,12 +1,13 @@
 import ModelNode from "../../basic/ModelNode";
 import Vector2 from "../../basic/Vector2";
 import ModelNodeCollection from "../../basic/ModelNodeCollection";
-import BattleCharacterModel from "./BattleCharacterModel";
 import NullableNode from "../../basic/NullableNode";
 import IntValue from "../../basic/IntValue";
 import FloatValue from "../../basic/FloatValue";
 import BoolValue from "../../basic/BoolValue";
 import BattleItemModel from "./BattleItemModel";
+import BattlePartyCharacterModel from "./BattlePartyCharacterModel";
+import BattleNpcCharacterModel from "./BattleNpcCharacterModel";
 
 export default class BattleModel extends ModelNode {
 
@@ -21,9 +22,14 @@ export default class BattleModel extends ModelNode {
 	battleMap;
 
 	/**
-	 * @type ModelNodeCollection<BattleCharacterModel>
+	 * @type ModelNodeCollection<BattlePartyCharacterModel>
 	 */
-	characters;
+	partyCharacters;
+
+	/**
+	 * @type ModelNodeCollection<BattleNpcCharacterModel>
+	 */
+	npcCharacters;
 
 	/**
 	 * @type ModelNodeCollection<BattleItemModel>
@@ -79,7 +85,8 @@ export default class BattleModel extends ModelNode {
 		this.battleMapId = this.addProperty('battleMapId', new IntValue());
 		this.battleMap = this.addProperty('battleMap', new NullableNode(null, false));
 
-		this.characters = this.addProperty('characters', new ModelNodeCollection(() => new BattleCharacterModel()));
+		this.partyCharacters = this.addProperty('partyCharacters', new ModelNodeCollection(() => new BattlePartyCharacterModel()));
+		this.npcCharacters = this.addProperty('npcCharacters', new ModelNodeCollection(() => new BattleNpcCharacterModel()));
 		this.items = this.addProperty('items', new ModelNodeCollection(() => new BattleItemModel()));
 
 		this.coordinates = this.addProperty('coordinates', new Vector2());

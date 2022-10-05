@@ -25,7 +25,7 @@ export default class BattleController extends ControllerNode {
 		this.addChild(
 			new CollectionController(
 				this.game,
-				this.model.characters,
+				this.model.partyCharacters,
 				(m) => new BattleCharacterController(game, m)
 			)
 		);
@@ -33,7 +33,7 @@ export default class BattleController extends ControllerNode {
 		this.addChild(
 			new NullableNodeController(
 				this.game,
-				this.model.characters.selectedNode,
+				this.model.partyCharacters.selectedNode,
 				(m) => new SelectedBattleCharacterController(game, m)
 			)
 		);
@@ -105,11 +105,22 @@ export default class BattleController extends ControllerNode {
 			(param) => this.onZoom(param)
 		);
 
+		const save = this.game.saveGame.get();
+
 		this.addAutoEvent(
-			this.model.characters.selectedNode,
+			save.party.selectedCharacterId,
 			'change',
 			() => {
-				const character = this.model.characters.selectedNode.get();
+				this.model.partyCharacters.selectedNode.set(this.model.partyCharacters.find((chr) => chr.characterId.equalsTo(save.party.selectedCharacterId)));
+			},
+			true
+		);
+
+		this.addAutoEvent(
+			this.model.partyCharacters.selectedNode,
+			'change',
+			() => {
+				const character = this.model.partyCharacters.selectedNode.get();
 				if (character) {
 					const battleMap = this.model.battleMap.get();
 					const coords = battleMap.positionToScreenCoords(character.position);
@@ -124,10 +135,6 @@ export default class BattleController extends ControllerNode {
 			'leave-battle',
 			() => {
 				const save = this.game.saveGame.get();
-				// delete party characters from battle
-				const partyCharacters = this.model.characters.filter((chr) => save.party.hasCharacter(chr.characterId));
-				partyCharacters.forEach((chr) => this.model.characters.remove(chr));
-
 				save.mode.set(GAME_MODE_MAP);
 				save.currentBattle.set(null);
 			}
@@ -141,13 +148,6 @@ export default class BattleController extends ControllerNode {
 		const y = Pixies.between(halfScreenSize.y, this.model.battleMap.get().size.y - halfScreenSize.y, this.model.coordinates.y);
 		this.model.coordinates.set(x, y);
 		this.model.cornerCoordinates.set(this.model.coordinates.subtract(halfScreenSize));
-	}
-
-	activateInternal() {
-		this.model.coordinates.makeDirty();
-
-		const save = this.game.saveGame.get();
-		this.model.characters.selectedNode.set(this.model.characters.find((chr) => chr.characterId.equalsTo(save.party.selectedCharacterId)));
 	}
 
 	updateInternal(delta) {
@@ -194,7 +194,7 @@ export default class BattleController extends ControllerNode {
 		const blocked = battleMap.isTileBlocked(tile);
 		this.model.isHoveringNoGo.set(blocked);
 
-		const occupant = this.model.characters.find((ch) => ch.position.round().equalsTo(tile));
+		const occupant = this.model.partyCharacters.find((ch) => ch.position.round().equalsTo(tile));
 		this.model.isHoveringPartyCharacter.set(occupant);
 	}
 
@@ -210,28 +210,15 @@ export default class BattleController extends ControllerNode {
 
 		const tile = this.model.mouseHoveringTile
 
-		const occupant = this.model.characters.find((ch) => ch.position.round().equalsTo(tile));
+		const occupant = this.model.partyCharacters.find((ch) => ch.position.round().equalsTo(tile));
 		if (occupant) {
 			const save = this.game.saveGame.get();
 			save.party.triggerEvent('character-selected', occupant.characterId.get());
 		} else {
-			const character = this.getSelectedBattleCharacter()
+			const character = this.model.partyCharacters.selectedNode.get();
 			if (character) {
 				character.triggerEvent('go-to', tile);
 			}
 		}
 	}
-
-	getBattleCharacter(characterId) {
-		if (!characterId) {
-			return null;
-		}
-		return this.model.characters.find((ch) => ch.characterId.equalsTo(characterId));
-	}
-
-	getSelectedBattleCharacter() {
-		const selected = this.game.saveGame.get().party.selectedCharacterId.get();
-		return this.getBattleCharacter(selected);
-	}
-
 }

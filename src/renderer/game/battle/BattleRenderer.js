@@ -42,7 +42,7 @@ export default class BattleRenderer extends DomRenderer {
 		this.addChild(
 			new NullableNodeRenderer(
 				this.game,
-				this.model.characters.selectedNode,
+				this.model.partyCharacters.selectedNode,
 				(m) => new BattleCharacterRingRenderer(this.game, m, this.drawForeground)
 			)
 		);
@@ -50,7 +50,15 @@ export default class BattleRenderer extends DomRenderer {
 		this.addChild(
 			new CollectionRenderer(
 				this.game,
-				this.model.characters,
+				this.model.partyCharacters,
+				(m) => new BattleCharacterRenderer(this.game, m, this.scene)
+			)
+		);
+
+		this.addChild(
+			new CollectionRenderer(
+				this.game,
+				this.model.npcCharacters,
 				(m) => new BattleCharacterRenderer(this.game, m, this.scene)
 			)
 		);

@@ -8,9 +8,9 @@ import CurrentLocationController from "./CurrentLocationController";
 import CurrentPathController from "./CurrentPathController";
 import BattleModel from "../../../model/game/battle/BattleModel";
 import {GAME_MODE_BATTLE} from "../../../model/game/SaveGameModel";
-import BattleCharacterModel from "../../../model/game/battle/BattleCharacterModel";
 import Vector2 from "../../../model/basic/Vector2";
 import Pixies from "../../../class/basic/Pixies";
+import BattlePartyCharacterModel from "../../../model/game/battle/BattlePartyCharacterModel";
 
 export default class MapController extends ControllerNode {
 
@@ -169,19 +169,14 @@ export default class MapController extends ControllerNode {
 		}
 
 		const map = this.game.resources.map.battleMaps.getById(battleMapId);
-		//battle.battleMap.set(map);
-
-		// delete party characters from battle
-		const partyCharacters = battle.characters.filter((chr) => this.model.party.hasCharacter(chr.characterId));
-		partyCharacters.forEach((chr) => battle.characters.remove(chr));
-
 		const center = map.screenCoordsToPosition(map.size.multiply(0.5));
+		battle.partyCharacters.reset();
 		this.model.party.slots.forEach((slot) => {
-			const character = new BattleCharacterModel();
+			const character = new BattlePartyCharacterModel();
 			character.characterId.set(slot.characterId.get());
 			const position = center.add(new Vector2(Pixies.random(-5, 5), Pixies.random(-5, 5))).round();
 			character.position.set(position);
-			battle.characters.add(character);
+			battle.partyCharacters.add(character);
 		});
 
 		this.model.currentBattleMapId.set(battleMapId);

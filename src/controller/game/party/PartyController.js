@@ -18,15 +18,6 @@ export default class PartyController extends ControllerNode {
 		this.addChild(this.slotsController);
 
 		this.addAutoEvent(
-			this.model.mainCharacterId,
-			'change',
-			() => {
-				this.model.mainCharacter.set(this.game.saveGame.get().characters.getById(this.model.mainCharacterId.get()));
-			},
-			true
-		);
-
-		this.addAutoEvent(
 			this.model.selectedCharacterId,
 			'change',
 			() => {
@@ -40,23 +31,13 @@ export default class PartyController extends ControllerNode {
 			'character-selected',
 			(id) => {
 				if (this.model.selectedCharacterId.equalsTo(id)) {
-					this.model.isInventoryVisible.set(true);
+					this.model.isInventoryVisible.invert();
+					return;
 				}
 				this.model.selectedCharacterId.set(id);
 			}
 		);
 
-		this.addAutoEvent(
-			this.model.selectedCharacterId,
-			'change',
-			() => {
-				const save = this.game.saveGame.get();
-				if (!save) return;
-				const battle = save.currentBattle.get();
-				if (battle) battle.characters.selectedNode.set(battle.characters.find((chr) => chr.characterId.equalsTo(this.model.selectedCharacterId)));
-			},
-			true
-		);
 	}
 
 }

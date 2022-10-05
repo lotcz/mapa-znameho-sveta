@@ -13,11 +13,6 @@ export default class PartyModel extends ModelNode {
 	mainCharacterId;
 
 	/**
-	 * @type NullableNode<CharacterModel>
-	 */
-	mainCharacter;
-
-	/**
 	 * @type IntValue
 	 */
 	selectedCharacterId;
@@ -41,7 +36,6 @@ export default class PartyModel extends ModelNode {
 		super();
 
 		this.mainCharacterId = this.addProperty('mainCharacterId', new IntValue(0));
-		this.mainCharacter = this.addProperty('mainCharacter', new NullableNode(null, false));
 
 		this.selectedCharacterId = this.addProperty('selectedCharacterId', new IntValue());
 		this.selectedCharacter = this.addProperty('selectedCharacter', new NullableNode(null, false));
