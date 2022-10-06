@@ -24,7 +24,7 @@ export default class PartyRenderer extends DomRenderer {
 		this.model = model;
 		this.topLayer = topLayer;
 
-		this.charactersRenderer = new CollectionRenderer(this.game, this.model.slots, (m) => new PartySlotRenderer(this.game, m, this.inner));
+		this.charactersRenderer = new CollectionRenderer(this.game, this.model.slots, (m) => new PartySlotRenderer(this.game, m, this.portraits));
 		this.addChild(this.charactersRenderer);
 
 		this.addChild(
@@ -35,20 +35,25 @@ export default class PartyRenderer extends DomRenderer {
 				() => new NullableNodeRenderer(
 					this.game,
 					this.model.selectedCharacter,
-					(m) => new InventoryRenderer(this.game, m, this.topLayer)
+					(m) => new InventoryRenderer(this.game, m, this.model, this.inventory)
 				)
 			)
 		);
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', 'party flex-1');
-		this.inner = Pixies.createElement(this.container, 'div', 'inner');
-
+		this.container = this.addElement('div', 'party paper flex-1');
 		this.container.addEventListener('click', (e) => {
 			e.stopPropagation();
 			e.preventDefault();
 		});
+
+		this.inner = Pixies.createElement(this.container, 'div', 'inner row stretch');
+		this.portraits = Pixies.createElement(this.inner, 'div', 'portraits');
+		this.inventory = Pixies.createElement(this.inner, 'div', 'inventory-wrapper');
+
+
+
 	}
 
 	deactivateInternal() {

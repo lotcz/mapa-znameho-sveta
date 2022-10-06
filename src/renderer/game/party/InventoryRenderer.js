@@ -12,31 +12,36 @@ export default class InventoryRenderer extends DomRenderer {
 	 */
 	model;
 
-	constructor(game, model, dom) {
+	/**
+	 * @type PartyModel
+	 */
+	party;
+
+	constructor(game, model, party, dom) {
 		super(game, model, dom);
 
 		this.model = model;
-
+		this.party = party;
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', 'inventory column paper');
+		this.container = this.addElement('div', 'inventory column');
 		this.container.addEventListener('click', (e) => {
 			e.stopPropagation();
 			e.preventDefault();
 		});
-		this.inner = Pixies.createElement(this.container, 'div', 'inner row');
+		this.inner = Pixies.createElement(this.container, 'div', 'column');
 
-		this.statsWrapper = Pixies.createElement(this.inner, 'div', 'inventory-stats column');
+		this.statsWrapper = Pixies.createElement(this.inner, 'div', 'inventory-stats row');
+		this.portrait = Pixies.createElement(this.statsWrapper, 'div', 'portrait');
+		this.addChild(
+			new ImageRenderer(this.game, this.model.portrait, this.portrait)
+		);
+
 		this.stats = Pixies.createElement(this.statsWrapper, 'div', 'column');
 
 		this.name = Pixies.createElement(this.stats, 'div', 'name');
 		this.updateName();
-
-		this.portrait = Pixies.createElement(this.stats, 'div', 'portrait');
-		this.addChild(
-			new ImageRenderer(this.game, this.model.portrait, this.portrait)
-		);
 
 		this.buttons = Pixies.createElement(this.stats, 'div', 'row');
 
@@ -55,16 +60,17 @@ export default class InventoryRenderer extends DomRenderer {
 					}
 				});
 			renderer.activate();
-
 		});
 
-		this.inventoryCharacter = Pixies.createElement(this.inner, 'div', 'inventory-character ');
+		this.bottom = Pixies.createElement(this.inner, 'div', 'row');
+
+		this.inventoryCharacter = Pixies.createElement(this.bottom, 'div', 'inventory-character');
 		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.head, this.inventoryCharacter));
 		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.leftHand, this.inventoryCharacter));
 		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.rightHand, this.inventoryCharacter));
 		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.clothing, this.inventoryCharacter));
 
-		this.inventorySlots = Pixies.createElement(this.inner, 'div', 'inventory-slots');
+		this.inventorySlots = Pixies.createElement(this.bottom, 'div', 'inventory-slots');
 		this.inventorySlotsTop = Pixies.createElement(this.inventorySlots, 'div', 'inventory-slots-top');
 		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.slot1, this.inventorySlotsTop));
 		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.slot2, this.inventorySlotsTop));
@@ -72,11 +78,14 @@ export default class InventoryRenderer extends DomRenderer {
 
 		this.inventorySlotsBottom = Pixies.createElement(this.inventorySlots, 'div', 'inventory-slots-bottom');
 		this.addChild(new InventorySlotRenderer(this.game, this.model.dropSlot, this.inventorySlotsBottom));
+
+		this.party.triggerEvent('inventory-resize');
 	}
 
 	deactivateInternal() {
 		this.resetChildren();
 		this.removeElement(this.container);
+		this.party.triggerEvent('inventory-resize');
 	}
 
 	renderInternal() {

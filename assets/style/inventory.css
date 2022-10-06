@@ -1,7 +1,4 @@
 .inventory {
-	position: absolute;
-	left: 260px;
-	bottom: 20px;
 
 }
 
@@ -12,13 +9,15 @@
 }
 
 .inventory .portrait {
-	width: 250px;
+	width: 200px;
+	margin-left: 20px;
 }
 
 .inventory .inventory-slots {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+	width: 220px;
 }
 
 .inventory .inventory-slots > div {

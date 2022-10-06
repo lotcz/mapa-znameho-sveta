@@ -1,24 +1,17 @@
 .party {
 	display: flex;
 	color:var(--dark-brown);
-	background-image: url('../img/texture/paper.jpg');
-	background-color: sandybrown;
 	text-align: center;
-	box-shadow: #311a0a 0 0 60px;
 }
 
-.party .inner  {
-	padding: 2rem;
-	box-shadow: #311a0a 0 0 40px inset;
-	display: flex;
-	flex: 1;
-	flex-direction: column;
-	justify-content: flex-start;
+.party.paper,
+.party.paper > .inner {
+	border-radius: 0;
 }
 
-.party .portrait {
-	width: 120px;
-	height: 120px;
+.party .portraits .portrait {
+	width: 100px;
+	height: 100px;
 	border: 2px solid transparent;
 	border-radius: 5px;
 }
@@ -35,7 +28,7 @@
 .party .stats {
 	display: flex;
 	flex-direction: row;
-	height: 118px;
+	height: 98px;
 	box-shadow: #311a0a 0 0 4px;
 	margin: 2px 4px;
 }

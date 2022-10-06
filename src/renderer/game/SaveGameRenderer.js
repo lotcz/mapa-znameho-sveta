@@ -48,11 +48,14 @@ export default class SaveGameRenderer extends DomRenderer {
 		this.addAutoEvent(
 			window,
 			'resize',
-			() => {
-				const size = new Vector2(this.mainLayer.offsetWidth, this.mainLayer.offsetHeight);
-				this.model.triggerEvent('resize', size);
-			},
+			() => this.mainLayerResized(),
 			true
+		);
+
+		this.addAutoEvent(
+			this.model.party,
+			'inventory-resize',
+			() => this.mainLayerResized()
 		);
 
 		this.updateLoadingHandler = () => this.updateLoading();
@@ -65,7 +68,7 @@ export default class SaveGameRenderer extends DomRenderer {
 		const bottomLayer = Pixies.createElement(this.container, 'div', 'bottom-layer container container-host row stretch');
 		this.topLayer = Pixies.createElement(this.container, 'div', 'top-layer ');
 
-		const party = Pixies.createElement(bottomLayer, 'div', 'savegame-party column');
+		const party = Pixies.createElement(bottomLayer, 'div', 'savegame-party row stretch');
 		this.mainLayer = Pixies.createElement(bottomLayer, 'div', 'main row stretch');
 		this.mainLayer.addEventListener(
 			'mousemove',
@@ -73,7 +76,8 @@ export default class SaveGameRenderer extends DomRenderer {
 				const bcr = this.mainLayer.getBoundingClientRect();
 				const position = new Vector2(e.pageX - bcr.left, e.pageY - bcr.top);
 				this.model.triggerEvent('mousemove', position);
-			});
+			}
+		);
 
 		if (this.partyRenderer) {
 			this.removeChild(this.partyRenderer);
@@ -83,7 +87,6 @@ export default class SaveGameRenderer extends DomRenderer {
 
 		this.updateGameMode();
 		this.model.mode.addOnChangeListener(this.updateGameModeHandler);
-
 	}
 
 	deactivateInternal() {
@@ -114,6 +117,11 @@ export default class SaveGameRenderer extends DomRenderer {
 		if (this.mainRenderer) {
 			this.addChild(this.mainRenderer);
 		}
+	}
+
+	mainLayerResized() {
+		const size = new Vector2(this.mainLayer.offsetWidth, this.mainLayer.offsetHeight);
+		this.model.triggerEvent('resize', size);
 	}
 
 }
