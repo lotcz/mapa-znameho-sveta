@@ -64,12 +64,20 @@ export default class BattleController extends ControllerNode {
 		);
 
 		this.addAutoEvent(
-			this.model.coordinates,
+			this.game.mainLayerSize,
 			'change',
 			() => {
 				this.updateCoordinates();
 			},
 			true
+		);
+
+		this.addAutoEvent(
+			this.model.coordinates,
+			'change',
+			() => {
+				this.updateCoordinates();
+			}
 		);
 
 		this.addAutoEvent(
