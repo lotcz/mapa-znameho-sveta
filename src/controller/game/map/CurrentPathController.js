@@ -25,17 +25,10 @@ export default class CurrentPathController extends ControllerNode {
 		);
 
 		this.addAutoEvent(this.model, 'path-marker-position', (pos) => {
-			this.runOnUpdate(() => {
-				const save = this.game.saveGame.get();
-				save.partyCoordinates.set(pos);
-			});
+			const save = this.game.saveGame.get();
+			this.runOnUpdate(() => save.partyCoordinates.set(pos));
 			if (this.game.saveGame.get().partyTraveling.get()) {
-				this.runOnUpdate(() => {
-					const save = this.game.saveGame.get();
-					const center = this.game.viewBoxSize.multiply(0.5 * save.zoom.get());
-					const corner = pos.subtract(center);
-					save.coordinates.set(corner)
-				});
+				this.runOnUpdate(() => save.mapCenterCoordinates.set(pos));
 			}
 		});
 

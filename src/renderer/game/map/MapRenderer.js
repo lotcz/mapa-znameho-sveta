@@ -32,15 +32,19 @@ export default class MapRenderer extends DomRenderer {
 	 */
 	draw;
 
-	constructor(game, model, dom) {
+	constructor(game, model, dom, rightPanel) {
 		super(game, model, dom);
 
 		this.model = model;
+		this.rightPanel = rightPanel;
 		this.map = game.resources.map;
-		this.onViewBoxChangeHandler = () => this.updateSize();
 
-		this.addChild(new NullableNodeRenderer(this.game, this.model.currentLocation, (m) => new CurrentLocationRenderer(this.game, m, this.currentGroup)));
-		this.addChild(new NullableNodeRenderer(this.game, this.model.currentPath, (m) => new CurrentPathRenderer(this.game, m, this.currentGroup)));
+		this.addAutoEvent(
+			this.game.mainLayerSize,
+			'change',
+			() => this.updateSize(),
+			true
+		);
 	}
 
 	activateInternal() {
@@ -56,38 +60,39 @@ export default class MapRenderer extends DomRenderer {
 		this.currentGroup = this.draw.group();
 		this.partyGroup = this.draw.group();
 
+		this.addChild(new NullableNodeRenderer(this.game, this.model.currentLocation, (m) => new CurrentLocationRenderer(this.game, m, this.currentGroup)));
+		this.addChild(new NullableNodeRenderer(this.game, this.model.currentPath, (m) => new CurrentPathRenderer(this.game, m, this.currentGroup)));
+		this.addChild(new CollectionRenderer(this.game, this.map.paths, (model) => new PathRenderer(this.game, model, this.pathsGroup)));
+		this.addChild(new CollectionRenderer(this.game, this.map.locations, (model) => new LocationRenderer(this.game, model, this.locationsGroup)));
+		this.addChild(new MapPartyRenderer(this.game, this.model, this.partyGroup));
+		this.addChild(new MapMenuRenderer(this.game, this.model, this.rightPanel));
+
 		this.mapImage = null;
 		this.game.assets.getAsset(
 			'img/world-HD.jpg',
 			(img) => {
 				if (!this.draw) {
+					console.log('map loaded after renderer was deactivated');
 					return;
 				}
 				this.mapImage = img;
 				this.updateSize();
-				this.game.mainLayerSize.addOnChangeListener(this.onViewBoxChangeHandler);
 			}
 		);
-
-		this.pathsRenderer = this.addChild(new CollectionRenderer(this.game, this.map.paths, (model) => new PathRenderer(this.game, model, this.pathsGroup)));
-		this.locationsRenderer = this.addChild(new CollectionRenderer(this.game, this.map.locations, (model) => new LocationRenderer(this.game, model, this.locationsGroup)));
-		this.partyRenderer = this.addChild(new MapPartyRenderer(this.game, this.model, this.partyGroup));
-
-		this.menuRenderer = this.addChild(new MapMenuRenderer(this.game, this.model, this.container));
 	}
 
 	deactivateInternal() {
-		this.game.mainLayerSize.removeOnChangeListener(this.onViewBoxChangeHandler);
 		this.resetChildren();
 		this.draw.remove();
 		this.draw = null;
 		Pixies.destroyElement(this.canvas);
 		this.canvas = null;
+		this.mapImage = null;
 		Pixies.destroyElement(this.container);
 	}
 
 	renderInternal() {
-		if (this.model.zoom.isDirty || this.model.coordinates.isDirty) {
+		if (this.model.zoom.isDirty || this.model.mapCornerCoordinates.isDirty) {
 			this.updateZoom();
 		}
 	}
@@ -101,10 +106,10 @@ export default class MapRenderer extends DomRenderer {
 
 	updateZoom() {
 		this.draw.viewbox(
-			this.model.coordinates.x,
-			this.model.coordinates.y,
-			this.game.mainLayerSize.x * this.model.zoom.get(),
-			this.game.mainLayerSize.y * this.model.zoom.get()
+			this.model.mapCornerCoordinates.x,
+			this.model.mapCornerCoordinates.y,
+			this.game.mainLayerSize.x / this.model.zoom.get(),
+			this.game.mainLayerSize.y / this.model.zoom.get()
 		);
 		this.updateMapImage();
 	}
@@ -117,10 +122,10 @@ export default class MapRenderer extends DomRenderer {
 		this.context2d.clearRect(0, 0, this.context2d.canvas.width, this.context2d.canvas.height);
 		this.context2d.drawImage(
 			this.mapImage,
-			this.model.coordinates.x,
-			this.model.coordinates.y,
-			this.game.mainLayerSize.x * this.model.zoom.get(),
-			this.game.mainLayerSize.y * this.model.zoom.get(),
+			this.model.mapCornerCoordinates.x,
+			this.model.mapCornerCoordinates.y,
+			this.game.mainLayerSize.x / this.model.zoom.get(),
+			this.game.mainLayerSize.y / this.model.zoom.get(),
 			0,
 			0,
 			this.game.mainLayerSize.x,

@@ -29,6 +29,10 @@ export default class BattleSprite3dRenderer extends RendererNode {
 		this.game.assets.loadSprite3d(
 			this.model.sprite3dId.get(),
 			(sprite) => {
+				if (!this.group) {
+					console.log('sprite3d loaded after renderer already deactivated');
+					return;
+				}
 				this.group.add(sprite.clone());
 				this.updatePosition();
 			}

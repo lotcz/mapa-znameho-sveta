@@ -43,9 +43,13 @@ export default class SaveGameModel extends ModelNode {
 
 	/**
 	 * @type Vector2
-	 * current screen position on map
 	 */
-	coordinates;
+	mapCenterCoordinates;
+
+	/**
+	 * @type Vector2
+	 */
+	mapCornerCoordinates;
 
 	/**
 	 * @type Vector2
@@ -145,12 +149,14 @@ export default class SaveGameModel extends ModelNode {
 
 		this.party = this.addProperty('party', new PartyModel());
 
-		this.coordinates = this.addProperty('coordinates', new Vector2());
+		this.mapCenterCoordinates = this.addProperty('mapCenterCoordinates', new Vector2());
+		this.mapCornerCoordinates = this.addProperty('mapCornerCoordinates', new Vector2());
+
 		this.partyCoordinates = this.addProperty('partyCoordinates', new Vector2());
 		this.lastPartyCoordinates = this.addProperty('lastPartyCoordinates', new Vector2());
 		this.partyCoordinates.addOnChangeListener((param) => {
 			this.lastPartyCoordinates.set(param.oldValue);
-		})
+		});
 		this.zoom = this.addProperty('zoom', new FloatValue(1));
 
 		this.pathProgress = this.addProperty('pathProgress', new FloatValue(0));

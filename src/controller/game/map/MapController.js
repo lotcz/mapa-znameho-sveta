@@ -55,6 +55,24 @@ export default class MapController extends ControllerNode {
 		this.addChild(new NullableNodeController(this.game, this.model.currentLocation, (m) => new CurrentLocationController(this.game, m)));
 
 		this.addAutoEvent(
+			this.game.mainLayerSize,
+			'change',
+			() => this.updateCoordinates()
+		);
+
+		this.addAutoEvent(
+			this.model.mapCenterCoordinates,
+			'change',
+			() => this.updateCoordinates()
+		);
+
+		this.addAutoEvent(
+			this.model.zoom,
+			'change',
+			() => this.updateCoordinates()
+		);
+
+		this.addAutoEvent(
 			this.model.currentPathId,
 			'change',
 			() => {
@@ -125,15 +143,19 @@ export default class MapController extends ControllerNode {
 		if (!this.game.controls.mouseDownRight.get()) {
 			this.scrolling = false;
 		}
+	}
 
-
+	updateCoordinates() {
+		const center = this.game.mainLayerSize.multiply(0.5 / this.model.zoom.get());
+		const corner = this.model.mapCenterCoordinates.subtract(center);
+		this.model.mapCornerCoordinates.set(corner);
 	}
 
 	onMouseMove() {
 		if (this.game.controls.mouseDownLeft.get()) {
 			this.model.partyTraveling.set(false);
 			if (this.dragging) {
-				const mapCoords = this.model.coordinates.add(this.game.mainLayerMouseCoordinates.multiply(this.model.zoom.get()));
+				const mapCoords = this.model.mapCenterCoordinates.add(this.game.mainLayerMouseCoordinates.multiply(1 / this.model.zoom.get()));
 				this.dragging.set(mapCoords);
 			} else if (this.focusedHelper.isSet()) {
 				this.dragging = this.focusedHelper.get();
@@ -144,8 +166,8 @@ export default class MapController extends ControllerNode {
 			this.model.partyTraveling.set(false);
 			if (this.scrolling) {
 				const offset = this.game.mainLayerMouseCoordinates.subtract(this.scrolling);
-				const mapCoords = this.model.coordinates.subtract(offset.multiply(this.model.zoom.get()));
-				this.model.coordinates.set(mapCoords);
+				const mapCoords = this.model.mapCenterCoordinates.subtract(offset.multiply(1 / this.model.zoom.get()));
+				this.model.mapCenterCoordinates.set(mapCoords);
 				this.scrolling = this.game.mainLayerMouseCoordinates.clone();
 			} else {
 				this.scrolling = this.game.mainLayerMouseCoordinates.clone();
@@ -154,7 +176,7 @@ export default class MapController extends ControllerNode {
 	}
 
 	onZoom(param) {
-		this.model.zoom.set(this.model.zoom.get() + (param * 0.1));
+		this.model.zoom.set(Math.max(this.model.zoom.get() + (param * -0.1), 0.05));
 	}
 
 	toBattle() {

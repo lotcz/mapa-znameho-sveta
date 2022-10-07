@@ -192,6 +192,8 @@ export default class BattleRenderer extends DomRenderer {
 				this.renderBgImage();
 			}
 		);
+
+		this.game.triggerEvent('battle-resize');
 	}
 
 	deactivateInternal() {

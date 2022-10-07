@@ -8,21 +8,18 @@ export default class MapMenuRenderer extends DomRenderer {
 	 */
 	model;
 
-
 	constructor(game, model, dom) {
 		super(game, model, dom);
 
 		this.model = model;
-
-
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', 'map-menu');
+		this.container = this.addElement('div', 'map-menu paper');
 		this.inner = Pixies.createElement(this.container,'div', 'inner');
 		this.art = Pixies.createElement(this.inner,'div', 'art');
-		this.artLower = Pixies.createElement(this.art, 'div');
-		this.artUpper = Pixies.createElement(this.art,'div');
+		this.artLower = Pixies.createElement(this.art, 'div', 'lower');
+		this.artUpper = Pixies.createElement(this.art,'div', 'upper');
 		this.artLowerImg = null;
 		this.artUpperImg = null;
 
@@ -38,9 +35,13 @@ export default class MapMenuRenderer extends DomRenderer {
 		const sleep = Pixies.createElement(this.buttons, 'button', null, 'Sleep', () => {
 			this.game.saveGame.get().partyResting.set(0.4);
 		});
+		const battle = Pixies.createElement(this.buttons, 'button', 'special', 'To Battle', () => {
+			this.model.triggerEvent('to-battle');
+		});
 
 		this.updateArt();
-		this.updateLocation();
+
+		this.model.triggerEvent('right-panel-resize');
 	}
 
 	deactivateInternal() {
@@ -52,12 +53,6 @@ export default class MapMenuRenderer extends DomRenderer {
 			this.time.innerText = Pixies.round(this.model.time.get(), 2);
 			this.updateArt();
 		}
-	}
-
-	updateLocation() {
-		const battle = Pixies.createElement(this.buttons, 'button', 'special', 'To Battle', () => {
-			this.model.triggerEvent('to-battle');
-		});
 	}
 
 	clearArt() {
@@ -127,7 +122,6 @@ export default class MapMenuRenderer extends DomRenderer {
 				Pixies.emptyElement(this.artUpper);
 			}
 		}
-
 	}
 
 }

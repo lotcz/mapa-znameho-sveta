@@ -1,40 +1,35 @@
 .map-menu {
-	position: absolute;
-	top: 20px;
-	right: 20px;
-
 	display: flex;
-
-	color:var(--dark-brown);
-	background-image: url('../img/texture/paper.jpg');
-	background-color: sandybrown;
 	text-align: center;
+}
 
-	border-radius: 10px;
-	box-shadow: #311a0a 0 0 60px;
+.map-menu.paper,
+.map-menu.paper > .inner {
+	border-radius: 0;
 }
 
 .map-menu .inner {
-	border-radius: 10px;
-	padding: 2rem;
-	box-shadow: #311a0a 0 0 40px inset;
 	display: flex;
 	flex: 1;
 	flex-direction: column;
-	justify-content: space-between;
 }
 
 .map-menu .art {
-	width: 500px;
-	height: 322px;
+	position: relative;
 }
 
-.map-menu .art > div {
+.map-menu .art,
+.map-menu .art img {
+	width: 288px;
+}
+
+.map-menu .art > div.upper {
 	position: absolute;
+	top: 0;
+	left: 0;
 }
 
 .map-menu .art img {
-	max-width: 500px;
 	border-radius: 3px;
 }
 
