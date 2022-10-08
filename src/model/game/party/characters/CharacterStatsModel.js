@@ -1,46 +1,45 @@
 import ModelNode from "../../../basic/ModelNode";
-import StatFloatModel from "./StatFloatModel";
-import StatIntModel from "./StatIntModel";
-import {HEALTH_STAT, MELEE_WEAPONS_STAT, MENTAL_STAT, PHYSICAL_STAT, STRENGTH_STAT} from "./StatDefinitionModel";
+import StatModel from "../stats/StatModel";
+import {STAT_HEALTH, STAT_MELEE_WEAPONS, STAT_MENTAL, STAT_PHYSICAL, STAT_STRENGTH} from "../stats/StatDefinitionModel";
 
 export default class CharacterStatsModel extends ModelNode {
 
 	/**
-	 * @type StatFloatModel
+	 * @type StatModel
 	 */
 	health;
 
 	/**
-	 * @type StatFloatModel
+	 * @type StatModel
 	 */
 	physical;
 
 	/**
-	 * @type StatFloatModel
+	 * @type StatModel
 	 */
 	mental;
 
 	/**
-	 * @type StatIntModel
+	 * @type StatModel
 	 */
 	strength;
 
-
 	/**
-	 * @type StatIntModel
+	 * @type StatModel
 	 */
 	meleeWeapons;
 
 	constructor() {
 		super();
 
-		this.health = this.addProperty('health', new StatFloatModel(HEALTH_STAT));
-		this.physical = this.addProperty('physical', new StatFloatModel(PHYSICAL_STAT));
-		this.mental = this.addProperty('mental', new StatFloatModel(MENTAL_STAT));
+		this.stats = [];
+		this.stats[STAT_HEALTH] = this.health = this.addProperty('health', new StatModel(STAT_HEALTH));
+		this.stats[STAT_PHYSICAL] = this.physical = this.addProperty('physical', new StatModel(STAT_PHYSICAL));
+		this.stats[STAT_MENTAL] = this.mental = this.addProperty('mental', new StatModel(STAT_MENTAL));
 
-		this.strength = this.addProperty('strength', new StatIntModel(STRENGTH_STAT));
+		this.stats[STAT_STRENGTH] = this.strength = this.addProperty('strength', new StatModel(STAT_STRENGTH));
 
-		this.meleeWeapons = this.addProperty('meleeWeapons', new StatIntModel(MELEE_WEAPONS_STAT));
+		this.stats[STAT_MELEE_WEAPONS] = this.meleeWeapons = this.addProperty('meleeWeapons', new StatModel(STAT_MELEE_WEAPONS));
 
 	}
 

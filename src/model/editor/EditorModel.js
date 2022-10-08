@@ -67,13 +67,14 @@ export default class EditorModel extends ModelNode {
 			characterTemplates: 'Character Templates',
 			conversations: 'Conversations',
 			itemDefinitions: 'Item Definitions',
+			statDefinitions: 'Stat Definitions'
 		};
 
 		this.mapOptions = {
 			biotopes: 'Biotopes',
 			paths: 'Paths',
 			locations: 'Locations',
-			battleMaps: 'Battle Maps',
+			battleMaps: 'Battle Maps'
 		};
 
 		this.saveGameOptions = {

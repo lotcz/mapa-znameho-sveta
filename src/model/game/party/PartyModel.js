@@ -4,6 +4,11 @@ import PartySlotModel from "./PartySlotModel";
 import IntValue from "../../basic/IntValue";
 import NullableNode from "../../basic/NullableNode";
 import BoolValue from "../../basic/BoolValue";
+import DirtyValue from "../../basic/DirtyValue";
+
+export const INVENTORY_MODE_ITEMS = 'items';
+export const INVENTORY_MODE_STATS = 'stats';
+export const INVENTORY_MODE_RITUALS = 'rituals';
 
 export default class PartyModel extends ModelNode {
 
@@ -28,6 +33,11 @@ export default class PartyModel extends ModelNode {
 	isInventoryVisible;
 
 	/**
+	 * @type DirtyValue
+	 */
+	inventoryMode;
+
+	/**
 	 * @type ModelNodeCollection<PartySlotModel>
 	 */
 	slots;
@@ -39,7 +49,9 @@ export default class PartyModel extends ModelNode {
 
 		this.selectedCharacterId = this.addProperty('selectedCharacterId', new IntValue());
 		this.selectedCharacter = this.addProperty('selectedCharacter', new NullableNode(null, false));
+
 		this.isInventoryVisible = this.addProperty('isInventoryVisible', new BoolValue(false));
+		this.inventoryMode = this.addProperty('inventoryMode', new DirtyValue(INVENTORY_MODE_ITEMS));
 
 		this.slots = this.addProperty('slots', new ModelNodeCollection(() => new PartySlotModel()));
 	}

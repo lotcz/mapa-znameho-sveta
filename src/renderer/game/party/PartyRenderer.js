@@ -1,10 +1,9 @@
 import DomRenderer from "../../basic/DomRenderer";
-import CollectionRenderer from "../../basic/CollectionRenderer";
 import Pixies from "../../../class/basic/Pixies";
-import PartySlotRenderer from "./portraits/PartySlotRenderer";
 import NullableNodeRenderer from "../../basic/NullableNodeRenderer";
 import InventoryRenderer from "./inventory/InventoryRenderer";
 import ConditionalNodeRenderer from "../../basic/ConditionalNodeRenderer";
+import PortraitsRenderer from "./portraits/PortraitsRenderer";
 
 export default class PartyRenderer extends DomRenderer {
 
@@ -13,32 +12,12 @@ export default class PartyRenderer extends DomRenderer {
 	 */
 	model;
 
-	/**
-	 * @type CollectionRenderer
-	 */
-	charactersRenderer;
-
 	constructor(game, model, dom, topLayer) {
 		super(game, model, dom);
 
 		this.model = model;
 		this.topLayer = topLayer;
 
-		this.charactersRenderer = new CollectionRenderer(this.game, this.model.slots, (m) => new PartySlotRenderer(this.game, m, this.portraits));
-		this.addChild(this.charactersRenderer);
-
-		this.addChild(
-			new ConditionalNodeRenderer(
-				this.game,
-				this.model.isInventoryVisible,
-				() => this.model.isInventoryVisible.get(),
-				() => new NullableNodeRenderer(
-					this.game,
-					this.model.selectedCharacter,
-					(m) => new InventoryRenderer(this.game, m, this.model, this.inventory)
-				)
-			)
-		);
 	}
 
 	activateInternal() {
@@ -52,11 +31,31 @@ export default class PartyRenderer extends DomRenderer {
 		this.portraits = Pixies.createElement(this.inner, 'div', 'portraits');
 		this.inventory = Pixies.createElement(this.inner, 'div', 'inventory-wrapper');
 
+		this.addChild(
+			new PortraitsRenderer(
+				this.game,
+				this.model,
+				this.portraits
+			)
+		);
 
+		this.addChild(
+			new ConditionalNodeRenderer(
+				this.game,
+				this.model.isInventoryVisible,
+				() => this.model.isInventoryVisible.get(),
+				() => new NullableNodeRenderer(
+					this.game,
+					this.model.selectedCharacter,
+					(m) => new InventoryRenderer(this.game, m, this.model, this.inventory)
+				)
+			)
+		);
 
 	}
 
 	deactivateInternal() {
+		this.resetChildren();
 		this.removeElement(this.container);
 	}
 

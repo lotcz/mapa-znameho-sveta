@@ -9,6 +9,7 @@ import Model3dModel from "./items/Model3dModel";
 import ItemDefinitionModel from "./items/ItemDefinitionModel";
 import SpriteModel from "./battle/battlemap/SpriteModel";
 import Sprite3dModel from "./battle/battlemap/Sprite3dModel";
+import StatDefinitionModel from "./party/stats/StatDefinitionModel";
 
 export default class ResourcesModel extends ModelNode {
 
@@ -43,14 +44,19 @@ export default class ResourcesModel extends ModelNode {
 	races;
 
 	/**
-	 * @type ModelNodeTable
+	 * @type ModelNodeTable<CharacterModel>
 	 */
 	characterTemplates;
 
 	/**
-	 * @type ModelNodeTable<ItemModel>
+	 * @type ModelNodeTable<ItemDefinitionModel>
 	 */
 	itemDefinitions;
+
+	/**
+	 * @type ModelNodeTable<StatDefinitionModel>
+	 */
+	statDefinitions;
 
 	/**
 	 * @type ModelNodeTable
@@ -69,6 +75,7 @@ export default class ResourcesModel extends ModelNode {
 		this.characterTemplates = this.addProperty('characterTemplates', new ModelNodeTable((id) => new CharacterModel(id)));
 		this.conversations = this.addProperty('conversations', new ModelNodeTable((id) => new ConversationModel(id)));
 		this.itemDefinitions = this.addProperty('itemDefinitions', new ModelNodeTable((id) => new ItemDefinitionModel(id)));
+		this.statDefinitions = this.addProperty('statDefinitions', new ModelNodeTable((id) => new StatDefinitionModel(id)));
 	}
 
 }

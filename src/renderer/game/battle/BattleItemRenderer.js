@@ -31,6 +31,10 @@ export default class BattleItemRenderer extends RendererNode {
 		this.game.assets.loadItemModel3d(
 			item.definitionId.get(),
 			(mesh) => {
+				if (!this.group) {
+					console.log('model3d loaded after renderer was deactivated');
+					return;
+				}
 				this.group.add(mesh.clone());
 				this.updatePosition();
 			}

@@ -9,6 +9,10 @@
 	border-radius: 0;
 }
 
+.party.paper > .inner {
+	padding: 20px;
+}
+
 .party .portraits .portrait {
 	width: 100px;
 	height: 100px;

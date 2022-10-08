@@ -1,6 +1,6 @@
 import IntValue from "../../basic/IntValue";
 import ModelNode from "../../basic/ModelNode";
-import StatFloatModel from "../party/characters/StatFloatModel";
+import StatModel from "../party/stats/StatModel";
 
 export default class ItemModel extends ModelNode {
 
@@ -16,7 +16,7 @@ export default class ItemModel extends ModelNode {
 	primaryMaterialId;
 
 	/**
-	 * @type StatFloatModel
+	 * @type StatModel
 	 */
 	condition;
 
@@ -26,7 +26,7 @@ export default class ItemModel extends ModelNode {
 		this.definitionId = this.addProperty('definitionId', new IntValue());
 		this.primaryMaterialId = this.addProperty('primaryMaterialId', new IntValue());
 
-		this.condition = this.addProperty('condition', new StatFloatModel());
+		this.condition = this.addProperty('condition', new StatModel());
 	}
 
 }

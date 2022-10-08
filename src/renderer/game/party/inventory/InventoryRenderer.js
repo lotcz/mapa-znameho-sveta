@@ -1,9 +1,12 @@
 import DomRenderer from "../../../basic/DomRenderer";
 import Pixies from "../../../../class/basic/Pixies";
 import ImageRenderer from "../../../basic/ImageRenderer";
-import InventorySlotRenderer from "./InventorySlotRenderer";
 import ItemModel from "../../../../model/game/items/ItemModel";
 import TableLookupRenderer from "../../../editor/TableLookupRenderer";
+import InventoryItemsRenderer from "./InventoryItemsRenderer";
+import ConditionalNodeRenderer from "../../../basic/ConditionalNodeRenderer";
+import {INVENTORY_MODE_ITEMS, INVENTORY_MODE_STATS} from "../../../../model/game/party/PartyModel";
+import InventoryStatsRenderer from "./InventoryStatsRenderer";
 
 export default class InventoryRenderer extends DomRenderer {
 
@@ -62,22 +65,43 @@ export default class InventoryRenderer extends DomRenderer {
 			renderer.activate();
 		});
 
-		this.bottom = Pixies.createElement(this.inner, 'div', 'row');
+		Pixies.createElement(
+			this.buttons,
+			'button',
+			null,
+			'Items',
+			() => {
+				this.party.inventoryMode.set(INVENTORY_MODE_ITEMS);
+			}
+		);
 
-		this.inventoryCharacter = Pixies.createElement(this.bottom, 'div', 'inventory-character');
-		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.head, this.inventoryCharacter));
-		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.leftHand, this.inventoryCharacter));
-		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.rightHand, this.inventoryCharacter));
-		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.clothing, this.inventoryCharacter));
+		Pixies.createElement(
+			this.buttons,
+			'button',
+			null,
+			'Stats',
+			() => {
+				this.party.inventoryMode.set(INVENTORY_MODE_STATS);
+			}
+		);
 
-		this.inventorySlots = Pixies.createElement(this.bottom, 'div', 'inventory-slots');
-		this.inventorySlotsTop = Pixies.createElement(this.inventorySlots, 'div', 'inventory-slots-top');
-		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.slot1, this.inventorySlotsTop));
-		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.slot2, this.inventorySlotsTop));
-		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.slot3, this.inventorySlotsTop));
-
-		this.inventorySlotsBottom = Pixies.createElement(this.inventorySlots, 'div', 'inventory-slots-bottom');
-		this.addChild(new InventorySlotRenderer(this.game, this.model.dropSlot, this.inventorySlotsBottom));
+		this.bottom = Pixies.createElement(this.inner, 'div', 'column');
+		this.addChild(
+			new ConditionalNodeRenderer(
+				this.game,
+				this.party.inventoryMode,
+				() => this.party.inventoryMode.equalsTo(INVENTORY_MODE_ITEMS),
+				() => new InventoryItemsRenderer(this.game, this.model, this.party, this.bottom)
+			)
+		);
+		this.addChild(
+			new ConditionalNodeRenderer(
+				this.game,
+				this.party.inventoryMode,
+				() => this.party.inventoryMode.equalsTo(INVENTORY_MODE_STATS),
+				() => new InventoryStatsRenderer(this.game, this.model, this.party, this.bottom)
+			)
+		);
 
 		this.party.triggerEvent('inventory-resize');
 	}

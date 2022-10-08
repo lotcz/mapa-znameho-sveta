@@ -21,7 +21,8 @@ const FIELD_TABLE_MAPPINGS = {
 	biotopeId: 'biotopes',
 	startLocationId: 'locations',
 	endLocationId: 'locations',
-	battleMapId: 'battleMaps'
+	battleMapId: 'battleMaps',
+	statId: 'statDefinitions'
 }
 
 const RENDER_FIELDS = ['id', 'name'];

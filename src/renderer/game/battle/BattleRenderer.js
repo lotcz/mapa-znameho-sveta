@@ -292,7 +292,7 @@ export default class BattleRenderer extends DomRenderer {
 		this.camera.right = horizontal;
 		this.camera.bottom = - vertical;
 		this.camera.top = vertical;
-		this.camera.updateProjectionMatrix();
+		this.updateCameraZoom();
 		this.composer.render();
 	}
 

@@ -1,16 +1,17 @@
 import DirtyValue from "../../../basic/DirtyValue";
 import IdentifiedModelNode from "../../../basic/IdentifiedModelNode";
-
-// abilities
-export const STRENGTH_STAT = 1;
-
-// skills
-export const MELEE_WEAPONS_STAT = 11;
+import IntValue from "../../../basic/IntValue";
 
 // stats
-export const HEALTH_STAT = 101;
-export const PHYSICAL_STAT = 102;
-export const MENTAL_STAT = 103;
+export const STAT_HEALTH = 1;
+export const STAT_PHYSICAL = 2;
+export const STAT_MENTAL = 3;
+
+// abilities
+export const STAT_STRENGTH = 11;
+
+// skills
+export const STAT_MELEE_WEAPONS = 101;
 
 // other
 export const STAT_ITEM_CONDITION = 1001;
@@ -27,11 +28,17 @@ export default class StatDefinitionModel extends IdentifiedModelNode {
 	 */
 	description;
 
-	constructor(name = '') {
-		super();
+	/**
+	 * @type IntValue
+	 */
+	max;
 
-		this.name = this.addProperty('name', new DirtyValue(name));
+	constructor(id) {
+		super(id);
+
+		this.name = this.addProperty('name', new DirtyValue(`Stat ${id}`));
 		this.description = this.addProperty('description', new DirtyValue('description'));
+		this.max = this.addProperty('max', new IntValue(10));
 	}
 
 }
