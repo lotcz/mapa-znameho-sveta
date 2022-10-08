@@ -2,6 +2,8 @@ import DomRenderer from "../basic/DomRenderer";
 import Pixies from "../../class/basic/Pixies";
 import NodeTableRenderer from "./NodeTableRenderer";
 import TableLookupRenderer from "./TableLookupRenderer";
+import PartySlotModel from "../../model/game/party/PartySlotModel";
+import CharacterStatsModel from "../../model/game/party/characters/CharacterStatsModel";
 
 export default class NodeFormRenderer extends DomRenderer {
 
@@ -119,6 +121,26 @@ export default class NodeFormRenderer extends DomRenderer {
 			start.addEventListener('click', (e) => {
 				e.preventDefault();
 				this.model.addWaypoint();
+			});
+		}
+
+		if (this.model.constructor.name === 'CharacterModel') {
+			const join = Pixies.createElement(buttonsLeft, 'button', 'special');
+			join.innerText = 'Join party!';
+			join.addEventListener('click', (e) => {
+				e.preventDefault();
+				const chr = this.model.clone();
+				const save = this.game.saveGame.get();
+				save.characters.add(chr);
+				const slot = save.party.slots.add(new PartySlotModel());
+				slot.characterId.set(chr.id.get());
+			});
+			const reset = Pixies.createElement(buttonsLeft, 'button', 'red');
+			reset.innerText = 'Reset stats';
+			reset.addEventListener('click', (e) => {
+				e.preventDefault();
+				const fresh = new CharacterStatsModel();
+				this.model.stats.restoreState(fresh.getState());
 			});
 		}
 

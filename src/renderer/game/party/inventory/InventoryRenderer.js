@@ -6,7 +6,7 @@ import TableLookupRenderer from "../../../editor/TableLookupRenderer";
 import InventoryItemsRenderer from "./InventoryItemsRenderer";
 import ConditionalNodeRenderer from "../../../basic/ConditionalNodeRenderer";
 import {INVENTORY_MODE_ITEMS, INVENTORY_MODE_STATS} from "../../../../model/game/party/PartyModel";
-import InventoryStatsRenderer from "./InventoryStatsRenderer";
+import InventoryStatsRenderer from "../stats/InventoryStatsRenderer";
 
 export default class InventoryRenderer extends DomRenderer {
 

@@ -24,7 +24,7 @@ export default class StatModel extends ModelNode {
 
 		this.definitionId = this.addProperty('definitionId', new IntValue(definitionId));
 		this.baseValue = this.addProperty('baseValue', new IntValue(1));
-		this.current = this.addProperty('current', new IntValue(0.5));
+		this.current = this.addProperty('current', new IntValue(1));
 	}
 
 	set(n) {
