@@ -1,5 +1,5 @@
-import DomRenderer from "../../basic/DomRenderer";
-import Pixies from "../../../class/basic/Pixies";
+import DomRenderer from "../../../basic/DomRenderer";
+import Pixies from "../../../../class/basic/Pixies";
 
 export default class InventorySlotRenderer extends DomRenderer {
 

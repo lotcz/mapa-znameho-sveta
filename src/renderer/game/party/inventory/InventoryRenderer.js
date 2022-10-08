@@ -1,9 +1,9 @@
-import DomRenderer from "../../basic/DomRenderer";
-import Pixies from "../../../class/basic/Pixies";
-import ImageRenderer from "../../basic/ImageRenderer";
+import DomRenderer from "../../../basic/DomRenderer";
+import Pixies from "../../../../class/basic/Pixies";
+import ImageRenderer from "../../../basic/ImageRenderer";
 import InventorySlotRenderer from "./InventorySlotRenderer";
-import ItemModel from "../../../model/game/items/ItemModel";
-import TableLookupRenderer from "../../editor/TableLookupRenderer";
+import ItemModel from "../../../../model/game/items/ItemModel";
+import TableLookupRenderer from "../../../editor/TableLookupRenderer";
 
 export default class InventoryRenderer extends DomRenderer {
 

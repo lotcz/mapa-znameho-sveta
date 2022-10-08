@@ -5,7 +5,7 @@ import BattleRenderer from "./battle/BattleRenderer";
 import ConversationRenderer from "./conversation/ConversationRenderer";
 import NullableNodeRenderer from "../basic/NullableNodeRenderer";
 import PartyRenderer from "./party/PartyRenderer";
-import SelectedSlotRenderer from "./party/SelectedSlotRenderer";
+import SelectedSlotRenderer from "./party/inventory/SelectedSlotRenderer";
 import Pixies from "../../class/basic/Pixies";
 import Vector2 from "../../model/basic/Vector2";
 

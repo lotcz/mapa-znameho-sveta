@@ -104,7 +104,8 @@ export default class BattleRenderer extends DomRenderer {
 				this.updateCanvasSize();
 				this.updateRendererSize();
 				this.updateSvgSize();
-			}
+			},
+			true
 		);
 
 		this.addAutoEvent(
@@ -226,16 +227,17 @@ export default class BattleRenderer extends DomRenderer {
 	}
 
 	renderInternal() {
-		if (this.model.coordinates.isDirty || this.model.zoom.isDirty) {
-			this.renderBgImage();
-			this.updateSvgViewBox();
+		if (this.model.zoom.isDirty) {
+			this.updateCameraZoom();
 		}
 		if (this.model.coordinates.isDirty) {
 			this.updateCameraPosition();
 		}
-		if (this.model.zoom.isDirty) {
-			this.updateCameraZoom();
+		if (this.model.coordinates.isDirty || this.model.zoom.isDirty) {
+			this.renderBgImage();
+			this.updateSvgViewBox();
 		}
+
 		if (this.model.isHoveringNoGo.isDirty) {
 			if (this.model.isHoveringNoGo.get()) {
 				Pixies.addClass(this.container, 'no-go');
@@ -320,4 +322,5 @@ export default class BattleRenderer extends DomRenderer {
 			this.game.mainLayerSize.y / this.model.zoom.get(),
 		);
 	}
+
 }

@@ -1,7 +1,7 @@
-import DomRenderer from "../../basic/DomRenderer";
-import NullableNodeRenderer from "../../basic/NullableNodeRenderer";
+import DomRenderer from "../../../basic/DomRenderer";
+import NullableNodeRenderer from "../../../basic/NullableNodeRenderer";
 import PartyCharacterRenderer from "./PartyCharacterRenderer";
-import Pixies from "../../../class/basic/Pixies";
+import Pixies from "../../../../class/basic/Pixies";
 
 export default class PartySlotRenderer extends DomRenderer {
 

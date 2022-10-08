@@ -1,10 +1,10 @@
-import Pixies from "../../../class/basic/Pixies";
+import Pixies from "../../../../class/basic/Pixies";
 import * as THREE from "three";
 import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer";
 import {RenderPass} from "three/examples/jsm/postprocessing/RenderPass";
 import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 import {FXAAShader} from "three/examples/jsm/shaders/FXAAShader";
-import Vector2 from "../../../model/basic/Vector2";
+import Vector2 from "../../../../model/basic/Vector2";
 
 export const IMAGE_SIZE = new Vector2(80, 80);
 

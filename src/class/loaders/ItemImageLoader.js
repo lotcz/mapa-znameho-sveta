@@ -1,6 +1,6 @@
 import AssetLoader from "./AssetLoader";
 import Pixies from "../basic/Pixies";
-import ItemInventoryImageHelper from "../../renderer/game/party/InventoryImageHelper";
+import ItemInventoryImageHelper from "../../renderer/game/party/inventory/InventoryImageHelper";
 
 /**
  * Loads a single Image for inventory item

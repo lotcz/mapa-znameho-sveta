@@ -1,9 +1,9 @@
 import DomRenderer from "../../basic/DomRenderer";
 import CollectionRenderer from "../../basic/CollectionRenderer";
 import Pixies from "../../../class/basic/Pixies";
-import PartySlotRenderer from "./PartySlotRenderer";
+import PartySlotRenderer from "./portraits/PartySlotRenderer";
 import NullableNodeRenderer from "../../basic/NullableNodeRenderer";
-import InventoryRenderer from "./InventoryRenderer";
+import InventoryRenderer from "./inventory/InventoryRenderer";
 import ConditionalNodeRenderer from "../../basic/ConditionalNodeRenderer";
 
 export default class PartyRenderer extends DomRenderer {

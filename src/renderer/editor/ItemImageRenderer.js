@@ -1,7 +1,7 @@
 import Pixies from "../../class/basic/Pixies";
 import GUIHelper from "../../class/basic/GUIHelper";
 import DomRenderer from "../basic/DomRenderer";
-import ItemInventoryImageHelper from "../game/party/InventoryImageHelper";
+import ItemInventoryImageHelper from "../game/party/inventory/InventoryImageHelper";
 
 export default class ItemImageRenderer extends DomRenderer {
 

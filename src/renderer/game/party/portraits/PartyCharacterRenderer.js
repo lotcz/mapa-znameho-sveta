@@ -1,6 +1,6 @@
-import DomRenderer from "../../basic/DomRenderer";
-import Pixies from "../../../class/basic/Pixies";
-import StatFloatRenderer from "./StatFloatRenderer";
+import DomRenderer from "../../../basic/DomRenderer";
+import Pixies from "../../../../class/basic/Pixies";
+import StatFloatRenderer from "../stats/StatFloatRenderer";
 
 export default class PartyCharacterRenderer extends DomRenderer {
 
