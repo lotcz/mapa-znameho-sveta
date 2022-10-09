@@ -1,8 +1,8 @@
 import DomRenderer from "../../../basic/DomRenderer";
 import Pixies from "../../../../class/basic/Pixies";
-import StatFloatRenderer from "../stats/StatFloatRenderer";
+import PortraitStatRenderer from "./PortraitStatRenderer";
 
-export default class PartyCharacterRenderer extends DomRenderer {
+export default class CharacterPortraitRenderer extends DomRenderer {
 
 	/**
 	 * @type CharacterModel
@@ -26,8 +26,8 @@ export default class PartyCharacterRenderer extends DomRenderer {
 		this.renderPortrait();
 
 		this.stats = Pixies.createElement(this.container, 'div', 'stats');
-		this.addChild(new StatFloatRenderer(this.game, this.model.stats.health, this.stats));
-		this.addChild(new StatFloatRenderer(this.game, this.model.stats.physical, this.stats));
+		this.addChild(new PortraitStatRenderer(this.game, this.model.stats.health, this.stats));
+		this.addChild(new PortraitStatRenderer(this.game, this.model.stats.stamina, this.stats));
 
 	}
 

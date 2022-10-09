@@ -1,6 +1,6 @@
 import DomRenderer from "../../../basic/DomRenderer";
 import NullableNodeRenderer from "../../../basic/NullableNodeRenderer";
-import PartyCharacterRenderer from "./PartyCharacterRenderer";
+import CharacterPortraitRenderer from "./CharacterPortraitRenderer";
 import Pixies from "../../../../class/basic/Pixies";
 
 export default class PartySlotRenderer extends DomRenderer {
@@ -16,7 +16,7 @@ export default class PartySlotRenderer extends DomRenderer {
 		this.model = model;
 		this.container = null;
 
-		this.characterRenderer = new NullableNodeRenderer(this.game, this.model.character, (m) => new PartyCharacterRenderer(this.game, m, this.container));
+		this.characterRenderer = new NullableNodeRenderer(this.game, this.model.character, (m) => new CharacterPortraitRenderer(this.game, m, this.container));
 		this.addChild(this.characterRenderer);
 
 		this.addAutoEvent(

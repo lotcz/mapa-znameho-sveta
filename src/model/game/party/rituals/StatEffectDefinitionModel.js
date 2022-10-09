@@ -1,7 +1,8 @@
 import IntValue from "../../../basic/IntValue";
 import ModelNode from "../../../basic/ModelNode";
+import FloatValue from "../../../basic/FloatValue";
 
-export default class EffectDefinitionModel extends ModelNode {
+export default class StatEffectDefinitionModel extends ModelNode {
 
 	/**
 	 * @type IntValue
@@ -9,7 +10,7 @@ export default class EffectDefinitionModel extends ModelNode {
 	statId;
 
 	/**
-	 * @type IntValue
+	 * @type FloatValue
 	 */
 	amount;
 
@@ -17,7 +18,7 @@ export default class EffectDefinitionModel extends ModelNode {
 		super();
 
 		this.statId = this.addProperty('statId', new IntValue());
-		this.amount = this.addProperty('amount', new IntValue(1));
+		this.amount = this.addProperty('amount', new FloatValue(1));
 	}
 
 }

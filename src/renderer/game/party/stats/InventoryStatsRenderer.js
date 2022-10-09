@@ -1,6 +1,6 @@
 import DomRenderer from "../../../basic/DomRenderer";
 import InventorySkillRenderer from "./InventorySkillRenderer";
-import InventoryStatFloatRenderer from "./InventoryStatFloatRenderer";
+import CollectionRenderer from "../../../basic/CollectionRenderer";
 
 export default class InventoryStatsRenderer extends DomRenderer {
 
@@ -15,24 +15,29 @@ export default class InventoryStatsRenderer extends DomRenderer {
 		this.model = model;
 		this.party = party;
 
+		this.addChild(
+			new CollectionRenderer(
+				this.game,
+				this.model.stats.abilities,
+				(m) => new InventorySkillRenderer(this.game, m, this.container)
+			)
+		);
+
+		this.addChild(
+			new CollectionRenderer(
+				this.game,
+				this.model.stats.skills,
+				(m) => new InventorySkillRenderer(this.game, m, this.container)
+			)
+		);
 	}
 
 	activateInternal() {
-		this.container = this.addElement( 'div', 'column');
-
-		this.addChild(new InventoryStatFloatRenderer(this.game, this.model.stats.health, this.container));
-		this.addChild(new InventoryStatFloatRenderer(this.game, this.model.stats.mental, this.container));
-		this.addChild(new InventoryStatFloatRenderer(this.game, this.model.stats.physical, this.container));
-
-		this.addChild(new InventorySkillRenderer(this.game, this.model.stats.strength, this.container));
-		this.addChild(new InventorySkillRenderer(this.game, this.model.stats.meleeWeapons, this.container));
-
-
+		this.container = this.addElement( 'div', 'inventory-stats column');
 		this.party.triggerEvent('inventory-resize');
 	}
 
 	deactivateInternal() {
-		this.resetChildren();
 		this.removeElement(this.container);
 		this.container = null;
 		this.party.triggerEvent('inventory-resize');

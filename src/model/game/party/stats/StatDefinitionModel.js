@@ -4,14 +4,31 @@ import IntValue from "../../../basic/IntValue";
 
 // stats
 export const STAT_HEALTH = 1;
-export const STAT_PHYSICAL = 2;
-export const STAT_MENTAL = 3;
+export const STAT_STAMINA = 2;
+export const STAT_HUNGER = 3;
+export const STAT_THIRST = 4;
+
+export const STAT_OFFENSIVE_CHANCE = 5;
+export const STAT_OFFENSIVE_POWER = 6;
+export const STAT_DEFENSIVE_CHANCE = 7;
+export const STAT_DEFENSIVE_POWER = 8;
+
+export const STAT_ACTION_POINTS = 9;
 
 // abilities
 export const STAT_STRENGTH = 11;
+export const STAT_AGILITY = 12;
+export const STAT_TOUGHNESS = 13;
+export const STAT_SMARTNESS = 14;
+export const STAT_WISDOM = 15;
+export const STAT_WILLPOWER = 16;
 
 // skills
 export const STAT_MELEE_WEAPONS = 101;
+export const STAT_THROWN_WEAPONS = 102;
+export const STAT_MISSILE_WEAPONS = 103;
+export const STAT_EVASION = 104;
+export const STAT_HUNTING = 105;
 
 // other
 export const STAT_ITEM_CONDITION = 1001;

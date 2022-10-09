@@ -112,7 +112,7 @@ export default class SaveGameController extends ControllerNode {
 					this.model.selectedInventorySlot.set(null);
 					return;
 				}
-				this.model.party.isInventoryVisible.set(false);
+				//this.model.party.isInventoryVisible.set(false);
 			}
 		)
 	}
@@ -132,18 +132,17 @@ export default class SaveGameController extends ControllerNode {
 
 	updateInternal(delta) {
 		// rest
-		const save = this.game.saveGame.get();
-		let resting = save.partyResting.get();
+		let resting = this.model.partyResting.get();
 		if (resting > 0) {
 			let diff = (delta / 1000) * REST_SPEED;
 			if (diff > resting) {
 				diff = resting;
 			}
 			resting -= diff;
-			save.partyResting.set(resting);
-			save.passTime(diff);
+			this.model.passTime(diff);
+			this.model.partyResting.set(resting);
 		} else {
-			save.partyResting.set(0);
+			this.model.partyResting.set(0);
 		}
 	}
 

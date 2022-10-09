@@ -77,6 +77,11 @@ export default class CharacterModel extends TemplateNode {
 	 */
 	additionalItemsSlots;
 
+	/**
+	 * @type ModelNodeCollection<StatEffectDefinitionModel>
+	 */
+	statEffects;
+
 	constructor(id = 0) {
 		super(id);
 
@@ -99,6 +104,8 @@ export default class CharacterModel extends TemplateNode {
 		this.additionalItemsSlots = this.addProperty('additionalItemsSlots', new ModelNodeCollection(null, false));
 		this.additionalItems.addOnAddListener((ai) => this.createAdditionalSlot(ai));
 		this.additionalItems.addOnRemoveListener((ai) => this.removeAdditionalSlot(ai));
+
+		this.statEffects = this.addProperty('statEffects', new ModelNodeCollection(null, false));
 	}
 
 	createAdditionalSlot(ai) {
@@ -125,4 +132,5 @@ export default class CharacterModel extends TemplateNode {
 		ch.originalId.set(this.id.get());
 		return ch;
 	}
+
 }

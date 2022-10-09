@@ -1,6 +1,6 @@
 import DirtyValue from "../../../basic/DirtyValue";
 import IdentifiedModelNode from "../../../basic/IdentifiedModelNode";
-import EffectDefinitionModel from "./EffectDefinitionModel";
+import StatEffectDefinitionModel from "./StatEffectDefinitionModel";
 import ModelNodeCollection from "../../../basic/ModelNodeCollection";
 
 export default class PermanentDefinitionModel extends IdentifiedModelNode {
@@ -11,15 +11,15 @@ export default class PermanentDefinitionModel extends IdentifiedModelNode {
 	name;
 
 	/**
-	 * @type ModelNodeCollection<EffectDefinitionModel>
+	 * @type ModelNodeCollection<StatEffectDefinitionModel>
 	 */
-	skillEffects;
+	statEffects;
 
 	constructor(id) {
 		super(id);
 
 		this.name = this.addProperty('name', new DirtyValue(`Permanent ${id}`));
-		this.skillEffects = this.addProperty('skillEffects', new ModelNodeCollection(() => new EffectDefinitionModel()));
+		this.statEffects = this.addProperty('statEffects', new ModelNodeCollection(() => new StatEffectDefinitionModel()));
 	}
 
 }

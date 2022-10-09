@@ -1,10 +1,10 @@
 import DomRenderer from "../../../basic/DomRenderer";
 import Pixies from "../../../../class/basic/Pixies";
 
-export default class StatFloatRenderer extends DomRenderer {
+export default class PortraitStatRenderer extends DomRenderer {
 
 	/**
-	 * @type StatFloatModel
+	 * @type StatModel
 	 */
 	model;
 
@@ -31,7 +31,7 @@ export default class StatFloatRenderer extends DomRenderer {
 	}
 
 	updateBar() {
-		const ratio = this.model.getCurrentPortion();
-		this.bar.style.height = `${Pixies.round(ratio * 100, 2)}%`;
+		const ratio = this.model.currentFloat.get() / this.model.baseValue.get();
+		this.bar.style.height = `${Pixies.round(ratio * 100, 4)}%`;
 	}
 }

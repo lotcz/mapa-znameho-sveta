@@ -1,4 +1,6 @@
 import ControllerNode from "../../basic/ControllerNode";
+import NullableNodeController from "../../basic/NullableNodeController";
+import CharacterController from "./CharacterController";
 
 export default class PartySlotController extends ControllerNode {
 
@@ -11,6 +13,14 @@ export default class PartySlotController extends ControllerNode {
 		super(game, model);
 
 		this.model = model;
+
+		this.addChild(
+			new NullableNodeController(
+				this.game,
+				this.model.character,
+				(m) => new CharacterController(this.game, m)
+			)
+		);
 
 		this.addAutoEvent(this.model.characterId, 'change', () => this.updateCharacter(), true);
 	}

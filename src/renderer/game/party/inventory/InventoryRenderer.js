@@ -7,6 +7,9 @@ import InventoryItemsRenderer from "./InventoryItemsRenderer";
 import ConditionalNodeRenderer from "../../../basic/ConditionalNodeRenderer";
 import {INVENTORY_MODE_ITEMS, INVENTORY_MODE_STATS} from "../../../../model/game/party/PartyModel";
 import InventoryStatsRenderer from "../stats/InventoryStatsRenderer";
+import CollectionRenderer from "../../../basic/CollectionRenderer";
+import InventoryStatFloatRenderer from "../stats/InventoryStatFloatRenderer";
+import InventoryCombatStatRenderer from "../stats/InventoryCombatStatRenderer";
 
 export default class InventoryRenderer extends DomRenderer {
 
@@ -35,18 +38,21 @@ export default class InventoryRenderer extends DomRenderer {
 		});
 		this.inner = Pixies.createElement(this.container, 'div', 'column');
 
-		this.statsWrapper = Pixies.createElement(this.inner, 'div', 'inventory-stats row');
-		this.portrait = Pixies.createElement(this.statsWrapper, 'div', 'portrait');
+		this.top = Pixies.createElement(this.inner, 'div', 'inventory-top row');
+		this.col1 = Pixies.createElement(this.top, 'div', 'column');
+		this.name = Pixies.createElement(this.col1, 'div', 'name');
+		this.updateName();
+		this.portrait = Pixies.createElement(this.col1, 'div', 'portrait');
 		this.addChild(
 			new ImageRenderer(this.game, this.model.portrait, this.portrait)
 		);
 
-		this.stats = Pixies.createElement(this.statsWrapper, 'div', 'column');
+		this.col2 = Pixies.createElement(this.top, 'div', 'inventory-basic column flex-1');
+		this.basic = Pixies.createElement(this.col2, 'div','row');
+		this.consumption = Pixies.createElement(this.col2, 'div', 'row');
+		this.combat = Pixies.createElement(this.col2, 'div', 'row');
 
-		this.name = Pixies.createElement(this.stats, 'div', 'name');
-		this.updateName();
-
-		this.buttons = Pixies.createElement(this.stats, 'div', 'row');
+		this.buttons = Pixies.createElement(this.col2, 'div', 'row');
 
 		Pixies.createElement(this.buttons, 'button', 'special', 'Add item', () => {
 			const slot = this.model.inventory.slot1;
@@ -83,6 +89,30 @@ export default class InventoryRenderer extends DomRenderer {
 			() => {
 				this.party.inventoryMode.set(INVENTORY_MODE_STATS);
 			}
+		);
+
+		this.addChild(
+			new CollectionRenderer(
+				this.game,
+				this.model.stats.basic,
+				(m) => new InventoryStatFloatRenderer(this.game, m, this.basic)
+			)
+		);
+
+		this.addChild(
+			new CollectionRenderer(
+				this.game,
+				this.model.stats.consumption,
+				(m) => new InventoryStatFloatRenderer(this.game, m, this.consumption)
+			)
+		);
+
+		this.addChild(
+			new CollectionRenderer(
+				this.game,
+				this.model.stats.combat,
+				(m) => new InventoryCombatStatRenderer(this.game, m, this.combat)
+			)
 		);
 
 		this.bottom = Pixies.createElement(this.inner, 'div', 'column');

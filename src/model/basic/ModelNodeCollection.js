@@ -22,6 +22,8 @@ export default class ModelNodeCollection extends ModelNode {
 
 		this.nodeFactory = nodeFactory;
 		this.children = new Collection();
+		const events = ['add', 'remove', 'change'];
+		events.forEach((evnt) => this.children.addEventListener(evnt, (param) => this.triggerEvent(evnt, param)));
 		this.children.addOnAddListener((child) => this.onChildAdded(child));
 		this.children.addOnRemoveListener((child) => this.onChildRemoved(child));
 		this.childDirtyHandler = (ch) => this.onChildDirty(ch);

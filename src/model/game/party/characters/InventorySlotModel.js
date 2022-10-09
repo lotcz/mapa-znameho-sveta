@@ -25,7 +25,7 @@ export default class InventorySlotModel extends ModelNode {
 
 		this.name = name;
 		this.item = this.addProperty('item', new NullableNode(() => new ItemModel()));
-
+		this.item.addOnChangeListener((param) => this.triggerEvent('item-changed', param));
 		this.accepts = (type) => {
 			if (accepts.includes('all')) return true;
 			return accepts.includes(type);

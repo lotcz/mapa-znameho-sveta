@@ -196,8 +196,9 @@ export default class SaveGameModel extends ModelNode {
 			if (!character) {
 				character = this.characters.getById(slot.characterId.get());
 			}
-			if (this.partyResting.get()) {
+			if (this.partyResting.get() > 0) {
 				character.stats.physical.restore(duration);
+				character.stats.health.restore(duration);
 			} else {
 				character.stats.physical.consume(duration);
 			}

@@ -6,6 +6,7 @@ import Vector3 from "../../basic/Vector3";
 import ModelNodeCollection from "../../basic/ModelNodeCollection";
 import BoolValue from "../../basic/BoolValue";
 import AdditionalItemModel from "./AdditionalItemModel";
+import StatEffectDefinitionModel from "../party/rituals/StatEffectDefinitionModel";
 
 export default class ItemDefinitionModel extends IdentifiedModelNode {
 
@@ -89,6 +90,11 @@ export default class ItemDefinitionModel extends IdentifiedModelNode {
 	 */
 	additionalItems;
 
+	/**
+	 * @type ModelNodeCollection<StatEffectDefinitionModel>
+	 */
+	statEffects;
+
 	constructor(id) {
 		super(id);
 
@@ -112,6 +118,9 @@ export default class ItemDefinitionModel extends IdentifiedModelNode {
 		this.additionalSlotName = this.addProperty('additionalSlotName', new DirtyValue(''));
 		this.hideWhenAddingItems = this.addProperty('hideWhenAddingItems', new BoolValue());
 		this.additionalItems = this.addProperty('additionalItems', new ModelNodeCollection(() => new AdditionalItemModel()));
+
+		this.statEffects = this.addProperty('statEffects', new ModelNodeCollection(() => new StatEffectDefinitionModel()));
+
 	}
 
 }

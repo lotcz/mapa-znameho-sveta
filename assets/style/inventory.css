@@ -1,5 +1,5 @@
 .inventory {
-
+	width: 750px;
 }
 
 .inventory .inner {
@@ -17,7 +17,6 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	width: 220px;
 }
 
 .inventory .inventory-slots > div {
@@ -50,8 +49,8 @@
 .inventory .inventory-character {
 	position: relative;
 	display: block;
-	height: 600px;
-	width: 350px;
+	height: 500px;
+	width: 300px;
 	margin: 20px;
 	background-image: url('../img/ui/inventory-female.png');
 	background-size: contain;
@@ -90,4 +89,25 @@
 .selected-item-slot {
 	position: absolute;
 	pointer-events: none;
+}
+
+.inventory .stat-brick {
+	width: 45px;
+	height: 15px;
+	margin: 3px;
+	background-color: rgba(100, 100, 100, 0.5);
+	border-radius: 3px;
+}
+
+.inventory .stat-brick.normal {
+	background-color: var(--dark-brown);
+	opacity: 0.75;
+}
+
+.inventory .stat-brick.extra {
+	background-color: rgba(100, 200, 100, 0.75);
+}
+
+.inventory .stat-brick.loss {
+	background-color: rgba(200, 100, 100, 0.75);
 }

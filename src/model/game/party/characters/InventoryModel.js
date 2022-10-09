@@ -49,6 +49,11 @@ export default class InventoryModel extends ModelNode {
 		this.slot1 = this.addProperty('slot1', new InventorySlotModel(['all']));
 		this.slot2 = this.addProperty('slot2', new InventorySlotModel(['all']));
 		this.slot3 = this.addProperty('slot3', new InventorySlotModel(['all']));
+
+		const all = [this.head, this.leftHand, this.rightHand, this.clothing];
+		all.forEach((slot) => {
+			slot.addEventListener('item-changed', () => this.triggerEvent('item-changed'));
+		});
 	}
 
 }

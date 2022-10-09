@@ -14,12 +14,14 @@ export default class Collection extends Node {
 	add(element) {
 		this.items.push(element);
 		this.triggerEvent('add', element);
+		this.triggerEvent('change');
 		return element;
 	}
 
 	prepend(element) {
 		this.items.unshift(element);
 		this.triggerEvent('add', element);
+		this.triggerEvent('change');
 		return element;
 	}
 
@@ -41,6 +43,7 @@ export default class Collection extends Node {
 		}
 		if (element) {
 			this.triggerEvent('remove', element);
+			this.triggerEvent('change');
 			return element;
 		}
 		return false;

@@ -32,6 +32,35 @@
 	flex: 1;
 }
 
+.center {
+	text-align: center;
+	align-items: center;
+	align-content: center;
+	justify-items: center;
+	justify-content: center;
+	vertical-align: middle;
+}
+
+.center > * {
+	margin: auto;
+}
+
+.m-1 {
+	margin: 10px;
+}
+
+.m-2 {
+	margin: 20px;
+}
+
+.p-1 {
+	padding: 10px;
+}
+
+.p-2 {
+	padding: 20px;
+}
+
 .savegame-layer > * {
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -118,13 +147,21 @@ html, body {
 	background-image: url('../img/texture/paper.jpg');
 	background-color: sandybrown;
 	border-radius: 10px;
-	box-shadow: #311a0a 0 0 60px;
 	display: flex;
+}
+
+.paper,
+.outer-shadow {
+	box-shadow: #311a0a 0 0 60px;
 }
 
 .paper .inner  {
 	border-radius: 10px;
 	padding: 2rem;
-	box-shadow: #311a0a 0 0 40px inset;
 	flex: 1;
+}
+
+.paper .inner,
+.inner-shadow {
+	box-shadow: #311a0a 0 0 40px inset;
 }
