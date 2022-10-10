@@ -21,7 +21,7 @@ export default class GameRenderer extends DomRenderer {
 
 		this.model = model;
 		this.loading = null;
-		this.addClass('game container-host');
+		this.addClass('container-host');
 		this.editorRenderer = null;
 
 		this.saveGameRenderer = new NullableNodeRenderer(this.game, this.model.saveGame, (model) => new SaveGameRenderer(this.game, model, this.saveGameLayer));

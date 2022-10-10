@@ -62,10 +62,10 @@ export default class GameController extends ControllerNode {
 
 		this.addAutoEvent(
 			this.model,
-			'save-game',
+			'save-ui',
 			() => {
 				this.saveGameToStorage().then(() => {
-					console.log('game saved');
+					console.log('ui saved');
 				});
 			}
 		);
@@ -77,7 +77,7 @@ export default class GameController extends ControllerNode {
 			this.model.resources.addOnDirtyListener(() => this.isResourcesDirty = true);
 			console.log('resources loaded');
 			this.loadGameFromStorage().then(() => {
-				console.log('game loaded');
+				console.log('ui loaded');
 			});
 		});
 	}
@@ -136,10 +136,10 @@ export default class GameController extends ControllerNode {
 			if (state) {
 				this.model.saveGame.restoreState(state);
 			} else {
-				console.log('no saved game in storage');
+				console.log('no saved ui in storage');
 			}
 		} catch (err) {
-			console.error('Error when loading game.', err);
+			console.error('Error when loading ui.', err);
 		}
 	}
 

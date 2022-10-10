@@ -57,7 +57,7 @@ export default class CurrentPathController extends ControllerNode {
 	}
 
 	activateInternal() {
-		//this.game.editor.activeForm.set(this.model);
+		//this.ui.editor.activeForm.set(this.model);
 		this.game.saveGame.get().currentLocationId.set(0);
 	}
 

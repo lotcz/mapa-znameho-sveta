@@ -1,0 +1,81 @@
+@dark-brown: #311a0a;
+@light-brown: #ad9475;
+@orange: sandybrown;
+
+@font-face {
+  font-family: 'Vollkorn';
+  src: url('Vollkorn-SemiBold.ttf') format('truetype');
+}
+
+.savegame-layer {
+  font-family: 'Vollkorn', 'Georgia', serif;
+  color: @dark-brown;
+  font-size: 12pt;
+  cursor: url('img/cursor.png'), auto;
+
+  & > * {
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+	-webkit-touch-callout: none;
+	-ms-user-select: none;
+  }
+
+  button {
+	cursor: url('img/cursor.png'), auto;
+  }
+
+  &.no-go {
+	cursor: url('img/cursor-red.png'), not-allowed;
+  }
+}
+
+.loading {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  pointer-events: none;
+
+  .div {
+	width: 250px;
+	height: 150px;
+	text-align: center;
+	line-height: 150px;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-image: url('img/paper.png');
+  }
+}
+
+.overlay {
+  background-color: rgba(150, 150, 150, 0.5);
+}
+
+.portrait img {
+  width: 100%;
+  border-radius: 3px;
+}
+
+.paper {
+  color: @dark-brown;
+  background-color: @light-brown;
+  background-image: url('img/texture/paper.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  .inner {
+	box-shadow: @dark-brown 0 0 40px inset;
+  }
+}
+
+.board {
+  display: flex;
+  border-radius: 10px;
+  box-shadow: #311a0a 0 0 60px;
+}

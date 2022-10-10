@@ -73,7 +73,7 @@ export default class EditorController extends ControllerNode {
 
 		this.addAutoEvent(
 			this.model,
-			'start-new-game',
+			'start-new-ui',
 			() => this.runOnUpdate(() => this.game.saveGame.set(new SaveGameModel()))
 		);
 

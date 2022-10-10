@@ -37,7 +37,7 @@ export default class EditorSaveGameRenderer extends DomRenderer {
 	}
 
 	activateInternal() {
-		this.container = Pixies.createElement(this.buttons, 'div', 'editor-save-game col');
+		this.container = Pixies.createElement(this.buttons, 'div', 'editor-save-ui col');
 		const buttons = Pixies.createElement(this.container, 'div', 'buttons row');
 		this.buttonsLeft = Pixies.createElement(buttons, 'div', 'row');
 		this.buttonsRight = Pixies.createElement(buttons, 'div',  'row');

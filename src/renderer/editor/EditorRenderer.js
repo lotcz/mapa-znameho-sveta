@@ -78,7 +78,7 @@ export default class EditorRenderer extends DomRenderer {
 			'button',
 			'red',
 			'New Game',
-			() => this.model.triggerEvent('start-new-game')
+			() => this.model.triggerEvent('start-new-ui')
 		);
 
 		this.buttonsRight = Pixies.createElement(this.nav, 'div');

@@ -19,6 +19,7 @@
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.3.2",
     "http-server": "^13.0.2",
+    "less": "^4.1.3",
     "style-loader": "^3.3.0",
     "url-loader": "^4.1.1",
     "webpack": "^5.56.0",
@@ -30,7 +31,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "debug": "webpack serve --open"
+    "debug": "webpack serve --open",
+	"less": "lessc src/style/style.less assets/style.css",
+	"less-watch": "less-watch-compiler src/style assets style.less"
   },
   "author": "",
   "license": "ISC"

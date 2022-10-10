@@ -69,7 +69,7 @@ export default class SaveGameRenderer extends DomRenderer {
 		this.topLayer = Pixies.createElement(this.container, 'div', 'top-layer ');
 
 		this.partyPanel = Pixies.createElement(bottomLayer, 'div', 'savegame-party row stretch');
-		this.mainLayer = Pixies.createElement(bottomLayer, 'div', 'main row stretch');
+		this.mainLayer = Pixies.createElement(bottomLayer, 'div', 'main row stretch flex-1');
 		this.mainLayer.addEventListener(
 			'mousemove',
 			(e) => {

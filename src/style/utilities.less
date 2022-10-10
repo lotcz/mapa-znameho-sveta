@@ -1,0 +1,203 @@
+@m-1: 5px;
+@m-2: 10px;
+@m-3: 20px;
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100%;
+  min-height: 100%;
+  background-color: #000;
+}
+
+h1, h2, h3, h4 {
+  margin: 0;
+  padding: 0;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.stretch {
+  align-items: stretch;
+  justify-content: stretch;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.space-between {
+  justify-content: space-between;
+  align-content: space-between;
+}
+
+.center {
+  text-align: center;
+  align-items: center;
+  align-content: center;
+  justify-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+.left {
+  text-align: left;
+}
+
+.small {
+  font-size: 75%;
+}
+
+.container-host {
+  position: relative;
+  flex: 1;
+}
+
+.container-host > .container {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.m-0, .mt-0, .my-0 {
+  margin-top: 0;
+}
+
+.m-0, .ml-0, .mx-0 {
+  margin-left: 0;
+}
+
+.m-0, .mb-0, .my-0 {
+  margin-bottom: 0;
+}
+
+.m-0, .mr-0, .mx-0 {
+  margin-right: 0;
+}
+
+.p-0, .pt-0, .py-0 {
+  padding-top: 0;
+}
+
+.p-0, .pl-0, .px-0 {
+  padding-left: 0;
+}
+
+.p-0, .pb-0, .py-0 {
+  padding-bottom: 0;
+}
+
+.p-0, .pr-0, .px-0 {
+  padding-right: 0;
+}
+
+.m-1, .mt-1, .my-1 {
+  margin-top: @m-1;
+}
+
+.m-1, .ml-1, .mx-1 {
+  margin-left: @m-1;
+}
+
+.m-1, .mb-1, .my-1 {
+  margin-bottom: @m-1;
+}
+
+.m-1, .mr-1, .mx-1 {
+  margin-right: @m-1;
+}
+
+.p-1, .pt-1, .py-1 {
+  padding-top: @m-1;
+}
+
+.p-1, .pl-1, .px-1 {
+  padding-left: @m-1;
+}
+
+.p-1, .pb-1, .py-1 {
+  padding-bottom: @m-1;
+}
+
+.p-1, .pr-1, .px-1 {
+  padding-right: @m-1;
+}
+
+.m-2, .mt-2, .my-2 {
+  margin-top: @m-2;
+}
+
+.m-2, .ml-2, .mx-2 {
+  margin-left: @m-2;
+}
+
+.m-2, .mb-2, .my-2 {
+  margin-bottom: @m-2;
+}
+
+.m-2, .mr-2, .mx-2 {
+  margin-right: @m-2;
+}
+
+.p-2, .pt-2, .py-2 {
+  padding-top: @m-2;
+}
+
+.p-2, .pl-2, .px-2 {
+  padding-left: @m-2;
+}
+
+.p-2, .pb-2, .py-2 {
+  padding-bottom: @m-2;
+}
+
+.p-2, .pr-2, .px-2 {
+  padding-right: @m-2;
+}
+
+.m-3, .mt-3, .my-3 {
+  margin-top: @m-3;
+}
+
+.m-3, .ml-3, .mx-3 {
+  margin-left: @m-3;
+}
+
+.m-3, .mb-3, .my-3 {
+  margin-bottom: @m-3;
+}
+
+.m-3, .mr-3, .mx-3 {
+  margin-right: @m-3;
+}
+
+.p-3, .pt-3, .py-3 {
+  padding-top: @m-3;
+}
+
+.p-3, .pl-3, .px-3 {
+  padding-left: @m-3;
+}
+
+.p-3, .pb-3, .py-3 {
+  padding-bottom: @m-3;
+}
+
+.p-3, .pr-3, .px-3 {
+  padding-right: @m-3;
+}
