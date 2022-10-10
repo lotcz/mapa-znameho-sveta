@@ -7,13 +7,14 @@ export const STAT_HEALTH = 1;
 export const STAT_STAMINA = 2;
 export const STAT_HUNGER = 3;
 export const STAT_THIRST = 4;
+export const STAT_TEMPERATURE = 5;
 
-export const STAT_OFFENSIVE_CHANCE = 5;
-export const STAT_OFFENSIVE_POWER = 6;
-export const STAT_DEFENSIVE_CHANCE = 7;
-export const STAT_DEFENSIVE_POWER = 8;
+export const STAT_OFFENSIVE_CHANCE = 6;
+export const STAT_OFFENSIVE_POWER = 7;
+export const STAT_DEFENSIVE_CHANCE = 8;
+export const STAT_DEFENSIVE_POWER = 9;
 
-export const STAT_ACTION_POINTS = 9;
+export const STAT_ACTION_POINTS = 10;
 
 // abilities
 export const STAT_STRENGTH = 11;

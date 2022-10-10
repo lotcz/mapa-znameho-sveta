@@ -3,6 +3,7 @@ import CollectionController from "../../basic/CollectionController";
 import SkillController from "./SkillController";
 import HealthStatController from "./HealthStatController";
 import StaminaStatController from "./StaminaStatController";
+import DefenseChanceStatController from "./DefenseChanceStatController";
 
 export default class CharacterController extends ControllerNode {
 
@@ -32,8 +33,17 @@ export default class CharacterController extends ControllerNode {
 			)
 		);
 
+		this.addChild(
+			new CollectionController(
+				this.game,
+				this.model.stats.combat,
+				(m) => new SkillController(this.game, m, this.model)
+			)
+		);
+
 		this.addChild(new HealthStatController(this.game, this.model.stats.health, this.model));
 		this.addChild(new StaminaStatController(this.game, this.model.stats.stamina, this.model));
+		this.addChild(new DefenseChanceStatController(this.game, this.model.stats.defensiveChance, this.model));
 
 		this.addAutoEvent(
 			this.model.inventory,

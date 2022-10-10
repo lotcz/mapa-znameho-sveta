@@ -50,7 +50,7 @@ export default class CharacterPortraitRenderer extends DomRenderer {
 			this.game.assets.getAsset(portraitUri, (img) => portrait.appendChild(img.cloneNode(true)));
 		}
 
-		this.text = Pixies.createElement(this.portraitWrapper, 'div', 'text');
+		this.text = Pixies.createElement(this.portraitWrapper, 'div', 'text center');
 		this.text.innerText = this.model.name.get();
 	}
 

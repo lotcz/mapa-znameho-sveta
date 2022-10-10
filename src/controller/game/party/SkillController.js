@@ -18,6 +18,12 @@ export default class SkillController extends ControllerNode {
 			'change',
 			() => this.updateCurrent()
 		);
+
+		this.addAutoEvent(
+			this.model.baseValue,
+			'change',
+			() => this.updateCurrent()
+		);
 	}
 
 	updateCurrent() {

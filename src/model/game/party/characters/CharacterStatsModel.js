@@ -16,6 +16,7 @@ import {
 	STAT_SMARTNESS,
 	STAT_STAMINA,
 	STAT_STRENGTH,
+	STAT_TEMPERATURE,
 	STAT_THIRST,
 	STAT_THROWN_WEAPONS,
 	STAT_TOUGHNESS,
@@ -183,13 +184,17 @@ export default class CharacterStatsModel extends ModelNode {
 		this.all.add(this.thirst);
 		this.consumption.add(this.thirst);
 
+		this.temperature = this.addProperty('temperature', new StatModel(STAT_TEMPERATURE));
+		this.all.add(this.temperature);
+		this.consumption.add(this.temperature);
+
 		// COMBAT
 		this.combat = this.addProperty('combat', new ModelNodeCollection(null, false));
 
 		this.actionPoints = this.addProperty('actionPoints', new StatModel(STAT_ACTION_POINTS));
 		this.all.add(this.actionPoints);
 		this.combat.add(this.actionPoints);
-		
+
 		this.offensiveChance = this.addProperty('offensiveChance', new StatModel(STAT_OFFENSIVE_CHANCE));
 		this.all.add(this.offensiveChance);
 		this.combat.add(this.offensiveChance);

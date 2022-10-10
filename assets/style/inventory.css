@@ -10,7 +10,10 @@
 
 .inventory .portrait {
 	width: 200px;
-	margin-left: 20px;
+}
+
+.inventory .inventory-top .name {
+	font-size: 150%;
 }
 
 .inventory .inventory-slots {
@@ -92,16 +95,16 @@
 }
 
 .inventory .stat-brick {
-	width: 45px;
+	width: 25px;
 	height: 15px;
 	margin: 3px;
-	background-color: rgba(100, 100, 100, 0.5);
-	border-radius: 3px;
+	box-shadow: #311a0a 0 0 6px inset;
+	border-radius: 5px;
 }
 
 .inventory .stat-brick.normal {
-	background-color: var(--dark-brown);
-	opacity: 0.75;
+	box-shadow: #311a0a 0 0 6px inset;
+	background-color: #311a0aa0;
 }
 
 .inventory .stat-brick.extra {

@@ -1,7 +1,6 @@
 .party {
 	display: flex;
 	color:var(--dark-brown);
-	text-align: center;
 }
 
 .party.paper,
@@ -52,6 +51,16 @@
 	display: flex;
 	box-shadow: #311a0a 0 0 4px;
 	padding: 3px;
+	height: 15px;
+}
+
+.party .inventory-basic .stats-basic .stat-bar {
+	box-shadow: #311a0a 4px 1px 9px -1px;
+	padding-left: 4px;
+}
+
+.party .inventory-basic .stats-consumption .stat-bar {
+	height: 10px;
 }
 
 .party .stat-bar .stat-1 {
@@ -67,5 +76,54 @@
 }
 
 .party .stat-bar .stat-4 {
-	background-color: lightblue;
+	background-color: var(--dark-brown);
+}
+
+.party .stat-bar .stat-5 {
+	background-color: var(--dark-brown);
+}
+
+.party .stat-badge {
+	font-size: 130%;
+	padding: 5px;
+	text-align: center;
+}
+
+.party .stat-badge .small {
+	align-self: flex-end;
+	opacity: 0.5;
+}
+
+.party .stats-basic .stat-badge {
+	align-self: center;
+	width: 40px;
+	height: 40px;
+	vertical-align: center;
+	padding: 0;
+	border-radius: 20px;
+	box-shadow: var(--dark-brown) 0 0 8px;
+	position: relative;
+	right: -7px;
+}
+
+.party .tabs > .tab-header {
+	border-width: 0;
+	box-shadow: #311a0a 0 0 15px inset;
+	background-color: transparent;
+	border-radius: 5px 5px 0 0;
+	padding: 5px 10px;
+	opacity: 0.75;
+}
+
+.party .tabs > .tab-header.active {
+	box-shadow: #311a0a 0 6px 6px -6px inset;
+	opacity: 1;
+}
+
+.party .tabs > .filler {
+	box-shadow: #311a0a 0 -4px 6px -6px inset;
+}
+
+.party .tab-content {
+	box-shadow: #311a0a 0 6px 12px -6px;
 }

@@ -29,7 +29,7 @@ export default class PartyRenderer extends DomRenderer {
 
 		this.inner = Pixies.createElement(this.container, 'div', 'inner row stretch');
 		this.portraits = Pixies.createElement(this.inner, 'div', 'portraits');
-		this.inventory = Pixies.createElement(this.inner, 'div', 'inventory-wrapper');
+		this.inventory = Pixies.createElement(this.inner, 'div', 'inventory-wrapper row stretch');
 
 		this.addChild(
 			new PortraitsRenderer(
