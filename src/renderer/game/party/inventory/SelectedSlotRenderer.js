@@ -24,6 +24,7 @@ export default class SelectedSlotRenderer extends DomRenderer {
 
 	activateInternal() {
 		this.container = this.addElement('div', 'selected-item-slot');
+		this.img = null;
 		this.renderItem();
 	}
 
@@ -44,7 +45,9 @@ export default class SelectedSlotRenderer extends DomRenderer {
 			const defId = item.definitionId.get();
 			const itemDef = this.game.resources.itemDefinitions.getById(defId);
 			this.game.assets.getAsset(`itm/${itemDef.id.get()}`, (img) => {
-				this.container.appendChild(img.cloneNode(true));
+				this.img = img.cloneNode(true);
+				this.img.setAttribute('draggable', false);
+				this.container.appendChild(this.img);
 			});
 		}
 		this.updatePosition();

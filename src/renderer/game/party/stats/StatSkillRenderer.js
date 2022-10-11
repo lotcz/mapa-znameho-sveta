@@ -17,10 +17,9 @@ export default class StatSkillRenderer extends DomRenderer {
 	}
 
 	activateInternal() {
-		this.container = this.addElement( 'div', 'stat row stretch');
-		this.left = Pixies.createElement(this.container, 'div', 'row');
-		this.name = Pixies.createElement(this.left, 'div', 'flex-1');
-		this.numeric = Pixies.createElement(this.left, 'div');
+		this.container = this.addElement( 'div', 'stat-skill row my-1');
+		this.name = Pixies.createElement(this.container, 'div', 'name');
+		this.numeric = Pixies.createElement(this.container, 'div');
 		this.addChild(
 			new StatNumberRenderer(
 				this.game,
@@ -29,7 +28,7 @@ export default class StatSkillRenderer extends DomRenderer {
 			)
 		);
 		this.right = Pixies.createElement(this.container, 'div', 'flex-1');
-		this.value = Pixies.createElement(this.right, 'div', 'row');
+		this.value = Pixies.createElement(this.right, 'div', 'row value');
 		this.statDef = this.game.resources.statDefinitions.getById(this.model.definitionId.get());
 		this.updateStat();
 	}

@@ -16,7 +16,7 @@ export default class StatNumberRenderer extends DomRenderer {
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', 'row center');
+		this.container = this.addElement('div', 'number row center');
 		this.wholePart = Pixies.createElement(this.container, 'div');
 		this.decimalPart = Pixies.createElement(this.container, 'div', 'small');
 		this.updateNumber();
