@@ -37,20 +37,14 @@ export default class SaveGameRenderer extends DomRenderer {
 		);
 
 		this.addAutoEvent(
-			this.model.party,
-			'inventory-resize',
+			this.model.party.isInventoryVisible,
+			'change',
 			() => this.mainLayerResized()
 		);
 
 		this.addAutoEvent(
 			this.model,
-			'right-panel-resize',
-			() => this.mainLayerResized()
-		);
-
-		this.addAutoEvent(
-			this.game,
-			'battle-resize',
+			'trigger-resize',
 			() => this.mainLayerResized()
 		);
 
@@ -120,7 +114,8 @@ export default class SaveGameRenderer extends DomRenderer {
 
 	mainLayerResized() {
 		const size = new Vector2(this.mainLayer.offsetWidth, this.mainLayer.offsetHeight);
-		this.model.triggerEvent('resize', size);
+		console.log('resized', size);
+		this.model.triggerEvent('main-layer-resized', size);
 	}
 
 }

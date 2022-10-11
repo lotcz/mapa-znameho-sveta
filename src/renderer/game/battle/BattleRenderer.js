@@ -115,6 +115,9 @@ export default class BattleRenderer extends DomRenderer {
 				this.model.isHoveringPartyCharacter.triggerEvent('change');
 			}
 		);
+
+		const save = this.game.saveGame.get();
+		save.triggerEvent('trigger-resize');
 	}
 
 	activateInternal() {
@@ -224,6 +227,8 @@ export default class BattleRenderer extends DomRenderer {
 		Pixies.destroyElement(this.draw);
 		Pixies.destroyElement(this.container);
 		this.container = null;
+		const save = this.game.saveGame.get();
+		save.triggerEvent('trigger-resize');
 	}
 
 	renderInternal() {

@@ -5,6 +5,36 @@
 	width: 200px;
   }
 
+  .tabs > .tab-header {
+	border-width: 0;
+	box-shadow: @dark-brown 0 0 15px inset;
+	background-color: transparent;
+	border-radius: 5px 5px 0 0;
+	padding: 10px 50px;
+	opacity: 0.75;
+  }
+
+  .tabs > .tab-header.active {
+	box-shadow: @dark-brown 0 -10px 20px -10px;
+	opacity: 1;
+
+	&:first-of-type {
+	  box-shadow: @dark-brown -10px -10px 20px -10px;
+	}
+
+	&:last-of-type {
+	  box-shadow: @dark-brown 10px -10px 20px -10px;
+	}
+  }
+
+  .tabs > .filler {
+	box-shadow: @dark-brown 4px -4px 10px -8px inset;
+  }
+
+  .tab-content {
+	box-shadow: @dark-brown 0 10px 22px -11px;
+  }
+
   .stat-badge {
 	font-size: 130%;
 	text-align: center;

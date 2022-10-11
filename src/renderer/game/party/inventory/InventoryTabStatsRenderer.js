@@ -40,13 +40,13 @@ export default class InventoryTabStatsRenderer extends DomRenderer {
 			)
 		);
 
-		this.party.triggerEvent('inventory-resize');
+		//this.party.triggerEvent('inventory-resize');
 	}
 
 	deactivateInternal() {
 		this.removeElement(this.container);
 		this.container = null;
-		this.party.triggerEvent('inventory-resize');
+		//this.party.triggerEvent('inventory-resize');
 	}
 
 }

@@ -79,6 +79,8 @@ export default class MapRenderer extends DomRenderer {
 				this.updateSize();
 			}
 		);
+
+		this.model.triggerEvent('trigger-resize');
 	}
 
 	deactivateInternal() {
@@ -89,6 +91,7 @@ export default class MapRenderer extends DomRenderer {
 		this.canvas = null;
 		this.mapImage = null;
 		Pixies.destroyElement(this.container);
+		this.model.triggerEvent('trigger-resize');
 	}
 
 	renderInternal() {

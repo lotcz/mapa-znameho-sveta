@@ -85,11 +85,12 @@ export default class SaveGameController extends ControllerNode {
 				if (slot.item.isSet()) {
 					this.model.selectedInventorySlot.set(slot);
 				}
-			});
+			}
+		);
 
 		this.addAutoEvent(
 			this.model,
-			'resize',
+			'main-layer-resized',
 			(size) => {
 				this.runOnUpdate(() => this.game.mainLayerSize.set(size));
 			}

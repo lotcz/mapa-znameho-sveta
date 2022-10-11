@@ -41,11 +41,12 @@ export default class MapMenuRenderer extends DomRenderer {
 
 		this.updateArt();
 
-		this.model.triggerEvent('right-panel-resize');
+		this.model.triggerEvent('trigger-resize');
 	}
 
 	deactivateInternal() {
 		this.removeElement(this.container);
+		this.model.triggerEvent('trigger-resize');
 	}
 
 	renderInternal() {

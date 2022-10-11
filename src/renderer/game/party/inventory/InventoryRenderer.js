@@ -123,7 +123,7 @@ export default class InventoryRenderer extends DomRenderer {
 
 		Pixies.createElement(
 			this.tabs,
-			'div',
+			'article',
 			'flex-1 filler'
 		);
 
