@@ -23,7 +23,7 @@ export default class ConversationLineRenderer extends DomRenderer {
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', 'line');
+		this.container = this.addElement('div', 'line row');
 
 		let portraitUri = null;
 
@@ -36,7 +36,7 @@ export default class ConversationLineRenderer extends DomRenderer {
 			this.game.assets.getAsset(portraitUri, (img) => portrait.appendChild(img.cloneNode(false)));
 		}
 
-		this.text = Pixies.createElement(this.container, 'div', 'text');
+		this.text = Pixies.createElement(this.container, 'div', 'text flex-1');
 		this.text.innerText = this.model.text.get();
 
 		if (this.game.isInDebugMode.get()) {

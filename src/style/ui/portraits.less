@@ -1,0 +1,81 @@
+.party {
+  display: flex;
+  color: @dark-brown;
+
+  .tabs > .tab-header {
+	border-width: 0;
+	box-shadow: #311a0a 0 0 15px inset;
+	background-color: transparent;
+	border-radius: 5px 5px 0 0;
+	padding: 5px 10px;
+	opacity: 0.75;
+  }
+
+  .tabs > .tab-header.active {
+	box-shadow: #311a0a 0 6px 6px -6px inset;
+	opacity: 1;
+  }
+
+  .tabs > .filler {
+	box-shadow: #311a0a 0 -4px 6px -6px inset;
+  }
+
+  .tab-content {
+	box-shadow: #311a0a 0 6px 12px -6px;
+  }
+
+  .portraits .portrait {
+	width: 100px;
+	height: 100px;
+	border: 2px solid transparent;
+	border-radius: 5px;
+  }
+
+  .portraits .selected .portrait {
+	border: 2px solid white;
+  }
+
+  .portraits .character {
+	display: flex;
+	flex-direction: row;
+  }
+
+  .portraits .stats {
+	display: flex;
+	flex-direction: row;
+	height: 98px;
+	box-shadow: @dark-brown 0 0 4px;
+	margin: 2px 4px;
+  }
+
+  .portraits .stat-bar {
+	display: flex;
+	flex-direction: column-reverse;
+	width: 8px;
+	margin: 2px;
+  }
+
+  .portraits .stat-bar div {
+	width: auto;
+  }
+
+  .stat-bar .stat-1 {
+	background-color: red;
+  }
+
+  .stat-bar .stat-2 {
+	background-color: orange;
+  }
+
+  .stat-bar .stat-3 {
+	background-color: @dark-brown;
+  }
+
+  .stat-bar .stat-4 {
+	background-color: @dark-brown;
+  }
+
+  .stat-bar .stat-5 {
+	background-color: @dark-brown;
+  }
+}

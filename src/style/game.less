@@ -1,6 +1,13 @@
 @dark-brown: #311a0a;
+@medium-brown: #885f32;
 @light-brown: #ad9475;
+
 @orange: sandybrown;
+@gold: #e0b050;
+
+@light: #E2E2E2;
+@medium: #606060;
+@dark: #202020;
 
 @font-face {
   font-family: 'Vollkorn';
@@ -71,6 +78,36 @@
 
   .inner {
 	box-shadow: @dark-brown 0 0 40px inset;
+  }
+
+  button {
+	background-color: @medium-brown;
+	color: @orange;
+	box-shadow: @dark-brown 1px 1px 10px;
+	border-width: 0;
+	border-radius: 5px;
+	font-weight: bold;
+	padding: 5px 10px;
+	margin: 5px;
+
+	&:hover {
+	  color: @gold;
+	}
+
+	&:active {
+	  position: relative;
+	  top: 2px;
+	}
+
+	&.close {
+	  position: relative;
+	  top: -5px;
+	  right: -5px;
+	  width: 25px;
+	  height: 25px;
+	  padding: 0;
+	  margin: 0;
+	}
   }
 }
 

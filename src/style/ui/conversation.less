@@ -8,7 +8,6 @@
   left: 0;
   right: 0;
   bottom: 0;
-  cursor: default;
 
   .panel {
 	margin: auto;
@@ -20,12 +19,11 @@
 	height: 85%;
 	max-height: 100%;
 	border-radius: 10px;
-	box-shadow: #311a0a 0 0 60px;
+	box-shadow: @dark-brown 0 0 60px;
 	display: flex;
   }
-}
 
-.conversation .inner {
+  .inner {
 	border-radius: 10px;
 	padding: 2rem;
 	box-shadow: #311a0a 0 0 40px inset;
@@ -33,89 +31,70 @@
 	flex: 1;
 	flex-direction: column;
 	justify-content: space-between;
-}
+  }
 
-.conversation .scroll {
+  .scroll {
 	overflow-y: auto;
 	overflow-x: hidden;
-}
-
-.conversation .scroll {
-	scrollbar-color: var(--dark-brown) var(--orange);
+	scrollbar-color: @dark-brown @orange;
 	scrollbar-width: thin;
-}
 
-.conversation .scroll::-webkit-scrollbar {
-	width: 10px; /* Mostly for vertical scrollbars */
-	height: 10px; /* Mostly for horizontal scrollbars */
-}
+	&::-webkit-scrollbar {
+	  width: 10px; /* Mostly for vertical scrollbars */
+	  height: 10px; /* Mostly for horizontal scrollbars */
+	}
 
-.conversation .scroll::-webkit-scrollbar-thumb { /* Foreground */
-	background: #311a0a;
-}
+	&::-webkit-scrollbar-thumb { /* Foreground */
+	  background: #311a0a;
+	}
 
-.conversation .scroll::-webkit-scrollbar-track { /* Background */
-	background: sandybrown;
-}
+	&::-webkit-scrollbar-track { /* Background */
+	  background: sandybrown;
+	}
+  }
 
-.conversation .info {
-	display: flex;
-	flex-direction: row;
-}
+  .info {
+	.portrait {
+	  max-width: 150px;
+	  max-height: 150px;
+	  margin-right: 20px;
+	}
+  }
 
-.conversation .header {
-	padding-bottom: 10px;
-	margin-bottom: 10px;
-}
-
-.conversation .info .portrait {
-	max-width: 150px;
-	max-height: 150px;
-	margin-right: 20px;
-}
-
-.conversation .info .description {
-	flex: 1;
-}
-
-.conversation .entries {
+  .entries {
 	flex: 1 2;
-}
+  }
 
-.conversation .responses {
+  .responses {
 	height: 100px;
-}
+  }
 
-.conversation h2 {
-	margin: 0 0 10px 0;
-}
-.conversation a {
-	cursor: pointer;
+  a {
 	color: saddlebrown;
-}
 
-.conversation a:hover {
-	color: darkred;
-	/* text-shadow: 2px 2px orange; */
-}
+	&:hover {
+	  color: darkred;
+	}
+  }
 
-.conversation .line {
+  .line {
 	display: flex;
 	flex-direction: row;
 	margin-top: 10px;
 	align-items: flex-start;
-}
 
-.conversation .line .portrait {
-	max-width: 50px;
-	max-height: 50px;
-	margin-right: 10px;
-}
+	.portrait {
+	  max-width: 50px;
+	  max-height: 50px;
+	  margin-right: 10px;
+	}
 
-.conversation .line .text {
-	flex: 1;
-}
+	.text {
+	  flex: 1;
+	}
 
-.conversation .line.response {
-	padding-left: 20px;
+	.response {
+	  padding-left: 20px;
+	}
+  }
 }

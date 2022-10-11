@@ -13,214 +13,207 @@
 }
 
 .editor-layer {
-  font-family: 'Vollkorn', 'Georgia', serif;
-  color: @dark-brown;
-  font-size: 12pt;
+  font-family: monospace;
   position: absolute;
   top: 0;
   left: 0;
   max-height: 100%;
   overflow: hidden;
-}
-
-.editor {
-  background-color: transparent;
-  font-size: 10pt;
-}
-
-.editor .bg {
-  background-color: black;
-  color: gray;
-}
-
-.editor .table-selection .inner {
-  padding: 10px;
-}
-
-.editor .buttons {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.editor .buttons > div {
-  display: flex;
-  flex-direction: row;
-  justify-content: start;
-}
-
-.editor button {
-  background-color: gray;
-  color: black;
-  border: 0;
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 10px;
-}
-
-.editor button.special {
-  background-color: @light-brown;
-  color: @dark-brown;
-}
-
-.editor button.red {
-  background-color: red;
-}
-
-.editor button:hover {
-  background-color: lightblue;
-}
-
-.editor button.active {
-  background-color: black;
-  color: white;
-  border: 1px white solid;
   cursor: default;
-}
 
-.editor .dock {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
-}
+  .editor {
+	background-color: transparent;
+	font-size: 10pt;
 
-.editor .table,
-.editor form,
-.editor .item-def {
-  border: 1px gray solid;
-  border-radius: 5px;
-  margin: 10px;
-  padding: 10px;
-}
+	.bg {
+	  background-color: black;
+	  color: gray;
+	}
 
-.editor .table .scroll,
-.editor form .scroll {
-  display: block;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
+	ul.menu {
+	  padding: 0;
+	  margin: 0;
 
-.editor .table .scroll {
-  max-height: 200px;
-  max-width: 700px;
-  overflow-x: auto;
-}
+	  a:hover {
+		color: lightblue;
+		cursor: pointer;
+	  }
+	  .active {
+		color: white;
+	  }
+	  li {
+		padding: 4px;
+		list-style: none;
+	  }
+	}
 
-.editor form .scroll {
-  max-height: 563px;
-}
+	.buttons {
+	  display: flex;
+	  flex-direction: row;
+	  justify-content: space-between;
 
-.editor table {
-  margin-right: 20px;
-}
+	  & > div {
+		display: flex;
+		flex-direction: row;
+		justify-content: start;
+	  }
+	}
 
-.editor table td {
-  border-left: 1px gray solid;
-  white-space: nowrap;
-}
+	button {
+	  background-color: gray;
+	  color: black;
+	  border: 0;
+	  border-radius: 5px;
+	  cursor: pointer;
+	  margin: 10px;
 
-.editor table td:last-of-type {
-  border-right: 1px gray solid;
-}
+	  &.special {
+		background-color: @light-brown;
+		color: @dark-brown;
+	  }
+	  &.active {
+		background-color: black;
+		color: white;
+		border: 1px white solid;
+		cursor: default;
+	  }
+	  &.red {
+		background-color: red;
+	  }
+	  &:hover {
+		background-color: lightblue;
+	  }
+	}
 
-.editor table tr:hover > td {
-  color: lightblue;
-  cursor: pointer;
-}
+	.dock {
+	  width: 100%;
+	  display: flex;
+	  flex-direction: row;
+	  align-items: flex-start;
+	  justify-content: space-between;
+	}
 
-.editor table tr.active > td {
-  color: white;
-}
+	.table,
+	form,
+	.item-def {
+	  border: 1px gray solid;
+	  border-radius: 5px;
+	  margin: 10px;
+	  padding: 10px;
+	}
 
-.editor form .fields .row {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 10px;
-  margin-bottom: 10px;
-}
+	.table .scroll,
+	form .scroll {
+	  display: block;
+	  overflow-y: auto;
+	  overflow-x: hidden;
+	}
 
-.editor form .fields .row .field {
-  display: flex;
-  align-content: stretch;
-  flex-direction: column;
-}
+	.table .scroll {
+	  max-height: 200px;
+	  max-width: 700px;
+	  overflow-x: auto;
+	}
 
-.editor form .fields .row .field.with-lookup {
-  flex-direction: row;
-  align-items: center;
-}
+	form .scroll {
+	  max-height: 563px;
+	}
 
-.editor form .fields .row .field.with-lookup .lookup-button {
-  margin: 0;
-}
+	table {
+	  margin-right: 20px;
+	}
 
-.table-lookup {
-  position: absolute;
-}
+	table td {
+	  border-left: 1px gray solid;
+	  white-space: nowrap;
+	}
 
-.editor form .fields .row input {
-  display: block;
-  width: auto;
-  margin-right: 10px;
-}
+	table td:last-of-type {
+	  border-right: 1px gray solid;
+	}
 
-.editor form .fields .row input[type=checkbox] {
-  align-self: start;
-}
+	table tr:hover > td {
+	  color: lightblue;
+	  cursor: pointer;
+	}
 
-.editor form .fields .row .vector {
-  flex-direction: row;
-}
+	table tr.active > td {
+	  color: white;
+	}
 
-.editor form .fields .row .vector input {
-  width: 100px;
-}
+	form .fields .row {
+	  display: grid;
+	  grid-template-columns: 1fr 2fr;
+	  gap: 10px;
+	  margin-bottom: 10px;
+	}
 
-.editor .item-def .slot {
-  background-image: url('assets/img/texture/paper.jpg');
-}
+	form .fields .row .field {
+	  display: flex;
+	  align-content: stretch;
+	  flex-direction: column;
+	}
 
-.editor .item-def .slot .inner {
-  display: flex;
-}
+	form .fields .row .field.with-lookup {
+	  flex-direction: row;
+	  align-items: center;
+	}
 
-.menu a:hover {
-  color: lightblue;
-  cursor: pointer;
-}
+	form .fields .row .field.with-lookup .lookup-button {
+	  margin: 0;
+	}
 
-.menu .active {
-  color: white;
-}
+	.table-lookup {
+	  position: absolute;
+	}
 
-.menu,
-.menu li {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
+	form .fields .row input {
+	  display: block;
+	  width: auto;
+	  margin-right: 10px;
+	}
 
-.force-foreground {
-  position: fixed;
-  z-index: 9999999;
-  top: 20%;
-  left: 40%;
-}
+	form .fields .row input[type=checkbox] {
+	  align-self: start;
+	}
 
-.editor .battle-menu {
-  position: fixed;
-  right: 20px;
-  top: 20px;
-  padding: 10px;
-}
+	form .fields .row .vector {
+	  flex-direction: row;
+	}
 
-.editor .battle-menu input[type=text] {
-  width: 50px;
-}
+	form .fields .row .vector input {
+	  width: 100px;
+	}
 
-.editor .battle-menu input[type=radio] {
-  margin: 0;
-  padding: 5px;
+	.item-def .slot {
+	  background-image: url('assets/img/texture/paper.jpg');
+	}
+
+	.item-def .slot .inner {
+	  display: flex;
+	}
+
+	.force-foreground {
+	  position: fixed;
+	  z-index: 9999999;
+	  top: 20%;
+	  left: 40%;
+	}
+
+	.battle-menu {
+	  position: fixed;
+	  right: 20px;
+	  top: 20px;
+	  padding: 10px;
+	}
+
+	.battle-menu input[type=text] {
+	  width: 50px;
+	}
+
+	.battle-menu input[type=radio] {
+	  margin: 0;
+	  padding: 5px;
+	}
+  }
 }

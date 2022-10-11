@@ -1,0 +1,88 @@
+.inventory .inventory-items {
+
+  .slot {
+	margin: 5px;
+
+	.inner {
+	  box-shadow: @dark-brown 0 0 40px;
+	  width: 80px;
+	  height: 80px;
+	  padding: 0;
+	  border-radius: 10px;
+
+	  img {
+		width: 100%;
+	  }
+	}
+  }
+
+  .inventory-character {
+	position: relative;
+	display: block;
+	height: 500px;
+	width: 300px;
+	margin: 20px;
+	background-image: url('../../../assets/img/ui/inventory-female.png');
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
+
+	.stats-consumption {
+	  position: absolute;
+	  right: 0;
+	  top: 0;
+	  font-size: 75%;
+
+	  .stat-bar {
+		height: 10px;
+		width: 80px;
+	  }
+	}
+
+	.slot {
+	  position: absolute;
+	}
+
+	.slot.head {
+	  top: 0;
+	  left: 20%;
+	}
+
+	.slot.leftHand {
+	  top: 40%;
+	  right: 0;
+	}
+
+	.slot.rightHand {
+	  top: 45%;
+	  left: 0;
+	}
+
+	.slot.clothing {
+	  top: 33%;
+	  left: 40%;
+	}
+  }
+
+  .slot.drop .inner {
+	background-color: rgba(200, 0, 0, 0.2);
+  }
+}
+
+.inventory-slots {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  & > div {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	padding: 20px
+  }
+}
+
+.selected-item-slot {
+  position: absolute;
+  pointer-events: none;
+}

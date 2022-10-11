@@ -1,7 +1,7 @@
 import DomRenderer from "../../../basic/DomRenderer";
 import Pixies from "../../../../class/basic/Pixies";
 
-export default class InventoryStatNumberRenderer extends DomRenderer {
+export default class StatNumberRenderer extends DomRenderer {
 
 	/**
 	 * @type FloatValue|IntValue

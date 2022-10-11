@@ -1,8 +1,8 @@
 import DomRenderer from "../../../basic/DomRenderer";
 import Pixies from "../../../../class/basic/Pixies";
-import InventoryStatNumberRenderer from "./InventoryStatNumberRenderer";
+import StatNumberRenderer from "./StatNumberRenderer";
 
-export default class InventoryStatCombatRenderer extends DomRenderer {
+export default class StatCombatRenderer extends DomRenderer {
 
 	/**
 	 * @type StatModel
@@ -16,12 +16,12 @@ export default class InventoryStatCombatRenderer extends DomRenderer {
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', 'column flex-1 p-1');
-		this.name = Pixies.createElement(this.container, 'div', 'center');
+		this.container = this.addElement('div', 'stat-wrapper column flex-1 p-1');
+		this.name = Pixies.createElement(this.container, 'div', 'stat-name center mb-1');
 		this.bottom = Pixies.createElement(this.container, 'div', 'column center');
-		this.numeric = Pixies.createElement(this.bottom, 'div', 'stat-badge');
+		this.numeric = Pixies.createElement(this.bottom, 'div', 'stat-badge row center');
 		this.addChild(
-			new InventoryStatNumberRenderer(
+			new StatNumberRenderer(
 				this.game,
 				this.model.currentFloat,
 				this.numeric

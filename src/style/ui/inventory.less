@@ -1,117 +1,35 @@
 .inventory {
-	width: 750px;
-}
+  width: 750px;
 
-.inventory .inner {
-	display: flex;
-	flex-direction: row;
-	align-items: stretch;
-}
-
-.inventory .portrait {
+  .portrait {
 	width: 200px;
-}
+  }
 
-.inventory .inventory-top .name {
-	font-size: 150%;
-}
-
-.inventory .inventory-slots {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-}
-
-.inventory .inventory-slots > div {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	padding: 20px
-}
-
-.inventory .slot {
-	margin: 5px;
-
-}
-
-.inventory .slot .inner {
-	box-shadow: @dark-brown 0 0 40px;
-	width: 80px;
-	height: 80px;
+  .stat-badge {
+	font-size: 130%;
+	text-align: center;
+	align-self: center;
+	vertical-align: center;
 	padding: 0;
-  	border-radius: 10px;
-}
+	width: 40px;
+	height: 40px;
+	border-radius: 20px;
+	box-shadow: @dark-brown 0 0 16px;
+	background-size: initial;
 
-.inventory .slot .inner img {
-	width: 100%;
-}
+	.small {
+	  align-self: flex-end;
+	  opacity: 0.5;
+	}
+  }
 
-.inventory .inventory-items {
-	margin-left: 20px;
-}
+  .stat-wrapper {
+	.stat-name {
+	  -visibility: hidden;
+	}
+	&:hover .stat-name {
+	  visibility: visible;
+	}
+  }
 
-.inventory .inventory-character {
-	position: relative;
-	display: block;
-	height: 500px;
-	width: 300px;
-	margin: 20px;
-	background-image: url('../../../assets/img/ui/inventory-female.png');
-	background-size: contain;
-	background-position: center;
-	background-repeat: no-repeat;
-}
-
-.inventory .inventory-character .slot {
-	position: absolute;
-}
-
-.inventory .inventory-character .slot.head {
-	top: 0;
-	left: 20%;
-}
-
-.inventory .inventory-character .slot.leftHand {
-	top: 40%;
-	right: 0;
-}
-
-.inventory .inventory-character .slot.rightHand {
-	top: 45%;
-	left: 0;
-}
-
-.inventory .inventory-character .slot.clothing {
-	top: 33%;
-	left: 40%;
-}
-
-.inventory .slot.drop .inner {
-	background-color: rgba(200, 0, 0, 0.2);
-}
-
-.selected-item-slot {
-	position: absolute;
-	pointer-events: none;
-}
-
-.inventory .stat-brick {
-	width: 25px;
-	height: 15px;
-	margin: 3px;
-	box-shadow: #311a0a 0 0 6px inset;
-	border-radius: 5px;
-}
-
-.inventory .stat-brick.normal {
-	box-shadow: #311a0a 0 0 6px inset;
-	background-color: #311a0aa0;
-}
-
-.inventory .stat-brick.extra {
-	background-color: rgba(100, 200, 100, 0.75);
-}
-
-.inventory .stat-brick.loss {
-	background-color: rgba(200, 100, 100, 0.75);
 }

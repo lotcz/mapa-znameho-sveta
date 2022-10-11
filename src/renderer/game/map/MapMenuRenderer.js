@@ -16,7 +16,7 @@ export default class MapMenuRenderer extends DomRenderer {
 
 	activateInternal() {
 		this.container = this.addElement('div', 'map-menu paper');
-		this.inner = Pixies.createElement(this.container,'div', 'inner');
+		this.inner = Pixies.createElement(this.container,'div', 'inner p-3');
 		this.art = Pixies.createElement(this.inner,'div', 'art');
 		this.artLower = Pixies.createElement(this.art, 'div', 'lower');
 		this.artUpper = Pixies.createElement(this.art,'div', 'upper');
@@ -25,7 +25,7 @@ export default class MapMenuRenderer extends DomRenderer {
 
 		this.time = Pixies.createElement(this.inner,'div', 'time');
 
-		this.buttons = Pixies.createElement(this.inner, 'div', 'buttons');
+		this.buttons = Pixies.createElement(this.inner, 'div', 'buttons column center');
 		const start = Pixies.createElement(this.buttons, 'button', null, 'Start/Stop', () => {
 			this.game.saveGame.get().partyTraveling.set(!this.game.saveGame.get().partyTraveling.get());
 		});

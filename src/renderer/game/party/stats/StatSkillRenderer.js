@@ -1,8 +1,8 @@
 import DomRenderer from "../../../basic/DomRenderer";
 import Pixies from "../../../../class/basic/Pixies";
-import InventoryStatNumberRenderer from "./InventoryStatNumberRenderer";
+import StatNumberRenderer from "./StatNumberRenderer";
 
-export default class InventorySkillRenderer extends DomRenderer {
+export default class StatSkillRenderer extends DomRenderer {
 
 	/**
 	 * @type StatModel
@@ -22,7 +22,7 @@ export default class InventorySkillRenderer extends DomRenderer {
 		this.name = Pixies.createElement(this.left, 'div', 'flex-1');
 		this.numeric = Pixies.createElement(this.left, 'div');
 		this.addChild(
-			new InventoryStatNumberRenderer(
+			new StatNumberRenderer(
 				this.game,
 				this.model.currentFloat,
 				this.numeric

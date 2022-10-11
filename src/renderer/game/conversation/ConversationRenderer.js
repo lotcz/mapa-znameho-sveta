@@ -45,7 +45,7 @@ export default class ConversationRenderer extends DomRenderer {
 		const title = Pixies.createElement(header, 'h2', 'title');
 		title.innerText = this.model.name.get();
 
-		const info = Pixies.createElement(header, 'div', 'info');
+		const info = Pixies.createElement(header, 'div', 'info row');
 
 		const portraitUrl = this.model.portrait.get();
 		if (portraitUrl) {
@@ -55,7 +55,7 @@ export default class ConversationRenderer extends DomRenderer {
 			});
 		}
 
-		const description = Pixies.createElement(info, 'div', 'description');
+		const description = Pixies.createElement(info, 'div', 'description flex-1');
 		description.innerText = this.model.description.get();
 
 		if (this.game.isInDebugMode.get()) {

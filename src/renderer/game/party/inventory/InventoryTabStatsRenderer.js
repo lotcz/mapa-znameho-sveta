@@ -1,9 +1,9 @@
 import DomRenderer from "../../../basic/DomRenderer";
-import InventorySkillRenderer from "./InventorySkillRenderer";
+import StatSkillRenderer from "../stats/StatSkillRenderer";
 import CollectionRenderer from "../../../basic/CollectionRenderer";
 import Pixies from "../../../../class/basic/Pixies";
 
-export default class InventoryStatsRenderer extends DomRenderer {
+export default class InventoryTabStatsRenderer extends DomRenderer {
 
 	/**
 	 * @type CharacterModel
@@ -26,7 +26,7 @@ export default class InventoryStatsRenderer extends DomRenderer {
 			new CollectionRenderer(
 				this.game,
 				this.model.stats.abilities,
-				(m) => new InventorySkillRenderer(this.game, m, this.abilities)
+				(m) => new StatSkillRenderer(this.game, m, this.abilities)
 			)
 		);
 
@@ -36,7 +36,7 @@ export default class InventoryStatsRenderer extends DomRenderer {
 			new CollectionRenderer(
 				this.game,
 				this.model.stats.skills,
-				(m) => new InventorySkillRenderer(this.game, m, this.skills)
+				(m) => new StatSkillRenderer(this.game, m, this.skills)
 			)
 		);
 

@@ -26,7 +26,7 @@ export default class PortraitsRenderer extends DomRenderer {
 	}
 
 	activateInternal() {
-		this.container = Pixies.createElement(this.dom, 'div', 'column');
+		this.container = Pixies.createElement(this.dom, 'div', 'column p-1');
 	}
 
 	deactivateInternal() {
