@@ -164,6 +164,7 @@ export default class BattleController extends ControllerNode {
 		const y = Pixies.between(halfScreenSize.y, this.model.battleMap.get().size.y - halfScreenSize.y, this.model.coordinates.y);
 		this.model.coordinates.set(x, y);
 		this.model.cornerCoordinates.set(this.model.coordinates.subtract(halfScreenSize));
+		this.onMouseMove();
 	}
 
 	updateInternal(delta) {

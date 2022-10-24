@@ -88,7 +88,7 @@ export default class InventoryRenderer extends DomRenderer {
 			)
 		);
 
-		this.bottom = Pixies.createElement(this.inner, 'div', 'inventory-bottom column flex-1 mt-1');
+		this.bottom = Pixies.createElement(this.inner, 'div', 'inventory-bottom column flex-1 mt-2');
 		this.tabs = Pixies.createElement(this.bottom, 'div', 'tabs row');
 
 		this.itemsTab = Pixies.createElement(
