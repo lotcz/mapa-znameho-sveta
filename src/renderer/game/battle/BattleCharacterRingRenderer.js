@@ -36,11 +36,11 @@ export default class BattleCharacterRingRenderer extends SvgRenderer {
 			'radial',
 			function(add) {
 				add.stop(0, 'rgba(0, 255, 0, 0)');
-				add.stop(0.5, 'rgba(0, 255, 0, 0)');
-				add.stop(1, 'green');
+				add.stop(0.3, 'rgba(155, 155, 155, 0)');
+				add.stop(1, 'rgba(255, 255, 255, 1)');
 			}
 		);
-		this.circle.fill(this.radial).stroke({width: width, color: 'green'});
+		this.circle.fill(this.radial).stroke({width: width, color: 'rgba(255, 255, 255, 1)'});
 		this.updatePosition();
 	}
 

@@ -16,37 +16,36 @@ export default class InventoryTabStatsRenderer extends DomRenderer {
 		this.model = model;
 		this.party = party;
 
-			}
+		this.addChild(
+			new CollectionRenderer(
+				this.game,
+				this.model.stats.abilities.all,
+				(m) => new StatSkillRenderer(this.game, m, this.abilities)
+			)
+		);
+
+		this.addChild(
+			new CollectionRenderer(
+				this.game,
+				this.model.stats.skills.all,
+				(m) => new StatSkillRenderer(this.game, m, this.skills)
+			)
+		);
+	}
 
 	activateInternal() {
 		this.container = this.addElement( 'div', 'inventory-stats column flex-1 p-1 m-1');
 		Pixies.createElement(this.container, 'h2', null, 'Vlastnosti');
 		this.abilities = Pixies.createElement(this.container, 'div');
-		this.addChild(
-			new CollectionRenderer(
-				this.game,
-				this.model.stats.abilities,
-				(m) => new StatSkillRenderer(this.game, m, this.abilities)
-			)
-		);
 
 		Pixies.createElement(this.container, 'h2', null, 'Dovednosti');
 		this.skills = Pixies.createElement(this.container, 'div');
-		this.addChild(
-			new CollectionRenderer(
-				this.game,
-				this.model.stats.skills,
-				(m) => new StatSkillRenderer(this.game, m, this.skills)
-			)
-		);
 
-		//this.party.triggerEvent('inventory-resize');
 	}
 
 	deactivateInternal() {
 		this.removeElement(this.container);
 		this.container = null;
-		//this.party.triggerEvent('inventory-resize');
 	}
 
 }

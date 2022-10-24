@@ -438,7 +438,7 @@ h4 {
 .savegame-layer button {
   cursor: url('img/cursor.png'), auto;
 }
-.savegame-layer.no-go {
+.savegame-layer .battle.no-go {
   cursor: url('img/cursor-red.png'), not-allowed;
 }
 .loading {

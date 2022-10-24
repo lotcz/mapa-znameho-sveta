@@ -3,7 +3,7 @@ import TemplateNode from "../../../basic/TemplateNode";
 import IntValue from "../../../basic/IntValue";
 import BoolValue from "../../../basic/BoolValue";
 import Vector3 from "../../../basic/Vector3";
-import CharacterStatsModel from "./CharacterStatsModel";
+import CharacterStatsModel from "../stats/CharacterStatsModel";
 import InventoryModel from "./InventoryModel";
 import InventorySlotModel from "./InventorySlotModel";
 import ModelNodeCollection from "../../../basic/ModelNodeCollection";
@@ -77,10 +77,7 @@ export default class CharacterModel extends TemplateNode {
 	 */
 	additionalItemsSlots;
 
-	/**
-	 * @type ModelNodeCollection<StatEffectDefinitionModel>
-	 */
-	statEffects;
+
 
 	constructor(id = 0) {
 		super(id);
@@ -105,7 +102,7 @@ export default class CharacterModel extends TemplateNode {
 		this.additionalItems.addOnAddListener((ai) => this.createAdditionalSlot(ai));
 		this.additionalItems.addOnRemoveListener((ai) => this.removeAdditionalSlot(ai));
 
-		this.statEffects = this.addProperty('statEffects', new ModelNodeCollection(null, false));
+
 	}
 
 	createAdditionalSlot(ai) {

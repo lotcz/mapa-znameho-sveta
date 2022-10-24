@@ -33,7 +33,7 @@ export default class InventoryTabItemsRenderer extends DomRenderer {
 		this.addChild(
 			new CollectionRenderer(
 				this.game,
-				this.model.stats.consumption,
+				this.model.stats.consumption.all,
 				(m) => new StatConsumptionRenderer(this.game, m, this.consumption, false)
 			)
 		);
@@ -67,14 +67,11 @@ export default class InventoryTabItemsRenderer extends DomRenderer {
 				});
 			renderer.activate();
 		});
-
-		//this.party.triggerEvent('inventory-resize');
 	}
 
 	deactivateInternal() {
 		this.resetChildren();
 		this.removeElement(this.container);
-		//this.party.triggerEvent('inventory-resize');
 	}
 
 }

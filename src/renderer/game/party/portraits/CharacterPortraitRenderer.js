@@ -1,6 +1,7 @@
 import DomRenderer from "../../../basic/DomRenderer";
 import Pixies from "../../../../class/basic/Pixies";
 import PortraitStatRenderer from "./PortraitStatRenderer";
+import CollectionRenderer from "../../../basic/CollectionRenderer";
 
 export default class CharacterPortraitRenderer extends DomRenderer {
 
@@ -13,9 +14,15 @@ export default class CharacterPortraitRenderer extends DomRenderer {
 		super(game, model, dom);
 
 		this.model = model;
-
 		this.container = null;
-		this.health = null;
+
+		this.addChild(
+			new CollectionRenderer(
+				this.game,
+				this.model.stats.basic.all,
+				(m) => new PortraitStatRenderer(this.game, m, this.stats)
+			)
+		);
 	}
 
 	activateInternal() {
@@ -26,9 +33,10 @@ export default class CharacterPortraitRenderer extends DomRenderer {
 		this.renderPortrait();
 
 		this.stats = Pixies.createElement(this.container, 'div', 'stats');
-		this.addChild(new PortraitStatRenderer(this.game, this.model.stats.health, this.stats));
-		this.addChild(new PortraitStatRenderer(this.game, this.model.stats.stamina, this.stats));
-
+		/*
+		this.addChild(new PortraitStatRenderer(this.game, this.model.stats.basic.health, this.stats));
+		this.addChild(new PortraitStatRenderer(this.game, this.model.stats.basic.stamina, this.stats));
+*/
 	}
 
 	deactivateInternal() {

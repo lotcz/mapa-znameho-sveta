@@ -155,28 +155,30 @@ export default class BattleRenderer extends DomRenderer {
 		this.scene.add(this.ambientLight);
 
 		this.directLight = new THREE.DirectionalLight( 0xe0e0e0, 1);
-		this.directLight.position.set( 0, 10, 0 );
-		this.directLight.castShadow = true;
-		this.directLight.shadow.bias = 0;
-		this.directLight.shadow.camera.near = 0.5;
-		this.directLight.shadow.camera.far = 25;
-		this.directLight.shadow.camera.right = 15;
-		this.directLight.shadow.camera.left = -15;
-		this.directLight.shadow.camera.top	= 15;
-		this.directLight.shadow.camera.bottom = - 15;
-		this.directLight.shadow.mapSize.width = 1024;
-		this.directLight.shadow.mapSize.height = 1024;
-		this.scene.add(this.directLight);
+		this.directLight.position.set( 10, 10, 10 );
+		this.directLight.castShadow = false;
+		if (this.directLight.castShadow) {
+			this.directLight.shadow.bias = 0;
+			this.directLight.shadow.camera.near = 0.5;
+			this.directLight.shadow.camera.far = 25;
+			this.directLight.shadow.camera.right = 15;
+			this.directLight.shadow.camera.left = -15;
+			this.directLight.shadow.camera.top = 15;
+			this.directLight.shadow.camera.bottom = -15;
+			this.directLight.shadow.mapSize.width = 1024;
+			this.directLight.shadow.mapSize.height = 1024;
 
-		const shadowMaterial = new THREE.ShadowMaterial({color:'#000000'})
-		shadowMaterial.opacity = 0.5;
-		shadowMaterial.side = THREE.FrontSide;
-		shadowMaterial.shadowSide = THREE.FrontSide;
-		this.floor = new THREE.Mesh(new THREE.PlaneGeometry(35, 35), shadowMaterial);
-		this.floor.receiveShadow = true;
-		this.floor.position.set(0, 0, 0);
-		this.floor.rotation.set(-Math.PI / 2, 0, 0);
-		this.scene.add(this.floor);
+			const shadowMaterial = new THREE.ShadowMaterial({color:'#000000'})
+			shadowMaterial.opacity = 0.5;
+			shadowMaterial.side = THREE.FrontSide;
+			shadowMaterial.shadowSide = THREE.FrontSide;
+			this.floor = new THREE.Mesh(new THREE.PlaneGeometry(135, 135), shadowMaterial);
+			this.floor.receiveShadow = true;
+			this.floor.position.set(0, 0, 0);
+			this.floor.rotation.set(-Math.PI / 2, 0, 0);
+			this.scene.add(this.floor);
+		}
+		this.scene.add(this.directLight);
 
 		this.composer = new EffectComposer(this.renderer);
 
@@ -203,30 +205,18 @@ export default class BattleRenderer extends DomRenderer {
 	deactivateInternal() {
 		if (this.gui) {
 			this.gui.destroy();
-			this.gui = null;
 		}
 		this.ambientLight.dispose();
-		this.ambientLight = null;
 		this.directLight.dispose();
-		this.directLight = null;
-		this.floor.material.dispose();
-		this.floor.geometry.dispose();
-		this.floor = null;
-		this.scene = null;
+		if (this.floor) {
+			this.floor.material.dispose();
+			this.floor.geometry.dispose();
+		}
 		this.renderer.dispose();
-		this.renderer = null;
-		this.composer = null;
-		this.camera = null;
-		this.bgImage = null;
 		Pixies.destroyElement(this.bgCanvas);
-		this.bgCanvas = null;
-		this.canvas = null;
-		this.context2d = null;
 		this.draw.remove();
-		this.draw = null;
 		Pixies.destroyElement(this.draw);
 		Pixies.destroyElement(this.container);
-		this.container = null;
 		const save = this.game.saveGame.get();
 		save.triggerEvent('trigger-resize');
 	}

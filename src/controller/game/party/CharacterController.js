@@ -1,9 +1,5 @@
 import ControllerNode from "../../basic/ControllerNode";
-import CollectionController from "../../basic/CollectionController";
-import SkillController from "./SkillController";
-import HealthStatController from "./HealthStatController";
-import StaminaStatController from "./StaminaStatController";
-import DefenseChanceStatController from "./DefenseChanceStatController";
+import CharacterStatsController from "./stats/CharacterStatsController";
 
 export default class CharacterController extends ControllerNode {
 
@@ -18,32 +14,11 @@ export default class CharacterController extends ControllerNode {
 		this.model = model;
 
 		this.addChild(
-			new CollectionController(
+			new CharacterStatsController(
 				this.game,
-				this.model.stats.skills,
-				(m) => new SkillController(this.game, m, this.model)
+				this.model.stats
 			)
 		);
-
-		this.addChild(
-			new CollectionController(
-				this.game,
-				this.model.stats.abilities,
-				(m) => new SkillController(this.game, m, this.model)
-			)
-		);
-
-		this.addChild(
-			new CollectionController(
-				this.game,
-				this.model.stats.combat,
-				(m) => new SkillController(this.game, m, this.model)
-			)
-		);
-
-		this.addChild(new HealthStatController(this.game, this.model.stats.health, this.model));
-		this.addChild(new StaminaStatController(this.game, this.model.stats.stamina, this.model));
-		this.addChild(new DefenseChanceStatController(this.game, this.model.stats.defensiveChance, this.model));
 
 		this.addAutoEvent(
 			this.model.inventory,
@@ -61,12 +36,12 @@ export default class CharacterController extends ControllerNode {
 				items.push(slot.item.get());
 			}
 		});
-		this.model.statEffects.reset();
+		this.model.stats.statEffects.reset();
 		items.forEach((item) => {
-			item.statEffects.forEach((eff) => this.model.statEffects.add(eff));
+			item.statEffects.forEach((eff) => this.model.stats.statEffects.add(eff));
 			const def = this.game.resources.itemDefinitions.getById(item.definitionId.get());
 			if (def) {
-				def.statEffects.forEach((eff) => this.model.statEffects.add(eff));
+				def.statEffects.forEach((eff) => this.model.stats.statEffects.add(eff));
 			}
 		});
 	}

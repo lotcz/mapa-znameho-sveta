@@ -8,12 +8,10 @@ export const STAT_STAMINA = 2;
 export const STAT_HUNGER = 3;
 export const STAT_THIRST = 4;
 export const STAT_TEMPERATURE = 5;
-
 export const STAT_OFFENSIVE_CHANCE = 6;
 export const STAT_OFFENSIVE_POWER = 7;
 export const STAT_DEFENSIVE_CHANCE = 8;
 export const STAT_DEFENSIVE_POWER = 9;
-
 export const STAT_ACTION_POINTS = 10;
 
 // abilities
@@ -31,8 +29,14 @@ export const STAT_MISSILE_WEAPONS = 103;
 export const STAT_EVASION = 104;
 export const STAT_HUNTING = 105;
 
+// level progress
+export const STAT_LEVEL = 1001;
+export const STAT_EXPERIENCE = 1002;
+export const STAT_ABILITY_POINTS = 1003;
+export const STAT_SKILL_POINTS = 1004;
+
 // other
-export const STAT_ITEM_CONDITION = 1001;
+export const STAT_ITEM_CONDITION = 2000;
 
 export default class StatDefinitionModel extends IdentifiedModelNode {
 

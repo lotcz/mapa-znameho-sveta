@@ -3,7 +3,7 @@ import Pixies from "../../class/basic/Pixies";
 import NodeTableRenderer from "./NodeTableRenderer";
 import TableLookupRenderer from "./TableLookupRenderer";
 import PartySlotModel from "../../model/game/party/PartySlotModel";
-import CharacterStatsModel from "../../model/game/party/characters/CharacterStatsModel";
+import CharacterStatsModel from "../../model/game/party/stats/CharacterStatsModel";
 
 export default class NodeFormRenderer extends DomRenderer {
 

@@ -75,7 +75,7 @@ export default class InventoryRenderer extends DomRenderer {
 		this.addChild(
 			new CollectionRenderer(
 				this.game,
-				this.model.stats.basic,
+				this.model.stats.basic.all,
 				(m) => new StatBasicRenderer(this.game, m, this.basic)
 			)
 		);
@@ -83,7 +83,7 @@ export default class InventoryRenderer extends DomRenderer {
 		this.addChild(
 			new CollectionRenderer(
 				this.game,
-				this.model.stats.combat,
+				this.model.stats.combat.all,
 				(m) => new StatCombatRenderer(this.game, m, this.combat)
 			)
 		);

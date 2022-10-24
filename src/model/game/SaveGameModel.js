@@ -197,14 +197,14 @@ export default class SaveGameModel extends ModelNode {
 				character = this.characters.getById(slot.characterId.get());
 			}
 			if (this.partyResting.get() > 0) {
-				character.stats.stamina.restore(duration * 5);
-				character.stats.health.restore(duration);
-				character.stats.hunger.consume(duration * 0.25);
-				character.stats.thirst.consume(duration * 0.25);
+				character.stats.basic.stamina.restore(duration * 5);
+				character.stats.basic.health.restore(duration);
+				character.stats.consumption.hunger.consume(duration * 0.25);
+				character.stats.consumption.thirst.consume(duration * 0.25);
 			} else {
-				character.stats.stamina.consume(duration * 5);
-				character.stats.hunger.consume(duration);
-				character.stats.thirst.consume(duration * 1.5);
+				character.stats.basic.stamina.consume(duration * 5);
+				character.stats.consumption.hunger.consume(duration);
+				character.stats.consumption.thirst.consume(duration * 1.5);
 
 			}
 		})

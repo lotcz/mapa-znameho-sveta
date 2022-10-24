@@ -1,4 +1,4 @@
-import ControllerNode from "../../basic/ControllerNode";
+import ControllerNode from "../../../basic/ControllerNode";
 
 export default class SkillController extends ControllerNode {
 
@@ -7,14 +7,14 @@ export default class SkillController extends ControllerNode {
 	 */
 	model;
 
-	constructor(game, model, character) {
+	constructor(game, model, stats) {
 		super(game, model);
 
 		this.model = model;
-		this.character = character;
+		this.stats = stats;
 
 		this.addAutoEvent(
-			this.character.statEffects,
+			this.stats.statEffects,
 			'change',
 			() => this.updateCurrent()
 		);
@@ -27,7 +27,7 @@ export default class SkillController extends ControllerNode {
 	}
 
 	updateCurrent() {
-		const effects = this.character.statEffects.filter((eff) => eff.statId.equalsTo(this.model.definitionId.get()));
+		const effects = this.stats.statEffects.filter((eff) => eff.statId.equalsTo(this.model.definitionId.get()));
 		const total = effects.reduce((prev, current) => prev + current.amount.get(), 0);
 		this.model.currentFloat.set(this.model.baseValue.get() + total);
 	}
