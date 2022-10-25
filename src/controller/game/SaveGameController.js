@@ -115,7 +115,35 @@ export default class SaveGameController extends ControllerNode {
 				}
 				//this.model.party.isInventoryVisible.set(false);
 			}
-		)
+		);
+
+		this.addAutoEvent(
+			this.model.currentLocation,
+			'change',
+			() => {
+				// update environment effects on party
+				this.model.party.forEachCharacter((ch) => {
+					ch.stats.environmentStatEffects.reset();
+				});
+
+				const location = this.model.currentLocation.get();
+				if (!location) {
+					return;
+				}
+
+				const biotope = this.game.resources.map.biotopes.getById(location.biotopeId.get());
+				if (!biotope) {
+					return;
+				}
+
+				this.model.party.forEachCharacter((ch) => {
+					biotope.statEffects.forEach((eff) => {
+						ch.stats.environmentStatEffects.add(eff)
+					});
+				});
+			},
+			true
+		);
 	}
 
 	activateInternal() {

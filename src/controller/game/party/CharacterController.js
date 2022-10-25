@@ -28,6 +28,15 @@ export default class CharacterController extends ControllerNode {
 		);
 	}
 
+	activateInternal() {
+		const race = this.game.resources.races.getById(this.model.raceId.get());
+		this.model.stats.raceStatEffects.reset();
+		race.statEffects.forEach((eff) => {
+			this.model.stats.raceStatEffects.add(eff);
+			console.log(eff);
+		});
+	}
+
 	updateInventoryEffects() {
 		const slots = [this.model.inventory.leftHand, this.model.inventory.rightHand, this.model.inventory.clothing, this.model.inventory.head];
 		const items = [];

@@ -114,7 +114,6 @@ export default class SaveGameRenderer extends DomRenderer {
 
 	mainLayerResized() {
 		const size = new Vector2(this.mainLayer.offsetWidth, this.mainLayer.offsetHeight);
-		console.log('resized', size);
 		this.model.triggerEvent('main-layer-resized', size);
 	}
 

@@ -77,8 +77,6 @@ export default class CharacterModel extends TemplateNode {
 	 */
 	additionalItemsSlots;
 
-
-
 	constructor(id = 0) {
 		super(id);
 
@@ -101,8 +99,6 @@ export default class CharacterModel extends TemplateNode {
 		this.additionalItemsSlots = this.addProperty('additionalItemsSlots', new ModelNodeCollection(null, false));
 		this.additionalItems.addOnAddListener((ai) => this.createAdditionalSlot(ai));
 		this.additionalItems.addOnRemoveListener((ai) => this.removeAdditionalSlot(ai));
-
-
 	}
 
 	createAdditionalSlot(ai) {

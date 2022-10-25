@@ -39,6 +39,16 @@ export default class CharacterStatsModel extends ModelNode {
 	 */
 	inventoryStatEffects;
 
+	/**
+	 * @type ModelNodeCollection<StatEffectDefinitionModel>
+	 */
+	environmentStatEffects;
+
+	/**
+	 * @type ModelNodeCollection<StatEffectDefinitionModel>
+	 */
+	raceStatEffects;
+
 	constructor() {
 		super();
 
@@ -50,6 +60,8 @@ export default class CharacterStatsModel extends ModelNode {
 		this.skills = this.addProperty('skills', new SkillsStatsModel());
 
 		this.inventoryStatEffects = this.addProperty('inventoryStatEffects', new ModelNodeCollection(null, false));
+		this.environmentStatEffects = this.addProperty('environmentStatEffects', new ModelNodeCollection(null, false));
+		this.raceStatEffects = this.addProperty('raceStatEffects', new ModelNodeCollection(null, false));
 	}
 
 }

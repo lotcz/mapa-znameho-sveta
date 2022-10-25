@@ -17,7 +17,7 @@ export default class PartySlotModel extends ModelNode {
 	constructor() {
 		super();
 
-		this.characterId = this.addProperty('characterId', new IntValue(0));
+		this.characterId = this.addProperty('characterId', new IntValue());
 		this.character = this.addProperty('character', new NullableNode(null, false));
 
 	}

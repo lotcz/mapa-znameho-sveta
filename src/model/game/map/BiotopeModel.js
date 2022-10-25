@@ -2,6 +2,7 @@ import ModelNodeCollection from "../../basic/ModelNodeCollection";
 import BiotopeImageModel from "./BiotopeImageModel";
 import DirtyValue from "../../basic/DirtyValue";
 import IdentifiedModelNode from "../../basic/IdentifiedModelNode";
+import StatEffectDefinitionModel from "../party/rituals/StatEffectDefinitionModel";
 
 export default class BiotopeModel extends IdentifiedModelNode {
 
@@ -15,6 +16,11 @@ export default class BiotopeModel extends IdentifiedModelNode {
 	 */
 	images;
 
+	/**
+	 * @type ModelNodeCollection<StatEffectDefinitionModel>
+	 */
+	statEffects;
+
 	constructor(id) {
 		super(id);
 
@@ -22,6 +28,9 @@ export default class BiotopeModel extends IdentifiedModelNode {
 		this.images = this.addProperty('images', new ModelNodeCollection(() => new BiotopeImageModel()));
 		this.images.addOnAddListener(() => this.sortImages());
 		this.images.addOnRemoveListener(() => this.sortImages());
+
+		this.statEffects = this.addProperty('statEffects', new ModelNodeCollection(() => new StatEffectDefinitionModel()));
+
 	}
 
 	sortImages() {

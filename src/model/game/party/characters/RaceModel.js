@@ -2,6 +2,8 @@ import DirtyValue from "../../../basic/DirtyValue";
 import IdentifiedModelNode from "../../../basic/IdentifiedModelNode";
 import IntValue from "../../../basic/IntValue";
 import Vector3 from "../../../basic/Vector3";
+import ModelNodeCollection from "../../../basic/ModelNodeCollection";
+import StatEffectDefinitionModel from "../rituals/StatEffectDefinitionModel";
 
 export default class RaceModel extends IdentifiedModelNode {
 
@@ -35,6 +37,11 @@ export default class RaceModel extends IdentifiedModelNode {
 	 */
 	scale;
 
+	/**
+	 * @type ModelNodeCollection<StatEffectDefinitionModel>
+	 */
+	statEffects;
+
 	constructor(id) {
 		super(id);
 
@@ -46,6 +53,9 @@ export default class RaceModel extends IdentifiedModelNode {
 		this.female3dModelId = this.addProperty('female3dModelId', new IntValue(2));
 
 		this.scale = this.addProperty('scale', new Vector3(1,1,1));
+
+		this.statEffects = this.addProperty('statEffects', new ModelNodeCollection(() => new StatEffectDefinitionModel()));
+
 	}
 
 }

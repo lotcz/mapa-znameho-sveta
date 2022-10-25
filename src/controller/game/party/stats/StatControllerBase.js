@@ -22,10 +22,13 @@ export default class StatControllerBase extends ControllerNode {
 			this.addAutoEvent(
 				dep,
 				'change',
-				() => this.updateBase(),
-				true
+				() => this.updateBase()
 			);
 		});
+	}
+
+	activateInternal() {
+		this.updateBase();
 	}
 
 	updateBase() {
