@@ -133,6 +133,9 @@ export default class ActivatedTreeNode {
 	 * @param runOnActivate bool
 	 */
 	addAutoEvent(node, event, handler, runOnActivate = false) {
+		if ((!node) || typeof node.addEventListener !== 'function') {
+			console.error('Node with addEventListener was not provided!');
+		}
 		this.autoRegisterEvents.push({node: node, name:event, handler: handler, runOnActivate: runOnActivate});
 	}
 

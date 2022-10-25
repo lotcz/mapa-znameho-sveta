@@ -47,8 +47,7 @@ export default class StatConsumptionRenderer extends DomRenderer {
 		const ratio = this.model.currentFloat.get() / this.model.baseValue.get();
 		const width = Pixies.round(ratio * 100, 3);
 		this.bar.style.width = `${Pixies.between(0, 100, width)}%`;
-		const opacity = Pixies.between(0.1, 1, ratio);
-		this.bar.style.opacity = opacity;
+		this.bar.style.opacity = Pixies.between(0.1, 1, ratio);
 	}
 
 }

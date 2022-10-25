@@ -37,7 +37,7 @@ export default class CharacterStatsModel extends ModelNode {
 	/**
 	 * @type ModelNodeCollection<StatEffectDefinitionModel>
 	 */
-	statEffects;
+	inventoryStatEffects;
 
 	constructor() {
 		super();
@@ -49,7 +49,7 @@ export default class CharacterStatsModel extends ModelNode {
 		this.abilities = this.addProperty('abilities', new AbilitiesStatsModel());
 		this.skills = this.addProperty('skills', new SkillsStatsModel());
 
-		this.statEffects = this.addProperty('statEffects', new ModelNodeCollection(null, false));
+		this.inventoryStatEffects = this.addProperty('inventoryStatEffects', new ModelNodeCollection(null, false));
 	}
 
 }

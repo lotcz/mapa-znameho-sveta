@@ -36,12 +36,12 @@ export default class CharacterController extends ControllerNode {
 				items.push(slot.item.get());
 			}
 		});
-		this.model.stats.statEffects.reset();
+		this.model.stats.inventoryStatEffects.reset();
 		items.forEach((item) => {
-			item.statEffects.forEach((eff) => this.model.stats.statEffects.add(eff));
+			item.statEffects.forEach((eff) => this.model.stats.inventoryStatEffects.add(eff));
 			const def = this.game.resources.itemDefinitions.getById(item.definitionId.get());
 			if (def) {
-				def.statEffects.forEach((eff) => this.model.stats.statEffects.add(eff));
+				def.statEffects.forEach((eff) => this.model.stats.inventoryStatEffects.add(eff));
 			}
 		});
 	}
