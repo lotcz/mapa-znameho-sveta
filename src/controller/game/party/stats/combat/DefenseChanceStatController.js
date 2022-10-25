@@ -1,4 +1,4 @@
-import StatControllerBase from "./StatControllerBase";
+import StatControllerBase from "../StatControllerBase";
 
 export default class DefenseChanceStatController extends StatControllerBase {
 

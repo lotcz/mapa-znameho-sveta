@@ -35,10 +35,13 @@ export default class StatModel extends ModelNode {
 		this.currentFloat.addOnChangeListener(
 			() => {
 				const f = this.currentFloat.get();
+				/*
 				if (f < 0) {
 					this.currentFloat.set(0);
 					return;
 				}
+
+				 */
 				const r = Math.round(f);
 				this.current.set(r);
 			}

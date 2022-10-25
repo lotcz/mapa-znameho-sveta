@@ -2,6 +2,7 @@ import DomRenderer from "../../../basic/DomRenderer";
 import StatSkillRenderer from "../stats/StatSkillRenderer";
 import CollectionRenderer from "../../../basic/CollectionRenderer";
 import Pixies from "../../../../class/basic/Pixies";
+import StatLevelRenderer from "../stats/StatLevelRenderer";
 
 export default class InventoryTabStatsRenderer extends DomRenderer {
 
@@ -16,6 +17,16 @@ export default class InventoryTabStatsRenderer extends DomRenderer {
 		this.model = model;
 		this.party = party;
 
+	}
+
+	activateInternal() {
+		this.container = this.addElement( 'div', 'inventory-stats column flex-1 p-1 m-1');
+		Pixies.createElement(this.container, 'h2', null, 'Úroveň postavy');
+		this.level = Pixies.createElement(this.container, 'div');
+		this.addChild(new StatLevelRenderer(this.game, this.model.stats.levelProgress.level, this.level));
+
+		Pixies.createElement(this.container, 'h2', null, 'Vlastnosti');
+		this.abilities = Pixies.createElement(this.container, 'div');
 		this.addChild(
 			new CollectionRenderer(
 				this.game,
@@ -24,6 +35,8 @@ export default class InventoryTabStatsRenderer extends DomRenderer {
 			)
 		);
 
+		Pixies.createElement(this.container, 'h2', null, 'Dovednosti');
+		this.skills = Pixies.createElement(this.container, 'div');
 		this.addChild(
 			new CollectionRenderer(
 				this.game,
@@ -33,17 +46,8 @@ export default class InventoryTabStatsRenderer extends DomRenderer {
 		);
 	}
 
-	activateInternal() {
-		this.container = this.addElement( 'div', 'inventory-stats column flex-1 p-1 m-1');
-		Pixies.createElement(this.container, 'h2', null, 'Vlastnosti');
-		this.abilities = Pixies.createElement(this.container, 'div');
-
-		Pixies.createElement(this.container, 'h2', null, 'Dovednosti');
-		this.skills = Pixies.createElement(this.container, 'div');
-
-	}
-
 	deactivateInternal() {
+		this.resetChildren();
 		this.removeElement(this.container);
 		this.container = null;
 	}
