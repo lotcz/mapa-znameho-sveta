@@ -4,7 +4,6 @@ import Vector2 from "../../basic/Vector2";
 import ModelNodeCollection from "../../basic/ModelNodeCollection";
 import ConnectionModel from "./ConnectionModel";
 import IntValue from "../../basic/IntValue";
-import NullableNode from "../../basic/NullableNode";
 
 export default class LocationModel extends IdentifiedModelNode {
 
@@ -29,11 +28,6 @@ export default class LocationModel extends IdentifiedModelNode {
 	biotopeId;
 
 	/**
-	 * @type NullableNode
-	 */
-	biotope;
-
-	/**
 	 * @type ModelNodeCollection<ConnectionModel>
 	 */
 	connections;
@@ -46,7 +40,6 @@ export default class LocationModel extends IdentifiedModelNode {
 		this.battleMapId = this.addProperty('battleMapId', new IntValue(0));
 
 		this.biotopeId = this.addProperty('biotopeId', new IntValue(0));
-		this.biotope = this.addProperty('biotope', new NullableNode(null, false));
 
 		this.connections = this.addProperty('connections', new ModelNodeCollection(null, false));
 	}

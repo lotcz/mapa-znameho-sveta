@@ -5,8 +5,8 @@
 
 	.inner {
 	  box-shadow: @dark-brown 0 0 40px;
-	  width: 80px;
-	  height: 80px;
+	  width: @inventory-slot-size;
+	  height: @inventory-slot-size;
 	  padding: 0;
 	  border-radius: 10px;
 
@@ -32,10 +32,21 @@
 	  right: 0;
 	  top: 0;
 	  font-size: 75%;
+	  width: @inventory-slot-size;
+	  padding: @m-1;
 
-	  .stat-bar {
-		height: 10px;
-		width: 80px;
+	  .stat-wrapper {
+		box-shadow: @dark-brown 0 0 10px;
+		border-radius: 5px;
+		padding: @m-1;
+		margin: @m-1 0;
+
+		.stat-bar {
+		  height: 10px;
+		  border-color: @dark-brown;
+		  border-style: solid;
+		  border-width: 0 1px 0 1px;
+		}
 	  }
 	}
 

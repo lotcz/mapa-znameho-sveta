@@ -16,14 +16,6 @@ export default class CurrentLocationController extends ControllerNode {
 
 		this.addChild(new CollectionController(this.game, this.model.connections, (m) => new ConnectionController(this.game, m)));
 
-		this.addAutoEvent(
-			this.model.biotopeId,
-			'change',
-			() => {
-				this.model.biotope.set(this.game.resources.map.biotopes.getById(this.model.biotopeId.get()));
-			},
-			true
-		);
 	}
 
 	activateInternal() {

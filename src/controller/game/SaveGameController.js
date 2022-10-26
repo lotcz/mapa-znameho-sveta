@@ -36,13 +36,26 @@ export default class SaveGameController extends ControllerNode {
 		this.partyController = new PartyController(this.game, this.model.party);
 		this.addChild(this.partyController);
 
-		this.conversationChangedHandler = () => this.updateConversation();
-		this.onGameModeChanged = () => this.updateGameMode();
+		this.addAutoEvent(
+			this.model.mode,
+			'change',
+			() => this.updateGameMode(),
+			true
+		);
+
+		this.addAutoEvent(
+			this.model.conversation,
+			'change',
+			() => this.updateConversation(),
+			true
+		);
 
 		this.addAutoEvent(
 			this.model,
 			'item-slot-selected',
 			(slot) => {
+				// handle items
+				// todo: move to some separate controller
 				if (this.model.selectedInventorySlot.equalsTo(slot)) {
 					this.model.selectedInventorySlot.set(null);
 					return;
@@ -117,8 +130,23 @@ export default class SaveGameController extends ControllerNode {
 			}
 		);
 
+		this.addAutoEventMultiple(
+			[this.model.currentLocation, this.model.currentPath],
+			'change',
+			() => this.updateBiotopeId()
+		);
+
 		this.addAutoEvent(
-			this.model.currentLocation,
+			this.model.currentBiotopeId,
+			'change',
+			() => {
+				this.model.currentBiotope.set(this.game.resources.map.biotopes.getById(this.model.currentBiotopeId.get()));
+			},
+			true
+		);
+
+		this.addAutoEvent(
+			this.model.currentBiotope,
 			'change',
 			() => {
 				// update environment effects on party
@@ -126,15 +154,11 @@ export default class SaveGameController extends ControllerNode {
 					ch.stats.environmentStatEffects.reset();
 				});
 
-				const location = this.model.currentLocation.get();
-				if (!location) {
+				if (this.model.currentBiotope.isEmpty()) {
 					return;
 				}
 
-				const biotope = this.game.resources.map.biotopes.getById(location.biotopeId.get());
-				if (!biotope) {
-					return;
-				}
+				const biotope = this.model.currentBiotope.get();
 
 				this.model.party.forEachCharacter((ch) => {
 					biotope.statEffects.forEach((eff) => {
@@ -147,16 +171,7 @@ export default class SaveGameController extends ControllerNode {
 	}
 
 	activateInternal() {
-		this.updateConversation();
-		this.model.conversation.addOnChangeListener(this.conversationChangedHandler);
-
-		this.updateGameMode();
-		this.model.mode.addOnChangeListener(this.onGameModeChanged);
-	}
-
-	deactivateInternal() {
-		this.model.conversation.removeOnChangeListener(this.conversationChangedHandler);
-		this.model.mode.removeOnChangeListener(this.onGameModeChanged);
+		this.updateBiotopeId();
 	}
 
 	updateInternal(delta) {
@@ -204,6 +219,14 @@ export default class SaveGameController extends ControllerNode {
 				}
 				this.mainController = this.addChild(new BattleController(this.game, this.model.currentBattle.get()));
 				break;
+		}
+	}
+
+	updateBiotopeId() {
+		if (this.model.currentLocation.isSet()) {
+			this.model.currentBiotopeId.set(this.model.currentLocation.get().biotopeId.get());
+		} else if (this.model.currentPath.isSet()) {
+			this.model.currentBiotopeId.set(this.model.currentPath.get().biotopeId.get());
 		}
 	}
 

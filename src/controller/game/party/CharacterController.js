@@ -33,7 +33,6 @@ export default class CharacterController extends ControllerNode {
 		this.model.stats.raceStatEffects.reset();
 		race.statEffects.forEach((eff) => {
 			this.model.stats.raceStatEffects.add(eff);
-			console.log(eff);
 		});
 	}
 

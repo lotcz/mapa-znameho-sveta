@@ -67,16 +67,6 @@ export default class SaveGameModel extends ModelNode {
 	zoom;
 
 	/**
-	 * @type IntValue
-	 */
-	currentPathId;
-
-	/**
-	 * @type NullableNode
-	 */
-	currentPath;
-
-	/**
 	 * @type FloatValue
 	 */
 	pathProgress;
@@ -99,12 +89,32 @@ export default class SaveGameModel extends ModelNode {
 	/**
 	 * @type IntValue
 	 */
-	currentLocationId;
+	currentPathId;
 
 	/**
 	 * @type NullableNode
 	 */
+	currentPath;
+
+	/**
+	 * @type IntValue
+	 */
+	currentLocationId;
+
+	/**
+	 * @type NullableNode<LocationModel>
+	 */
 	currentLocation;
+
+	/**
+	 * @type IntValue
+	 */
+	currentBiotopeId;
+
+	/**
+	 * @type NullableNode<BiotopeModel>
+	 */
+	currentBiotope;
 
 	/**
 	 * @type IntValue
@@ -178,6 +188,9 @@ export default class SaveGameModel extends ModelNode {
 
 		this.currentLocationId = this.addProperty('currentLocationId', new IntValue());
 		this.currentLocation = this.addProperty('currentLocation', new NullableNode(null, false));
+
+		this.currentBiotopeId = this.addProperty('currentBiotopeId', new IntValue());
+		this.currentBiotope = this.addProperty('currentBiotope', new NullableNode(null, false));
 
 		this.conversation = this.addProperty('conversation', new NullableNode());
 

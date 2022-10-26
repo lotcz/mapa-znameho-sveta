@@ -15,15 +15,6 @@ export default class CurrentPathController extends ControllerNode {
 
 		this.model = model;
 
-		this.addAutoEvent(
-			this.model.biotopeId,
-			'change',
-			() => {
-				this.model.biotope.set(this.game.resources.map.biotopes.getById(this.model.biotopeId.get()));
-			},
-			true
-		);
-
 		this.addAutoEvent(this.model, 'path-marker-position', (pos) => {
 			const save = this.game.saveGame.get();
 			this.runOnUpdate(() => save.partyCoordinates.set(pos));

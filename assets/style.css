@@ -689,10 +689,20 @@ h4 {
   right: 0;
   top: 0;
   font-size: 75%;
-}
-.inventory .inventory-items .inventory-character .stats-consumption .stat-bar {
-  height: 10px;
   width: 80px;
+  padding: 5px;
+}
+.inventory .inventory-items .inventory-character .stats-consumption .stat-wrapper {
+  box-shadow: #311a0a 0 0 10px;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px 0;
+}
+.inventory .inventory-items .inventory-character .stats-consumption .stat-wrapper .stat-bar {
+  height: 10px;
+  border-color: #311a0a;
+  border-style: solid;
+  border-width: 0 1px 0 1px;
 }
 .inventory .inventory-items .inventory-character .slot {
   position: absolute;

@@ -25,7 +25,6 @@ export default class SkillController extends ControllerNode {
 		this.addEffectHandler = (eff) => {
 			if (eff.statId.equalsTo(this.model.definitionId.get())) {
 				this.cache.add(eff);
-				console.log(eff);
 			}
 		};
 		this.removeEffectHandler = (eff) => {

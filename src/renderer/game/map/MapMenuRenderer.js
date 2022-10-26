@@ -50,7 +50,7 @@ export default class MapMenuRenderer extends DomRenderer {
 	}
 
 	renderInternal() {
-		if (this.model.currentPath.isDirty || this.model.currentLocation.isDirty || this.model.time.isDirty) {
+		if (this.model.currentBiotope.isDirty || this.model.time.isDirty) {
 			this.time.innerText = Pixies.round(this.model.time.get(), 2);
 			this.updateArt();
 		}
@@ -66,15 +66,9 @@ export default class MapMenuRenderer extends DomRenderer {
 	updateArt() {
 
 		/** @type BiotopeModel */
-		let biotope = null;
+		let biotope = this.model.currentBiotope.get();
 
-		if (this.model.currentLocation.isSet()) {
-			biotope = this.model.currentLocation.get().biotope.get();
-		} else if (this.model.currentPath.isSet()) {
-			biotope = this.model.currentPath.get().biotope.get();
-		}
-
-		if (biotope === null || biotope.images.count() <= 0) {
+		if (biotope === null || biotope === undefined || biotope.images.count() <= 0) {
 			this.clearArt();
 			return;
 		}
@@ -82,8 +76,6 @@ export default class MapMenuRenderer extends DomRenderer {
 		const time = this.model.time.get();
 		let lower = biotope.images.first();
 		let upper = null;
-
-		//console.log(biotope.images);
 
 		if (biotope.images.count() > 1) {
 			let i = 0;
