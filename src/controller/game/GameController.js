@@ -65,7 +65,10 @@ export default class GameController extends ControllerNode {
 			'save-ui',
 			() => {
 				this.saveGameToStorage().then(() => {
-					console.log('ui saved');
+					console.log('savegame saved');
+				});
+				this.saveResourcesToStorage().then(() => {
+					console.log('resources saved');
 				});
 			}
 		);
@@ -77,7 +80,7 @@ export default class GameController extends ControllerNode {
 			this.model.resources.addOnDirtyListener(() => this.isResourcesDirty = true);
 			console.log('resources loaded');
 			this.loadGameFromStorage().then(() => {
-				console.log('ui loaded');
+				console.log('savegame loaded');
 			});
 		});
 	}

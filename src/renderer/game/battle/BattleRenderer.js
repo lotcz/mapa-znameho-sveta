@@ -155,7 +155,7 @@ export default class BattleRenderer extends DomRenderer {
 		this.scene.add(this.ambientLight);
 
 		this.directLight = new THREE.DirectionalLight( 0xe0e0e0, 1);
-		this.directLight.position.set( 10, 10, 10 );
+		this.directLight.position.set( 0, 10, -10 );
 		this.directLight.castShadow = false;
 		if (this.directLight.castShadow) {
 			this.directLight.shadow.bias = 0;

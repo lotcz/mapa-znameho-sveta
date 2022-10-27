@@ -6,7 +6,7 @@ import IntValue from "../../basic/IntValue";
 import NullableNode from "../../basic/NullableNode";
 
 export const CHARACTER_STATE_IDLE = 'Idle';
-export const CHARACTER_STATE_RUN = 'Run';
+export const CHARACTER_STATE_RUN = 'Run'; // "Slow Run"
 export const CHARACTER_STATE_SWORD = 'Sword';
 
 export default class BattleCharacterModel extends ModelNode {
