@@ -253,6 +253,9 @@ h4 {
   overflow-x: hidden;
   max-height: 400px;
 }
+.table-lookup .row {
+  display: flex !important;
+}
 .force-foreground {
   position: fixed;
   z-index: 9999999;
@@ -300,6 +303,9 @@ h4 {
   display: flex;
   flex-direction: row;
   justify-content: start;
+}
+.editor-layer .editor .buttons input {
+  margin: 10px;
 }
 .editor-layer .editor button {
   background-color: gray;

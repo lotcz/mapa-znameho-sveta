@@ -54,6 +54,14 @@ export default class NodeTableRenderer extends DomRenderer {
 			}
 		);
 
+		this.input = Pixies.createElement(buttonsLeft,'input', 'flex-1')
+		this.input.setAttribute('type', 'text');
+		this.input.addEventListener('input', () => this.updateItems());
+		Pixies.createElement(buttonsLeft,'button',null,'Reset',() => {
+			this.input.value = '';
+			this.updateItems();
+		});
+
 		Pixies.createElement(
 			buttonsRight,
 			'button',
@@ -97,4 +105,17 @@ export default class NodeTableRenderer extends DomRenderer {
 		Pixies.destroyElement(this.container);
 	}
 
+	updateItems() {
+		const rows = this.tbody.querySelectorAll('tr');
+		const search = this.input.value.toLowerCase();
+		rows.forEach((row) => {
+			const str = row.innerText.toLowerCase();
+			const visible = (search === '') || str.includes(search);
+			if (visible) {
+				Pixies.removeClass(row, 'hidden');
+			} else {
+				Pixies.addClass(row, 'hidden');
+			}
+		});
+	}
 }
