@@ -715,11 +715,11 @@ h4 {
 }
 .inventory .inventory-items .inventory-character .slot.leftHand {
   top: 40%;
-  left: 15%;
+  right: 20%;
 }
 .inventory .inventory-items .inventory-character .slot.rightHand {
   top: 43%;
-  right: 20%;
+  left: 15%;
 }
 .inventory .inventory-items .inventory-character .slot.body {
   top: 20%;
