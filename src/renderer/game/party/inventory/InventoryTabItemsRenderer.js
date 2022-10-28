@@ -63,7 +63,9 @@ export default class InventoryTabItemsRenderer extends DomRenderer {
 				'table-closed',
 				() => {
 					if (renderer) {
-						slot.item.set(item);
+						if (item.definitionId.isSet()) {
+							slot.item.set(item);
+						}
 						renderer.deactivate();
 						renderer = null;
 					}

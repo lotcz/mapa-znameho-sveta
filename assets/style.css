@@ -245,7 +245,13 @@ h4 {
   margin: auto;
 }
 .table-lookup {
-  position: absolute;
+  background-color: black;
+  color: gray;
+}
+.table-lookup .scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 400px;
 }
 .force-foreground {
   position: fixed;

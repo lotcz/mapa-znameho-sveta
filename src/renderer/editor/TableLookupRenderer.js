@@ -43,20 +43,20 @@ export default class TableLookupRenderer extends DomRenderer {
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', 'table table-lookup bg force-foreground');
+		this.container = this.addElement('div', 'table-lookup force-foreground p-2');
+		this.container.addEventListener('wheel', (e) => e.stopPropagation());
 
-		this.buttons = Pixies.createElement(this.container, 'div', 'buttons');
-		Pixies.createElement(
-			this.buttons,
-			'button',
-			null,
-			'Close',
-			() => {
-				this.model.triggerEvent('table-closed');
-			}
-		);
+		this.buttons = Pixies.createElement(this.container, 'div', 'buttons row stretch');
+		this.input = Pixies.createElement(this.buttons,'input', 'flex-1')
+		this.input.setAttribute('type', 'text');
+		this.input.addEventListener('input', () => this.renderItems());
+		Pixies.createElement(this.buttons,'button',null,'Reset',() => {
+			this.input.value = '';
+			this.renderItems();
+		});
+		Pixies.createElement(this.buttons,'button',null,'Close',() => this.model.triggerEvent('table-closed'));
 
-		this.scrollable = Pixies.createElement(this.container, 'div', 'scroll');
+		this.scrollable = Pixies.createElement(this.container, 'div', 'scroll p-1');
 		this.table = Pixies.createElement(this.scrollable, 'table');
 
 		const thead = Pixies.createElement(this.table, 'thead');
@@ -67,7 +67,37 @@ export default class TableLookupRenderer extends DomRenderer {
 		});
 
 		this.tbody = Pixies.createElement(this.table, 'tbody');
-		this.lookupTable.forEach(
+		this.renderItems();
+	}
+
+	deactivateInternal() {
+		this.removeElement(this.container);
+	}
+
+	getTableByField(name) {
+		return this.game.getTableByName(FIELD_TABLE_MAPPINGS[name]);
+	}
+
+	static isTableLookupField(name) {
+		return Object.keys(FIELD_TABLE_MAPPINGS).includes(name);
+	}
+
+	renderItems() {
+		Pixies.emptyElement(this.tbody);
+		const search = this.input.value.toLowerCase();
+		const searchId = Number(search);
+		this.lookupTable
+			.filter((m) => {
+				if (search === '') {
+					return true;
+				}
+				if (!Number.isNaN(searchId)) {
+					return m.id.equalsTo(searchId);
+				}
+				const name = m.name.get();
+				return name.toLowerCase().includes(search);
+			})
+			.forEach(
 			(node) => {
 				const tr = Pixies.createElement(
 					this.tbody,
@@ -86,17 +116,4 @@ export default class TableLookupRenderer extends DomRenderer {
 			}
 		);
 	}
-
-	deactivateInternal() {
-		this.removeElement(this.container);
-	}
-
-	getTableByField(name) {
-		return this.game.getTableByName(FIELD_TABLE_MAPPINGS[name]);
-	}
-
-	static isTableLookupField(name) {
-		return Object.keys(FIELD_TABLE_MAPPINGS).includes(name);
-	}
-
 }
