@@ -37,7 +37,7 @@ export default class CharacterController extends ControllerNode {
 	}
 
 	updateInventoryEffects() {
-		const slots = [this.model.inventory.leftHand, this.model.inventory.rightHand, this.model.inventory.clothing, this.model.inventory.head];
+		const slots = [this.model.inventory.leftHand, this.model.inventory.rightHand, this.model.inventory.body, this.model.inventory.hips, this.model.inventory.feet, this.model.inventory.head];
 		const items = [];
 		slots.forEach((slot) => {
 			if (slot.item.isSet()) {

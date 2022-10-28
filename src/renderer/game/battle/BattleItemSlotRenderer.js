@@ -6,9 +6,14 @@ const BONES = {
 	head: 'mixamorigHead',
 	leftHand: 'mixamorigLeftHand',
 	rightHand: 'mixamorigRightHand',
-	clothing: 'mixamorigSpine',
+	body: 'mixamorigSpine2',
+	hips: 'mixamorigHips',
+	leftFoot: 'mixamorigLeftFoot',
+	rightFoot: 'mixamorigRightFoot',
 	leftLeg: 'mixamorigLeftUpLeg',
-	rightLeg: 'mixamorigRightUpLeg'
+	rightLeg: 'mixamorigRightUpLeg',
+	leftDownLeg: 'mixamorigLeftLeg',
+	rightDownLeg: 'mixamorigRightLeg'
 }
 
 export default class BattleItemSlotRenderer extends RendererNode {

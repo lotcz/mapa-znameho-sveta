@@ -21,7 +21,17 @@ export default class InventoryModel extends ModelNode {
 	/**
 	 * @type InventorySlotModel
 	 */
-	clothing;
+	body;
+
+	/**
+	 * @type InventorySlotModel
+	 */
+	hips;
+
+	/**
+	 * @type InventorySlotModel
+	 */
+	feet;
 
 	/**
 	 * @type InventorySlotModel
@@ -44,13 +54,16 @@ export default class InventoryModel extends ModelNode {
 		this.head = this.addProperty('head', new InventorySlotModel(['head'], 'head'));
 		this.leftHand = this.addProperty('leftHand', new InventorySlotModel(['all'], 'leftHand'));
 		this.rightHand = this.addProperty('rightHand', new InventorySlotModel(['all'], 'rightHand'));
-		this.clothing = this.addProperty('clothing', new InventorySlotModel(['clothing'], 'clothing'));
+
+		this.body = this.addProperty('body', new InventorySlotModel(['body'], 'body'));
+		this.hips = this.addProperty('hips', new InventorySlotModel(['hips'], 'hips'));
+		this.feet = this.addProperty('feet', new InventorySlotModel(['feet'], 'feet'));
 
 		this.slot1 = this.addProperty('slot1', new InventorySlotModel(['all']));
 		this.slot2 = this.addProperty('slot2', new InventorySlotModel(['all']));
 		this.slot3 = this.addProperty('slot3', new InventorySlotModel(['all']));
 
-		const all = [this.head, this.leftHand, this.rightHand, this.clothing];
+		const all = [this.head, this.leftHand, this.rightHand, this.body, this.hips, this.feet];
 		all.forEach((slot) => {
 			slot.addEventListener('item-changed', () => this.triggerEvent('item-changed'));
 		});

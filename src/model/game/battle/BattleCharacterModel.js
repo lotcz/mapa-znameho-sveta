@@ -5,9 +5,11 @@ import Rotation from "../../basic/Rotation";
 import IntValue from "../../basic/IntValue";
 import NullableNode from "../../basic/NullableNode";
 
-export const CHARACTER_STATE_IDLE = 'Idle';
+export const CHARACTER_STATE_STAND = 'Stand'; // "Standing Idle"
+export const CHARACTER_STATE_IDLE = 'Idle'; // "Idle"
 export const CHARACTER_STATE_RUN = 'Run'; // "Slow Run"
-export const CHARACTER_STATE_SWORD = 'Sword';
+export const CHARACTER_STATE_SWORD = 'Sword'; // "Stable Sword Outward Slash"
+export const CHARACTER_STATE_HIT = 'Hit'; // "Zombie Reaction Hit"
 
 export default class BattleCharacterModel extends ModelNode {
 

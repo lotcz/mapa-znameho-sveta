@@ -1,19 +1,7 @@
 import Pixies from "../../class/basic/Pixies";
 import GUIHelper from "../../class/basic/GUIHelper";
 import DomRenderer from "../basic/DomRenderer";
-import BattleCharacterModel from "../../model/game/battle/BattleCharacterModel";
-import BattleCharacterRenderer from "../game/battle/BattleCharacterRenderer";
-import * as THREE from "three";
-import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer";
-import {RenderPass} from "three/examples/jsm/postprocessing/RenderPass";
-import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
-import {FXAAShader} from "three/examples/jsm/shaders/FXAAShader";
 import Vector2 from "../../model/basic/Vector2";
-import Vector3 from "../../model/basic/Vector3";
-import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-import ItemModel from "../../model/game/items/ItemModel";
-import CharacterModel from "../../model/game/party/characters/CharacterModel";
-import AdditionalItemModel from "../../model/game/items/AdditionalItemModel";
 
 const PREVIEW_SIZE = new Vector2(250, 250);
 
@@ -50,7 +38,7 @@ export default class ItemMountingRenderer extends DomRenderer {
 		position2.open();
 		const quaternion2 = GUIHelper.addRotationVector3(this.gui, this.model.altMountingRotation, 'alt mounting rotation');
 		quaternion2.open();
-
+/*
 		this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 		this.slot.appendChild(this.renderer.domElement);
 		this.renderer.setSize(PREVIEW_SIZE.x, PREVIEW_SIZE.y);
@@ -148,9 +136,12 @@ export default class ItemMountingRenderer extends DomRenderer {
 		this.battleCharacterRenderer.activate();
 
 		this.updatePreview();
+
+ */
 	}
 
 	deactivateInternal() {
+		/*
 		this.ambientLight.dispose();
 		this.ambientLight = null;
 		this.directLight.dispose();
@@ -158,13 +149,14 @@ export default class ItemMountingRenderer extends DomRenderer {
 		this.scene = null;
 		this.renderer.dispose();
 		this.renderer = false;
+		 */
 		this.removeElement(this.container);
 		this.gui.destroy();
 		this.gui = null;
 	}
 
 	renderInternal() {
-		this.updatePreview();
+		//this.updatePreview();
 	}
 
 	updatePreview() {

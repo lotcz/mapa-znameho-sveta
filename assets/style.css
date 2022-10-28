@@ -665,8 +665,8 @@ h4 {
 }
 .inventory .inventory-items .slot .inner {
   box-shadow: #311a0a 0 0 40px;
-  width: 80px;
-  height: 80px;
+  width: 65px;
+  height: 65px;
   padding: 0;
   border-radius: 10px;
 }
@@ -677,7 +677,6 @@ h4 {
   position: relative;
   display: block;
   height: 500px;
-  width: 300px;
   margin: 20px;
   background-image: url('../../../assets/img/ui/inventory-female.png');
   background-size: contain;
@@ -689,7 +688,7 @@ h4 {
   right: 0;
   top: 0;
   font-size: 75%;
-  width: 80px;
+  width: 65px;
   padding: 5px;
 }
 .inventory .inventory-items .inventory-character .stats-consumption .stat-wrapper {
@@ -700,28 +699,33 @@ h4 {
 }
 .inventory .inventory-items .inventory-character .stats-consumption .stat-wrapper .stat-bar {
   height: 10px;
-  border-color: #311a0a;
-  border-style: solid;
-  border-width: 0 1px 0 1px;
 }
 .inventory .inventory-items .inventory-character .slot {
   position: absolute;
 }
 .inventory .inventory-items .inventory-character .slot.head {
   top: 0;
-  left: 20%;
+  left: 40%;
 }
 .inventory .inventory-items .inventory-character .slot.leftHand {
   top: 40%;
-  right: 0;
+  left: 15%;
 }
 .inventory .inventory-items .inventory-character .slot.rightHand {
-  top: 45%;
-  left: 0;
+  top: 43%;
+  right: 20%;
 }
-.inventory .inventory-items .inventory-character .slot.clothing {
-  top: 33%;
+.inventory .inventory-items .inventory-character .slot.body {
+  top: 20%;
+  left: 34%;
+}
+.inventory .inventory-items .inventory-character .slot.hips {
+  top: 45%;
   left: 40%;
+}
+.inventory .inventory-items .inventory-character .slot.feet {
+  bottom: 0;
+  left: 38%;
 }
 .inventory .inventory-items .slot.drop .inner {
   background-color: rgba(200, 0, 0, 0.2);

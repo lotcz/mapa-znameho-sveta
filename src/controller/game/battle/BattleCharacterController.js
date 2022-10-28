@@ -65,7 +65,10 @@ export default class BattleCharacterController extends ControllerNode {
 					character.inventory.head.item.addOnChangeListener(this.headGearChangedHandler);
 					this.updateHair();
 
-					this.addChild(new BattleItemSlotController(this.game, character.inventory.clothing));
+					// to update additional items
+					this.addChild(new BattleItemSlotController(this.game, character.inventory.body));
+					this.addChild(new BattleItemSlotController(this.game, character.inventory.hips));
+					this.addChild(new BattleItemSlotController(this.game, character.inventory.feet));
 				}
 			},
 			true

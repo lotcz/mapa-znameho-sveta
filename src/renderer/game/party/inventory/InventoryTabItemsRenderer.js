@@ -40,7 +40,10 @@ export default class InventoryTabItemsRenderer extends DomRenderer {
 		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.head, this.inventoryCharacter));
 		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.leftHand, this.inventoryCharacter));
 		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.rightHand, this.inventoryCharacter));
-		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.clothing, this.inventoryCharacter));
+
+		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.body, this.inventoryCharacter));
+		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.hips, this.inventoryCharacter));
+		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.feet, this.inventoryCharacter));
 
 		this.inventorySlots = Pixies.createElement(this.container, 'div', 'inventory-slots');
 		this.inventorySlotsTop = Pixies.createElement(this.inventorySlots, 'div', 'inventory-slots-top');
