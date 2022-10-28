@@ -124,6 +124,7 @@ export default class ItemMountingRenderer extends DomRenderer {
 
 		if (this.model.type.equalsTo('clothing')) {
 			character.inventory.clothing.item.set(item);
+			placeInHands = false;
 		}
 
 		if (this.model.type.equalsTo('legs')) {

@@ -64,20 +64,34 @@ export default class AssetCache {
 		}
 	}
 
-	getAsset(uri, onLoaded = null, onError = null) {
-		const onFailHandler = (msg) => {
-			console.error(`Loading of asset '${uri}' failed: ${msg}`);
-			if (onError) {
-				onError(msg);
-			}
-		}
+	loaderFailed(loader, msg, onError) {
+		console.error(`Loading of asset '${loader.uri}' failed: ${msg}`);
 
+		this.loaders.remove(loader);
+
+		if (onError) {
+			onError(msg);
+		}
+	}
+
+	loaderSucceeded(loader, resource, onLoaded) {
+		if (this.cache.exists(loader.uri)) {
+			this.cache.set(loader.uri, resource);
+			console.warn(`Resource ${loader.uri} was already present when loaded and replaced.`);
+		} else {
+			this.cache.add(loader.uri, resource);
+		}
+		this.loaders.remove(loader);
+		if (onLoaded) onLoaded(resource);
+	}
+
+	getAsset(uri, onLoaded = null, onError = null) {
 		if (this.cache.exists(uri)) {
 			onLoaded(this.cache.get(uri));
 		} else {
 			const existingLoader = this.loaders.find((l) => l.uri === uri);
 			if (existingLoader) {
-				existingLoader.addLoaderEventsListeners(onLoaded, onFailHandler);
+				existingLoader.addLoaderEventsListeners(onLoaded, onError);
 				return;
 			}
 
@@ -90,17 +104,8 @@ export default class AssetCache {
 			const loader = new loaderType(this, uri);
 			this.loaders.add(loader);
 			loader.load(
-				(resource) => {
-					if (this.cache.exists(uri)) {
-						this.cache.set(uri, resource);
-						console.warn(`Resource ${uri} was already present when loaded and replaced.`);
-					} else {
-						this.cache.add(uri, resource);
-					}
-					this.loaders.remove(loader);
-					if (onLoaded) onLoaded(resource);
-				},
-				onFailHandler
+				(resource) => this.loaderSucceeded(loader, resource, onLoaded),
+				(msg) => this.loaderFailed(loader, msg, onError)
 			);
 		}
 	}

@@ -12,6 +12,17 @@
   }
 }
 
+.table-lookup {
+  position: absolute;
+}
+
+.force-foreground {
+  position: fixed;
+  z-index: 9999999;
+  top: 20%;
+  left: 40%;
+}
+
 .editor-layer {
   font-family: monospace;
   position: absolute;
@@ -163,10 +174,6 @@
 	  margin: 0;
 	}
 
-	.table-lookup {
-	  position: absolute;
-	}
-
 	form .fields .row input {
 	  display: block;
 	  width: auto;
@@ -186,18 +193,11 @@
 	}
 
 	.item-def .slot {
-	  background-image: url('assets/img/texture/paper.jpg');
+	  background-image: url('img/texture/paper.jpg');
 	}
 
 	.item-def .slot .inner {
 	  display: flex;
-	}
-
-	.force-foreground {
-	  position: fixed;
-	  z-index: 9999999;
-	  top: 20%;
-	  left: 40%;
 	}
 
 	.battle-menu {

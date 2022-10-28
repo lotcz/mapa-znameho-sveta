@@ -119,7 +119,7 @@ export default class BattleItemSlotRenderer extends RendererNode {
 	}
 
 	updateBonePosition() {
-		if (!this.definition) {
+		if (!(this.definition && this.mesh)) {
 			return;
 		}
 

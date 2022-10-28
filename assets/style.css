@@ -244,6 +244,15 @@ h4 {
   width: 100%;
   margin: auto;
 }
+.table-lookup {
+  position: absolute;
+}
+.force-foreground {
+  position: fixed;
+  z-index: 9999999;
+  top: 20%;
+  left: 40%;
+}
 .editor-layer {
   font-family: monospace;
   position: absolute;
@@ -374,9 +383,6 @@ h4 {
 .editor-layer .editor form .fields .row .field.with-lookup .lookup-button {
   margin: 0;
 }
-.editor-layer .editor .table-lookup {
-  position: absolute;
-}
 .editor-layer .editor form .fields .row input {
   display: block;
   width: auto;
@@ -392,16 +398,10 @@ h4 {
   width: 100px;
 }
 .editor-layer .editor .item-def .slot {
-  background-image: url('assets/img/texture/paper.jpg');
+  background-image: url('img/texture/paper.jpg');
 }
 .editor-layer .editor .item-def .slot .inner {
   display: flex;
-}
-.editor-layer .editor .force-foreground {
-  position: fixed;
-  z-index: 9999999;
-  top: 20%;
-  left: 40%;
 }
 .editor-layer .editor .battle-menu {
   position: fixed;
