@@ -2,7 +2,7 @@ const cors = require("cors");
 const express = require("express");
 const fs = require("fs");
 
-const path = 'assets/resources.json';
+const path = 'src/resources.json';
 const port = 88;
 
 const corsOptions = {
