@@ -56,7 +56,7 @@ export default class LocationRenderer extends SvgRenderer {
 				.on('mouseover', () => this.game.triggerEvent('helperMouseOver', this.model.coordinates))
 				.on('mouseout', () => this.game.triggerEvent('helperMouseOut', this.model.coordinates));
 
-			this.helperLabel = this.draw.text(this.model.id.get())
+			this.helperLabel = this.draw.text(`${this.model.id.get()}-${this.model.name.get()}`)
 				.font({ fill: 'white', size: 25})
 				.center(this.model.coordinates.x, this.model.coordinates.y - 25);
 		}

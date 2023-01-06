@@ -57,19 +57,19 @@ export default class MapController extends ControllerNode {
 		this.addAutoEvent(
 			this.game.mainLayerSize,
 			'change',
-			() => this.updateCoordinates()
+			() => this.updateCornerCoordinates()
 		);
 
 		this.addAutoEvent(
 			this.model.mapCenterCoordinates,
 			'change',
-			() => this.updateCoordinates()
+			() => this.updateCornerCoordinates()
 		);
 
 		this.addAutoEvent(
 			this.model.zoom,
 			'change',
-			() => this.updateCoordinates()
+			() => this.updateCornerCoordinates()
 		);
 
 		this.addAutoEvent(
@@ -145,7 +145,7 @@ export default class MapController extends ControllerNode {
 		}
 	}
 
-	updateCoordinates() {
+	updateCornerCoordinates() {
 		const center = this.game.mainLayerSize.multiply(0.5 / this.model.zoom.get());
 		const corner = this.model.mapCenterCoordinates.subtract(center);
 		this.model.mapCornerCoordinates.set(corner);
@@ -155,7 +155,7 @@ export default class MapController extends ControllerNode {
 		if (this.game.controls.mouseDownLeft.get()) {
 			this.model.partyTraveling.set(false);
 			if (this.dragging) {
-				const mapCoords = this.model.mapCenterCoordinates.add(this.game.mainLayerMouseCoordinates.multiply(1 / this.model.zoom.get()));
+				const mapCoords = this.model.mapCornerCoordinates.add(this.game.mainLayerMouseCoordinates.multiply(1 / this.model.zoom.get()));
 				this.dragging.set(mapCoords);
 			} else if (this.focusedHelper.isSet()) {
 				this.dragging = this.focusedHelper.get();
@@ -181,8 +181,17 @@ export default class MapController extends ControllerNode {
 
 	toBattle() {
 		const location = this.model.currentLocation.get();
+		if (!location) {
+			console.log('location empty');
+			return;
+		}
 		const battleMapId = location.battleMapId.get();
 		const map = this.game.resources.map.battleMaps.getById(battleMapId);
+
+		if (!map) {
+			console.log('no map found, id =', battleMapId);
+			return;
+		}
 
 		let battle = this.model.battles.find((b) => b.battleMapId.equalsTo(battleMapId));
 
