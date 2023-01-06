@@ -2,6 +2,7 @@ import ControllerNode from "../basic/ControllerNode";
 import EditorSaveGameController from "./EditorSaveGameController";
 import NullableNodeController from "../basic/NullableNodeController";
 import SaveGameModel from "../../model/game/SaveGameModel";
+import Pixies from "../../class/basic/Pixies";
 
 export default class EditorController extends ControllerNode {
 
@@ -63,6 +64,12 @@ export default class EditorController extends ControllerNode {
 			this.model,
 			'download-resources',
 			(param) => this.runOnUpdate(() => this.downloadResources(param))
+		);
+
+		this.addAutoEvent(
+			this.model,
+			'save-resources',
+			() => this.saveResources()
 		);
 
 		this.addAutoEvent(
@@ -149,4 +156,8 @@ export default class EditorController extends ControllerNode {
 		document.body.removeChild(element);
 	}
 
+	saveResources() {
+		const str = JSON.stringify(this.game.resources.getState());
+		Pixies.post('http://localhost:88/save-resources', str);
+	}
 }

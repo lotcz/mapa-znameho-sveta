@@ -9,7 +9,10 @@
   "dependencies": {
     "@svgdotjs/svg.filter.js": "^3.0.7",
     "@svgdotjs/svg.js": "^3.1.1",
+    "cors": "^2.8.5",
     "dat.gui": "^0.7.7",
+    "express": "^4.18.2",
+    "fs": "0.0.1-security",
     "localforage": "^1.10.0",
     "three": "^0.139.2"
   },
@@ -32,8 +35,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
     "debug": "webpack serve --open",
-	"less": "lessc src/style/style.less assets/style.css",
-	"less-watch": "less-watch-compiler src/style assets style.less"
+    "start": "node api.js",
+    "less": "lessc src/style/style.less assets/style.css",
+    "less-watch": "less-watch-compiler src/style assets style.less"
   },
   "author": "",
   "license": "ISC"

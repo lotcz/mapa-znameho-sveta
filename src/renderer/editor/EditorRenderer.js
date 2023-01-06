@@ -69,8 +69,16 @@ export default class EditorRenderer extends DomRenderer {
 			buttonsLeft,
 			'button',
 			'special',
-			'Download Resources',
+			'Download',
 			() => this.model.triggerEvent('download-resources')
+		);
+
+		Pixies.createElement(
+			buttonsLeft,
+			'button',
+			'special',
+			'Post',
+			() => this.model.triggerEvent('save-resources')
 		);
 
 		Pixies.createElement(
