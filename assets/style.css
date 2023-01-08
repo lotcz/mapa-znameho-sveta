@@ -256,6 +256,9 @@ h4 {
 .table-lookup .row {
   display: flex !important;
 }
+.table-lookup tr.active {
+  color: white;
+}
 .force-foreground {
   position: fixed;
   z-index: 9999999;

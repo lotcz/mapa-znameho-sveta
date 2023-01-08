@@ -5,6 +5,7 @@ import InventoryTabItemsRenderer from "./InventoryTabItemsRenderer";
 import ConditionalNodeRenderer from "../../../basic/ConditionalNodeRenderer";
 import {
 	INVENTORY_MODE_ITEMS,
+	INVENTORY_MODE_QUESTS,
 	INVENTORY_MODE_RITUALS,
 	INVENTORY_MODE_STATS
 } from "../../../../model/game/party/PartyModel";
@@ -12,6 +13,7 @@ import InventoryTabStatsRenderer from "./InventoryTabStatsRenderer";
 import CollectionRenderer from "../../../basic/CollectionRenderer";
 import StatCombatRenderer from "../stats/StatCombatRenderer";
 import StatBasicRenderer from "../stats/StatBasicRenderer";
+import InventoryTabQuestsRenderer from "./InventoryTabQuestsRenderer";
 
 export default class InventoryRenderer extends DomRenderer {
 
@@ -121,6 +123,16 @@ export default class InventoryRenderer extends DomRenderer {
 			}
 		);
 
+		this.questsTab = Pixies.createElement(
+			this.tabs,
+			'div',
+			'tab-header',
+			'Úkoly',
+			() => {
+				this.party.inventoryMode.set(INVENTORY_MODE_QUESTS);
+			}
+		);
+
 		Pixies.createElement(
 			this.tabs,
 			'article',
@@ -145,6 +157,14 @@ export default class InventoryRenderer extends DomRenderer {
 				() => new InventoryTabStatsRenderer(this.game, this.model, this.party, this.content)
 			)
 		);
+		this.addChild(
+			new ConditionalNodeRenderer(
+				this.game,
+				this.party.inventoryMode,
+				() => this.party.inventoryMode.equalsTo(INVENTORY_MODE_QUESTS),
+				() => new InventoryTabQuestsRenderer(this.game, this.game.saveGame.get().completedStages, this.content)
+			)
+		);
 
 		this.party.triggerEvent('inventory-resize');
 	}
@@ -159,6 +179,7 @@ export default class InventoryRenderer extends DomRenderer {
 		Pixies.removeClass(this.statsTab, 'active');
 		Pixies.removeClass(this.itemsTab, 'active');
 		Pixies.removeClass(this.ritualsTab, 'active');
+		Pixies.removeClass(this.questsTab, 'active');
 
 		switch (this.party.inventoryMode.get()) {
 			case INVENTORY_MODE_ITEMS:
@@ -169,6 +190,9 @@ export default class InventoryRenderer extends DomRenderer {
 				break;
 			case INVENTORY_MODE_RITUALS:
 				Pixies.addClass(this.ritualsTab, 'active');
+				break;
+			case INVENTORY_MODE_QUESTS:
+				Pixies.addClass(this.questsTab, 'active');
 				break;
 		}
 	}

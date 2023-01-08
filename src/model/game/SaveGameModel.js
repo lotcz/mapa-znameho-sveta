@@ -10,6 +10,7 @@ import IntValue from "../basic/IntValue";
 import FloatValue from "../basic/FloatValue";
 import BoolValue from "../basic/BoolValue";
 import ModelNodeCollection from "../basic/ModelNodeCollection";
+import CompletedStagesModel from "./quests/CompletedStagesModel";
 
 export const GAME_MODE_MAP = 'map';
 export const GAME_MODE_BATTLE = 'battle';
@@ -136,6 +137,11 @@ export default class SaveGameModel extends ModelNode {
 	 */
 	selectedInventorySlot;
 
+	/**
+	 * @type CompletedStagesModel
+	 */
+	completedStages;
+
 	constructor() {
 		super();
 
@@ -195,6 +201,8 @@ export default class SaveGameModel extends ModelNode {
 		this.conversation = this.addProperty('conversation', new NullableNode());
 
 		this.selectedInventorySlot = this.addProperty('selectedInventorySlot', new NullableNode(null, false));
+
+		this.completedStages = this.addProperty('completedStages', new CompletedStagesModel());
 	}
 
 	passTime(duration) {
@@ -222,4 +230,5 @@ export default class SaveGameModel extends ModelNode {
 			}
 		})
 	}
+
 }

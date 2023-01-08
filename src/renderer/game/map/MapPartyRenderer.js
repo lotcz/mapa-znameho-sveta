@@ -12,10 +12,10 @@ export default class MapPartyRenderer extends SvgRenderer {
 
 		this.model = model;
 
+		this.addAutoEvent(this.game.isInDebugMode, 'change', () => this.updateDebugMode(), true);
 	}
 
 	activateInternal() {
-
 		this.group = this.draw.group();
 		this.markers = this.group.group();
 		this.arrowPrevGroup = this.createArrowGroup('go-back');
@@ -51,6 +51,7 @@ export default class MapPartyRenderer extends SvgRenderer {
 
 	deactivateInternal() {
 		this.group.remove();
+		this.group = null;
 		this.markerTravel = null;
 		this.markerStop = null;
 		this.arrowPrev = null;
@@ -84,7 +85,6 @@ export default class MapPartyRenderer extends SvgRenderer {
 	}
 
 	renderArrows() {
-
 		if (!(this.arrowNext && this.arrowNextGroup)) {
 			return;
 		}
@@ -126,5 +126,13 @@ export default class MapPartyRenderer extends SvgRenderer {
 		});
 
 		return group;
+	}
+
+	updateDebugMode() {
+		if (this.game.isInDebugMode.get()) {
+			this.group.hide();
+		} else {
+			this.group.show();
+		}
 	}
 }

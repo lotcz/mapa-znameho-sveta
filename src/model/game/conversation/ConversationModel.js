@@ -54,7 +54,7 @@ export default class ConversationModel extends IdentifiedModelNode {
 		this.name = this.addProperty('name', new DirtyValue(`Conversation ${id}`));
 		this.description = this.addProperty('description', new DirtyValue('Conversation description'));
 		this.portrait = this.addProperty('portrait', new DirtyValue('img/portrait/adelan/female-1.jpg'));
-		this.characterId = this.addProperty('characterId', new IntValue(0));
+		this.characterId = this.addProperty('characterId', new IntValue());
 		this.character = this.addProperty('character', new NullableNode(() => new CharacterModel(), false));
 
 		this.initialEntry = this.addProperty('initialEntry', new ConversationEntryModel());

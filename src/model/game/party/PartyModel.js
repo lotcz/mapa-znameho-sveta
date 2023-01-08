@@ -9,6 +9,7 @@ import DirtyValue from "../../basic/DirtyValue";
 export const INVENTORY_MODE_ITEMS = 'items';
 export const INVENTORY_MODE_STATS = 'stats';
 export const INVENTORY_MODE_RITUALS = 'rituals';
+export const INVENTORY_MODE_QUESTS = 'quests';
 
 export default class PartyModel extends ModelNode {
 
@@ -54,6 +55,7 @@ export default class PartyModel extends ModelNode {
 		this.inventoryMode = this.addProperty('inventoryMode', new DirtyValue(INVENTORY_MODE_ITEMS));
 
 		this.slots = this.addProperty('slots', new ModelNodeCollection(() => new PartySlotModel()));
+
 	}
 
 	containsCharacter(characterId) {

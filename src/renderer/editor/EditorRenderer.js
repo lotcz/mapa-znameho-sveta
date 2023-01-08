@@ -64,7 +64,7 @@ export default class EditorRenderer extends DomRenderer {
 		this.switch.setAttribute('type', 'checkbox');
 		this.switch.setAttribute('name', 'switch');
 		this.switch.addEventListener('change', () => this.model.triggerEvent('switch-options'));
-
+/*
 		Pixies.createElement(
 			buttonsLeft,
 			'button',
@@ -72,12 +72,12 @@ export default class EditorRenderer extends DomRenderer {
 			'Download',
 			() => this.model.triggerEvent('download-resources')
 		);
-
+*/
 		Pixies.createElement(
 			buttonsLeft,
 			'button',
 			'special',
-			'Post',
+			'Save Resources',
 			() => this.model.triggerEvent('save-resources')
 		);
 

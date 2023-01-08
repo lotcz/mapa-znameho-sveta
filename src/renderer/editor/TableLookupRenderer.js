@@ -22,7 +22,10 @@ const FIELD_TABLE_MAPPINGS = {
 	startLocationId: 'locations',
 	endLocationId: 'locations',
 	battleMapId: 'battleMaps',
-	statId: 'statDefinitions'
+	statId: 'statDefinitions',
+	parentStageId: 'quests',
+	requiresStageId: 'quests',
+	completesStageId: 'quests'
 }
 
 const RENDER_FIELDS = ['id', 'name'];

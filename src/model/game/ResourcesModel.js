@@ -10,6 +10,7 @@ import ItemDefinitionModel from "./items/ItemDefinitionModel";
 import SpriteModel from "./battle/battlemap/SpriteModel";
 import Sprite3dModel from "./battle/battlemap/Sprite3dModel";
 import StatDefinitionModel from "./party/stats/StatDefinitionModel";
+import QuestStageModel from "./quests/QuestStageModel";
 
 export default class ResourcesModel extends ModelNode {
 
@@ -63,6 +64,11 @@ export default class ResourcesModel extends ModelNode {
 	 */
 	conversations;
 
+	/**
+	 * @type ModelNodeTable<QuestStageModel>
+	 */
+	quests;
+
 	constructor() {
 		super();
 
@@ -76,6 +82,8 @@ export default class ResourcesModel extends ModelNode {
 		this.conversations = this.addProperty('conversations', new ModelNodeTable((id) => new ConversationModel(id)));
 		this.itemDefinitions = this.addProperty('itemDefinitions', new ModelNodeTable((id) => new ItemDefinitionModel(id)));
 		this.statDefinitions = this.addProperty('statDefinitions', new ModelNodeTable((id) => new StatDefinitionModel(id)));
+
+		this.quests = this.addProperty('quests', new ModelNodeTable((id) => new QuestStageModel(id)));
 	}
 
 }

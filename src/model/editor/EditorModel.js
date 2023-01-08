@@ -67,7 +67,8 @@ export default class EditorModel extends ModelNode {
 			characterTemplates: 'Character Templates',
 			conversations: 'Conversations',
 			itemDefinitions: 'Item Definitions',
-			statDefinitions: 'Stat Definitions'
+			statDefinitions: 'Stat Definitions',
+			quests: 'Quests'
 		};
 
 		this.mapOptions = {

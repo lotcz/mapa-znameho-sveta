@@ -36,6 +36,11 @@ export default class ConversationController extends ControllerNode {
 	entrySelected() {
 		if (this.model.currentEntry.isSet()) {
 			const entry = this.model.currentEntry.get();
+
+			if (entry.completesStageId.isSet()) {
+				this.game.saveGame.get().completedStages.complete(entry.completesStageId.get());
+			}
+
 			entry.entries.forEach((responseEntry) => {
 				const slot = this.game.saveGame.get().party.slots.random();
 				const ch = this.game.saveGame.get().characters.getById(slot.characterId.get());
@@ -45,6 +50,7 @@ export default class ConversationController extends ControllerNode {
 				line.portrait.set(this.model.portrait.get());
 			});
 			this.model.pastEntries.add(entry);
+
 		}
 	}
 
