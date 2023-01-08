@@ -32,6 +32,7 @@ export default class CompletedStagesModel extends ModelNode {
 		if (!this.isCompleted(id)) {
 			this.stages.push(id);
 			this.triggerEvent('stage-completed', id);
+			this.makeDirty();
 			return true;
 		}
 		return false;

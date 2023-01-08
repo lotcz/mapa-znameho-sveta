@@ -12,13 +12,19 @@ export default class InventoryTabQuestsRenderer extends DomRenderer {
 		super(game, model, dom);
 
 		this.model = model;
+
+		this.addAutoEvent(
+			this.model,
+			'stage-completed',
+			(id) => this.renderQuests(),
+			true
+		);
 	}
 
 	activateInternal() {
 		this.container = this.addElement( 'div', 'inventory-quests column flex-1 p-1 m-1');
 		Pixies.createElement(this.container, 'h2', null, 'Úkoly');
 		this.quests = Pixies.createElement(this.container, 'div');
-		this.renderQuests();
 	}
 
 	deactivateInternal() {
@@ -27,18 +33,39 @@ export default class InventoryTabQuestsRenderer extends DomRenderer {
 	}
 
 	renderQuests() {
+		Pixies.emptyElement(this.quests);
+		const activeGroup = Pixies.createElement(this.quests, 'div');
+		const completedGroup = Pixies.createElement(this.quests, 'div', 'completed');
+
+
+		const completedQuests = [];
+
 		this.model.forEach((id) => {
 			const quest = this.game.resources.quests.getById(id);
 			if (quest.isQuest()) {
 				const [stage, completed] = this.getQuestActiveStage(quest);
 
-				const title = Pixies.createElement(this.quests, 'h2', null, quest.name.get());
-				const text =  Pixies.createElement(this.quests, 'p', null, stage.text.get());
-
+				if (completed) {
+					completedQuests.push({quest, stage});
+				} else {
+					this.renderQuest(activeGroup, quest, stage);
+				}
 			}
 		});
 
+		if (completedQuests.length > 0) {
+			Pixies.createElement(completedGroup, 'h2', null, 'Dokončené');
+		}
 
+		completedQuests.forEach((q) => {
+			this.renderQuest(completedGroup, q.quest, q.stage);
+		});
+
+	}
+
+	renderQuest(container, quest, stage) {
+		const title = Pixies.createElement(container, 'h3', null, quest.name.get());
+		const text =  Pixies.createElement(container, 'p', null, stage.text.get());
 	}
 
 	getQuestActiveStage(quest) {

@@ -788,6 +788,10 @@ h4 {
 .inventory .inventory-stats .stat-skill .value .stat-brick.loss {
   background-color: rgba(200, 100, 100, 0.75);
 }
+.inventory .inventory-quests .completed {
+  color: black;
+  opacity: 0.5;
+}
 .conversation {
   display: flex;
   position: fixed;
