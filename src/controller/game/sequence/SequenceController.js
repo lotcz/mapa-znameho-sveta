@@ -34,7 +34,6 @@ export default class SequenceController extends ControllerSavedGameNode {
 	}
 
 	nextStep() {
-		console.log('next step');
 		if (this.model.steps.count() <= this.currentIndex) {
 			this.saveGame.triggerEvent('sequence-finished');
 			return;

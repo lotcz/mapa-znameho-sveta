@@ -164,6 +164,7 @@ export default class NodeFormRenderer extends DomRenderer {
 					e.preventDefault();
 					const save = this.game.saveGame.get();
 					this.model.coordinates.set(save.mapCenterCoordinates);
+					this.model.zoom.set(save.zoom.get());
 				}
 			);
 		}

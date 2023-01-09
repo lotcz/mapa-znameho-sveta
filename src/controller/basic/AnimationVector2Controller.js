@@ -28,12 +28,11 @@ export default class AnimationVector2Controller extends ControllerNode {
 	}
 
 	updateInternal(delta) {
-		if (this.animatedVector.isFinished()) {
-			this.model.triggerEvent('animation-finished');
-			this.removeMyself();
-			return;
-		}
 		this.model.set(this.animatedVector.get(delta));
+		if (this.animatedVector.isFinished()) {
+			this.removeMyself();
+			this.model.triggerEvent('animation-finished');
+		}
 	}
 
 }
