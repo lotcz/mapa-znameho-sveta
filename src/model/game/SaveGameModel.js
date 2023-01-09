@@ -142,6 +142,11 @@ export default class SaveGameModel extends ModelNode {
 	 */
 	completedStages;
 
+	/**
+	 * @type NullableNode<SequenceModel>
+	 */
+	animationSequence;
+
 	constructor() {
 		super();
 
@@ -203,6 +208,8 @@ export default class SaveGameModel extends ModelNode {
 		this.selectedInventorySlot = this.addProperty('selectedInventorySlot', new NullableNode(null, false));
 
 		this.completedStages = this.addProperty('completedStages', new CompletedStagesModel());
+
+		this.animationSequence = this.addProperty('animationSequence', new NullableNode(null, false));
 	}
 
 	passTime(duration) {

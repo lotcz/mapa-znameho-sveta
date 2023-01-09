@@ -5,6 +5,8 @@ import BattleController from "./battle/BattleController";
 import ConversationController from "./conversation/ConversationController";
 import PartyController from "./party/PartyController";
 import BattleItemModel from "../../model/game/battle/BattleItemModel";
+import SequenceController from "./sequence/SequenceController";
+import NullableNodeController from "../basic/NullableNodeController";
 
 const REST_SPEED = 0.15; // portion of day per second
 
@@ -35,6 +37,14 @@ export default class SaveGameController extends ControllerNode {
 
 		this.partyController = new PartyController(this.game, this.model.party);
 		this.addChild(this.partyController);
+
+		this.addChild(
+			new NullableNodeController(
+				this.game,
+				this.model.animationSequence,
+				(m) => new SequenceController(this.game, m, this.model)
+			)
+		);
 
 		this.addAutoEvent(
 			this.model.mode,
@@ -146,6 +156,22 @@ export default class SaveGameController extends ControllerNode {
 		);
 
 		this.addAutoEvent(
+			this.model,
+			'start-sequence',
+			(sequenceId) => {
+				this.runOnUpdate(() => this.startSequence(sequenceId));
+			}
+		);
+
+		this.addAutoEvent(
+			this.model,
+			'sequence-finished',
+			() => {
+				this.runOnUpdate(() => this.sequenceFinished());
+			}
+		);
+
+		this.addAutoEvent(
 			this.model.currentBiotope,
 			'change',
 			() => {
@@ -230,4 +256,18 @@ export default class SaveGameController extends ControllerNode {
 		}
 	}
 
+	startSequence(sequenceId) {
+		const sequence = this.game.resources.sequences.getById(sequenceId);
+		sequence.origMode.set(this.model.mode.get());
+		this.model.mode.set(GAME_MODE_MAP);
+		this.model.animationSequence.set(sequence);
+	}
+
+	sequenceFinished() {
+		const sequence = this.model.animationSequence.get();
+		const origMode = sequence.origMode.get();
+		this.model.animationSequence.set(null);
+		this.model.mode.set(origMode);
+		console.log('sequence finished');
+	}
 }

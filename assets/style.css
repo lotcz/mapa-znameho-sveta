@@ -456,28 +456,6 @@ h4 {
 .savegame-layer .battle.no-go {
   cursor: url('img/cursor-red.png'), not-allowed;
 }
-.loading {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-  pointer-events: none;
-}
-.loading .div {
-  width: 250px;
-  height: 150px;
-  text-align: center;
-  line-height: 150px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-image: url('img/paper.png');
-}
-.overlay {
-  background-color: rgba(150, 150, 150, 0.5);
-}
 .portrait img {
   width: 100%;
   border-radius: 3px;
@@ -522,6 +500,28 @@ h4 {
   display: flex;
   border-radius: 10px;
   box-shadow: #311a0a 0 0 60px;
+}
+.overlay {
+  background-color: rgba(150, 150, 150, 0.5);
+}
+.loading {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  pointer-events: none;
+}
+.loading div {
+  width: 250px;
+  height: 150px;
+  text-align: center;
+  line-height: 150px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url('img/paper.png');
 }
 .map-menu {
   display: flex;

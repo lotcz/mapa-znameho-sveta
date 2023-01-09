@@ -3,14 +3,44 @@
     <head>
         <meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-        <title>Kobok - Mapa známého světa</title>
+        <title>Kobok</title>
 		<link rel="favicon" href="assets/favicon.ico">
 		<link rel="manifest" href="pwa.webmanifest">
 		<link rel="stylesheet" href="assets/style.css">
 		<script src="index.bundle.js" defer></script>
+		<style>
+
+			html, body {
+				margin: 0;
+				padding: 0;
+				height: 100%;
+				background-color: #000;
+			}
+
+			#initial_loading {
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				color: #fff;
+				font-size: 2rem;
+				font-family: "Bookman Old Style", "Times New Roman", serif;
+				animation-name: loadanim;
+				animation-duration: 2s;
+				animation-direction: alternate;
+				animation-iteration-count: infinite;
+			}
+
+			@keyframes loadanim {
+				from {color: #0a0a0a;}
+				to {color: #f0f0f0;}
+			}
+
+		</style>
     </head>
     <body>
-		<div id="initial_loading" class="centered" style="z-index: -1"><span>Loading, please wait...</span></div>
+		<div id="initial_loading"><div>Nahrávám mapu známého světa...</div></div>
     </body>
 	<script>
 		if ('serviceWorker' in navigator) {

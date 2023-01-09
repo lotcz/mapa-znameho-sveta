@@ -59,7 +59,7 @@ export default class GameRenderer extends DomRenderer {
 			this.loading = null;
 		}
 		if (this.model.assets.isLoading.get()) {
-			this.loading = Pixies.createElement(this.editorLayer, 'div', 'loading');
+			this.loading = this.addElement( 'div', 'loading container');
 			const inner = Pixies.createElement(this.loading, 'div');
 			inner.innerText = Pixies.randomElement(['Obětuji ovci...', 'Rozdělávám oheň...', 'Zpívám bohům...', 'Zahajuji rituál...']);
 		}

@@ -29,6 +29,7 @@ export default class AnimationVector2Controller extends ControllerNode {
 
 	updateInternal(delta) {
 		if (this.animatedVector.isFinished()) {
+			this.model.triggerEvent('animation-finished');
 			this.removeMyself();
 			return;
 		}

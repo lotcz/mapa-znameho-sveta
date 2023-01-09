@@ -144,6 +144,30 @@ export default class NodeFormRenderer extends DomRenderer {
 			});
 		}
 
+		if (this.model.constructor.name === 'SequenceModel') {
+			const start = Pixies.createElement(buttonsLeft, 'button', 'special');
+			start.innerText = 'Start';
+			start.addEventListener('click', (e) => {
+				e.preventDefault();
+				const save = this.game.saveGame.get();
+				save.triggerEvent('start-sequence', this.model.id.get());
+			});
+		}
+
+		if (this.model.constructor.name === 'SequenceStepModel') {
+			Pixies.createElement(
+				buttonsLeft,
+				'button',
+				'special',
+			'Capture',
+			(e) => {
+					e.preventDefault();
+					const save = this.game.saveGame.get();
+					this.model.coordinates.set(save.mapCenterCoordinates);
+				}
+			);
+		}
+
 		this.fields = Pixies.createElement(this.container, 'div', 'fields scroll');
 		this.renderFields();
 	}
