@@ -23,12 +23,27 @@ export default class ModelNodeCollection extends ModelNode {
 		this.nodeFactory = nodeFactory;
 		this.children = new Collection();
 		const events = ['add', 'remove', 'change'];
-		events.forEach((evnt) => this.children.addEventListener(evnt, (param) => this.triggerEvent(evnt, param)));
+		events.forEach((event) => this.children.addEventListener(event, (param) => this.triggerEvent(event, param)));
 		this.children.addOnAddListener((child) => this.onChildAdded(child));
 		this.children.addOnRemoveListener((child) => this.onChildRemoved(child));
 		this.childDirtyHandler = (ch) => this.onChildDirty(ch);
 
 		this.selectedNode = this.addProperty('selectedNode', new NullableNode(null, false));
+
+		this.addEventListener('drag-start', (child) => {
+			this.selectedNode.set(child);
+		});
+		this.addEventListener('drag-drop', (child) => {
+			const node = this.selectedNode.get();
+			const startIndex = this.indexOf(node);
+			const targetIndex = this.indexOf(child);
+			if (startIndex === targetIndex) {
+				return;
+			}
+			this.remove(node);
+			this.insert(node, targetIndex);
+			this.selectedNode.set(node);
+		});
 	}
 
 	/**
@@ -47,6 +62,10 @@ export default class ModelNodeCollection extends ModelNode {
 		this.children.prepend(child);
 	}
 
+	insert(child, index) {
+		this.children.insert(child, index);
+	}
+
 	remove(child) {
 		return this.children.remove(child);
 	}
@@ -61,6 +80,10 @@ export default class ModelNodeCollection extends ModelNode {
 
 	last() {
 		return this.children.last();
+	}
+
+	indexOf(node) {
+		return this.children.items.indexOf(node);
 	}
 
 	random() {
@@ -105,6 +128,10 @@ export default class ModelNodeCollection extends ModelNode {
 
 	forEach(func) {
 		return this.children.forEach(func);
+	}
+
+	swap(childA, childB) {
+		this.children.swap(childA, childB);
 	}
 
 	clean() {

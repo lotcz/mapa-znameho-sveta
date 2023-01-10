@@ -134,5 +134,7 @@ export default class MapPartyRenderer extends SvgRenderer {
 		} else {
 			this.group.show();
 		}
+		this.renderArrows();
+		this.renderParty();
 	}
 }

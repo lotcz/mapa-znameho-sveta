@@ -34,6 +34,7 @@ export default class NodeTableRenderer extends DomRenderer {
 				(m) => new TableRowRenderer(game, m, this.tbody, this.model)
 			)
 		);
+
 	}
 
 	activateInternal() {
@@ -89,6 +90,7 @@ export default class NodeTableRenderer extends DomRenderer {
 		if (dummy) {
 			const thead = Pixies.createElement(this.table, 'thead');
 			const header = Pixies.createElement(thead, 'tr');
+			Pixies.createElement(header, 'th');
 			dummy.properties.forEach((name) => {
 				const cell = Pixies.createElement(header, 'th');
 				cell.innerText = name;

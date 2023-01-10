@@ -86,17 +86,14 @@ export default class GameController extends ControllerNode {
 	}
 
 	updateInternal(delta) {
-		super.updateInternal(delta);
-		if (this.resourcesTimeOut !== null) this.resourcesTimeOut -= delta;
-		if (this.isResourcesDirty) {
-			if (this.resourcesTimeOut === null) this.resourcesTimeOut = 3000;
-			if (this.resourcesTimeOut <= 0) {
-				this.saveResourcesToStorage().then(() => {
-					this.isResourcesDirty = false;
-					this.resourcesTimeOut = null;
-					console.log('resources saved');
-				});
-			}
+		this.resourcesTimeOut = (this.resourcesTimeOut === null) ? 3000 : this.resourcesTimeOut - delta;
+		if (this.isResourcesDirty && this.resourcesTimeOut <= 0) {
+			this.resourcesTimeOut = null;
+			this.isResourcesDirty = false;
+			this.saveResourcesToStorage().then(() => {
+				this.resourcesTimeOut = null;
+				console.log('resources saved');
+			});
 		}
 	}
 

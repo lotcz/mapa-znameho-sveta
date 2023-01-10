@@ -12,32 +12,39 @@ export default class CollectionRenderer extends RendererNode {
 		this.model = model;
 
 		this.rendererFactory = rendererFactory;
-		this.onModelAddedHandler = (model) => this.createRenderer(model);
-		this.onModelRemovedHandler = (model) => this.removeRenderer(model);
+
+		this.addAutoEvent(
+			this.model.children,
+			'add',
+			(model) => {
+				this.addRenderer(model);
+			}
+		);
+
+		this.addAutoEvent(
+			this.model.children,
+			'remove',
+			(model) => {
+				const renderer = this.children.find((ch) => ch.model === model);
+				this.removeChild(renderer);
+			}
+		);
+
+		this.addAutoEvent(
+			this.model.children,
+			'insert',
+			() => {
+				this.resetChildren();
+				this.model.forEach((model) => {
+					this.addRenderer(model);
+				});
+			},
+			true
+		);
 	}
 
-	activateInternal() {
-		this.resetChildren();
-
-		this.model.children.forEach((model) => this.createRenderer(model).activate());
-
-		this.model.children.addOnAddListener(this.onModelAddedHandler);
-		this.model.children.addOnRemoveListener(this.onModelRemovedHandler);
-	}
-
-	deactivateInternal() {
-		this.model.children.removeOnAddListener(this.onModelAddedHandler);
-		this.model.children.removeOnRemoveListener(this.onModelRemovedHandler);
-		this.resetChildren();
-	}
-
-	createRenderer(model) {
+	addRenderer(model) {
 		return this.addChild(this.rendererFactory(model));
-	}
-
-	removeRenderer(model) {
-		const renderer = this.children.find((ch) => ch.model === model);
-		this.removeChild(renderer);
 	}
 
 }

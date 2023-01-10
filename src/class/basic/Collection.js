@@ -18,6 +18,13 @@ export default class Collection extends Node {
 		return element;
 	}
 
+	insert(element, index) {
+		this.items.splice(index, 0, element);
+		this.triggerEvent('insert', element);
+		this.triggerEvent('change');
+		return element;
+	}
+
 	prepend(element) {
 		this.items.unshift(element);
 		this.triggerEvent('add', element);
@@ -72,6 +79,24 @@ export default class Collection extends Node {
 
 	removeLast() {
 		return this.removeByIndex(this.count() - 1);
+	}
+
+	swap(childA, childB) {
+		const indexA = this.items.indexOf(childA);
+		if (indexA < 0) {
+			return;
+		}
+		this.removeInternal(indexA, childA);
+
+		const indexB = this.items.indexOf(childB);
+		if (indexB < 0) {
+			this.insert(childA, indexA);
+			return;
+		}
+		this.removeInternal(indexB, childB);
+
+		this.insert(childA, indexB);
+		this.insert(childB, indexA);
 	}
 
 	first() {

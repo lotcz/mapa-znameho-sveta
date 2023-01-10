@@ -349,6 +349,13 @@ h4 {
   margin: 10px;
   padding: 10px;
 }
+.editor-layer .editor .grab-icon {
+  cursor: move;
+  opacity: 0.5;
+}
+.editor-layer .editor .grab-icon::after {
+  content: "■";
+}
 .editor-layer .editor .table .scroll,
 .editor-layer .editor form .scroll {
   display: block;

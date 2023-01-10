@@ -8,6 +8,7 @@ import PartyRenderer from "./party/PartyRenderer";
 import SelectedSlotRenderer from "./party/inventory/SelectedSlotRenderer";
 import Pixies from "../../class/basic/Pixies";
 import Vector2 from "../../model/basic/Vector2";
+import SequenceRenderer from "./sequence/SequenceRenderer";
 
 export default class SaveGameRenderer extends DomRenderer {
 
@@ -76,8 +77,10 @@ export default class SaveGameRenderer extends DomRenderer {
 		this.rightPanel = Pixies.createElement(bottomLayer, 'div', 'right-panel row stretch');
 
 		this.addChild(new NullableNodeRenderer(this.game, this.model.conversation, (m) => new ConversationRenderer(this.game, m, this.topLayer)));
-		this.addChild(new NullableNodeRenderer(this.game, this.model.selectedInventorySlot, (m) => new SelectedSlotRenderer(this.game, m, this.dom)));
+		this.addChild(new NullableNodeRenderer(this.game, this.model.selectedInventorySlot, (m) => new SelectedSlotRenderer(this.game, m, this.container)));
 		this.addChild(new PartyRenderer(this.game, this.model.party, this.partyPanel, this.topLayer));
+
+		this.addChild(new NullableNodeRenderer(this.game, this.model.animationSequence, (m) => new SequenceRenderer(this.game, m, this.container)));
 
 		this.updateGameMode();
 	}

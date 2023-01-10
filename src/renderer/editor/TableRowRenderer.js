@@ -53,6 +53,18 @@ export default class TableRowRenderer extends DomRenderer {
 	updateRow() {
 		Pixies.emptyElement(this.container);
 
+		const grab = Pixies.createElement(this.container, 'td');
+		const icon = Pixies.createElement(grab, 'div', 'grab-icon');
+		icon.setAttribute('draggable', "true");
+		icon.addEventListener('dragstart', (e) => {
+			this.collection.triggerEvent('drag-start', this.model);
+		});
+		this.container.addEventListener('dragover', (e) => e.preventDefault());
+		this.container.addEventListener('drop', (e) => {
+			e.preventDefault();
+			this.collection.triggerEvent('drag-drop', this.model);
+		});
+
 		this.model.properties.forEach((name, value) => {
 			const cell = Pixies.createElement(this.container, 'td');
 			let text = '';
