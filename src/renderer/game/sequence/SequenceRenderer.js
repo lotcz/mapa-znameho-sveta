@@ -38,7 +38,7 @@ export default class SequenceRenderer extends DomRenderer {
 		this.overlay.addClass('sequence-overlay-svg');
 		this.overlay.addClass('container');
 
-		this.text = Pixies.createElement(this.container, 'div');
+		this.text = Pixies.createElement(this.container, 'div', 'sequence-text container');
 	}
 
 	deactivateInternal() {

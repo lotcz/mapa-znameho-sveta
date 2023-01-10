@@ -1,4 +1,5 @@
 import DomRenderer from "../../basic/DomRenderer";
+import Pixies from "../../../class/basic/Pixies";
 
 export default class SequenceStepRenderer extends DomRenderer {
 
@@ -14,7 +15,19 @@ export default class SequenceStepRenderer extends DomRenderer {
 	}
 
 	activateInternal() {
-		this.dom.innerText = this.model.text.get();
+		const text = this.model.text.get();
+		if (text && text.length > 0) {
+			Pixies.emptyElement(this.dom);
+			Pixies.removeClass(this.dom, 'fading-out');
+			this.container = this.addElement('div');
+			this.container.innerText = text;
+		} else {
+			Pixies.addClass(this.dom, 'fading-out');
+		}
+	}
+
+	deactivateInternal() {
+		//this.removeElement(this.container);
 	}
 
 }
