@@ -7,6 +7,7 @@ import PartyController from "./party/PartyController";
 import BattleItemModel from "../../model/game/battle/BattleItemModel";
 import SequenceController from "./sequence/SequenceController";
 import NullableNodeController from "../basic/NullableNodeController";
+import {ImageHelper} from "../../class/basic/ImageHelper";
 
 const REST_SPEED = 0.15; // portion of day per second
 
@@ -44,6 +45,36 @@ export default class SaveGameController extends ControllerNode {
 				this.model.animationSequence,
 				(m) => new SequenceController(this.game, m, this.model)
 			)
+		);
+
+		this.addAutoEventMultiple(
+			[this.game.mainLayerSize, this.model.mapCenterCoordinates, this.model.zoom],
+			'change',
+			() => {
+				this.model.mapCenterCoordinates.set(
+					ImageHelper.sanitizeCenter(
+						this.model.mapSize,
+						this.game.mainLayerSize,
+						this.model.zoom.get(),
+						this.model.mapCenterCoordinates
+					)
+				);
+			}
+		);
+
+		this.addAutoEventMultiple(
+			[this.model.zoom, this.game.mainLayerSize],
+			'change',
+			() => {
+				this.model.zoom.set(
+					ImageHelper.sanitizeZoom(
+						this.model.mapSize,
+						this.game.mainLayerSize,
+						this.model.zoom.get(),
+						1.5
+					)
+				);
+			}
 		);
 
 		this.addAutoEvent(
@@ -260,6 +291,7 @@ export default class SaveGameController extends ControllerNode {
 		const sequence = this.game.resources.sequences.getById(sequenceId);
 		sequence.origMode.set(this.model.mode.get());
 		this.model.mode.set(GAME_MODE_MAP);
+		this.model.animationSequence.set(null);
 		this.model.animationSequence.set(sequence);
 	}
 

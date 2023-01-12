@@ -105,7 +105,7 @@ export default class ModelNode extends Node {
 		return n;
 	}
 
-	addDirtyListener(node) {
+	subscribeToOnDirtyEvent(node) {
 		node.addOnDirtyListener(this.propertyValueDirtyHandler);
 		return node;
 	}
@@ -121,7 +121,7 @@ export default class ModelNode extends Node {
 
 	propertyAdded(name, property) {
 		this.makeDirty();
-		this.addDirtyListener(property);
+		this.subscribeToOnDirtyEvent(property);
 	}
 
 	propertyRemoved(name, property) {

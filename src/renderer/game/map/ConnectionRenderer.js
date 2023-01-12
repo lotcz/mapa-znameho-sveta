@@ -15,6 +15,9 @@ export default class ConnectionRenderer extends SvgRenderer {
 		this.model = model;
 
 		this.lastRotation = 0;
+
+		this.saveGame = this.game.saveGame.get();
+		this.addAutoEvent(this.saveGame.animationSequence, 'change', () => this.renderArrow());
 	}
 
 	activateInternal() {
@@ -53,6 +56,12 @@ export default class ConnectionRenderer extends SvgRenderer {
 		if (!this.arrow) {
 			console.log('no arrow created');
 			return;
+		}
+		if (this.saveGame.animationSequence.isSet()) {
+			this.group.hide();
+			return;
+		} else {
+			this.group.show();
 		}
 		const diff = this.model.direction.subtract(this.model.location.coordinates);
 		diff.setSize(120);

@@ -438,6 +438,9 @@ h4 {
   margin: 0;
   padding: 5px;
 }
+.editor-layer .editor .battle-menu label {
+  padding: 5px;
+}
 @font-face {
   font-family: 'Vollkorn';
   src: url('Vollkorn-SemiBold.ttf') format('truetype');

@@ -21,7 +21,7 @@ export default class NullableNode extends DirtyValue {
 		super.set(value);
 
 		if (this.value) {
-			this.addDirtyListener(this.value);
+			this.subscribeToOnDirtyEvent(this.value);
 		}
 	}
 

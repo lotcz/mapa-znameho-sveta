@@ -232,16 +232,22 @@
 	  position: fixed;
 	  right: 20px;
 	  top: 20px;
-	  padding: 10px;
+	  padding: @m-2;
+
+	  input[type=text] {
+		width: 50px;
+	  }
+
+	  input[type=radio] {
+		margin: 0;
+		padding: @m-1;
+	  }
+
+	  label {
+		padding: @m-1;
+	  }
 	}
 
-	.battle-menu input[type=text] {
-	  width: 50px;
-	}
 
-	.battle-menu input[type=radio] {
-	  margin: 0;
-	  padding: 5px;
-	}
   }
 }

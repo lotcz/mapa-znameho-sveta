@@ -23,6 +23,11 @@ export default class SaveGameModel extends ModelNode {
 	mode;
 
 	/**
+	 * @type Vector2
+	 */
+	mapSize;
+
+	/**
 	 * @type FloatValue
 	 */
 	time;
@@ -151,6 +156,7 @@ export default class SaveGameModel extends ModelNode {
 		super();
 
 		this.mode = this.addProperty('mode', new DirtyValue(GAME_MODE_MAP));
+		this.mapSize = this.addProperty('mapSize', new Vector2(8192, 6144, false));
 		this.time = this.addProperty('time', new FloatValue(0));
 		this.characters = this.addProperty('characters', new ModelNodeTable((id) => new CharacterModel(id)));
 		this.battles = this.addProperty('battles', new ModelNodeCollection(() => new BattleModel()));

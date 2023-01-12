@@ -13,6 +13,7 @@ export default class MapPartyRenderer extends SvgRenderer {
 		this.model = model;
 
 		this.addAutoEvent(this.game.isInDebugMode, 'change', () => this.updateDebugMode(), true);
+		this.addAutoEvent(this.model.animationSequence, 'change', () => this.renderArrows());
 	}
 
 	activateInternal() {
@@ -89,7 +90,7 @@ export default class MapPartyRenderer extends SvgRenderer {
 			return;
 		}
 
-		if (this.model.partyTraveling.get() || this.model.currentLocation.isSet()) {
+		if (this.model.partyTraveling.get() || this.model.currentLocation.isSet() || this.model.animationSequence.isSet()) {
 			this.arrowNextGroup.hide();
 			this.arrowPrevGroup.hide();
 			return;

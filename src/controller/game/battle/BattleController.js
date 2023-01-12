@@ -7,6 +7,7 @@ import {GAME_MODE_MAP} from "../../../model/game/SaveGameModel";
 import AnimationVector2Controller from "../../basic/AnimationVector2Controller";
 import SelectedBattleCharacterController from "./SelectedBattleCharacterController";
 import Pixies from "../../../class/basic/Pixies";
+import {ImageHelper} from "../../../class/basic/ImageHelper";
 
 export default class BattleController extends ControllerNode {
 
@@ -61,6 +62,36 @@ export default class BattleController extends ControllerNode {
 				this.model.battleMap.set(this.game.resources.map.battleMaps.getById(this.model.battleMapId));
 			},
 			true
+		);
+
+		this.addAutoEventMultiple(
+			[this.game.mainLayerSize, this.model.coordinates, this.model.zoom],
+			'change',
+			() => {
+				this.model.coordinates.set(
+					ImageHelper.sanitizeCenter(
+						this.model.battleMap.get().size,
+						this.game.mainLayerSize,
+						this.model.zoom.get(),
+						this.model.coordinates
+					)
+				);
+			}
+		);
+
+		this.addAutoEventMultiple(
+			[this.model.zoom, this.game.mainLayerSize],
+			'change',
+			() => {
+				this.model.zoom.set(
+					ImageHelper.sanitizeZoom(
+						this.model.battleMap.get().size,
+						this.game.mainLayerSize,
+						this.model.zoom.get(),
+						1
+					)
+				);
+			}
 		);
 
 		this.addAutoEvent(

@@ -143,4 +143,7 @@ export default class Vector2 extends ModelNode {
 		this.removeEventListener('change', eventHandler);
 	}
 
+	toString() {
+		return `[${this.x},${this.y}]`;
+	}
 }
