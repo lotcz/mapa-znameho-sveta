@@ -21,11 +21,6 @@ export default class SequenceModel extends IdentifiedModelNode {
 	 */
 	currentStep;
 
-	/**
-	 * @type DirtyValue
-	 */
-	origMode;
-
 	constructor(id) {
 		super(id);
 
@@ -33,7 +28,6 @@ export default class SequenceModel extends IdentifiedModelNode {
 		this.steps = this.addProperty('steps', new ModelNodeCollection(() => new SequenceStepModel()));
 
 		this.currentStep = this.addProperty('currentStep', new NullableNode(() => new SequenceStepModel(), false));
-		this.origMode = this.addProperty('origMode', new DirtyValue(null, false));
 	}
 
 }

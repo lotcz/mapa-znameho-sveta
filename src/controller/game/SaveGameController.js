@@ -289,17 +289,12 @@ export default class SaveGameController extends ControllerNode {
 
 	startSequence(sequenceId) {
 		const sequence = this.game.resources.sequences.getById(sequenceId);
-		sequence.origMode.set(this.model.mode.get());
-		this.model.mode.set(GAME_MODE_MAP);
 		this.model.animationSequence.set(null);
 		this.model.animationSequence.set(sequence);
 	}
 
 	sequenceFinished() {
-		const sequence = this.model.animationSequence.get();
-		const origMode = sequence.origMode.get();
 		this.model.animationSequence.set(null);
-		this.model.mode.set(origMode);
 		console.log('sequence finished');
 	}
 }

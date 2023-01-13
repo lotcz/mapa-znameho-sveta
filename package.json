@@ -17,6 +17,7 @@
     "three": "^0.139.2"
   },
   "devDependencies": {
+    "concurrently": "^7.6.0",
     "copy-webpack-plugin": "^9.0.1",
     "css-loader": "^5.2.7",
     "file-loader": "^6.2.0",
@@ -33,11 +34,13 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
-    "debug": "webpack serve --open",
-    "start": "node api.js",
-    "less": "lessc src/style/style.less assets/style.css",
-    "less-watch": "less-watch-compiler src/style assets style.less"
+	"build-less": "lessc src/style/style.less assets/style.css",
+    "build-webpack": "webpack",
+	"build": "npm run build-less && npm run build-webpack",
+    "debug-serve-webpack": "webpack serve --open",
+    "debug-run-api": "node api.js",
+    "debug-watch-less": "less-watch-compiler src/style assets style.less",
+	"debug": "concurrently \"npm:debug-*\""
   },
   "author": "",
   "license": "ISC"
