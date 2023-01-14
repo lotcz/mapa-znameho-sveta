@@ -35,6 +35,9 @@ export default class SequenceRenderer extends DomRenderer {
 
 		this.text = Pixies.createElement(this.container, 'div', 'sequence-text container');
 		this.updateSize();
+
+		const images = this.model.steps.filter((step) => step.image.isSet()).map((step) => step.image.get());
+		images.forEach((image) => this.game.assets.getAsset(image));
 	}
 
 	deactivateInternal() {

@@ -506,11 +506,6 @@ h4 {
   padding: 0;
   margin: 0;
 }
-.sequence-container .sequence-text {
-  display: flex;
-  flex-direction: column-reverse;
-  align-items: center;
-}
 @keyframes fadeInAnim {
   from {
     opacity: 0;
@@ -519,16 +514,47 @@ h4 {
     opacity: 1;
   }
 }
+@keyframes fadeOutAnim {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+.sequence-container .sequence-text div,
+.sequence-container .sequence-background img {
+  opacity: 0;
+  animation-name: fadeInAnim;
+  animation-duration: 2s;
+  animation-fill-mode: forwards;
+}
+.sequence-container .sequence-text.fading-out div,
+.sequence-container .sequence-background.fading-out img {
+  opacity: 1;
+  animation-name: fadeOutAnim;
+  animation-duration: 2s;
+}
+.sequence-container .sequence-text:not(.fading-out) div {
+  animation-delay: 2s;
+}
+.sequence-container .sequence-background.fading-out img {
+  animation-delay: 2s;
+}
+.sequence-container .sequence-background img {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+}
+.sequence-container .sequence-text {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+}
 .sequence-container .sequence-text div {
   padding: 20px;
   color: #e0e0e0;
   font-size: 2rem;
-  animation-name: fadeInAnim;
-  animation-duration: 2s;
-}
-.sequence-container .sequence-text.fading-out div {
-  opacity: 0;
-  transition: opacity 2s;
 }
 .board {
   display: flex;

@@ -231,7 +231,7 @@ export default class MapController extends ControllerNode {
 		});
 
 		this.model.currentBattleMapId.set(battleMapId);
-
+//console.log(this.model.currentBattle.get());
 		//this.model.currentBattle.set(battle);
 		this.model.mode.set(GAME_MODE_BATTLE);
 	}

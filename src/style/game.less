@@ -89,27 +89,55 @@
 }
 
 .sequence-container {
+
+  @keyframes fadeInAnim {
+	from {opacity: 0;}
+	to {opacity: 1;}
+  }
+
+  @keyframes fadeOutAnim {
+	from {opacity: 1;}
+	to {opacity: 0;}
+  }
+
+  .sequence-text div,
+  .sequence-background img {
+	opacity: 0;
+	animation-name: fadeInAnim;
+	animation-duration: 2s;
+	animation-fill-mode: forwards;
+  }
+
+  .sequence-text.fading-out div,
+  .sequence-background.fading-out img {
+	opacity: 1;
+	animation-name: fadeOutAnim;
+	animation-duration: 2s;
+  }
+
+  .sequence-text:not(.fading-out) div {
+	animation-delay: 2s;
+  }
+
+  .sequence-background.fading-out img {
+	animation-delay: 2s;
+  }
+
+  .sequence-background img {
+	object-fit: cover;
+	height: 100%;
+	width: 100%;
+  }
+
   .sequence-text {
 	display: flex;
 	flex-direction: column-reverse;
 	align-items: center;
 
-	@keyframes fadeInAnim {
-	  from {opacity: 0;}
-	  to {opacity: 1;}
-	}
-
 	div {
 	  padding: @m-3;
 	  color: #e0e0e0;
 	  font-size: 2rem;
-	  animation-name: fadeInAnim;
-	  animation-duration: 2s;
-	}
-
-	&.fading-out div {
-	  opacity: 0;
-	  transition: opacity 2s;
 	}
 
   }

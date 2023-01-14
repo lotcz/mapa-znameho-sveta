@@ -87,11 +87,15 @@ export default class AssetCache {
 
 	getAsset(uri, onLoaded = null, onError = null) {
 		if (this.cache.exists(uri)) {
-			onLoaded(this.cache.get(uri));
+			if (onLoaded) {
+				onLoaded(this.cache.get(uri));
+			}
 		} else {
 			const existingLoader = this.loaders.find((l) => l.uri === uri);
 			if (existingLoader) {
-				existingLoader.addLoaderEventsListeners(onLoaded, onError);
+				if (onLoaded || onError) {
+					existingLoader.addLoaderEventsListeners(onLoaded, onError);
+				}
 				return;
 			}
 
