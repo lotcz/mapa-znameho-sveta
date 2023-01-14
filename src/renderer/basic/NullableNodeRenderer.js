@@ -22,12 +22,21 @@ export default class NullableNodeRenderer extends RendererNode {
 		);
 	}
 
+	render() {
+		if (!this.isActivated) {
+			return;
+		}
+		if (this.renderer) {
+			this.renderer.render();
+		}
+	}
+
 	updateRenderer() {
 		this.resetChildren();
 		if (this.model.isSet()) {
-			this.addChild(this.rendererFactory(this.model.get()));
+			this.renderer = this.addChild(this.rendererFactory(this.model.get()));
 		} else if (this.defaultRendererFactory) {
-			this.addChild(this.defaultRendererFactory());
+			this.renderer = this.addChild(this.defaultRendererFactory());
 		}
 	}
 

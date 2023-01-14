@@ -20,7 +20,7 @@ export default class SequenceRenderer extends DomRenderer {
 			new NullableNodeRenderer(
 				this.game,
 				this.model.currentStep,
-				(m) => new SequenceStepRenderer(this.game, m, this.text)
+				(m) => new SequenceStepRenderer(this.game, m, this.bg, this.text)
 			)
 		);
 
@@ -33,7 +33,8 @@ export default class SequenceRenderer extends DomRenderer {
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', 'sequence-overlay container-host container');
+		this.container = this.addElement('div', 'sequence-container container-host container');
+		this.bg = Pixies.createElement(this.container,'div', 'sequence-background container-host container');
 		this.overlay = SVG().addTo(this.container);
 		this.overlay.addClass('sequence-overlay-svg');
 		this.overlay.addClass('container');
@@ -46,6 +47,8 @@ export default class SequenceRenderer extends DomRenderer {
 		this.overlay = null;
 		this.removeElement(this.container);
 		this.container = null;
+		this.bg = null;
+		this.text = null;
 	}
 
 	updateSize() {

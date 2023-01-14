@@ -1,6 +1,7 @@
 import DomRenderer from "../basic/DomRenderer";
 import SequenceRenderer from "./sequence/SequenceRenderer";
 import MainScreenRenderer from "./MainScreenRenderer";
+import NullableNodeRenderer from "../basic/NullableNodeRenderer";
 
 export default class SaveGameRenderer extends DomRenderer {
 
@@ -14,18 +15,13 @@ export default class SaveGameRenderer extends DomRenderer {
 
 		this.model = model;
 
-		this.addAutoEvent(
-			this.model.animationSequence,
-			'change',
-			() => {
-				this.resetChildren();
-				if (this.model.animationSequence.isSet()) {
-					this.addChild(new SequenceRenderer(this.game, this.model.animationSequence.get(), this.dom));
-				} else {
-					this.addChild(new MainScreenRenderer(this.game, this.model, this.dom));
-				}
-			},
-			true
+		this.addChild(
+			new NullableNodeRenderer(
+				this.game,
+				this.model.animationSequence,
+				(m) => new SequenceRenderer(this.game, m, this.dom),
+				() => new MainScreenRenderer(this.game, this.model, this.dom)
+			)
 		);
 
 	}

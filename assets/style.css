@@ -506,7 +506,7 @@ h4 {
   padding: 0;
   margin: 0;
 }
-.sequence-overlay .sequence-text {
+.sequence-container .sequence-text {
   display: flex;
   flex-direction: column-reverse;
   align-items: center;
@@ -519,14 +519,14 @@ h4 {
     opacity: 1;
   }
 }
-.sequence-overlay .sequence-text div {
+.sequence-container .sequence-text div {
   padding: 20px;
   color: #e0e0e0;
   font-size: 2rem;
   animation-name: fadeInAnim;
   animation-duration: 2s;
 }
-.sequence-overlay .sequence-text.fading-out div {
+.sequence-container .sequence-text.fading-out div {
   opacity: 0;
   transition: opacity 2s;
 }
