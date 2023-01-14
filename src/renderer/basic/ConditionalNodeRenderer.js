@@ -24,6 +24,15 @@ export default class ConditionalNodeRenderer extends RendererNode {
 		);
 	}
 
+	render() {
+		if (!this.isActivated) {
+			return;
+		}
+		if (this.renderer) {
+			this.renderer.render();
+		}
+	}
+
 	updateRenderer() {
 		if (this.condition()) {
 			if (this.isUsingDefaultRenderer || this.renderer === null) {
@@ -43,7 +52,6 @@ export default class ConditionalNodeRenderer extends RendererNode {
 				this.renderer = null;
 			}
 		}
-		this.modelChanged = false;
 	}
 
 }

@@ -10,7 +10,7 @@ export default class GameRenderer extends DomRenderer {
 	 * @type GameModel
 	 */
 	model;
-	
+
 	constructor(model, dom) {
 		super(model, model, dom);
 

@@ -18,6 +18,7 @@ export default class SaveGameController extends ControllerNode {
 			this.model.animationSequence,
 			'change',
 			() => {
+				this.resetChildren();
 				if (this.model.animationSequence.isSet()) {
 					this.addChild(new SequenceController(this.game, this.model.animationSequence.get(), this.model));
 				} else {
