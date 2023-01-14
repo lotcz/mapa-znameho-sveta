@@ -1,7 +1,7 @@
 import ControllerSavedGameNode from "../../basic/ControllerSavedGameNode";
 import NullableNodeController from "../../basic/NullableNodeController";
 import SequenceStepController from "./SequenceStepController";
-import {GAME_MODE_MAP} from "../../../model/game/SaveGameModel";
+import Vector2 from "../../../model/basic/Vector2";
 
 export default class SequenceController extends ControllerSavedGameNode {
 
@@ -35,12 +35,29 @@ export default class SequenceController extends ControllerSavedGameNode {
 			true
 		);
 
+		this.addAutoEvent(
+			this.game.viewBoxSize,
+			'change',
+			() => {
+				const diameter = Math.min(this.game.viewBoxSize.x, this.game.viewBoxSize.y) * 0.8;
+				const size = new Vector2(diameter, diameter);
+				const corner = this.game.viewBoxSize.subtract(size).multiply(0.5);
+				this.model.theatreCoordinates.set(corner);
+				this.model.theatreSize.set(size);
+			},
+			true
+		)
+
 	}
 
 	activateInternal() {
+		/*
 		this.origMode = this.saveGame.mode.get();
 		this.origCoords = this.saveGame.mapCenterCoordinates.clone();
 		this.saveGame.mode.set(GAME_MODE_MAP);
+
+		 */
+
 	}
 
 	nextStep() {
@@ -54,8 +71,11 @@ export default class SequenceController extends ControllerSavedGameNode {
 	}
 
 	finished() {
+		/*
 		this.saveGame.mode.set(this.origMode);
 		this.saveGame.mapCenterCoordinates.set(this.origCoords);
+
+		 */
 		this.saveGame.triggerEvent('sequence-finished');
 	}
 

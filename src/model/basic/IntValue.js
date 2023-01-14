@@ -3,7 +3,7 @@ import DirtyValue from "./DirtyValue";
 export default class IntValue extends DirtyValue {
 
 	set(value) {
-		super.set(parseInt(value));
+		super.set(typeof value === 'string' ? parseInt(value) : value);
 	}
 
 }

@@ -1,7 +1,7 @@
-import DirtyValue from "../../basic/DirtyValue";
 import ModelNode from "../../basic/ModelNode";
 import FloatValue from "../../basic/FloatValue";
 import Vector2 from "../../basic/Vector2";
+import StringValue from "../../basic/StringValue";
 
 export default class SequenceStepModel extends ModelNode {
 
@@ -21,12 +21,12 @@ export default class SequenceStepModel extends ModelNode {
 	zoom;
 
 	/**
-	 * @type DirtyValue
+	 * @type StringValue
 	 */
 	image;
 
 	/**
-	 * @type DirtyValue
+	 * @type StringValue
 	 */
 	text;
 
@@ -36,8 +36,8 @@ export default class SequenceStepModel extends ModelNode {
 		this.duration = this.addProperty('duration', new FloatValue(1));
 		this.coordinates = this.addProperty('coordinates', new Vector2());
 		this.zoom = this.addProperty('zoom', new FloatValue(1));
-		this.image = this.addProperty('image', new DirtyValue(''));
-		this.text = this.addProperty('text', new DirtyValue(''));
+		this.image = this.addProperty('image', new StringValue());
+		this.text = this.addProperty('text', new StringValue());
 	}
 
 }

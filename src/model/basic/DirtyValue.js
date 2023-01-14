@@ -1,6 +1,7 @@
 import ModelNode from "./ModelNode";
 
 export default class DirtyValue extends ModelNode {
+	/** @type object|number|string|null */
 	value = null;
 
 	constructor(value = null, persistent = true) {

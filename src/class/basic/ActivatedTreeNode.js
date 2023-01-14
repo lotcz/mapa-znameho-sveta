@@ -74,6 +74,8 @@ export default class ActivatedTreeNode {
 	removeMyself() {
 		if (this.parent) {
 			this.parent.removeChild(this);
+		} else {
+			this.deactivate();
 		}
 	}
 

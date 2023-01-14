@@ -17,11 +17,19 @@ export default class SequenceStepRenderer extends DomRenderer {
 	}
 
 	activateInternal() {
-		const text = this.model.text.get();
-		if (text && text.length > 0) {
+		if (this.model.image.isSet()) {
+			this.game.assets.getAsset(this.model.image.get(), (img) => {
+				const image = Pixies.createElement(this.bg, 'img', 'container');
+				image.style.objectFit = 'cover';
+				image.style.height = '100%';
+				image.src = img.src;
+			});
+		}
+
+		if ( this.model.text.isSet()) {
 			Pixies.emptyElement(this.text);
 			Pixies.removeClass(this.text, 'fading-out');
-			Pixies.createElement(this.text,'div', null, text);
+			Pixies.createElement(this.text,'div', null, this.model.text.get());
 		} else {
 			Pixies.addClass(this.text, 'fading-out');
 		}

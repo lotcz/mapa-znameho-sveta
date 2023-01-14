@@ -24,12 +24,6 @@ export default class SequenceRenderer extends DomRenderer {
 			)
 		);
 
-		this.addAutoEvent(
-			this.game.viewBoxSize,
-			'change',
-			() => this.updateSize(),
-			true
-		);
 	}
 
 	activateInternal() {
@@ -40,6 +34,7 @@ export default class SequenceRenderer extends DomRenderer {
 		this.overlay.addClass('container');
 
 		this.text = Pixies.createElement(this.container, 'div', 'sequence-text container');
+		this.updateSize();
 	}
 
 	deactivateInternal() {
@@ -51,7 +46,23 @@ export default class SequenceRenderer extends DomRenderer {
 		this.text = null;
 	}
 
+	renderInternal() {
+		if (this.model.theatreSize.isDirty || this.model.theatreCoordinates.isDirty) {
+			this.updateSize();
+		}
+	}
+
 	updateSize() {
+		if (this.model.theatreSize.size() === 0) {
+			return;
+		}
+
+		this.bg.style.left = this.model.theatreCoordinates.x + 'px';
+		this.bg.style.top = this.model.theatreCoordinates.y + 'px';
+		this.bg.style.width = this.model.theatreSize.x + 'px';
+		this.bg.style.height = this.model.theatreSize.y + 'px';
+
+
 		if (this.clipPath) {
 			this.curtainContent.unmask();
 			this.clipPath.remove();
@@ -81,8 +92,8 @@ export default class SequenceRenderer extends DomRenderer {
 				add.stop(1, 'rgba(255, 255, 255, 1)');
 			}
 		);
-		const diameter = Math.min(size.x, size.y) * 0.8;
-		this.clipCircle = this.overlay.circle(diameter).fill(radial);
+
+		this.clipCircle = this.overlay.circle(this.model.theatreSize.x).fill(radial);
 		const center = size.multiply(0.5);
 		this.clipCircle.center(center.x, center.y);
 		this.clipPath = this.overlay.mask();
