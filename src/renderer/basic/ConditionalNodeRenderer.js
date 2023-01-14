@@ -7,32 +7,43 @@ export default class ConditionalNodeRenderer extends RendererNode {
 	 */
 	model;
 
-	constructor(game, model, condition, rendererFactory) {
+	constructor(game, model, condition, rendererFactory, defaultRendererFactory = null) {
 		super(game, model);
 		this.model = model;
 		this.condition = condition;
 		this.rendererFactory = rendererFactory;
+		this.defaultRendererFactory = defaultRendererFactory;
 		this.renderer = null;
+		this.isUsingDefaultRenderer = false;
 
 		this.addAutoEvent(
 			this.model,
 			'change',
 			() => this.updateRenderer(),
 			true
-		)
+		);
 	}
 
 	updateRenderer() {
-		this.renderer = null;
-		this.resetChildren();
 		if (this.condition()) {
-			this.renderer = this.addChild(this.rendererFactory());
+			if (this.isUsingDefaultRenderer || this.renderer === null) {
+				this.resetChildren();
+				this.renderer = this.addChild(this.rendererFactory());
+				this.isUsingDefaultRenderer = false;
+			}
+		} else {
+			if (this.defaultRendererFactory) {
+				if (this.renderer === null || this.isUsingDefaultRenderer === false) {
+					this.resetChildren();
+					this.renderer = this.addChild(this.defaultRendererFactory());
+					this.isUsingDefaultRenderer = true;
+				}
+			} else {
+				this.resetChildren();
+				this.renderer = null;
+			}
 		}
+		this.modelChanged = false;
 	}
 
-	render() {
-		if (this.renderer) {
-			this.renderer.render();
-		}
-	}
 }

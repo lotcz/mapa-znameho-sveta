@@ -20,7 +20,7 @@ export default class ActivatedTreeNode {
 	 * @type param.event {string}
 	 * @type param.handler {(ep) => any}
 	 */
-	autoRegisterEvents = [];
+	autoRegisterEvents = null;
 
 	constructor() {
 		this.isActivated = false;
@@ -96,12 +96,14 @@ export default class ActivatedTreeNode {
 			this.children.forEach((c) => c.activate());
 			this.isActivated = true;
 
-			this.autoRegisterEvents.forEach((event) => {
-				event.node.addEventListener(event.name, event.handler);
-				if (event.runOnActivate) {
-					event.handler();
-				}
-			})
+			if (this.autoRegisterEvents) {
+				this.autoRegisterEvents.forEach((event) => {
+					event.node.addEventListener(event.name, event.handler);
+					if (event.runOnActivate) {
+						event.handler();
+					}
+				});
+			}
 		}
 	}
 
@@ -111,9 +113,11 @@ export default class ActivatedTreeNode {
 
 	deactivate() {
 		if (this.isActivated) {
-			this.autoRegisterEvents.forEach((event) => {
-				event.node.removeEventListener(event.name, event.handler);
-			})
+			if (this.autoRegisterEvents) {
+				this.autoRegisterEvents.forEach((event) => {
+					event.node.removeEventListener(event.name, event.handler);
+				});
+			}
 
 			this.children.forEach((c) => c.deactivate());
 			this.deactivateInternal();
@@ -136,6 +140,9 @@ export default class ActivatedTreeNode {
 		if ((!node) || typeof node.addEventListener !== 'function') {
 			console.error('Node with addEventListener was not provided!');
 		}
+		if (!this.autoRegisterEvents) {
+			this.autoRegisterEvents = [];
+		}
 		this.autoRegisterEvents.push({node: node, name:event, handler: handler, runOnActivate: runOnActivate});
 	}
 
@@ -147,6 +154,9 @@ export default class ActivatedTreeNode {
 	}
 
 	removeAutoEvent(node, name, handler) {
+		if (!this.autoRegisterEvents) {
+			return;
+		}
 		const event = this.autoRegisterEvents.find((e) => e.handler === handler && e.name === name && e.node === node);
 		if (event) {
 			Pixies.arrayRemove(this.autoRegisterEvents, event);

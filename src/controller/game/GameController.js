@@ -30,7 +30,7 @@ export default class GameController extends ControllerNode {
 			new NullableNodeController(
 				this.game,
 				this.model.saveGame,
-				(model) => new SaveGameController(this.game, model)
+				(m) => new SaveGameController(this.game, m)
 			)
 		);
 
@@ -47,7 +47,7 @@ export default class GameController extends ControllerNode {
 			this.model.controls,
 			'debug-key',
 			() => {
-				this.model.isInDebugMode.set(!this.model.isInDebugMode.get());
+				this.model.isInDebugMode.invert();
 			}
 		);
 

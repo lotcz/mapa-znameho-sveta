@@ -51,6 +51,20 @@ export default class EditorRenderer extends DomRenderer {
 			() => this.updateTables()
 		);
 
+		this.addAutoEvent(
+			this.model.isOptionsVisible,
+			'change',
+			() => {
+				this.switch.checked = this.model.isOptionsVisible.get();
+				if (this.model.isOptionsVisible.get()) {
+					Pixies.removeClass(this.dock, 'hidden');
+				} else {
+					Pixies.addClass(this.dock, 'hidden');
+				}
+			},
+			true
+		);
+
 		this.stopEventPropagationHandler = (e) => e.stopPropagation();
 	}
 
@@ -64,15 +78,7 @@ export default class EditorRenderer extends DomRenderer {
 		this.switch.setAttribute('type', 'checkbox');
 		this.switch.setAttribute('name', 'switch');
 		this.switch.addEventListener('change', () => this.model.triggerEvent('switch-options'));
-/*
-		Pixies.createElement(
-			buttonsLeft,
-			'button',
-			'special',
-			'Download',
-			() => this.model.triggerEvent('download-resources')
-		);
-*/
+
 		Pixies.createElement(
 			buttonsLeft,
 			'button',
@@ -91,7 +97,7 @@ export default class EditorRenderer extends DomRenderer {
 
 		this.buttonsRight = Pixies.createElement(this.nav, 'div');
 
-		this.dock = Pixies.createElement(this.container, 'div', 'dock');
+		this.dock = Pixies.createElement(this.container, 'div', 'dock bg');
 		this.tables = Pixies.createElement(this.dock, 'div', 'table-selection bg');
 		this.table = Pixies.createElement(this.dock, 'div', 'active-table');
 		this.form = Pixies.createElement(this.dock, 'div', 'active-form');
@@ -112,16 +118,8 @@ export default class EditorRenderer extends DomRenderer {
 		this.removeElement(this.container);
 	}
 
-	renderInternal() {
-		if (this.model.isOptionsVisible.isDirty) {
-			this.updateTables();
-		}
-	}
-
 	updateTables() {
 		Pixies.emptyElement(this.tables);
-		this.switch.checked = this.model.isOptionsVisible.get();
-		if (!this.model.isOptionsVisible.get()) return;
 		const wrapper = Pixies.createElement(this.tables, 'div', 'inner');
 		this.addMenuSection(wrapper, this.model.resourcesOptions, 'Resources');
 		this.addMenuSection(wrapper, this.model.mapOptions, 'Map');

@@ -7,29 +7,28 @@ export default class NullableNodeController extends ControllerNode {
 	 */
 	model;
 
-	constructor(game, model, controllerFactory) {
+	constructor(game, model, controllerFactory, defaultControllerFactory = null) {
 		super(game, model);
+
 		this.model = model;
 
 		this.controllerFactory = controllerFactory;
-		this.onModelChangedHandler = () => this.updateController();
-	}
+		this.defaultControllerFactory = defaultControllerFactory;
 
-	activateInternal() {
-		this.updateController();
-
-		this.model.addOnChangeListener(this.onModelChangedHandler);
-	}
-
-	deactivateInternal() {
-		this.model.removeOnChangeListener(this.onModelChangedHandler);
-		this.resetChildren();
+		this.addAutoEvent(
+			this.model,
+			'change',
+			() => this.updateController(),
+			true
+		);
 	}
 
 	updateController() {
 		this.resetChildren();
 		if (this.model.isSet()) {
-			this.addChild(this.controllerFactory(this.model.get()));
+			 this.addChild(this.controllerFactory(this.model.get()));
+		} else if (this.defaultControllerFactory) {
+			this.addChild(this.defaultControllerFactory());
 		}
 	}
 

@@ -7,28 +7,27 @@ export default class NullableNodeRenderer extends RendererNode {
 	 */
 	model;
 
-	constructor(game, model, rendererFactory) {
+	constructor(game, model, rendererFactory, defaultRendererFactory = null) {
 		super(game, model);
 		this.model = model;
 
 		this.rendererFactory = rendererFactory;
-		this.onModelChangedHandler = () => this.updateRenderer();
-	}
+		this.defaultRendererFactory = defaultRendererFactory;
 
-	activateInternal() {
-		this.updateRenderer();
-		this.model.addOnChangeListener(this.onModelChangedHandler);
-	}
-
-	deactivateInternal() {
-		this.model.removeOnChangeListener(this.onModelChangedHandler);
-		this.resetChildren();
+		this.addAutoEvent(
+			this.model,
+			'change',
+			() => this.updateRenderer(),
+			true
+		);
 	}
 
 	updateRenderer() {
 		this.resetChildren();
 		if (this.model.isSet()) {
 			this.addChild(this.rendererFactory(this.model.get()));
+		} else if (this.defaultRendererFactory) {
+			this.addChild(this.defaultRendererFactory());
 		}
 	}
 

@@ -10,12 +10,7 @@ export default class GameRenderer extends DomRenderer {
 	 * @type GameModel
 	 */
 	model;
-
-	/**
-	 * @type NullableNodeRenderer
-	 */
-	saveGameRenderer;
-
+	
 	constructor(model, dom) {
 		super(model, model, dom);
 
@@ -24,8 +19,13 @@ export default class GameRenderer extends DomRenderer {
 		this.addClass('container-host');
 		this.editorRenderer = null;
 
-		this.saveGameRenderer = new NullableNodeRenderer(this.game, this.model.saveGame, (model) => new SaveGameRenderer(this.game, model, this.saveGameLayer));
-		this.addChild(this.saveGameRenderer);
+		this.addChild(
+			new NullableNodeRenderer(
+				this.game,
+				this.model.saveGame,
+				(m) => new SaveGameRenderer(this.game, m, this.saveGameLayer)
+			)
+		);
 
 		this.updateLoadingHandler = () => this.updateLoading();
 		this.updateDebugMenuHandler = () => this.updateDebugMenu();

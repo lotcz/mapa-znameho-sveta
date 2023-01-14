@@ -13,6 +13,11 @@ export default class RendererNode extends ActivatedTreeNode {
 	model;
 
 	/**
+	 * @type array[() => any]
+	 */
+	onRenderActions;
+
+	/**
 	 * @param {GameModel} game
 	 * @param {ModelNode} model
 	 */
@@ -20,6 +25,8 @@ export default class RendererNode extends ActivatedTreeNode {
 		super();
 		this.game = game;
 		this.model = model;
+
+		this.onRenderActions = null;
 	}
 
 	render() {
@@ -28,6 +35,13 @@ export default class RendererNode extends ActivatedTreeNode {
 		}
 		if (!this.isActivated) {
 			return;
+		}
+		if (this.onRenderActions) {
+			while (this.onRenderActions.length > 0) {
+				const action = this.onRenderActions.shift();
+				action();
+			}
+			this.onRenderActions = null;
 		}
 		this.renderInternal();
 		this.children.forEach((c) => c.render());
@@ -41,4 +55,11 @@ export default class RendererNode extends ActivatedTreeNode {
 	 */
 	renderInternal() {}
 
+	runOnRender(action) {
+		if (!this.onRenderActions) {
+			this.onRenderActions = [];
+		}
+		this.onRenderActions.push(action);
+		this.model.makeDirty();
+	}
 }

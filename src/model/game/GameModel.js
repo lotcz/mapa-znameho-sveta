@@ -1,6 +1,5 @@
 import ModelNode from "../basic/ModelNode";
 import Vector2 from "../basic/Vector2";
-import DirtyValue from "../basic/DirtyValue";
 import ControlsModel from "./ControlsModel";
 import AssetCache from "../../class/AssetCache";
 import ResourcesModel from "./ResourcesModel";
@@ -9,11 +8,12 @@ import EditorModel from "../editor/EditorModel";
 import NullableNode from "../basic/NullableNode";
 
 import ResourcesJson from "../../resources.json";
+import BoolValue from "../basic/BoolValue";
 
 export default class GameModel extends ModelNode {
 
 	/**
-	 * @type DirtyValue
+	 * @type BoolValue
 	 */
 	isInDebugMode;
 
@@ -60,7 +60,7 @@ export default class GameModel extends ModelNode {
 	constructor() {
 		super();
 
-		this.isInDebugMode = this.addProperty('isInDebugMode', new DirtyValue(true));
+		this.isInDebugMode = this.addProperty('isInDebugMode', new BoolValue(true));
 		this.resources = this.addProperty('resources', new ResourcesModel());
 		this.resources.restoreState(ResourcesJson);
 		this.assets = new AssetCache(this.resources);
