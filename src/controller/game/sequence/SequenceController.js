@@ -46,6 +46,14 @@ export default class SequenceController extends ControllerSavedGameNode {
 				this.model.theatreSize.set(size);
 			},
 			true
+		);
+
+		this.addAutoEvent(
+			this.game.controls,
+			'esc-key',
+			() => {
+				this.finished();
+			}
 		)
 
 	}
@@ -68,10 +76,10 @@ export default class SequenceController extends ControllerSavedGameNode {
 	}
 
 	finished() {
-/*
+		this.model.currentStep.set(null);
+		/*
 		this.saveGame.mode.set(this.origMode);
 		this.saveGame.mapCenterCoordinates.set(this.origCoords);
-
 		 */
 		this.saveGame.triggerEvent('sequence-finished');
 	}

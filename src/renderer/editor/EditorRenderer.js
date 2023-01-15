@@ -55,7 +55,6 @@ export default class EditorRenderer extends DomRenderer {
 			this.model.isOptionsVisible,
 			'change',
 			() => {
-				this.switch.checked = this.model.isOptionsVisible.get();
 				if (this.model.isOptionsVisible.get()) {
 					Pixies.removeClass(this.dock, 'hidden');
 				} else {
@@ -77,6 +76,7 @@ export default class EditorRenderer extends DomRenderer {
 		this.switch = Pixies.createElement(buttonsLeft,'input');
 		this.switch.setAttribute('type', 'checkbox');
 		this.switch.setAttribute('name', 'switch');
+		this.switch.setAttribute('checked', this.model.isOptionsVisible.get());
 		this.switch.addEventListener('change', () => this.model.triggerEvent('switch-options'));
 
 		Pixies.createElement(

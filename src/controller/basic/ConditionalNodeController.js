@@ -29,7 +29,7 @@ export default class ConditionalNodeController extends ControllerNode {
 
 	updateController() {
 		if (this.condition()) {
-			if (this.isUsingDefaultController || this.renderer === null) {
+			if (this.isUsingDefaultController || this.controller === null) {
 				this.resetChildren();
 				this.controller = this.addChild(this.controllerFactory());
 				this.isUsingDefaultController = false;

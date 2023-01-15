@@ -40,7 +40,6 @@ export default class ControlsController extends ControllerNode {
 			case 13: /*Enter*/
 				//this.model.interacting.set(true);
 				break;
-			case 27: /*Ecs*/ //this.model.menuRequested.set(true); break;
 			case 192: /*~*/ //this.model.triggerEvent('debug-key'); break;
 		}
 	}
@@ -53,10 +52,9 @@ export default class ControlsController extends ControllerNode {
 			case 13: /*Enter*/
 				//this.model.interacting.set(false);
 				break;
+			case 27: /*Esc*/ this.model.triggerEvent('esc-key'); break;
 			case 192: /*~*/ this.model.triggerEvent('debug-key'); break;
 		}
-		//this.makeDirty();
-
 	}
 
 	onMouseMove(e) {

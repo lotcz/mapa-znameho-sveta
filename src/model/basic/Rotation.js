@@ -3,7 +3,7 @@ import DirtyValue from "./DirtyValue";
 const ROTATION_RANGE = 2 * Math.PI;
 
 /**
- * Keeps track of rotation in radians or degrees that is always in interval (-pi, +pi> which equals to (-180, 180> degrees
+ * Keeps track of rotation in radians that is always in interval (-pi, +pi> which equals to (-180, 180> degrees
  */
 export default class Rotation extends DirtyValue {
 

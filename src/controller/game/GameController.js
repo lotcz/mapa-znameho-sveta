@@ -5,6 +5,7 @@ import EditorController from "../editor/EditorController";
 import SaveGameController from "./SaveGameController";
 import NullableNodeController from "../basic/NullableNodeController";
 import SaveGameModel from "../../model/game/SaveGameModel";
+import ConditionalNodeController from "../basic/ConditionalNodeController";
 
 export default class GameController extends ControllerNode {
 
@@ -31,22 +32,19 @@ export default class GameController extends ControllerNode {
 			)
 		);
 
+		this.addChild(
+			new ConditionalNodeController(
+				this.game,
+				this.game.isInDebugMode,
+				() => this.game.isInDebugMode.get(),
+				() => new EditorController(this.game, this.model.editor)
+			)
+		);
+
 		this.addAutoEvent(
 			this.model,
 			'new-game',
-			() => this.runOnUpdate(() => {
-					const save = new SaveGameModel();
-					const avelard = this.model.resources.characterTemplates.getById(1);
-					save.addCharacterToParty(avelard);
-					const residence = this.model.resources.map.locations.getById(1);
-					save.currentLocationId.set(residence.id.get());
-					save.mapCenterCoordinates.set(residence.coordinates);
-					save.currentBattleMapId.set(residence.battleMapId.get())
-					const sequence = this.model.resources.sequences.getById(1);
-					save.animationSequence.set(sequence);
-					this.model.saveGame.set(save);
-				}
-			)
+			() => this.runOnUpdate(() => this.startNewGame())
 		);
 
 		this.addAutoEvent(
@@ -64,15 +62,6 @@ export default class GameController extends ControllerNode {
 			() => {
 				this.model.isInDebugMode.invert();
 			}
-		);
-
-		this.addAutoEvent(
-			this.model.isInDebugMode,
-			'change',
-			() => {
-				this.updateDebugMenu();
-			},
-			true
 		);
 
 		this.addAutoEvent(
@@ -109,17 +98,6 @@ export default class GameController extends ControllerNode {
 				this.resourcesTimeOut = null;
 				console.log('resources saved');
 			});
-		}
-	}
-
-	updateDebugMenu() {
-		if (this.editorController) {
-			this.removeChild(this.editorController);
-			this.editorController = null;
-		}
-		if (this.model.isInDebugMode.get()) {
-			this.editorController = new EditorController(this.game, this.model.editor);
-			this.addChild(this.editorController);
 		}
 	}
 
@@ -167,4 +145,16 @@ export default class GameController extends ControllerNode {
 		}
 	}
 
+	startNewGame() {
+		const save = new SaveGameModel();
+		const avelard = this.model.resources.characterTemplates.getById(1);
+		save.addCharacterToParty(avelard);
+		const residence = this.model.resources.map.locations.getById(1);
+		save.currentLocationId.set(residence.id.get());
+		save.mapCenterCoordinates.set(residence.coordinates);
+		save.currentBattleMapId.set(residence.battleMapId.get())
+		const sequence = this.model.resources.sequences.getById(1);
+		save.animationSequence.set(sequence);
+		this.model.saveGame.set(save);
+	}
 }

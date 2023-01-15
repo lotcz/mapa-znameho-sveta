@@ -7,6 +7,7 @@ import BattleNpcCharacterModel from "../../model/game/battle/BattleNpcCharacterM
 import BattlePartyCharacterModel from "../../model/game/battle/BattlePartyCharacterModel";
 import Vector2 from "../../model/basic/Vector2";
 import Pixies from "../../class/basic/Pixies";
+import {SPECIAL_TYPE_SPAWN} from "../../model/game/battle/battlemap/BattleSpecialModel";
 
 export default class SaveGameController extends ControllerNode {
 
@@ -154,15 +155,34 @@ export default class SaveGameController extends ControllerNode {
 		}
 
 		// create party
-		const center = map.screenCoordsToPosition(map.size.multiply(0.5));
+		const spawns = map.specials.filter((s) => s.type.equalsTo(SPECIAL_TYPE_SPAWN));
+		const lastPos = map.screenCoordsToPosition(map.size.multiply(0.5));
+		const center = lastPos.clone();
+
 		battle.partyCharacters.reset();
+
 		this.model.party.slots.forEach((slot) => {
 			const character = new BattlePartyCharacterModel();
 			character.characterId.set(slot.characterId.get());
-			const position = center.add(new Vector2(Pixies.random(-5, 5), Pixies.random(-5, 5))).round();
-			character.position.set(position);
+			if (spawns.length > 0) {
+				const spawn = spawns[0];
+				spawns.splice(0, 1);
+				lastPos.set(spawn.position);
+				character.position.set(spawn.position);
+			} else {
+				const position = lastPos.add(new Vector2(Pixies.random(-5, 5), Pixies.random(-5, 5))).round();
+				character.position.set(position);
+			}
+			character.rotation.set(Math.PI);
 			battle.partyCharacters.add(character);
+
+			if (this.model.party.selectedCharacterId.equalsTo(slot.characterId)) {
+				center.set(character.position);
+			}
 		});
+
+		battle.coordinates.set(map.positionToScreenCoords(center));
+		battle.zoom.set(1);
 
 		this.model.currentBattle.set(battle);
 	}

@@ -116,8 +116,6 @@ export default class BattleRenderer extends DomRenderer {
 			}
 		);
 
-		const save = this.game.saveGame.get();
-		save.triggerEvent('trigger-resize');
 	}
 
 	activateInternal() {
@@ -188,6 +186,8 @@ export default class BattleRenderer extends DomRenderer {
 		this.effectFXAA = new ShaderPass(FXAAShader);
 		this.effectFXAA.uniforms['resolution'].value.set(1 / this.game.mainLayerSize.x, 1 / this.game.mainLayerSize.y);
 		this.composer.addPass(this.effectFXAA);
+
+		this.updateCameraPosition();
 
 		this.composer.render();
 

@@ -229,5 +229,6 @@ export default class SaveGameModel extends ModelNode {
 		this.characters.add(chr);
 		const slot = this.party.slots.add(new PartySlotModel());
 		slot.characterId.set(chr.id.get());
+		this.party.selectedCharacterId.set(chr.id.get());
 	}
 }
