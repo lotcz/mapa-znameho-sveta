@@ -3,7 +3,6 @@ import CollectionController from "../../basic/CollectionController";
 import BattleCharacterController from "./BattleCharacterController";
 import NullableNodeController from "../../basic/NullableNodeController";
 import BattleMapController from "./BattleMapController";
-import {GAME_MODE_MAP} from "../../../model/game/SaveGameModel";
 import AnimationVector2Controller from "../../basic/AnimationVector2Controller";
 import SelectedBattleCharacterController from "./SelectedBattleCharacterController";
 import Pixies from "../../../class/basic/Pixies";
@@ -182,8 +181,7 @@ export default class BattleController extends ControllerNode {
 			'leave-battle',
 			() => {
 				const save = this.game.saveGame.get();
-				save.mode.set(GAME_MODE_MAP);
-				save.currentBattleMapId.set(null);
+				save.triggerEvent('to-map');
 			}
 		);
 

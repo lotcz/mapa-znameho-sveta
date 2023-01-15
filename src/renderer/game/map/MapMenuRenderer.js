@@ -27,13 +27,13 @@ export default class MapMenuRenderer extends DomRenderer {
 
 		this.buttons = Pixies.createElement(this.inner, 'div', 'buttons column center');
 		const start = Pixies.createElement(this.buttons, 'button', null, 'Start/Stop', () => {
-			this.game.saveGame.get().partyTraveling.set(!this.game.saveGame.get().partyTraveling.get());
+			this.model.partyTraveling.invert();
 		});
 		const revert = Pixies.createElement(this.buttons, 'button', null, 'Revert', () => {
-			this.game.saveGame.get().forward.set(!this.game.saveGame.get().forward.get());
+			this.model.forward.invert();
 		});
 		const sleep = Pixies.createElement(this.buttons, 'button', null, 'Sleep', () => {
-			this.game.saveGame.get().partyResting.set(0.4);
+			this.model.partyResting.set(0.4);
 		});
 		const battle = Pixies.createElement(this.buttons, 'button', 'special', 'To Battle', () => {
 			this.model.triggerEvent('to-battle');

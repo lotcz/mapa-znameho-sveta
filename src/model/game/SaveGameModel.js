@@ -1,5 +1,4 @@
 import ModelNode from "../basic/ModelNode";
-import DirtyValue from "../basic/DirtyValue";
 import Vector2 from "../basic/Vector2";
 import BattleModel from "./battle/BattleModel";
 import ModelNodeTable from "../basic/ModelNodeTable";
@@ -13,15 +12,7 @@ import ModelNodeCollection from "../basic/ModelNodeCollection";
 import CompletedQuestsModel from "./quests/CompletedQuestsModel";
 import PartySlotModel from "./party/PartySlotModel";
 
-export const GAME_MODE_MAP = 'map';
-export const GAME_MODE_BATTLE = 'battle';
-
 export default class SaveGameModel extends ModelNode {
-
-	/**
-	 * @type DirtyValue
-	 */
-	mode;
 
 	/**
 	 * @type Vector2
@@ -156,24 +147,12 @@ export default class SaveGameModel extends ModelNode {
 	constructor() {
 		super();
 
-		this.mode = this.addProperty('mode', new DirtyValue(GAME_MODE_MAP));
 		this.mapSize = this.addProperty('mapSize', new Vector2(8192, 6144, false));
 		this.time = this.addProperty('time', new FloatValue(0));
 		this.characters = this.addProperty('characters', new ModelNodeTable((id) => new CharacterModel(id)));
 		this.battles = this.addProperty('battles', new ModelNodeCollection(() => new BattleModel()));
 		this.currentBattleMapId = this.addProperty('currentBattleMapId', new IntValue());
 		this.currentBattle = this.addProperty('currentBattle', new NullableNode(null, false));
-		this.currentBattleMapId.addOnChangeListener(
-			() => {
-				const battle = this.battles.find((b) => b.battleMapId.equalsTo(this.currentBattleMapId));
-				if (!battle) {
-					console.log('Battle map not found');
-					this.currentBattle.set(null);
-					return;
-				}
-				this.currentBattle.set(battle);
-			}
-		);
 
 		this.party = this.addProperty('party', new PartyModel());
 

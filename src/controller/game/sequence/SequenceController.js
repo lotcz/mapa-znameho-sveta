@@ -10,7 +10,7 @@ export default class SequenceController extends ControllerSavedGameNode {
 	 */
 	model;
 
-	origMode;
+	origBattle;
 	origCoords;
 
 	constructor(game, model, saveGame) {
@@ -52,12 +52,9 @@ export default class SequenceController extends ControllerSavedGameNode {
 
 	activateInternal() {
 		/*
-		this.origMode = this.saveGame.mode.get();
+		this.origBattle = this.saveGame.currentBattle.get();
 		this.origCoords = this.saveGame.mapCenterCoordinates.clone();
-		this.saveGame.mode.set(GAME_MODE_MAP);
-
-		 */
-
+		*/
 	}
 
 	nextStep() {
@@ -71,7 +68,7 @@ export default class SequenceController extends ControllerSavedGameNode {
 	}
 
 	finished() {
-		/*
+/*
 		this.saveGame.mode.set(this.origMode);
 		this.saveGame.mapCenterCoordinates.set(this.origCoords);
 

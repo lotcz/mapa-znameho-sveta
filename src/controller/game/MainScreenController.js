@@ -1,11 +1,11 @@
 import ControllerNode from "../basic/ControllerNode";
 import MapController from "./map/MapController";
-import {GAME_MODE_BATTLE, GAME_MODE_MAP} from "../../model/game/SaveGameModel";
 import BattleController from "./battle/BattleController";
 import ConversationController from "./conversation/ConversationController";
 import PartyController from "./party/PartyController";
 import BattleItemModel from "../../model/game/battle/BattleItemModel";
 import {ImageHelper} from "../../class/basic/ImageHelper";
+import NullableNodeController from "../basic/NullableNodeController";
 
 const REST_SPEED = 0.15; // portion of day per second
 
@@ -36,6 +36,15 @@ export default class MainScreenController extends ControllerNode {
 
 		this.partyController = new PartyController(this.game, this.model.party);
 		this.addChild(this.partyController);
+
+		this.addChild(
+			new NullableNodeController(
+				this.game,
+				this.model.currentBattle,
+				(m) => new BattleController(this.game, m),
+				() => new MapController(this.game, this.model)
+			)
+		);
 
 		this.addAutoEventMultiple(
 			[this.game.mainLayerSize, this.model.mapCenterCoordinates, this.model.zoom],
@@ -68,13 +77,6 @@ export default class MainScreenController extends ControllerNode {
 		);
 
 		this.addAutoEvent(
-			this.model.mode,
-			'change',
-			() => this.updateGameMode(),
-			true
-		);
-
-		this.addAutoEvent(
 			this.model.conversation,
 			'change',
 			() => this.updateConversation(),
@@ -96,7 +98,7 @@ export default class MainScreenController extends ControllerNode {
 					const oldItem = this.model.selectedInventorySlot.get().item.get();
 
 					if (slot.name === 'drop') {
-						if (oldItem && this.model.mode.equalsTo(GAME_MODE_BATTLE)) {
+						if (oldItem && this.model.currentBattle.isSet()) {
 							const battleItem = new BattleItemModel();
 							battleItem.item.set(oldItem);
 							const character = this.model.party.selectedCharacter.get();
@@ -164,7 +166,13 @@ export default class MainScreenController extends ControllerNode {
 		this.addAutoEventMultiple(
 			[this.model.currentLocation, this.model.currentPath],
 			'change',
-			() => this.updateBiotopeId(),
+			() => {
+				if (this.model.currentLocation.isSet()) {
+					this.model.currentBiotopeId.set(this.model.currentLocation.get().biotopeId.get());
+				} else if (this.model.currentPath.isSet()) {
+					this.model.currentBiotopeId.set(this.model.currentPath.get().biotopeId.get());
+				}
+			},
 			true
 		);
 
@@ -228,33 +236,6 @@ export default class MainScreenController extends ControllerNode {
 			this.conversationController = new ConversationController(this.game, this.model.conversation.get());
 			this.addChild(this.conversationController);
 			if (this.mainController) this.mainController.deactivate();
-		}
-	}
-
-	updateGameMode() {
-		const mode = this.model.mode.get();
-		if (this.mainController) this.removeChild(this.mainController);
-
-		switch (mode) {
-			case GAME_MODE_MAP:
-				this.mainController = this.addChild(new MapController(this.game, this.model));
-				break;
-			case GAME_MODE_BATTLE:
-				if (this.model.currentBattle.isEmpty()) {
-					this.model.mode.set(GAME_MODE_MAP);
-					console.log('no battle to fight!');
-					return;
-				}
-				this.mainController = this.addChild(new BattleController(this.game, this.model.currentBattle.get()));
-				break;
-		}
-	}
-
-	updateBiotopeId() {
-		if (this.model.currentLocation.isSet()) {
-			this.model.currentBiotopeId.set(this.model.currentLocation.get().biotopeId.get());
-		} else if (this.model.currentPath.isSet()) {
-			this.model.currentBiotopeId.set(this.model.currentPath.get().biotopeId.get());
 		}
 	}
 

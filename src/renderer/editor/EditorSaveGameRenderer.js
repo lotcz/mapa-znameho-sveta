@@ -1,6 +1,5 @@
 import DomRenderer from "../basic/DomRenderer";
 import Pixies from "../../class/basic/Pixies";
-import {GAME_MODE_BATTLE, GAME_MODE_MAP} from "../../model/game/SaveGameModel";
 import ConditionalNodeRenderer from "../basic/ConditionalNodeRenderer";
 import BattleEditorRenderer from "./battle/BattleEditorRenderer";
 
@@ -21,14 +20,14 @@ export default class EditorSaveGameRenderer extends DomRenderer {
 		this.addChild(
 			new ConditionalNodeRenderer(
 				this.game,
-				this.model.mode,
-				() => this.model.mode.equalsTo(GAME_MODE_BATTLE),
+				this.model.currentBattle,
+				() => this.model.currentBattle.isSet(),
 				() => new BattleEditorRenderer(this.game, this.game.editor.battleEditor, this.dom)
 			)
 		);
 
 		this.addAutoEvent(
-			this.model.mode,
+			this.model.currentBattle,
 			'change',
 			() => this.updateMode(),
 			true
@@ -61,17 +60,17 @@ export default class EditorSaveGameRenderer extends DomRenderer {
 		Pixies.createElement(
 			this.buttonsRight,
 			'button',
-			this.model.mode.equalsTo(GAME_MODE_MAP) ? 'active' : null,
+			this.model.currentBattle.isEmpty() ? 'active' : null,
 			'MAP',
-			() => this.model.triggerEvent('switch-mode-map')
+			() => this.model.triggerEvent('to-map')
 		);
 
 		Pixies.createElement(
 			this.buttonsRight,
 			'button',
-			this.model.mode.equalsTo(GAME_MODE_BATTLE) ? 'active' : null,
+			this.model.currentBattle.isSet() ? 'active' : null,
 			'BATTLE',
-			() => this.model.triggerEvent('switch-mode-battle')
+			() => this.model.triggerEvent('to-battle')
 		);
 	}
 

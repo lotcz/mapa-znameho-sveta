@@ -6,12 +6,6 @@ import LocationController from "./LocationController";
 import NullableNodeController from "../../basic/NullableNodeController";
 import CurrentLocationController from "./CurrentLocationController";
 import CurrentPathController from "./CurrentPathController";
-import BattleModel from "../../../model/game/battle/BattleModel";
-import {GAME_MODE_BATTLE} from "../../../model/game/SaveGameModel";
-import Vector2 from "../../../model/basic/Vector2";
-import Pixies from "../../../class/basic/Pixies";
-import BattlePartyCharacterModel from "../../../model/game/battle/BattlePartyCharacterModel";
-import BattleNpcCharacterModel from "../../../model/game/battle/BattleNpcCharacterModel";
 
 export default class MapController extends ControllerNode {
 
@@ -70,32 +64,6 @@ export default class MapController extends ControllerNode {
 			this.model.zoom,
 			'change',
 			() => this.updateCornerCoordinates()
-		);
-
-		this.addAutoEvent(
-			this.model.currentPathId,
-			'change',
-			() => {
-				this.runOnUpdate(() => this.model.currentPath.set(this.map.paths.getById(this.model.currentPathId.get())));
-			},
-			true
-		);
-
-		this.addAutoEvent(
-			this.model.currentLocationId,
-			'change',
-			() => {
-				this.runOnUpdate(() => this.model.currentLocation.set(this.map.locations.getById(this.model.currentLocationId.get())));
-			},
-			true
-		);
-
-		this.addAutoEvent(
-			this.model,
-			'to-battle',
-			() => {
-				this.runOnUpdate(() => this.toBattle());
-			}
 		);
 
 		this.helperMouseOverHandler = (point) => this.focusedHelper.set(point);
@@ -177,60 +145,6 @@ export default class MapController extends ControllerNode {
 		this.model.zoom.set(Math.max(this.model.zoom.get() + (param * -0.1), 0.05));
 	}
 
-	toBattle() {
-		const location = this.model.currentLocation.get();
-		if (!location) {
-			console.log('location empty');
-			return;
-		}
-		const battleMapId = location.battleMapId.get();
-		const map = this.game.resources.map.battleMaps.getById(battleMapId);
-		if (!map) {
-			console.log('no map found, id =', battleMapId);
-			return;
-		}
 
-		let battle = this.model.battles.find((b) => b.battleMapId.equalsTo(battleMapId));
-
-		// create battle
-		if (!battle) {
-			battle = new BattleModel();
-			battle.battleMapId.set(battleMapId);
-
-			// create NPCs
-			map.npcSpawns.forEach(
-				(spawn) => {
-					const template = this.game.resources.characterTemplates.getById(spawn.characterTemplateId);
-					if (!template) {
-						console.log('No character template found ', spawn.characterTemplateId.get());
-						return;
-					}
-					const character = this.model.characters.add(template.clone());
-					const npc = new BattleNpcCharacterModel();
-					npc.characterId.set(character.id.get());
-					npc.position.set(spawn.position);
-					battle.npcCharacters.add(npc);
-				}
-			);
-
-			this.model.battles.add(battle);
-		}
-
-		// create party
-		const center = map.screenCoordsToPosition(map.size.multiply(0.5));
-		battle.partyCharacters.reset();
-		this.model.party.slots.forEach((slot) => {
-			const character = new BattlePartyCharacterModel();
-			character.characterId.set(slot.characterId.get());
-			const position = center.add(new Vector2(Pixies.random(-5, 5), Pixies.random(-5, 5))).round();
-			character.position.set(position);
-			battle.partyCharacters.add(character);
-		});
-
-		this.model.currentBattleMapId.set(battleMapId);
-//console.log(this.model.currentBattle.get());
-		//this.model.currentBattle.set(battle);
-		this.model.mode.set(GAME_MODE_BATTLE);
-	}
 
 }

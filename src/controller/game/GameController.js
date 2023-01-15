@@ -4,7 +4,7 @@ import * as localForage from "localforage";
 import EditorController from "../editor/EditorController";
 import SaveGameController from "./SaveGameController";
 import NullableNodeController from "../basic/NullableNodeController";
-import SaveGameModel, {GAME_MODE_BATTLE} from "../../model/game/SaveGameModel";
+import SaveGameModel from "../../model/game/SaveGameModel";
 
 export default class GameController extends ControllerNode {
 
@@ -12,11 +12,6 @@ export default class GameController extends ControllerNode {
 	 * @type GameModel
 	 */
 	model;
-
-	/**
-	 * @type NullableNodeController
-	 */
-	saveGameController;
 
 	constructor(model) {
 		super(model, model);
@@ -47,7 +42,6 @@ export default class GameController extends ControllerNode {
 					save.currentLocationId.set(residence.id.get());
 					save.mapCenterCoordinates.set(residence.coordinates);
 					save.currentBattleMapId.set(residence.battleMapId.get())
-					save.mode.set(GAME_MODE_BATTLE);
 					const sequence = this.model.resources.sequences.getById(1);
 					save.animationSequence.set(sequence);
 					this.model.saveGame.set(save);

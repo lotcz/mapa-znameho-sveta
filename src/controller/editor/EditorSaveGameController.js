@@ -1,7 +1,6 @@
 import ControllerNode from "../basic/ControllerNode";
 import NullableNodeController from "../basic/NullableNodeController";
 import EditorBattleController from "./EditorBattleController";
-import {GAME_MODE_BATTLE, GAME_MODE_MAP} from "../../model/game/SaveGameModel";
 
 export default class EditorSaveGameController extends ControllerNode {
 
@@ -29,21 +28,6 @@ export default class EditorSaveGameController extends ControllerNode {
 			() => this.game.triggerEvent('save-ui')
 		);
 
-		this.addAutoEvent(
-			this.model,
-			'switch-mode-map',
-			() => this.runOnUpdate(
-				() => this.model.mode.set(GAME_MODE_MAP)
-			)
-		);
-
-		this.addAutoEvent(
-			this.model,
-			'switch-mode-battle',
-			() => this.runOnUpdate(
-				() => this.model.mode.set(GAME_MODE_BATTLE)
-			)
-		);
 	}
 
 }
