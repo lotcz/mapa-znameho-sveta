@@ -10,7 +10,8 @@ import IntValue from "../basic/IntValue";
 import FloatValue from "../basic/FloatValue";
 import BoolValue from "../basic/BoolValue";
 import ModelNodeCollection from "../basic/ModelNodeCollection";
-import CompletedStagesModel from "./quests/CompletedStagesModel";
+import CompletedQuestsModel from "./quests/CompletedQuestsModel";
+import PartySlotModel from "./party/PartySlotModel";
 
 export const GAME_MODE_MAP = 'map';
 export const GAME_MODE_BATTLE = 'battle';
@@ -143,7 +144,7 @@ export default class SaveGameModel extends ModelNode {
 	selectedInventorySlot;
 
 	/**
-	 * @type CompletedStagesModel
+	 * @type CompletedQuestsModel
 	 */
 	completedStages;
 
@@ -213,7 +214,7 @@ export default class SaveGameModel extends ModelNode {
 
 		this.selectedInventorySlot = this.addProperty('selectedInventorySlot', new NullableNode(null, false));
 
-		this.completedStages = this.addProperty('completedStages', new CompletedStagesModel());
+		this.completedStages = this.addProperty('completedStages', new CompletedQuestsModel());
 
 		this.animationSequence = this.addProperty('animationSequence', new NullableNode(null, false));
 	}
@@ -244,4 +245,10 @@ export default class SaveGameModel extends ModelNode {
 		})
 	}
 
+	addCharacterToParty(character) {
+		const chr = character.clone();
+		this.characters.add(chr);
+		const slot = this.party.slots.add(new PartySlotModel());
+		slot.characterId.set(chr.id.get());
+	}
 }

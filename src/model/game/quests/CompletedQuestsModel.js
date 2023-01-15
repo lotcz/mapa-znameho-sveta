@@ -1,7 +1,7 @@
 import ModelNode from "../../basic/ModelNode";
 
 
-export default class CompletedStagesModel extends ModelNode {
+export default class CompletedQuestsModel extends ModelNode {
 
 	/**
 	 * @type array<int>
@@ -31,7 +31,7 @@ export default class CompletedStagesModel extends ModelNode {
 		id = Number(id);
 		if (!this.isCompleted(id)) {
 			this.stages.push(id);
-			this.triggerEvent('stage-completed', id);
+			this.triggerEvent('quest-completed', id);
 			this.makeDirty();
 			return true;
 		}

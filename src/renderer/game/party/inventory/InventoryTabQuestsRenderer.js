@@ -4,7 +4,7 @@ import Pixies from "../../../../class/basic/Pixies";
 export default class InventoryTabQuestsRenderer extends DomRenderer {
 
 	/**
-	 * @type CompletedStagesModel
+	 * @type CompletedQuestsModel
 	 */
 	model;
 
@@ -15,7 +15,7 @@ export default class InventoryTabQuestsRenderer extends DomRenderer {
 
 		this.addAutoEvent(
 			this.model,
-			'stage-completed',
+			'quest-completed',
 			(id) => this.renderQuests(),
 			true
 		);

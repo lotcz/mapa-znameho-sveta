@@ -4,6 +4,7 @@ import * as localForage from "localforage";
 import EditorController from "../editor/EditorController";
 import SaveGameController from "./SaveGameController";
 import NullableNodeController from "../basic/NullableNodeController";
+import SaveGameModel, {GAME_MODE_BATTLE} from "../../model/game/SaveGameModel";
 
 export default class GameController extends ControllerNode {
 
@@ -26,11 +27,31 @@ export default class GameController extends ControllerNode {
 		this.resourcesTimeOut = null;
 
 		this.addChild(new ControlsController(this.game, this.model.controls));
+
 		this.addChild(
 			new NullableNodeController(
 				this.game,
 				this.model.saveGame,
 				(m) => new SaveGameController(this.game, m)
+			)
+		);
+
+		this.addAutoEvent(
+			this.model,
+			'new-game',
+			() => this.runOnUpdate(() => {
+					const save = new SaveGameModel();
+					const avelard = this.model.resources.characterTemplates.getById(1);
+					save.addCharacterToParty(avelard);
+					const residence = this.model.resources.map.locations.getById(1);
+					save.currentLocationId.set(residence.id.get());
+					save.mapCenterCoordinates.set(residence.coordinates);
+					save.currentBattleMapId.set(residence.battleMapId.get())
+					save.mode.set(GAME_MODE_BATTLE);
+					const sequence = this.model.resources.sequences.getById(1);
+					save.animationSequence.set(sequence);
+					this.model.saveGame.set(save);
+				}
 			)
 		);
 

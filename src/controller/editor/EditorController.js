@@ -1,7 +1,6 @@
 import ControllerNode from "../basic/ControllerNode";
 import EditorSaveGameController from "./EditorSaveGameController";
 import NullableNodeController from "../basic/NullableNodeController";
-import SaveGameModel from "../../model/game/SaveGameModel";
 import Pixies from "../../class/basic/Pixies";
 
 export default class EditorController extends ControllerNode {
@@ -76,12 +75,6 @@ export default class EditorController extends ControllerNode {
 			this.model,
 			'switch-options',
 			() => this.runOnUpdate(() => this.model.isOptionsVisible.invert())
-		);
-
-		this.addAutoEvent(
-			this.model,
-			'start-new-ui',
-			() => this.runOnUpdate(() => this.game.saveGame.set(new SaveGameModel()))
 		);
 
 	}

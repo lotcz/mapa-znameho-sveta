@@ -168,10 +168,8 @@ export default class MapController extends ControllerNode {
 				const offset = this.game.mainLayerMouseCoordinates.subtract(this.scrolling);
 				const mapCoords = this.model.mapCenterCoordinates.subtract(offset.multiply(1 / this.model.zoom.get()));
 				this.model.mapCenterCoordinates.set(mapCoords);
-				this.scrolling = this.game.mainLayerMouseCoordinates.clone();
-			} else {
-				this.scrolling = this.game.mainLayerMouseCoordinates.clone();
 			}
+			this.scrolling = this.game.mainLayerMouseCoordinates.clone();
 		}
 	}
 
@@ -187,7 +185,6 @@ export default class MapController extends ControllerNode {
 		}
 		const battleMapId = location.battleMapId.get();
 		const map = this.game.resources.map.battleMaps.getById(battleMapId);
-
 		if (!map) {
 			console.log('no map found, id =', battleMapId);
 			return;

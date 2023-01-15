@@ -23,7 +23,7 @@ export default class MapModel extends ModelNode {
 	locations;
 
 	/**
-	 * @type ModelNodeTable
+	 * @type ModelNodeTable<BattleMapModel>
 	 */
 	battleMaps;
 

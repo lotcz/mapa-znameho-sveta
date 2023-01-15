@@ -1,6 +1,7 @@
 import ControllerNode from "../basic/ControllerNode";
 import SequenceController from "./sequence/SequenceController";
 import MainScreenController from "./MainScreenController";
+import NullableNodeController from "../basic/NullableNodeController";
 
 export default class SaveGameController extends ControllerNode {
 
@@ -14,18 +15,21 @@ export default class SaveGameController extends ControllerNode {
 
 		this.model = model;
 
+		this.addChild(
+			new NullableNodeController(
+				this.game,
+				this.model.animationSequence,
+				(m) => new SequenceController(this.game, m, this.model),
+				() => new MainScreenController(this.game, this.model)
+			)
+		);
+
 		this.addAutoEvent(
-			this.model.animationSequence,
-			'change',
-			() => {
-				this.resetChildren();
-				if (this.model.animationSequence.isSet()) {
-					this.addChild(new SequenceController(this.game, this.model.animationSequence.get(), this.model));
-				} else {
-					this.addChild(new MainScreenController(this.game, this.model));
-				}
-			},
-			true
+			this.model,
+			'quest-completed',
+			(id) => {
+
+			}
 		);
 
 		this.addAutoEvent(

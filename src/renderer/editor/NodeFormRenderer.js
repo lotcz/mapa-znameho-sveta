@@ -2,7 +2,6 @@ import DomRenderer from "../basic/DomRenderer";
 import Pixies from "../../class/basic/Pixies";
 import NodeTableRenderer from "./NodeTableRenderer";
 import TableLookupRenderer from "./TableLookupRenderer";
-import PartySlotModel from "../../model/game/party/PartySlotModel";
 import CharacterStatsModel from "../../model/game/party/stats/CharacterStatsModel";
 
 export default class NodeFormRenderer extends DomRenderer {
@@ -117,7 +116,7 @@ export default class NodeFormRenderer extends DomRenderer {
 
 		if (this.model.constructor.name === 'PathModel') {
 			const start = Pixies.createElement(buttonsLeft, 'button', 'special');
-			start.innerText = 'Add waypoint';
+			start.innerText = 'Add Waypoint';
 			start.addEventListener('click', (e) => {
 				e.preventDefault();
 				this.model.addWaypoint();
@@ -125,18 +124,37 @@ export default class NodeFormRenderer extends DomRenderer {
 		}
 
 		if (this.model.constructor.name === 'CharacterModel') {
-			const join = Pixies.createElement(buttonsLeft, 'button', 'special');
-			join.innerText = 'Join party!';
-			join.addEventListener('click', (e) => {
-				e.preventDefault();
-				const chr = this.model.clone();
-				const save = this.game.saveGame.get();
-				save.characters.add(chr);
-				const slot = save.party.slots.add(new PartySlotModel());
-				slot.characterId.set(chr.id.get());
-			});
+			if (this.model.originalId.isSet()) {
+				Pixies.createElement(
+					buttonsLeft,
+					'button',
+					'blue',
+					'Update Template',
+					(e) => {
+						e.preventDefault();
+						const templateId = this.model.originalId.get();
+						const template = this.game.resources.characterTemplates.getById(templateId);
+						template.restoreState(this.model.getState());
+						template.originalId.set(null);
+						template.id.set(templateId);
+					}
+				);
+			}
+
+			Pixies.createElement(
+				buttonsLeft,
+				'button',
+				'special',
+				'Join Party!',
+				(e) => {
+					e.preventDefault();
+					const save = this.game.saveGame.get();
+					save.addCharacterToParty(this.model);
+				}
+			);
+
 			const reset = Pixies.createElement(buttonsLeft, 'button', 'red');
-			reset.innerText = 'Reset stats';
+			reset.innerText = 'Reset Stats';
 			reset.addEventListener('click', (e) => {
 				e.preventDefault();
 				const fresh = new CharacterStatsModel();
