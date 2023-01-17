@@ -35,7 +35,7 @@ export default class SequenceStepModel extends ModelNode {
 
 		this.duration = this.addProperty('duration', new FloatValue(1));
 		this.coordinates = this.addProperty('coordinates', new Vector2());
-		this.zoom = this.addProperty('zoom', new FloatValue(1));
+		this.zoom = this.addProperty('zoom', new FloatValue(0));
 		this.image = this.addProperty('image', new StringValue());
 		this.text = this.addProperty('text', new StringValue());
 	}

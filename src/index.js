@@ -5,7 +5,7 @@ import Stats from 'three/examples/jsm/libs/stats.module'
 
 const MAX_DELTA = 500;
 const DEBUG_MASTER = true;
-const SHOW_STATS = false;
+const SHOW_STATS = true;
 
 const game = new GameModel();
 

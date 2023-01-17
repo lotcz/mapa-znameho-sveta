@@ -100,33 +100,17 @@
 	to {opacity: 0;}
   }
 
-  .sequence-text div,
-  .sequence-background img {
+  .sequence-text div {
 	opacity: 0;
 	animation-name: fadeInAnim;
 	animation-duration: 2s;
 	animation-fill-mode: forwards;
   }
 
-  .sequence-text.fading-out div,
-  .sequence-background.fading-out img {
+  .sequence-text.fading-out div {
 	opacity: 1;
 	animation-name: fadeOutAnim;
 	animation-duration: 2s;
-  }
-
-  .sequence-text:not(.fading-out) div {
-	animation-delay: 2s;
-  }
-
-  .sequence-background.fading-out img {
-	animation-delay: 2s;
-  }
-
-  .sequence-background img {
-	object-fit: cover;
-	height: 100%;
-	width: 100%;
   }
 
   .sequence-text {

@@ -178,7 +178,7 @@ export default class Pixies {
 		return JSON.parse(JSON.stringify(obj));
 	}
 
-	static toUnique(arr) {
+	static arrayUnique(arr) {
 		return arr.filter((value, index, self) => self.indexOf(value) === index);
 	}
 

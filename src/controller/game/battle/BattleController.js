@@ -5,7 +5,6 @@ import NullableNodeController from "../../basic/NullableNodeController";
 import BattleMapController from "./BattleMapController";
 import AnimationVector2Controller from "../../basic/AnimationVector2Controller";
 import SelectedBattleCharacterController from "./SelectedBattleCharacterController";
-import Pixies from "../../../class/basic/Pixies";
 import {ImageHelper} from "../../../class/basic/ImageHelper";
 
 export default class BattleController extends ControllerNode {
@@ -75,7 +74,11 @@ export default class BattleController extends ControllerNode {
 						this.model.coordinates
 					)
 				);
-			}
+				const halfScreenSize = this.game.mainLayerSize.multiply(0.5 / this.model.zoom.get());
+				this.model.cornerCoordinates.set(this.model.coordinates.subtract(halfScreenSize));
+				this.onMouseMove();
+			},
+			true
 		);
 
 		this.addAutoEventMultiple(
@@ -90,32 +93,8 @@ export default class BattleController extends ControllerNode {
 						1
 					)
 				);
-			}
-		);
-
-		this.addAutoEvent(
-			this.game.mainLayerSize,
-			'change',
-			() => {
-				this.updateCoordinates();
 			},
 			true
-		);
-
-		this.addAutoEvent(
-			this.model.coordinates,
-			'change',
-			() => {
-				this.updateCoordinates();
-			}
-		);
-
-		this.addAutoEvent(
-			this.model.zoom,
-			'change',
-			() => {
-				this.updateCoordinates();
-			}
 		);
 
 		this.addAutoEvent(
@@ -185,15 +164,6 @@ export default class BattleController extends ControllerNode {
 			}
 		);
 
-	}
-
-	updateCoordinates() {
-		const halfScreenSize = this.game.mainLayerSize.multiply(0.5 / this.model.zoom.get());
-		const x = Pixies.between(halfScreenSize.x, this.model.battleMap.get().size.x - halfScreenSize.x, this.model.coordinates.x);
-		const y = Pixies.between(halfScreenSize.y, this.model.battleMap.get().size.y - halfScreenSize.y, this.model.coordinates.y);
-		this.model.coordinates.set(x, y);
-		this.model.cornerCoordinates.set(this.model.coordinates.subtract(halfScreenSize));
-		this.onMouseMove();
 	}
 
 	updateInternal(delta) {

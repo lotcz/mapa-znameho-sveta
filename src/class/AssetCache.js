@@ -86,6 +86,11 @@ export default class AssetCache {
 	}
 
 	getAsset(uri, onLoaded = null, onError = null) {
+		if (typeof uri !== 'string') {
+			console.log('uri is not a string', uri);
+			return;
+		}
+
 		if (this.cache.exists(uri)) {
 			if (onLoaded) {
 				onLoaded(this.cache.get(uri));

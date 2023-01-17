@@ -522,29 +522,16 @@ h4 {
     opacity: 0;
   }
 }
-.sequence-container .sequence-text div,
-.sequence-container .sequence-background img {
+.sequence-container .sequence-text div {
   opacity: 0;
   animation-name: fadeInAnim;
   animation-duration: 2s;
   animation-fill-mode: forwards;
 }
-.sequence-container .sequence-text.fading-out div,
-.sequence-container .sequence-background.fading-out img {
+.sequence-container .sequence-text.fading-out div {
   opacity: 1;
   animation-name: fadeOutAnim;
   animation-duration: 2s;
-}
-.sequence-container .sequence-text:not(.fading-out) div {
-  animation-delay: 2s;
-}
-.sequence-container .sequence-background.fading-out img {
-  animation-delay: 2s;
-}
-.sequence-container .sequence-background img {
-  object-fit: cover;
-  height: 100%;
-  width: 100%;
 }
 .sequence-container .sequence-text {
   display: flex;
