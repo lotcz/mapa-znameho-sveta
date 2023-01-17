@@ -27,9 +27,9 @@ export default class ControlsModel extends ModelNode {
 
 		this.isMouseOver = this.addProperty('isMouseOver', new BoolValue(false));
 		this.mouseCoordinates = this.addProperty('mouseCoordinates', new Vector2());
-		this.mouseDownLeft = this.addProperty('mouseDownLeft' , new DirtyValue(false));
+		this.mouseDownLeft = this.addProperty('mouseDownLeft', new DirtyValue(false));
 		this.mouseDownLeft.addOnChangeListener((params) => this.onMouseLeftChange(params.newValue));
-		this.mouseDownRight = this.addProperty('mouseDownRight' ,new DirtyValue(false));
+		this.mouseDownRight = this.addProperty('mouseDownRight', new DirtyValue(false));
 		this.mouseDownRight.addOnChangeListener((params) => this.onMouseRightChange(params.newValue));
 
 		this.leftClickTime = 0;

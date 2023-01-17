@@ -25,12 +25,18 @@ export default class ImageModel extends ModelNode {
 	 */
 	zoom;
 
-	constructor(id) {
-		super(id);
+	/**
+	 * @type Vector2
+	 */
+	size;
+
+	constructor(persistent = true) {
+		super(persistent);
 
 		this.url = this.addProperty('url', new StringValue());
 		this.opacity = this.addProperty('opacity', new FloatValue());
-		this.coordinates = this.addProperty('coordinates', new Vector2());
-		this.zoom = this.addProperty('zoom', new FloatValue(1));
+		this.coordinates = this.addProperty('startCoordinates', new Vector2());
+		this.size = this.addProperty('size', new Vector2());
+		this.zoom = this.addProperty('startZoom', new FloatValue(1));
 	}
 }

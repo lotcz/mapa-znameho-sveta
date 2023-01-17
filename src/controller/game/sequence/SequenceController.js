@@ -1,7 +1,7 @@
 import ControllerSavedGameNode from "../../basic/ControllerSavedGameNode";
 import Vector2 from "../../../model/basic/Vector2";
-import AnimationFloatController from "../../basic/AnimationFloatController";
-import AnimationVector2Controller from "../../basic/AnimationVector2Controller";
+import CollectionController from "../../basic/CollectionController";
+import SequenceStepBackgroundController from "./SequenceStepBackgroundController";
 
 export default class SequenceController extends ControllerSavedGameNode {
 
@@ -15,7 +15,34 @@ export default class SequenceController extends ControllerSavedGameNode {
 
 		this.model = model;
 
-		this.currentIndex = 0;
+		this.indexBg = 0;
+		this.indexText = 0;
+
+		this.timeoutText = 0;
+
+		this.addChild(
+			new CollectionController(
+				this.game,
+				this.model.runningSteps,
+				(m) => new SequenceStepBackgroundController(this.game, m, this.model)
+			)
+		);
+
+		this.addAutoEvent(
+			this.model,
+			'sequence-next-step',
+			() => this.nextStepBg()
+		);
+
+		this.addAutoEvent(
+			this.model.runningSteps,
+			'remove',
+			() => {
+				if (this.isFinished()) {
+					this.finished();
+				}
+			}
+		);
 
 		this.addAutoEvent(
 			this.game.viewBoxSize,
@@ -26,7 +53,7 @@ export default class SequenceController extends ControllerSavedGameNode {
 				const corner = this.game.viewBoxSize.subtract(size).multiply(0.5);
 				this.model.theatreCoordinates.set(corner);
 				this.model.theatreSize.set(size);
-				this.model.dualImage.size.set(size);
+				this.model.runningSteps.forEach((step) => step.renderingImage.size.set(size));
 			},
 			true
 		);
@@ -37,89 +64,70 @@ export default class SequenceController extends ControllerSavedGameNode {
 			() => {
 				this.finished();
 			}
-		)
+		);
 
 	}
 
 	activateInternal() {
-		this.model.dualImage.imageA.url.set('');
-		this.model.dualImage.imageB.url.set('');
-		this.nextStep();
+		this.model.text.set('');
+		this.model.runningSteps.reset();
+		this.nextStepText();
+		this.nextStepBg();
+	}
+
+	update(delta) {
+		if (!this.game.isInDebugMode.get()) {
+			super.update(delta);
+		}
 	}
 
 	updateInternal(delta)
 	{
-		if (this.model.currentStep.isEmpty()) {
-			return;
-		}
-		this.timeout -= delta;
-		if (this.timeout <= 0) {
-			this.nextStep();
+		this.timeoutText -= delta;
+		if (this.timeoutText <= 0) {
+			this.nextStepText();
 		}
 	}
 
-	nextStep() {
-		if (this.model.steps.count() <= this.currentIndex) {
-			this.finished();
+	nextStepText() {
+		if (this.isTextFinished()) {
+			if (this.isFinished()) {
+				this.finished();
+			}
 			return;
 		}
-		const index = this.currentIndex;
-		this.currentIndex++;
-		const step = this.model.steps.get(index);
-		this.model.currentStep.set(step);
-		this.timeout = step.duration.get();
+		const step = this.model.stepsText.get(this.indexText);
+		this.model.text.set(step.text.get());
+		this.indexText++;
+		this.timeoutText = step.duration.get();
+	}
 
-		this.model.currentText.set(step.text.get());
-		this.model.dualImage.imageA.restoreState(this.model.dualImage.imageB.getState());
-		this.model.dualImage.imageB.opacity.set(0);
-		this.model.dualImage.imageB.zoom.set(step.zoom.get());
-		this.model.dualImage.imageB.coordinates.set(step.coordinates);
-		this.model.dualImage.imageB.url.set(step.image.get());
-
-		if (this.model.dualImage.imageB.url.isSet()) {
-			this.addChild(
-				new AnimationFloatController(
-					this.game,
-					this.model.dualImage.imageB.opacity,
-					1,
-					3000
-				)
-			);
-		} else if (this.model.dualImage.imageA.url.isSet()) {
-			this.addChild(
-				new AnimationFloatController(
-					this.game,
-					this.model.dualImage.imageA.opacity,
-					0,
-					3000
-				)
-			);
+	nextStepBg() {
+		if (this.isBackgroundFinished()) {
+			if (this.isFinished()) {
+				this.finished();
+			}
+			return;
 		}
+		const step = this.model.stepsBg.get(this.indexBg);
+		this.indexBg++;
+		this.model.runningSteps.add(step);
+	}
 
-		// TEST
+	isFinished() {
+		return this.isTextFinished() && this.isBackgroundFinished() && (this.model.runningSteps.count() > 0);
+	}
 
-		this.addChild(
-			new AnimationFloatController(
-				this.game,
-				this.model.dualImage.imageB.zoom,
-				this.model.dualImage.imageB.zoom.get() * 1.05,
-				step.duration.get()
-			)
-		);
+	isTextFinished() {
+		return (this.model.stepsText.count() <= this.indexText);
+	}
 
-		this.addChild(
-			new AnimationVector2Controller(
-				this.game,
-				this.model.dualImage.imageB.coordinates,
-				this.model.dualImage.imageB.coordinates.add(new Vector2(50, 50)),
-				step.duration.get()
-			)
-		);
-
+	isBackgroundFinished() {
+		return (this.model.stepsBg.count() <= this.indexBg);
 	}
 
 	finished() {
-		this.model.currentStep.set(null);
+		this.model.runningSteps.reset();
 		this.saveGame.triggerEvent('sequence-finished');
 	}
 

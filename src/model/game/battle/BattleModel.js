@@ -38,13 +38,13 @@ export default class BattleModel extends ModelNode {
 
 	/**
 	 * @type Vector2
-	 * current coordinates of center of the screen, in px of background image
+	 * current startCoordinates of center of the screen, in px of background image
 	 */
 	coordinates;
 
 	/**
 	 * @type Vector2
-	 * current coordinates of top left corner, in px of background image
+	 * current startCoordinates of top left corner, in px of background image
 	 */
 	cornerCoordinates;
 
@@ -89,9 +89,9 @@ export default class BattleModel extends ModelNode {
 		this.npcCharacters = this.addProperty('npcCharacters', new ModelNodeCollection(() => new BattleNpcCharacterModel()));
 		this.items = this.addProperty('items', new ModelNodeCollection(() => new BattleItemModel()));
 
-		this.coordinates = this.addProperty('coordinates', new Vector2());
+		this.coordinates = this.addProperty('startCoordinates', new Vector2());
 		this.cornerCoordinates = this.addProperty('cornerCoordinates', new Vector2());
-		this.zoom = this.addProperty('zoom', new FloatValue(1));
+		this.zoom = this.addProperty('startZoom', new FloatValue(1));
 
 		this.isMouseOver = this.addProperty('isMouseOver', new BoolValue(false, false));
 		this.mouseCoordinates = this.addProperty('mouseCoordinates', new Vector2(0, 0, false));

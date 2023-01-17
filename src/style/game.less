@@ -90,6 +90,12 @@
 
 .sequence-container {
 
+  .sequence-background canvas {
+	position: absolute;
+	top: 0;
+	left: 0;
+  }
+
   @keyframes fadeInAnim {
 	from {opacity: 0;}
 	to {opacity: 1;}
@@ -103,7 +109,7 @@
   .sequence-text div {
 	opacity: 0;
 	animation-name: fadeInAnim;
-	animation-duration: 2s;
+	animation-duration: 3s;
 	animation-fill-mode: forwards;
   }
 
@@ -111,6 +117,7 @@
 	opacity: 1;
 	animation-name: fadeOutAnim;
 	animation-duration: 2s;
+	animation-fill-mode: forwards;
   }
 
   .sequence-text {

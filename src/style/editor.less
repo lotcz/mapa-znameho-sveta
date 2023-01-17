@@ -97,20 +97,23 @@
 	  cursor: pointer;
 	  margin: 10px;
 
-	  &.special {
-		background-color: @light-brown;
-		color: @dark-brown;
-	  }
 	  &.active {
 		background-color: black;
 		color: white;
 		border: 1px white solid;
 		cursor: default;
 	  }
+	  &:hover {
+		background-color: lightblue;
+	  }
+	  &.special {
+		background-color: @light-brown;
+		color: @dark-brown;
+	  }
 	  &.red {
 		background-color: red;
 	  }
-	  &:hover {
+	  &.blue {
 		background-color: lightblue;
 	  }
 	}
@@ -182,7 +185,7 @@
 
 	form .fields .row {
 	  display: grid;
-	  grid-template-columns: 1fr 2fr;
+	  grid-template-columns: 1fr 4fr;
 	  gap: 10px;
 	  margin-bottom: 10px;
 	}

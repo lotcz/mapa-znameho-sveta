@@ -172,6 +172,29 @@ export default class NodeFormRenderer extends DomRenderer {
 			});
 		}
 
+		if (this.model.constructor.name === 'SequenceStepBackgroundModel') {
+			Pixies.createElement(
+				buttonsLeft,
+				'button',
+				'blue',
+				'Set start',
+				(e) => {
+					e.preventDefault();
+					this.model.setStart();
+				}
+			);
+			Pixies.createElement(
+				buttonsLeft,
+				'button',
+				'blue',
+				'Set end',
+				(e) => {
+					e.preventDefault();
+					this.model.setEnd();
+				}
+			);
+		}
+
 		if (this.model.constructor.name === 'SequenceStepModel') {
 			Pixies.createElement(
 				buttonsLeft,

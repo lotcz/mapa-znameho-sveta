@@ -37,7 +37,7 @@ export default class SpriteModel extends IdentifiedModelNode {
 
 		this.name = this.addProperty('name', new DirtyValue(`Sprite ${id}`));
 		this.uri = this.addProperty('uri', new DirtyValue('img/texture/dirt.png'));
-		this.coordinates = this.addProperty('coordinates', new Vector3());
+		this.coordinates = this.addProperty('startCoordinates', new Vector3());
 		this.size = this.addProperty('size', new Vector2());
 		this.blocks = this.addProperty('blocks', new ModelNodeCollection(() => new BlockModel()));
 	}

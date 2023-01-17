@@ -1,7 +1,8 @@
 import DomRenderer from "../../basic/DomRenderer";
 import Pixies from "../../../class/basic/Pixies";
-import DualImageRenderer from "../../basic/DualImageRenderer";
 import {SVG} from "@svgdotjs/svg.js";
+import CollectionRenderer from "../../basic/CollectionRenderer";
+import SequenceStepBackgroundRenderer from "./SequenceStepBackgroundRenderer";
 
 export default class SequenceRenderer extends DomRenderer {
 
@@ -15,35 +16,35 @@ export default class SequenceRenderer extends DomRenderer {
 
 		this.model = model;
 
+		this.addChild(
+			new CollectionRenderer(
+				this.game,
+				this.model.runningSteps,
+				(m) => new SequenceStepBackgroundRenderer(this.game, m, this.bg)
+			)
+		);
 	}
 
 	activateInternal() {
 		this.container = this.addElement('div', 'sequence-container container-host container');
 
 		this.bg = Pixies.createElement(this.container,'div', 'sequence-background container-host container');
-		this.addChild(
-			new DualImageRenderer(
-				this.game,
-				this.model.dualImage,
-				this.bg
-			)
-		);
 
 		this.overlay = SVG().addTo(this.container);
 		this.overlay.addClass('sequence-overlay-svg');
 		this.overlay.addClass('container');
 
 		this.text = Pixies.createElement(this.container, 'div', 'sequence-text container');
+		this.renderText();
 		this.updateSize();
 
 		// pre-load images
-		const images = this.model.steps.filter((step) => step.image.isSet()).map((step) => step.image.get());
+		const images = this.model.stepsBg.filter((step) => step.image.isSet()).map((step) => step.image.get());
 		const paths = Pixies.arrayUnique(images);
 		paths.forEach((path) => this.game.assets.getAsset(path));
 	}
 
 	deactivateInternal() {
-		this.resetChildren();
 		this.overlay.remove();
 		this.overlay = null;
 		this.removeElement(this.container);
@@ -53,24 +54,23 @@ export default class SequenceRenderer extends DomRenderer {
 	}
 
 	renderInternal() {
-		if (this.model.currentStep.isEmpty()) {
-			return;
-		}
-
 		if (this.model.theatreSize.isDirty || this.model.theatreCoordinates.isDirty) {
 			this.updateSize();
 		}
 
-		if (this.model.currentText.isDirty) {
-			if (this.model.currentText.isSet()) {
-				Pixies.emptyElement(this.text);
-				Pixies.removeClass(this.text, 'fading-out');
-				Pixies.createElement(this.text, 'div', null, this.model.currentText.get());
-			} else {
-				Pixies.addClass(this.text, 'fading-out');
-			}
+		if (this.model.text.isDirty) {
+			this.renderText();
 		}
+	}
 
+	renderText() {
+		if (this.model.text.isSet()) {
+			Pixies.emptyElement(this.text);
+			Pixies.removeClass(this.text, 'fading-out');
+			Pixies.createElement(this.text, 'div', null, this.model.text.get());
+		} else {
+			Pixies.addClass(this.text, 'fading-out');
+		}
 	}
 
 	updateSize() {
@@ -103,16 +103,6 @@ export default class SequenceRenderer extends DomRenderer {
 			size.x,
 			size.y
 		).fill('white');
-/*
-		const radial = this.overlay.gradient(
-			'radial',
-			function(add) {
-				add.stop(0, 'rgba(0, 0, 0, 1)');
-				add.stop(0.95, 'rgba(0, 0, 0, 1)');
-				add.stop(1, 'rgba(255, 255, 255, 1)');
-			}
-		);
-*/
 
 		this.clipCircle = this.overlay
 			.rect(this.model.theatreSize.x, this.model.theatreSize.y)
@@ -123,7 +113,6 @@ export default class SequenceRenderer extends DomRenderer {
 		this.clipPath.add(this.maskBg);
 		this.clipPath.add(this.clipCircle);
 		this.curtainContent.maskWith(this.clipPath);
-
 	}
 
 }

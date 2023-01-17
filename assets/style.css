@@ -318,20 +318,23 @@ h4 {
   cursor: pointer;
   margin: 10px;
 }
-.editor-layer .editor button.special {
-  background-color: #ad9475;
-  color: #311a0a;
-}
 .editor-layer .editor button.active {
   background-color: black;
   color: white;
   border: 1px white solid;
   cursor: default;
 }
+.editor-layer .editor button:hover {
+  background-color: lightblue;
+}
+.editor-layer .editor button.special {
+  background-color: #ad9475;
+  color: #311a0a;
+}
 .editor-layer .editor button.red {
   background-color: red;
 }
-.editor-layer .editor button:hover {
+.editor-layer .editor button.blue {
   background-color: lightblue;
 }
 .editor-layer .editor .dock {
@@ -389,7 +392,7 @@ h4 {
 }
 .editor-layer .editor form .fields .row {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr 4fr;
   gap: 10px;
   margin-bottom: 10px;
 }
@@ -506,6 +509,11 @@ h4 {
   padding: 0;
   margin: 0;
 }
+.sequence-container .sequence-background canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 @keyframes fadeInAnim {
   from {
     opacity: 0;
@@ -525,13 +533,14 @@ h4 {
 .sequence-container .sequence-text div {
   opacity: 0;
   animation-name: fadeInAnim;
-  animation-duration: 2s;
+  animation-duration: 3s;
   animation-fill-mode: forwards;
 }
 .sequence-container .sequence-text.fading-out div {
   opacity: 1;
   animation-name: fadeOutAnim;
   animation-duration: 2s;
+  animation-fill-mode: forwards;
 }
 .sequence-container .sequence-text {
   display: flex;
