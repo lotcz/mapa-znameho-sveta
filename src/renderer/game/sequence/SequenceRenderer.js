@@ -83,6 +83,10 @@ export default class SequenceRenderer extends DomRenderer {
 		this.bg.style.width = this.model.theatreSize.x + 'px';
 		this.bg.style.height = this.model.theatreSize.y + 'px';
 
+		this.text.style.top = (this.model.theatreCoordinates.y + this.model.theatreSize.y) + 'px';
+		this.text.style.left = this.model.theatreCoordinates.x + 'px';
+		this.text.style.width = this.model.theatreSize.x + 'px';
+
 		if (this.clipPath) {
 			this.curtainContent.unmask();
 			this.clipPath.remove();

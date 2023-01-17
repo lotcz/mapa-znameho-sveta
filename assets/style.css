@@ -543,14 +543,13 @@ h4 {
   animation-fill-mode: forwards;
 }
 .sequence-container .sequence-text {
-  display: flex;
-  flex-direction: column-reverse;
-  align-items: center;
+  position: absolute;
+  text-align: center;
 }
 .sequence-container .sequence-text div {
   padding: 20px;
   color: #e0e0e0;
-  font-size: 2rem;
+  font-size: 22pt;
 }
 .board {
   display: flex;
