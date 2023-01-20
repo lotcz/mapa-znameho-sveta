@@ -1,6 +1,7 @@
 import AnimationFloatController from "../../basic/AnimationFloatController";
 import AnimationVector2Controller from "../../basic/AnimationVector2Controller";
 import ControllerNode from "../../basic/ControllerNode";
+import {EASING_QUAD_IN} from "../../../class/animating/ProgressValue";
 
 export default class SequenceStepBackgroundController extends ControllerNode {
 
@@ -61,7 +62,8 @@ export default class SequenceStepBackgroundController extends ControllerNode {
 					this.game,
 					this.model.renderingImage.opacity,
 					1,
-					this.model.fadeInDuration.get()
+					this.model.fadeInDuration.get(),
+					EASING_QUAD_IN
 				)
 			);
 		} else {

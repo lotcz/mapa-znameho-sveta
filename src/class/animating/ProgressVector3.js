@@ -1,4 +1,4 @@
-import ProgressValue from "./ProgressValue";
+import ProgressValue, {EASING_FLAT} from "./ProgressValue";
 import Vector3 from "../../model/basic/Vector3";
 
 export default class ProgressVector3 {
@@ -6,10 +6,10 @@ export default class ProgressVector3 {
 	progressY;
 	progressZ;
 
-	constructor(start, end, progress = 0) {
-		this.progressX = new ProgressValue(start.x, end.x, progress);
-		this.progressY = new ProgressValue(start.y, end.y, progress);
-		this.progressZ = new ProgressValue(start.z, end.z, progress);
+	constructor(start, end, easing = EASING_FLAT, progress = 0) {
+		this.progressX = new ProgressValue(start.x, end.x, easing, progress);
+		this.progressY = new ProgressValue(start.y, end.y, easing, progress);
+		this.progressZ = new ProgressValue(start.z, end.z, easing, progress);
 	}
 
 	setProgress(progress) {

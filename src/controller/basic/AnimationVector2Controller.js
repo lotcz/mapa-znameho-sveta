@@ -1,5 +1,6 @@
 import ControllerNode from "./ControllerNode";
 import AnimatedVector2 from "../../class/animating/AnimatedVector2";
+import {EASING_FLAT} from "../../class/animating/ProgressValue";
 
 export default class AnimationVector2Controller extends ControllerNode {
 
@@ -19,12 +20,13 @@ export default class AnimationVector2Controller extends ControllerNode {
 	 * @param model Vector2
 	 * @param target Vector2
 	 * @param duration Number
+	 * @param easing (float) => float
 	 * @param elapsed Number
 	 */
-	constructor(game, model, target, duration, elapsed = 0) {
+	constructor(game, model, target, duration, easing = EASING_FLAT, elapsed = 0) {
 		super(game, model);
 		this.model = model;
-		this.animatedVector = new AnimatedVector2(model, target, duration, elapsed);
+		this.animatedVector = new AnimatedVector2(model, target, duration, easing, elapsed);
 	}
 
 	updateInternal(delta) {

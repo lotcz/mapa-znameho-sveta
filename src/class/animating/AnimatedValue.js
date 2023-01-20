@@ -1,13 +1,12 @@
-import ProgressValue from "./ProgressValue";
+import ProgressValue, {EASING_FLAT} from "./ProgressValue";
 import Pixies from "../basic/Pixies";
 
 export default class AnimatedValue {
 	progressValue;
 	duration;
-	elapsed;
 
-	constructor(start, end, duration, elapsed = 0) {
-		this.progressValue = new ProgressValue(start, end);
+	constructor(start, end, duration, easing = EASING_FLAT, elapsed = 0) {
+		this.progressValue = new ProgressValue(start, end, easing, elapsed);
 		this.duration = duration;
 		this.elapsed = elapsed;
 		this.updateProgress();

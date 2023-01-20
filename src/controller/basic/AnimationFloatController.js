@@ -1,12 +1,8 @@
 import ControllerNode from "./ControllerNode";
 import AnimatedValue from "../../class/animating/AnimatedValue";
+import {EASING_FLAT} from "../../class/animating/ProgressValue";
 
 export default class AnimationFloatController extends ControllerNode {
-
-	/**
-	 * @type AnimatedValue
-	 */
-	animated;
 
 	/**
 	 * @type DirtyValue
@@ -14,17 +10,23 @@ export default class AnimationFloatController extends ControllerNode {
 	model;
 
 	/**
+	 * @type AnimatedValue
+	 */
+	animated;
+
+	/**
 	 *
 	 * @param game GameModel
 	 * @param model DirtyValue
 	 * @param target Number
 	 * @param duration Number
+	 * @param easing (float) => float
 	 * @param elapsed Number
 	 */
-	constructor(game, model, target, duration, elapsed = 0) {
+	constructor(game, model, target, duration, easing = EASING_FLAT, elapsed = 0) {
 		super(game, model);
 		this.model = model;
-		this.animated = new AnimatedValue(model.get(), target, duration, elapsed);
+		this.animated = new AnimatedValue(model.get(), target, duration, easing, elapsed);
 	}
 
 	updateInternal(delta) {
