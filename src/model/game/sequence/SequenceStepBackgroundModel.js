@@ -52,11 +52,12 @@ export default class SequenceStepBackgroundModel extends SequenceStepBaseModel {
 
 		this.fadeInDuration = this.addProperty('fadeInDuration', new IntValue(2000));
 		this.fadeOutDuration = this.addProperty('fadeOutDuration', new IntValue(2000));
+		this.image = this.addProperty('image', new StringValue());
 		this.startCoordinates = this.addProperty('startCoordinates', new Vector2());
 		this.endCoordinates = this.addProperty('endCoordinates', new Vector2());
 		this.startZoom = this.addProperty('startZoom', new FloatValue(0));
 		this.endZoom = this.addProperty('endZoom', new FloatValue(0));
-		this.image = this.addProperty('image', new StringValue());
+
 
 		this.renderingImage = this.addProperty('renderingImage', new ImageModel(false));
 	}

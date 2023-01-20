@@ -28,8 +28,7 @@ export default class SequenceStepBackgroundController extends ControllerNode {
 					zoom = 0.1;
 				}
 				zoom -= zoom * delta * 0.1;
-				console.log(zoom);
-				this.model.renderingImage.zoom.set(zoom);
+					this.model.renderingImage.zoom.set(zoom);
 			}
 		);
 
@@ -42,7 +41,6 @@ export default class SequenceStepBackgroundController extends ControllerNode {
 				const old = param.oldValue;
 				const nov = param.newValue;
 				const diff = nov.subtract(old).multiply(1 / this.model.renderingImage.zoom.get());
-				console.log(diff.toString());
 				const target = this.model.renderingImage.coordinates.subtract(diff);
 				this.model.renderingImage.coordinates.set(target);
 			}
@@ -132,7 +130,7 @@ export default class SequenceStepBackgroundController extends ControllerNode {
 	}
 
 	finished() {
-		this.removeMyself();
+		this.sequence.triggerEvent('sequence-step-finished', this.model);
 	}
 
 }

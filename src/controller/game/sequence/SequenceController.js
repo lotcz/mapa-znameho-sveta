@@ -35,6 +35,12 @@ export default class SequenceController extends ControllerSavedGameNode {
 		);
 
 		this.addAutoEvent(
+			this.model,
+			'sequence-step-finished',
+			(m) => this.model.runningSteps.remove(m)
+		);
+
+		this.addAutoEvent(
 			this.model.runningSteps,
 			'remove',
 			() => {
@@ -115,15 +121,15 @@ export default class SequenceController extends ControllerSavedGameNode {
 	}
 
 	isFinished() {
-		return this.isTextFinished() && this.isBackgroundFinished() && (this.model.runningSteps.count() > 0);
+		return this.isTextFinished() &&	this.isBackgroundFinished() && this.model.runningSteps.isEmpty();
 	}
 
 	isTextFinished() {
-		return (this.model.stepsText.count() <= this.indexText);
+		return this.model.stepsText.count() <= this.indexText && this.timeoutText <= 0;
 	}
 
 	isBackgroundFinished() {
-		return (this.model.stepsBg.count() <= this.indexBg);
+		return this.model.stepsBg.count() <= this.indexBg;
 	}
 
 	finished() {
