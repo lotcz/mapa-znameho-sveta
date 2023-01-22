@@ -77,6 +77,7 @@ export default class SequenceController extends ControllerSavedGameNode {
 	activateInternal() {
 		this.model.text.set('');
 		this.model.runningSteps.reset();
+		this.model.sounds.reset();
 		this.nextStepText();
 		this.nextStepBg();
 	}
@@ -104,6 +105,10 @@ export default class SequenceController extends ControllerSavedGameNode {
 		}
 		const step = this.model.stepsText.get(this.indexText);
 		this.model.text.set(step.text.get());
+		if (step.audioUrl.isSet()) {
+			const sound = this.game.audio.playSound(step.audioUrl.get());
+			this.model.sounds.add(sound);
+		}
 		this.indexText++;
 		this.timeoutText = step.duration.get();
 	}
@@ -134,6 +139,8 @@ export default class SequenceController extends ControllerSavedGameNode {
 
 	finished() {
 		this.model.runningSteps.reset();
+		this.model.sounds.forEach((audio) => this.game.audio.removeSound(audio));
+		this.model.sounds.reset();
 		this.saveGame.triggerEvent('sequence-finished');
 	}
 

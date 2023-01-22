@@ -8,10 +8,16 @@ export default class SequenceStepTextModel extends SequenceStepBaseModel {
 	 */
 	text;
 
+	/**
+	 * @type StringValue
+	 */
+	audioUrl;
+
 	constructor() {
 		super();
 
 		this.text = this.addProperty('text', new StringValue());
+		this.audioUrl = this.addProperty('audioUrl', new StringValue());
 
 	}
 

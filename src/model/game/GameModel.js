@@ -9,6 +9,7 @@ import NullableNode from "../basic/NullableNode";
 
 import ResourcesJson from "../../resources.json";
 import BoolValue from "../basic/BoolValue";
+import GlobalAudioModel from "../audio/GlobalAudioModel";
 
 export default class GameModel extends ModelNode {
 
@@ -57,6 +58,11 @@ export default class GameModel extends ModelNode {
 	 */
 	saveGame;
 
+	/**
+	 * @type GlobalAudioModel
+	 */
+	audio;
+
 	constructor() {
 		super();
 
@@ -72,6 +78,8 @@ export default class GameModel extends ModelNode {
 
 		this.saveGame = this.addProperty('saveGame', new NullableNode(() => new SaveGameModel()));
 		this.saveGame.set(new SaveGameModel());
+
+		this.audio = this.addProperty('audio', new GlobalAudioModel());
 	}
 
 	getTableByName(name) {

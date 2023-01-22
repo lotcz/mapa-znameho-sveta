@@ -39,6 +39,11 @@ export default class SequenceModel extends IdentifiedModelNode {
 	runningSteps;
 
 	/**
+	 * @type ModelNodeCollection<AudioModel>
+	 */
+	sounds;
+
+	/**
 	 * @type StringValue
 	 */
 	text;
@@ -55,6 +60,7 @@ export default class SequenceModel extends IdentifiedModelNode {
 		this.theatreCoordinates = this.addProperty('theatreCoordinates', new Vector2(0, 0, false));
 
 		this.runningSteps = this.addProperty('runningSteps', new ModelNodeCollection(null, false));
+		this.sounds = this.addProperty('sounds', new ModelNodeCollection(null, false));
 		this.text = this.addProperty('text', new StringValue('', false));
 	}
 

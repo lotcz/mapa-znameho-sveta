@@ -3,6 +3,7 @@ import Pixies from "../../class/basic/Pixies";
 import EditorRenderer from "../editor/EditorRenderer";
 import NullableNodeRenderer from "../basic/NullableNodeRenderer";
 import SaveGameRenderer from "./SaveGameRenderer";
+import GlobalAudioRenderer from "../audio/GlobalAudioRenderer";
 
 export default class GameRenderer extends DomRenderer {
 
@@ -24,6 +25,13 @@ export default class GameRenderer extends DomRenderer {
 				this.game,
 				this.model.saveGame,
 				(m) => new SaveGameRenderer(this.game, m, this.saveGameLayer)
+			)
+		);
+
+		this.addChild(
+			new GlobalAudioRenderer(
+				this.model,
+				this.model.audio
 			)
 		);
 

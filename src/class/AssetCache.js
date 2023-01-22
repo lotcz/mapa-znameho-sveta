@@ -10,8 +10,10 @@ import Model3dLoader from "./loaders/Model3dLoader";
 import ItemModel3dLoader from "./loaders/ItemModel3dLoader";
 import SpriteLoader from "./loaders/SpriteLoader";
 import Sprite3dLoader from "./loaders/Sprite3dLoader";
+import AudioLoader from "./loaders/AudioLoader";
 
 const ASSET_TYPE_LOADERS = {
+	'aud': AudioLoader,
 	'img': ImageLoader,
 	'glb': GlbLoader,
 	'mat': MaterialLoader,

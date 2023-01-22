@@ -27,6 +27,7 @@ export default class ModelNodeCollection extends ModelNode {
 		this.children.addOnAddListener((child) => this.onChildAdded(child));
 		this.children.addOnRemoveListener((child) => this.onChildRemoved(child));
 		this.childDirtyHandler = (ch) => this.onChildDirty(ch);
+		this.childRequestedRemoveHandler = (ch) => this.remove(ch);
 
 		this.selectedNode = this.addProperty('selectedNode', new NullableNode(null, false));
 
@@ -173,6 +174,7 @@ export default class ModelNodeCollection extends ModelNode {
 	onChildAdded(child) {
 		this.makeDirty();
 		child.addOnDirtyListener(this.childDirtyHandler);
+		child.addEventListener('remove-me', this.childRequestedRemoveHandler);
 	}
 
 	/**
@@ -182,6 +184,7 @@ export default class ModelNodeCollection extends ModelNode {
 	onChildRemoved(child) {
 		this.makeDirty();
 		child.removeOnDirtyListener(this.childDirtyHandler);
+		child.removeEventListener('remove-me', this.childRequestedRemoveHandler);
 		if (this.selectedNode.equalsTo(child)) {
 			this.selectedNode.set(null);
 		}
