@@ -20,6 +20,12 @@ export default class AudioRenderer extends RendererNode {
 		this.model = model;
 		this.audioContext = audioContext;
 		this.destination = destination;
+
+		this.addAutoEvent(
+			this.game.audio.paused,
+			'change',
+			() => this.updatePlaying()
+		);
 	}
 
 	activateInternal() {
@@ -41,9 +47,7 @@ export default class AudioRenderer extends RendererNode {
 			}
 
 			this.audio.addEventListener('canplaythrough', () => {
-				if (this.model.playing.get()) {
-					this.play();
-				}
+				this.updatePlaying();
 			});
 
 			this.audio.src = audio.src;
@@ -65,11 +69,7 @@ export default class AudioRenderer extends RendererNode {
 			this.updateVolume();
 		}
 		if (this.model.playing.isDirty) {
-			if (this.model.playing.get()) {
-				this.play();
-			} else {
-				this.pause();
-			}
+			this.updatePlaying();
 		}
 	}
 
@@ -79,6 +79,15 @@ export default class AudioRenderer extends RendererNode {
 		this.audio.controls = false;
 		this.updateLoop();
 		this.updateVolume();
+		this.updatePlaying();
+	}
+
+	updatePlaying() {
+		if (this.model.playing.get() && !this.game.audio.paused.get()) {
+			this.play();
+		} else {
+			this.pause();
+		}
 	}
 
 	updateLoop() {
@@ -99,8 +108,6 @@ export default class AudioRenderer extends RendererNode {
 	}
 
 	play() {
-		console.log('playing', this.audio.readyState);
-
 		if (this.audio.readyState === HAVE_ENOUGH_DATA) {
 			this.audio.play();
 		}

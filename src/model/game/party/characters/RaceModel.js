@@ -47,7 +47,7 @@ export default class RaceModel extends IdentifiedModelNode {
 
 		this.name = this.addProperty('name', new DirtyValue('Adelan'));
 		this.description = this.addProperty('description', new DirtyValue('Popis národa'));
-		this.skinMaterialId = this.addProperty('skinMaterialId', new IntValue(0));
+		this.skinMaterialId = this.addProperty('skinMaterialId', new IntValue());
 
 		this.male3dModelId = this.addProperty('male3dModelId', new IntValue(1));
 		this.female3dModelId = this.addProperty('female3dModelId', new IntValue(2));

@@ -82,6 +82,12 @@ export default class SequenceController extends ControllerSavedGameNode {
 		this.nextStepBg();
 	}
 
+	deactivateInternal() {
+		this.model.runningSteps.reset();
+		this.model.sounds.forEach((audio) => this.game.audio.removeSound(audio));
+		this.model.sounds.reset();
+	}
+
 	update(delta) {
 		if (!this.game.isInDebugMode.get()) {
 			super.update(delta);
@@ -138,9 +144,6 @@ export default class SequenceController extends ControllerSavedGameNode {
 	}
 
 	finished() {
-		this.model.runningSteps.reset();
-		this.model.sounds.forEach((audio) => this.game.audio.removeSound(audio));
-		this.model.sounds.reset();
 		this.saveGame.triggerEvent('sequence-finished');
 	}
 

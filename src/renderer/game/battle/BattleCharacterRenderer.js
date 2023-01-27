@@ -23,76 +23,111 @@ export default class BattleCharacterRenderer extends RendererNode {
 		this.model = model;
 		this.scene = scene;
 
+		this.character = null;
+		this.race = null;
+
 		this.animation = null;
+		this.useSkinMaterial = false;
+		this.skinMaterial = null;
+	}
+
+	resourceLoaded() {
+		if (!this.group) {
+			console.log('resources loaded after renderer deactivated');
+			return;
+		}
+
+		if (!this.animation) {
+			console.log('no animation');
+			return;
+		}
+
+		if (this.useSkinMaterial && !this.skinMaterial) {
+			console.log('no skin material');
+			return;
+		}
+
+		if (this.children.length > 0) {
+			console.log('resources loaded once again after initialized');
+			return;
+		}
+
+		if (this.skinMaterial) {
+			this.animation.mesh.traverse((mesh) => {
+				if (mesh.material && mesh.material.name === "SkinMaterial" && mesh.geometry) {
+					mesh.material.dispose();
+					mesh.material = this.skinMaterial;
+					mesh.castShadow = true;
+					mesh.receiveShadow = false;
+				}
+			});
+		}
+
+		const inner = new THREE.Group();
+		inner.add(this.animation.mesh);
+		const scale = this.race.scale;
+		inner.scale.set(scale.x, scale.y, scale.z);
+		this.group.add(inner);
+
+		this.addChild(new BattleItemSlotRenderer(this.game, this.character.hairSlot, this.animation.mesh));
+		this.addChild(new BattleItemSlotRenderer(this.game, this.character.inventory.head, this.animation.mesh));
+		this.addChild(new BattleItemSlotRenderer(this.game, this.character.inventory.leftHand, this.animation.mesh));
+		this.addChild(new BattleItemSlotRenderer(this.game, this.character.inventory.rightHand, this.animation.mesh));
+		this.addChild(new BattleItemSlotRenderer(this.game, this.character.inventory.body, this.animation.mesh));
+		this.addChild(new BattleItemSlotRenderer(this.game, this.character.inventory.hips, this.animation.mesh));
+		this.addChild(new BattleItemSlotRenderer(this.game, this.character.inventory.feet, this.animation.mesh));
+
+		this.addChild(
+			new CollectionRenderer(
+				this.game,
+				this.character.additionalItemsSlots,
+				(m) => new BattleItemSlotRenderer(this.game, m, this.animation.mesh)
+			)
+		);
+
+		this.updatePosition();
+		this.updateRotation();
+		this.switchAnimation();
+		this.animation.update();
 
 	}
 
 	activateInternal() {
 		this.group = new THREE.Group();
 
-		const character = this.model.character.get();
-		if (!character) {
-			console.error('Character not found');
-			return;
-		}
-
-		const scale = character.scale;
+		this.character = this.model.character.get();
+		const scale = this.character.scale;
 		this.group.scale.set(scale.x, scale.y, scale.z);
 
 		this.scene.add(this.group);
 
-		const race = this.game.resources.races.getById(character.raceId.get());
-		const materialId = race.skinMaterialId.get();
+		this.race = this.game.resources.races.getById(this.character.raceId.get());
+		this.useSkinMaterial = this.race.skinMaterialId.isSet();
 
-		this.game.assets.getAsset(`mat/${materialId}`, (material) => {
-			const skinMaterial = material;
-			skinMaterial.side = THREE.DoubleSide;
-			const modelId = character.sex.get() ? race.male3dModelId.get() : race.female3dModelId.get();
-			const model = this.game.resources.models3d.getById(modelId);
-			this.game.assets.getAsset(
-				model.uri.get(),
-				(asset) => {
-					if (this.group) {
-						//console.log(asset);
-						this.animation = new AnimationHelper(SkeletonUtils.clone(asset.scene), asset.animations);
-						this.switchAnimation(this.model.state.get());
-						this.animation.mesh.traverse((mesh) => {
-							if (mesh.material && mesh.geometry) {
-								mesh.material.dispose();
-								mesh.material = skinMaterial;
-								mesh.castShadow = true;
-								mesh.receiveShadow = false;
-							}
-						});
-						const scale = race.scale;
-						this.animation.mesh.scale.set(scale.x, scale.y, scale.z);
-						this.group.add(this.animation.mesh);
+		const modelId = this.character.sex.get() ? this.race.male3dModelId.get() : this.race.female3dModelId.get();
+		const model = this.game.resources.models3d.getById(modelId);
+		this.game.assets.getAsset(
+			model.uri.get(),
+			(asset) => {
+				this.animation = new AnimationHelper(SkeletonUtils.clone(asset.scene), asset.animations);
+				this.resourceLoaded();
+			}
+		);
 
-						this.resetChildren();
-						this.addChild(new BattleItemSlotRenderer(this.game, character.hairSlot, this.animation.mesh));
-						this.addChild(new BattleItemSlotRenderer(this.game, character.inventory.head, this.animation.mesh));
-						this.addChild(new BattleItemSlotRenderer(this.game, character.inventory.leftHand, this.animation.mesh));
-						this.addChild(new BattleItemSlotRenderer(this.game, character.inventory.rightHand, this.animation.mesh));
-						this.addChild(new BattleItemSlotRenderer(this.game, character.inventory.body, this.animation.mesh));
-						this.addChild(new BattleItemSlotRenderer(this.game, character.inventory.hips, this.animation.mesh));
-						this.addChild(new BattleItemSlotRenderer(this.game, character.inventory.feet, this.animation.mesh));
 
-						this.addChild(
-							new CollectionRenderer(
-								this.game,
-								character.additionalItemsSlots,
-								(m) => new BattleItemSlotRenderer(this.game, m, this.animation.mesh)
-							)
-						);
+		if (!this.useSkinMaterial) {
+			return;
+		}
 
-						this.updatePosition();
-						this.updateRotation();
-						this.switchAnimation();
-						this.animation.update();
-					}
-				}
-			);
-		});
+		const materialId = this.race.skinMaterialId.get();
+		this.game.assets.getAsset(
+			`mat/${materialId}`,
+			(material) => {
+				this.skinMaterial = material;
+				this.skinMaterial.side = THREE.DoubleSide;
+				this.resourceLoaded();
+			}
+		);
 	}
 
 	deactivateInternal() {
@@ -104,10 +139,12 @@ export default class BattleCharacterRenderer extends RendererNode {
 				}
 			});
 			this.group.remove(this.animation.mesh);
+			this.animation = null;
 		}
 
 		this.scene.remove(this.group);
 		this.group = null;
+		this.skinMaterial = null;
 	}
 
 	renderInternal() {

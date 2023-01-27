@@ -22,6 +22,11 @@ export default class GlobalAudioModel extends ModelNode {
 	musicOn;
 
 	/**
+	 * @type BoolValue
+	 */
+	paused;
+
+	/**
 	 * @type FloatValue
 	 */
 	musicVolume;
@@ -50,7 +55,8 @@ export default class GlobalAudioModel extends ModelNode {
 		super(persistent);
 
 		this.audioOn = this.addProperty('audioOn', new BoolValue(true));
-		this.masterVolume = this.addProperty('masterVolume', new FloatValue(0.5));
+		this.masterVolume = this.addProperty('masterVolume', new FloatValue(1));
+		this.paused = this.addProperty('paused', new BoolValue(false));
 
 		this.musicOn = this.addProperty('musicOn', new BoolValue(true));
 		this.musicVolume = this.addProperty('musicVolume', new FloatValue(1));

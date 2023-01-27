@@ -79,6 +79,14 @@ export default class EditorController extends ControllerNode {
 
 	}
 
+	activateInternal() {
+		this.game.audio.paused.set(true);
+	}
+
+	deactivateInternal() {
+		this.game.audio.paused.set(false);
+	}
+
 	updateInternal(delta) {
 		if (this.model.activeItemMounting.isSet()) {
 			this.model.activeItemMounting.get().makeDirty();
