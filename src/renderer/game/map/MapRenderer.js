@@ -69,7 +69,7 @@ export default class MapRenderer extends DomRenderer {
 
 		this.mapImage = null;
 		this.game.assets.getAsset(
-			'img/world-HD.jpg',
+			'img/world-map.jpg',
 			(img) => {
 				if (!this.draw) {
 					console.log('map loaded after renderer was deactivated');

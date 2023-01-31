@@ -8,6 +8,7 @@ import BoolValue from "../../basic/BoolValue";
 import BattleItemModel from "./BattleItemModel";
 import BattlePartyCharacterModel from "./BattlePartyCharacterModel";
 import BattleNpcCharacterModel from "./BattleNpcCharacterModel";
+import StringValue from "../../basic/StringValue";
 
 export default class BattleModel extends ModelNode {
 
@@ -79,6 +80,11 @@ export default class BattleModel extends ModelNode {
 	 */
 	isHoveringPartyCharacter;
 
+	/**
+	 * @type StringValue
+	 */
+	hoveringSpecial;
+
 	constructor() {
 		super();
 
@@ -98,6 +104,8 @@ export default class BattleModel extends ModelNode {
 		this.mouseHoveringTile = this.addProperty('mouseHoveringTile', new Vector2(0, 0, false));
 		this.isHoveringNoGo = this.addProperty('isHoveringNoGo', new BoolValue(false, false));
 		this.isHoveringPartyCharacter = this.addProperty('isHoveringPartyCharacter', new BoolValue(false, false));
+
+		this.hoveringSpecial = this.addProperty('hoveringSpecial', new StringValue('', false));
 	}
 
 }

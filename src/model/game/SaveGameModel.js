@@ -87,6 +87,11 @@ export default class SaveGameModel extends ModelNode {
 	/**
 	 * @type IntValue
 	 */
+	lastPathId;
+
+	/**
+	 * @type IntValue
+	 */
 	currentPathId;
 
 	/**
@@ -113,6 +118,11 @@ export default class SaveGameModel extends ModelNode {
 	 * @type NullableNode<BiotopeModel>
 	 */
 	currentBiotope;
+
+	/**
+	 * @type IntValue
+	 */
+	lastBattleMapId;
 
 	/**
 	 * @type IntValue
@@ -151,6 +161,7 @@ export default class SaveGameModel extends ModelNode {
 		this.time = this.addProperty('time', new FloatValue(0));
 		this.characters = this.addProperty('characters', new ModelNodeTable((id) => new CharacterModel(id)));
 		this.battles = this.addProperty('battles', new ModelNodeCollection(() => new BattleModel()));
+		this.lastBattleMapId = this.addProperty('lastBattleMapId', new IntValue());
 		this.currentBattleMapId = this.addProperty('currentBattleMapId', new IntValue());
 		this.currentBattle = this.addProperty('currentBattle', new NullableNode(null, false));
 
@@ -171,7 +182,9 @@ export default class SaveGameModel extends ModelNode {
 		this.partyTraveling = this.addProperty('partyTraveling', new BoolValue(false, false));
 		this.partyResting = this.addProperty('partyResting', new FloatValue(0, false));
 
+		this.lastPathId = this.addProperty('lastPathId', new IntValue());
 		this.currentPathId = this.addProperty('currentPathId', new IntValue());
+
 		this.currentPath = this.addProperty('currentPath', new NullableNode(null, false));
 		this.currentPath.addOnChangeListener((param) => {
 			if (param.oldValue) {

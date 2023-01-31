@@ -8,6 +8,8 @@ export class ImageHelper {
 			return max;
 		}
 
+		if (size.x === 0 || size.y === 0) return 1;
+
 		const minZoomX = viewBoxSize.x / size.x;
 		const minZoomY = viewBoxSize.y / size.y;
 

@@ -117,8 +117,8 @@ export default class BattleCharacterController extends ControllerNode {
 
 	getBlocks() {
 		const battle = this.game.saveGame.get().currentBattle.get();
-		const partyCharacters = battle.partyCharacters.filter((ch) => ch !== this.model).map((ch) => ch.position);
-		const npcCharacters = battle.npcCharacters.map((ch) => ch.position);
+		const partyCharacters = battle.partyCharacters.filter((ch) => ch !== this.model).map((ch) => ch.position.round());
+		const npcCharacters = battle.npcCharacters.map((ch) => ch.position.round());
 		const battleMap = battle.battleMap.get();
 		const mapBlocks = battleMap.getBlocks();
 		return mapBlocks.concat(partyCharacters).concat(npcCharacters);
@@ -164,6 +164,8 @@ export default class BattleCharacterController extends ControllerNode {
 	}
 
 	arrived() {
+		this.model.triggerEvent('arrived', this.model.position);
+
 		if (this.pathToGo.length > 0) {
 			this.startMovement(this.pathToGo.shift());
 			return;
@@ -173,6 +175,7 @@ export default class BattleCharacterController extends ControllerNode {
 		if (this.checkBlocks(blocks)) {
 			this.model.state.set(CHARACTER_STATE_IDLE);
 			this.model.targetPosition.set(null);
+			this.model.triggerEvent('arrived-idle', this.model.position);
 		}
 	}
 

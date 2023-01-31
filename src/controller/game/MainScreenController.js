@@ -41,7 +41,7 @@ export default class MainScreenController extends ControllerNode {
 			new NullableNodeController(
 				this.game,
 				this.model.currentBattle,
-				(m) => new BattleController(this.game, m),
+				(m) => new BattleController(this.game, m, this.model),
 				() => new MapController(this.game, this.model)
 			)
 		);

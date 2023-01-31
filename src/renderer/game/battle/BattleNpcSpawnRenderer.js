@@ -19,7 +19,7 @@ export default class BattleNpcSpawnRenderer extends SvgRenderer {
 	activateInternal() {
 		this.group = this.draw.group();
 
-		const color = 'blue';
+		const color = 'orange';
 		const size = this.battleMap.tileSize.get();
 		this.circle = this.group.ellipse(size, size / 2).stroke({width: 5, color:  color});
 

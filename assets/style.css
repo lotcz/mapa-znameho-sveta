@@ -440,9 +440,11 @@ h4 {
 .editor-layer .editor .battle-menu input[type=radio] {
   margin: 0;
   padding: 5px;
+  display: inline-block;
 }
 .editor-layer .editor .battle-menu label {
   padding: 5px;
+  display: inline-block;
 }
 @font-face {
   font-family: 'Vollkorn';
@@ -453,10 +455,16 @@ h4 {
   src: url('font/IMFellEnglishSC-Regular.ttf') format('truetype');
 }
 .savegame-layer {
-  font-family: 'Fell', 'Vollkorn', 'Georgia', serif;
+  font-family: 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
   color: #311a0a;
-  font-size: 12pt;
+  font-size: 17pt;
   cursor: url('img/cursor.png'), auto;
+}
+.savegame-layer h1,
+.savegame-layer h2,
+.savegame-layer h3,
+.savegame-layer h4 {
+  font-family: 'Fell', 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
 }
 .savegame-layer > * {
   -webkit-user-select: none;
@@ -468,10 +476,17 @@ h4 {
   -ms-user-select: none;
 }
 .savegame-layer button {
-  cursor: url('img/cursor.png'), auto;
+  cursor: url('img/cursor/cursor.png'), auto;
+}
+.savegame-layer .battle.sequence-hover {
+  cursor: url('img/cursor/cursor-eye.png'), not-allowed;
+}
+.savegame-layer .battle.exit-hover,
+.savegame-layer .battle.loc-hover {
+  cursor: url('img/cursor/cursor-walk.png'), not-allowed;
 }
 .savegame-layer .battle.no-go {
-  cursor: url('img/cursor-red.png'), not-allowed;
+  cursor: url('img/cursor/cursor-red.png'), not-allowed !important;
 }
 .portrait img {
   width: 100%;
@@ -905,9 +920,11 @@ h4 {
   background: sandybrown;
 }
 .conversation .info .portrait {
-  max-width: 150px;
-  max-height: 150px;
-  margin-right: 20px;
+  margin-right: 10px;
+}
+.conversation .info .portrait img {
+  max-width: 270px;
+  max-height: 180px;
 }
 .conversation .entries {
   flex: 1 2;

@@ -117,6 +117,11 @@ export default class EditorBattleController extends ControllerNode {
 				console.log('deleting 3D sprite', sprite);
 				this.model.battleMap.get().sprites3d.remove(sprite);
 				break;
+			case MODE_ACTION_SELECT:
+				if (sprite) {
+					this.game.editor.activeForm.set(sprite);
+				}
+				break;
 		}
 	}
 
@@ -133,7 +138,7 @@ export default class EditorBattleController extends ControllerNode {
 				for (let x = startX; x <= endX; x++) {
 					for (let y = startY; y <= endY; y++) {
 						const pos = new Vector2(x, y);
-						const existing = this.model.battleMap.get().specials.find((s) => s.position.round().equalsTo(pos));
+						const existing = this.model.battleMap.get().specials.find((s) => s.position.equalsTo(pos));
 						if (!existing) {
 							const special = new BattleSpecialModel();
 							special.position.set(pos);
@@ -147,7 +152,7 @@ export default class EditorBattleController extends ControllerNode {
 				for (let x = startX; x <= endX; x++) {
 					for (let y = startY; y <= endY; y++) {
 						const pos = new Vector2(x, y);
-						const existing = this.model.battleMap.get().specials.find((s) => s.position.round().equalsTo(pos));
+						const existing = this.model.battleMap.get().specials.find((s) => s.position.equalsTo(pos));
 						if (existing) {
 							this.model.battleMap.get().specials.remove(existing);
 						}
@@ -155,7 +160,11 @@ export default class EditorBattleController extends ControllerNode {
 				}
 				break;
 			case MODE_ACTION_SELECT:
-
+				const existing = this.model.battleMap.get().specials.filter((s) => s.position.equalsTo(tile));
+				if (existing.length > 0) {
+					const special = existing[0];
+					this.game.editor.activeForm.set(special);
+				}
 				break;
 		}
 	}
@@ -179,6 +188,11 @@ export default class EditorBattleController extends ControllerNode {
 			case MODE_ACTION_DELETE:
 				console.log('deleting NPC spawn', spawn);
 				this.model.battleMap.get().npcSpawns.remove(spawn);
+				break;
+			case MODE_ACTION_SELECT:
+				if (spawn) {
+					this.game.editor.activeForm.set(spawn);
+				}
 				break;
 		}
 	}

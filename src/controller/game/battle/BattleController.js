@@ -1,4 +1,3 @@
-import ControllerNode from "../../basic/ControllerNode";
 import CollectionController from "../../basic/CollectionController";
 import BattleCharacterController from "./BattleCharacterController";
 import NullableNodeController from "../../basic/NullableNodeController";
@@ -6,16 +5,17 @@ import BattleMapController from "./BattleMapController";
 import AnimationVector2Controller from "../../basic/AnimationVector2Controller";
 import SelectedBattleCharacterController from "./SelectedBattleCharacterController";
 import {ImageHelper} from "../../../class/basic/ImageHelper";
+import ControllerSavedGameNode from "../../basic/ControllerSavedGameNode";
 
-export default class BattleController extends ControllerNode {
+export default class BattleController extends ControllerSavedGameNode {
 
 	/**
 	 * @type BattleModel
 	 */
 	model;
 
-	constructor(game, model) {
-		super(game, model);
+	constructor(game, model, saveGame) {
+		super(game, model, saveGame);
 
 		this.model = model;
 		this.dragging = false;
@@ -33,7 +33,7 @@ export default class BattleController extends ControllerNode {
 			new NullableNodeController(
 				this.game,
 				this.model.partyCharacters.selectedNode,
-				(m) => new SelectedBattleCharacterController(game, m)
+				(m) => new SelectedBattleCharacterController(game, m, this.saveGame, this.model)
 			)
 		);
 
@@ -130,7 +130,7 @@ export default class BattleController extends ControllerNode {
 			(param) => this.onZoom(param)
 		);
 
-		const save = this.game.saveGame.get();
+		const save = this.saveGame;
 
 		this.addAutoEvent(
 			save.party.selectedCharacterId,
@@ -159,8 +159,7 @@ export default class BattleController extends ControllerNode {
 			this.model,
 			'leave-battle',
 			() => {
-				const save = this.game.saveGame.get();
-				save.triggerEvent('to-map');
+				this.saveGame.triggerEvent('to-map');
 			}
 		);
 
@@ -212,6 +211,13 @@ export default class BattleController extends ControllerNode {
 
 		const occupant = this.model.partyCharacters.find((ch) => ch.position.round().equalsTo(tile));
 		this.model.isHoveringPartyCharacter.set(occupant);
+
+		const special = battleMap.specials.find((s) => s.position.equalsTo(tile));
+		if (special) {
+			this.model.hoveringSpecial.set(special.type.get());
+		} else {
+			this.model.hoveringSpecial.set(null);
+		}
 	}
 
 	onZoom(param) {

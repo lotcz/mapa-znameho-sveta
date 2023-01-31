@@ -39,9 +39,6 @@ export default class PathRenderer extends SvgRenderer {
 		if (this.model.waypoints.count() < 2) {
 			return;
 		}
-		if (!this.game.isInDebugMode.get()) {
-			return;
-		}
 		const waypoints = this.model.waypoints.children.items;
 		const first = waypoints[0];
 		let path = `M ${first.coordinates.x} ${first.coordinates.y} `;

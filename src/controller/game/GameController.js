@@ -152,7 +152,7 @@ export default class GameController extends ControllerNode {
 		const residence = this.model.resources.map.locations.getById(1);
 		save.currentLocationId.set(residence.id.get());
 		save.mapCenterCoordinates.set(residence.coordinates);
-		save.currentBattleMapId.set(residence.battleMapId.get())
+		save.currentBattleMapId.set(residence.battleMapId.get());
 		const sequence = this.model.resources.sequences.getById(1);
 		save.animationSequence.set(sequence);
 		this.model.saveGame.set(save);

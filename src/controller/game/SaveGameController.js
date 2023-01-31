@@ -8,6 +8,7 @@ import BattlePartyCharacterModel from "../../model/game/battle/BattlePartyCharac
 import Vector2 from "../../model/basic/Vector2";
 import Pixies from "../../class/basic/Pixies";
 import {SPECIAL_TYPE_SPAWN} from "../../model/game/battle/battlemap/BattleSpecialModel";
+import PathFinder from "../../class/PathFinder";
 
 export default class SaveGameController extends ControllerNode {
 
@@ -31,7 +32,13 @@ export default class SaveGameController extends ControllerNode {
 					battleMapId = this.model.currentLocation.get().battleMapId.get();
 				}
 				if (battleMapId) {
-					this.runOnUpdate(() => this.model.currentBattleMapId.set(battleMapId));
+					this.runOnUpdate(() => {
+						const battle = this.model.currentBattle.get();
+						if (battle) {
+							battle.partyCharacters.reset();
+						}
+						this.model.currentBattleMapId.set(battleMapId);
+					});
 				}
 			}
 		);
@@ -41,6 +48,10 @@ export default class SaveGameController extends ControllerNode {
 			'to-map',
 			() => {
 				console.log('to map');
+				const battle = this.model.currentBattle.get();
+				if (battle) {
+					battle.partyCharacters.reset();
+				}
 				this.runOnUpdate(() => this.model.currentBattleMapId.set(null));
 			}
 		);
@@ -48,9 +59,12 @@ export default class SaveGameController extends ControllerNode {
 		this.addAutoEvent(
 			this.model.currentBattleMapId,
 			'change',
-			() => {
+			(param) => {
+				if (param) {
+					this.model.lastBattleMapId.set(param.oldValue);
+				}
 				if (this.model.currentBattleMapId.isSet()) {
-					this.toBattle(this.model.currentBattleMapId.get());
+					this.model.currentBattle.set(this.obtainBattle(this.model.currentBattleMapId.get()));
 				} else {
 					this.model.currentBattle.set(null);
 				}
@@ -61,8 +75,13 @@ export default class SaveGameController extends ControllerNode {
 		this.addAutoEvent(
 			this.model.currentPathId,
 			'change',
-			() => {
-				this.runOnUpdate(() => this.model.currentPath.set(this.map.paths.getById(this.model.currentPathId.get())));
+			(param) => {
+				this.runOnUpdate(() => {
+					if (param) {
+						this.model.lastPathId.set(param.oldValue);
+					}
+					this.model.currentPath.set(this.map.paths.getById(this.model.currentPathId.get()));
+				});
 			},
 			true
 		);
@@ -121,7 +140,7 @@ export default class SaveGameController extends ControllerNode {
 		console.log('sequence finished');
 	}
 
-	toBattle(battleMapId) {
+	obtainBattle(battleMapId) {
 		const map = this.game.resources.map.battleMaps.getById(battleMapId);
 		if (!map) {
 			console.log('no battle map found, id =', battleMapId);
@@ -155,35 +174,41 @@ export default class SaveGameController extends ControllerNode {
 		}
 
 		// create party
-		const spawns = map.specials.filter((s) => s.type.equalsTo(SPECIAL_TYPE_SPAWN));
-		const lastPos = map.screenCoordsToPosition(map.size.multiply(0.5));
-		const center = lastPos.clone();
+		if (battle.partyCharacters.isEmpty()) {
+			const spawns = map.specials.filter((s) => s.type.equalsTo(SPECIAL_TYPE_SPAWN));
+			let spawn = null;
 
-		battle.partyCharacters.reset();
+			if (this.model.lastBattleMapId.isSet()) {
+				spawn = spawns.find((s) => s.data.equalsTo(`battle:${this.model.lastBattleMapId.get()}`));
+			}
+			if (this.model.lastPathId.isSet() && !spawn) {
+				spawn = spawns.find((s) => s.data.equalsTo(`path:${this.model.lastPathId.get()}`));
+			}
 
-		this.model.party.slots.forEach((slot) => {
-			const character = new BattlePartyCharacterModel();
-			character.characterId.set(slot.characterId.get());
-			if (spawns.length > 0) {
-				const spawn = spawns[0];
-				spawns.splice(0, 1);
-				lastPos.set(spawn.position);
-				character.position.set(spawn.position);
-			} else {
-				const position = lastPos.add(new Vector2(Pixies.random(-5, 5), Pixies.random(-5, 5))).round();
+			const spawnPosition = spawn ? spawn.position : (spawns.length > 0 ? spawns[0].position : map.screenCoordsToPosition(map.size.multiply(0.5)));
+
+			const mapBlocks = map.getBlocks();
+			const npcCharactersBlocks = battle.npcCharacters.map((ch) => ch.position.round());
+			const blocks = mapBlocks.concat(npcCharactersBlocks);
+
+			this.model.party.slots.forEach((slot) => {
+				const character = new BattlePartyCharacterModel();
+				character.characterId.set(slot.characterId.get());
+				let position = spawnPosition;
+				while (PathFinder.isTileBlocked(position, blocks)) {
+					position = spawnPosition.add(new Vector2(Pixies.random(-5, 5), Pixies.random(-5, 5))).round();
+				}
 				character.position.set(position);
-			}
-			character.rotation.set(Math.PI);
-			battle.partyCharacters.add(character);
+				blocks.push(position);
+				character.rotation.set(Math.PI);
+				battle.partyCharacters.add(character);
 
-			if (this.model.party.selectedCharacterId.equalsTo(slot.characterId)) {
-				center.set(character.position);
-			}
-		});
+				if (this.model.party.selectedCharacterId.equalsTo(slot.characterId)) {
+					battle.coordinates.set(map.positionToScreenCoords(character.position));
+				}
+			});
+		}
 
-		battle.coordinates.set(map.positionToScreenCoords(center));
-		battle.zoom.set(1);
-
-		this.model.currentBattle.set(battle);
+		return battle;
 	}
 }

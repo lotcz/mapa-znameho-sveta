@@ -15,6 +15,7 @@ import BattleItemRenderer from "./BattleItemRenderer";
 import BattleCursorRenderer from "./BattleCursorRenderer";
 import BattleCharacterRingRenderer from "./BattleCharacterRingRenderer";
 import ConditionalNodeRenderer from "../../basic/ConditionalNodeRenderer";
+import {SPECIAL_TYPES} from "../../../model/game/battle/battlemap/BattleSpecialModel";
 
 export default class BattleRenderer extends DomRenderer {
 
@@ -240,6 +241,15 @@ export default class BattleRenderer extends DomRenderer {
 				Pixies.removeClass(this.container, 'no-go');
 			}
 		}
+
+		if (this.model.hoveringSpecial.isDirty) {
+			if (this.model.hoveringSpecial.isSet()) {
+				Pixies.addClass(this.container, `${this.model.hoveringSpecial.get()}-hover`);
+			} else {
+				SPECIAL_TYPES.forEach((type) => Pixies.removeClass(this.container, `${type}-hover`));
+			}
+		}
+
 		this.composer.render();
 	}
 

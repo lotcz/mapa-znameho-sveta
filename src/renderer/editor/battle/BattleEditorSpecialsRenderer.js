@@ -14,14 +14,6 @@ export default class BattleEditorSpecialsRenderer extends DomRenderer {
 
 		this.model = model;
 		this.container = null;
-/*
-		this.addAutoEvent(
-			this.model.spriteId,
-			'change',
-			() => this.spriteId.value = this.model.spriteId.get(),
-			true
-		);
-*/
 	}
 
 	activateInternal() {
@@ -48,7 +40,7 @@ export default class BattleEditorSpecialsRenderer extends DomRenderer {
 			r.setAttribute('name', 'specialType');
 			r.setAttribute('id',  `st-${specialType}`);
 			r.setAttribute('value', specialType);
-			r.checked = this.model.modeType.equalsTo(specialType);
+			r.checked = this.model.specialType.equalsTo(specialType);
 			r.addEventListener('change',  () => {
 				this.model.specialType.set(specialType);
 			});

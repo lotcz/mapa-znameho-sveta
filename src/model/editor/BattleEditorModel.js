@@ -79,6 +79,11 @@ export default class BattleEditorModel extends ModelNode {
 	 */
 	brushSize;
 
+	/**
+	 * @type NullableNode<BattleSpecialModel>
+	 */
+	selectedSpecial;
+
 	constructor() {
 		super();
 
@@ -94,6 +99,8 @@ export default class BattleEditorModel extends ModelNode {
 		this.specialType = this.addProperty('specialType', new DirtyValue(SPECIAL_TYPE_BLOCK));
 
 		this.brushSize = this.addProperty('brushSize', new IntValue(0));
+
+		this.selectedSpecial = this.addProperty('selectedSpecial', new NullableNode());
 	}
 
 }
