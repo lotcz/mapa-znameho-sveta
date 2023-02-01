@@ -1,4 +1,13 @@
+@keyframes fadeInAnim {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
 .conversation {
+  background-color: black;
+  animation-name: fadeInAnim;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
   display: flex;
   position: fixed;
   flex-direction: column;
@@ -11,9 +20,6 @@
 
   .panel {
 	margin: auto;
-	color: var(--dark-brown);
-	background-image: url('../../../assets/img/texture/paper.jpg');
-	background-color: sandybrown;
 	width: 900px;
 	max-width: 100%;
 	height: 85%;
@@ -40,8 +46,8 @@
 	scrollbar-width: thin;
 
 	&::-webkit-scrollbar {
-	  width: 10px; /* Mostly for vertical scrollbars */
-	  height: 10px; /* Mostly for horizontal scrollbars */
+	  width: @m-2;
+	  height: @m-2;
 	}
 
 	&::-webkit-scrollbar-thumb { /* Foreground */
@@ -53,15 +59,26 @@
 	}
   }
 
+  .title {
+	margin-bottom: @m-2;
+  }
+
   .info {
+
 	.portrait {
 	  margin-right: @m-2;
 
 	  img {
-		max-width: 270px;
-		max-height: 180px;
+		max-width: 320px;
+		max-height: 200px;
 	  }
 	}
+  }
+
+  .text p {
+	margin-top: 0;
+	margin-bottom: @m-2;
+	text-indent: 1.5em;
   }
 
   .entries {
@@ -96,8 +113,9 @@
 	  flex: 1;
 	}
 
-	.response {
+	&.response {
 	  padding-left: 20px;
+	  color: saddlebrown;
 	}
   }
 }

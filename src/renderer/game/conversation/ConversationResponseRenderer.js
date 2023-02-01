@@ -24,7 +24,9 @@ export default class ConversationResponseRenderer extends DomRenderer {
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', 'response');
+		if (this.model === this.parentEntry) return;
+
+		this.container = this.addElement('div', 'response row');
 		this.link = Pixies.createElement(this.container, 'a');
 		this.link.innerText = this.model.responseText.get();
 
@@ -33,14 +35,15 @@ export default class ConversationResponseRenderer extends DomRenderer {
 		});
 
 		if (this.game.isInDebugMode.get()) {
-			this.del = Pixies.createElement(this.container, 'button');
+			this.editorSection = Pixies.createElement(this.container, 'div', 'editor-section');
+			this.del = Pixies.createElement(this.editorSection, 'button');
 			this.del.innerText = 'del';
 			this.del.addEventListener('click', () => {
 				if (confirm('Delete response ' + this.model.responseText.get() + '?')) {
 					this.parentEntry.entries.remove(this.model);
 				}
 			});
-			Pixies.createElement(this.container, 'button', null, 'requires', (e) => {
+			Pixies.createElement(this.editorSection, 'button', null, 'requires', (e) => {
 				e.preventDefault();
 				const lookupRenderer = new TableLookupRenderer(this.game, this.model.requiresStageId, this.container, 'requiresStageId');
 				this.model.requiresStageId.addEventListener('table-closed', () => {
@@ -48,7 +51,7 @@ export default class ConversationResponseRenderer extends DomRenderer {
 				});
 				lookupRenderer.activate();
 			});
-			Pixies.createElement(this.container, 'button', null, 'completes', (e) => {
+			Pixies.createElement(this.editorSection, 'button', null, 'completes', (e) => {
 				e.preventDefault();
 				const lookupRenderer = new TableLookupRenderer(this.game, this.model.completesStageId, this.container, 'completesStageId');
 				this.model.completesStageId.addEventListener('table-closed', () => {

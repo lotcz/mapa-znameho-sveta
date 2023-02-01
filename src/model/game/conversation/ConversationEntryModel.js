@@ -4,6 +4,7 @@ import ModelNodeCollection from "../../basic/ModelNodeCollection";
 import ConversationLineModel from "./ConversationLineModel";
 import NullableNode from "../../basic/NullableNode";
 import IntValue from "../../basic/IntValue";
+import BoolValue from "../../basic/BoolValue";
 
 export default class ConversationEntryModel extends ModelNode {
 
@@ -33,7 +34,17 @@ export default class ConversationEntryModel extends ModelNode {
 	completesStageId;
 
 	/**
-	 * @type DirtyValue
+	 * @type BoolValue
+	 */
+	isExitAvailable;
+
+	/**
+	 * @type IntValue
+	 */
+	showParentResponses;
+
+	/**
+	 * @type BoolValue
 	 */
 	isResponseAvailable;
 
@@ -41,6 +52,11 @@ export default class ConversationEntryModel extends ModelNode {
 	 * @type NullableNode<CharacterModel>
 	 */
 	responseCharacter;
+
+	/**
+	 * @type NullableNode<ConversationEntryModel>
+	 */
+	parentEntry;
 
 	constructor() {
 		super();
@@ -52,8 +68,12 @@ export default class ConversationEntryModel extends ModelNode {
 		this.requiresStageId = this.addProperty('requiresStageId', new IntValue());
 		this.completesStageId = this.addProperty('completesStageId', new IntValue());
 
-		this.isResponseAvailable = new DirtyValue(true, false);
+		this.isExitAvailable = this.addProperty('isExitAvailable', new BoolValue(true));
+		this.showParentResponses = this.addProperty('showParentResponses', new IntValue(0));
+
+		this.isResponseAvailable = new BoolValue(true, false);
 		this.responseCharacter = new NullableNode(null, false);
+		this.parentEntry = new NullableNode(null, false);
 	}
 
 }

@@ -1,7 +1,11 @@
-import {SPECIAL_TYPE_EXIT, SPECIAL_TYPE_SEQUENCE} from "../../../model/game/battle/battlemap/BattleSpecialModel";
-import ControllerSavedGameNode from "../../basic/ControllerSavedGameNode";
+import {
+	SPECIAL_TYPE_CONVERSATION_LOC,
+	SPECIAL_TYPE_EXIT,
+	SPECIAL_TYPE_SEQUENCE
+} from "../../../model/game/battle/battlemap/BattleSpecialModel";
+import ControllerWithSaveGame from "../../basic/ControllerWithSaveGame";
 
-export default class SelectedBattleCharacterController extends ControllerSavedGameNode {
+export default class SelectedBattleCharacterController extends ControllerWithSaveGame {
 
 	/**
 	 * @type BattleCharacterModel
@@ -39,13 +43,18 @@ export default class SelectedBattleCharacterController extends ControllerSavedGa
 					}
 					return;
 				}
+				const con = specials.find((s) => s.type.equalsTo(SPECIAL_TYPE_CONVERSATION_LOC));
+				if (con) {
+					const conversationId = con.data.get();
+					const conversation = this.game.resources.conversations.getById(conversationId);
+					this.saveGame.conversation.set(conversation);
+				}
 				const seq = specials.find((s) => s.type.equalsTo(SPECIAL_TYPE_SEQUENCE));
 				if (seq) {
 					const sequenceId = seq.data.get();
 					const sequence = this.game.resources.sequences.getById(sequenceId);
 					this.saveGame.animationSequence.set(sequence);
 				}
-
 			}
 		);
 

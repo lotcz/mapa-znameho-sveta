@@ -37,7 +37,7 @@ export default class ConversationLineRenderer extends DomRenderer {
 		}
 
 		this.text = Pixies.createElement(this.container, 'div', 'text flex-1');
-		this.text.innerText = this.model.text.get();
+		this.text.innerHTML = Pixies.paragraphize(this.model.text.get());
 
 		if (this.game.isInDebugMode.get()) {
 			this.buttons = Pixies.createElement(this.container, 'div', 'buttons');

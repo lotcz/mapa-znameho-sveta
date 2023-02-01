@@ -261,4 +261,19 @@ export default class Pixies {
 		});
 	}
 
+	static paragraphize(text) {
+		if ((!text) || typeof text !== 'string') return '';
+		const arr = text.split(/(\<br\>|\<br\/\>|\n)/);
+		const strings = arr.filter((t) => Pixies.stripHtmlTags(t.trim()).length > 0);
+		console.log(strings);
+		const result = strings.reduce((prev, current) => prev.concat(`<p>${current}</p>`), '');
+		console.log(result);
+		return result;
+	}
+
+	static stripHtmlTags(text) {
+		if ((!text) || typeof text !== 'string') return '';
+		return text.replace(/(<([^>]+)>)/gi, '');
+	}
+
 }

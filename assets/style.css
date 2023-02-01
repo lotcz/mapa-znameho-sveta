@@ -265,6 +265,19 @@ h4 {
   top: 20%;
   left: 40%;
 }
+.editor-section {
+  background-color: black;
+  color: gray;
+}
+.editor-section button {
+  background-color: gray !important;
+  color: black !important;
+  font-weight: normal !important;
+  box-shadow: none !important;
+  border-radius: 2px !important;
+  padding: 5px !important;
+  margin: 5px !important;
+}
 .editor-layer {
   font-family: monospace;
   position: absolute;
@@ -457,7 +470,7 @@ h4 {
 .savegame-layer {
   font-family: 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
   color: #311a0a;
-  font-size: 17pt;
+  font-size: 16pt;
   cursor: url('img/cursor.png'), auto;
 }
 .savegame-layer h1,
@@ -478,12 +491,13 @@ h4 {
 .savegame-layer button {
   cursor: url('img/cursor/cursor.png'), auto;
 }
-.savegame-layer .battle.sequence-hover {
-  cursor: url('img/cursor/cursor-eye.png'), not-allowed;
+.savegame-layer .battle.seq-hover,
+.savegame-layer .battle.c-eye-hover {
+  cursor: url('img/cursor/cursor-eye.png'), pointer;
 }
 .savegame-layer .battle.exit-hover,
-.savegame-layer .battle.loc-hover {
-  cursor: url('img/cursor/cursor-walk.png'), not-allowed;
+.savegame-layer .battle.c-loc-hover {
+  cursor: url('img/cursor/cursor-walk.png'), move;
 }
 .savegame-layer .battle.no-go {
   cursor: url('img/cursor/cursor-red.png'), not-allowed !important;
@@ -507,10 +521,10 @@ h4 {
   color: sandybrown;
   box-shadow: #311a0a 1px 1px 10px;
   border-width: 0;
-  border-radius: 5px;
+  border-radius: 4px;
   font-weight: bold;
-  padding: 5px 10px;
-  margin: 5px;
+  padding: 6px 15px;
+  margin: 6px;
 }
 .paper button:hover {
   color: #e0b050;
@@ -866,7 +880,19 @@ h4 {
   color: black;
   opacity: 0.5;
 }
+@keyframes fadeInAnim {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 .conversation {
+  background-color: black;
+  animation-name: fadeInAnim;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
   display: flex;
   position: fixed;
   flex-direction: column;
@@ -879,9 +905,6 @@ h4 {
 }
 .conversation .panel {
   margin: auto;
-  color: var(--dark-brown);
-  background-image: url('../../../assets/img/texture/paper.jpg');
-  background-color: sandybrown;
   width: 900px;
   max-width: 100%;
   height: 85%;
@@ -907,9 +930,7 @@ h4 {
 }
 .conversation .scroll::-webkit-scrollbar {
   width: 10px;
-  /* Mostly for vertical scrollbars */
   height: 10px;
-  /* Mostly for horizontal scrollbars */
 }
 .conversation .scroll::-webkit-scrollbar-thumb {
   /* Foreground */
@@ -919,12 +940,20 @@ h4 {
   /* Background */
   background: sandybrown;
 }
+.conversation .title {
+  margin-bottom: 10px;
+}
 .conversation .info .portrait {
   margin-right: 10px;
 }
 .conversation .info .portrait img {
-  max-width: 270px;
-  max-height: 180px;
+  max-width: 320px;
+  max-height: 200px;
+}
+.conversation .text p {
+  margin-top: 0;
+  margin-bottom: 10px;
+  text-indent: 1.5em;
 }
 .conversation .entries {
   flex: 1 2;
@@ -952,6 +981,7 @@ h4 {
 .conversation .line .text {
   flex: 1;
 }
-.conversation .line .response {
+.conversation .line.response {
   padding-left: 20px;
+  color: saddlebrown;
 }

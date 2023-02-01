@@ -48,6 +48,20 @@ export default class ConversationEntryRenderer extends DomRenderer {
 				const newLine = this.model.lines.add(new ConversationLineModel());
 				newLine.text.set('line text');
 			});
+
+			this.exitAvailable = Pixies.createElement(buttons, 'input');
+			this.exitAvailable.setAttribute('type', 'checkbox');
+			this.exitAvailable.checked = this.model.isExitAvailable.get();
+			this.exitAvailable.addEventListener('change', () => {
+				this.model.isExitAvailable.set(this.exitAvailable.checked);
+			});
+
+			this.parentResponses = Pixies.createElement(buttons, 'input');
+			this.parentResponses.setAttribute('type', 'text');
+			this.parentResponses.value = this.model.showParentResponses.get();
+			this.parentResponses.addEventListener('change', () => {
+				this.model.showParentResponses.set(this.parentResponses.value);
+			});
 		}
 	}
 

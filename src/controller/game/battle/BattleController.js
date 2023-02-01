@@ -5,9 +5,10 @@ import BattleMapController from "./BattleMapController";
 import AnimationVector2Controller from "../../basic/AnimationVector2Controller";
 import SelectedBattleCharacterController from "./SelectedBattleCharacterController";
 import {ImageHelper} from "../../../class/basic/ImageHelper";
-import ControllerSavedGameNode from "../../basic/ControllerSavedGameNode";
+import ControllerWithSaveGame from "../../basic/ControllerWithSaveGame";
+import NpcBattleCharacterController from "./NpcBattleCharacterController";
 
-export default class BattleController extends ControllerSavedGameNode {
+export default class BattleController extends ControllerWithSaveGame {
 
 	/**
 	 * @type BattleModel
@@ -42,6 +43,14 @@ export default class BattleController extends ControllerSavedGameNode {
 				this.game,
 				this.model.npcCharacters,
 				(m) => new BattleCharacterController(game, m)
+			)
+		);
+
+		this.addChild(
+			new CollectionController(
+				this.game,
+				this.model.npcCharacters,
+				(m) => new NpcBattleCharacterController(game, m)
 			)
 		);
 

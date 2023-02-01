@@ -1,9 +1,9 @@
-import ControllerSavedGameNode from "../../basic/ControllerSavedGameNode";
+import ControllerWithSaveGame from "../../basic/ControllerWithSaveGame";
 import Vector2 from "../../../model/basic/Vector2";
 import CollectionController from "../../basic/CollectionController";
 import SequenceStepBackgroundController from "./SequenceStepBackgroundController";
 
-export default class SequenceController extends ControllerSavedGameNode {
+export default class SequenceController extends ControllerWithSaveGame {
 
 	/**
 	 * @type SequenceModel

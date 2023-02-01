@@ -6,15 +6,18 @@ import StringValue from "../../../basic/StringValue";
 export const SPECIAL_TYPE_BLOCK = 'block';
 export const SPECIAL_TYPE_EXIT = 'exit';
 export const SPECIAL_TYPE_SPAWN = 'spawn';
-export const SPECIAL_TYPE_SEQUENCE = 'sequence';
-export const SPECIAL_TYPE_LOC = 'loc';
+export const SPECIAL_TYPE_SEQUENCE = 'seq';
+export const SPECIAL_TYPE_CONVERSATION_LOC = 'c-loc';
+export const SPECIAL_TYPE_CONVERSATION_EYE = 'c-eye';
 
 export const SPECIAL_TYPES = [
 	SPECIAL_TYPE_BLOCK,
 	SPECIAL_TYPE_EXIT,
 	SPECIAL_TYPE_SPAWN,
-	SPECIAL_TYPE_SEQUENCE
-]
+	SPECIAL_TYPE_SEQUENCE,
+	SPECIAL_TYPE_CONVERSATION_LOC,
+	SPECIAL_TYPE_CONVERSATION_EYE
+];
 
 export default class BattleSpecialModel extends ModelNode {
 

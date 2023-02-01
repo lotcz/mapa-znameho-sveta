@@ -54,10 +54,21 @@ export default class ConversationController extends ControllerNode {
 		}
 	}
 
+	updateEntryParents(entry = null, parent = null) {
+		if (!entry) {
+			entry = this.model.currentEntry.get();
+		}
+		if (parent) {
+			entry.parentEntry.set(parent);
+		}
+		entry.entries.forEach((e) => this.updateEntryParents(e, entry));
+	}
+
 	restartConversation() {
 		this.model.pastEntries.reset();
 		this.model.currentEntry.set(null);
 		this.model.currentEntry.set(this.model.initialEntry);
+		this.updateEntryParents();
 	}
 
 }

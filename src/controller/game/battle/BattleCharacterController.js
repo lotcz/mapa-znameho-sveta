@@ -1,4 +1,3 @@
-import ControllerNode from "../../basic/ControllerNode";
 import AnimatedVector2 from "../../../class/animating/AnimatedVector2";
 import {CHARACTER_STATE_IDLE, CHARACTER_STATE_RUN} from "../../../model/game/battle/BattleCharacterModel";
 import AnimatedRotation from "../../../class/animating/AnimatedRotation";
@@ -6,14 +5,15 @@ import PathFinder from "../../../class/PathFinder";
 import Pixies from "../../../class/basic/Pixies";
 import ItemModel from "../../../model/game/items/ItemModel";
 import BattleItemSlotController from "./BattleItemSlotController";
+import ControllerWithBattle from "../../basic/ControllerWithBattle";
 
 const TRAVEL_SPEED = 3.25 / 1000; // position units per milisecond
 const ROTATION_SPEED = (Math.PI * 4) / 1000; // radians per milisecond
 
-export default class BattleCharacterController extends ControllerNode {
+export default class BattleCharacterController extends ControllerWithBattle {
 
 	/**
-	 * @type BattleCharacterModel
+	 * @type BattleCharacterModel|BattleNpcCharacterModel
 	 */
 	model;
 
@@ -29,19 +29,27 @@ export default class BattleCharacterController extends ControllerNode {
 		super(game, model);
 
 		this.model = model;
+
 		this.pathToGo = [];
 
 		this.positionAnimation = null;
 		this.rotationAnimation = null;
 
-		this.goToHandler = (p) => this.goTo(p);
 		this.headGearChangedHandler = () => this.updateHair();
+
+		this.addAutoEvent(
+			this.model,
+			'go-to',
+			(p) => this.goTo(p)
+		);
 
 		this.addAutoEvent(
 			this.model.characterId,
 			'change',
 			() => {
-				const character = this.game.saveGame.get().characters.getById(this.model.characterId.get());
+				if (this.model.character.isSet() && this.model.character.get().id.equalsTo(this.model.characterId.get())) return;
+
+				const character = this.saveGame.characters.getById(this.model.characterId.get());
 				if (!character) {
 					console.error('Character not found', this.model.characterId.get());
 					return;
@@ -77,11 +85,11 @@ export default class BattleCharacterController extends ControllerNode {
 	}
 
 	activateInternal() {
-		this.model.addEventListener('go-to', this.goToHandler);
+		super.activateInternal();
 	}
 
 	deactivateInternal() {
-		this.model.removeEventListener('go-to', this.goToHandler);
+		this.resetChildren();
 
 		const character = this.model.character.get();
 		if (character) character.inventory.head.item.removeOnChangeListener(this.headGearChangedHandler);
@@ -116,10 +124,9 @@ export default class BattleCharacterController extends ControllerNode {
 	}
 
 	getBlocks() {
-		const battle = this.game.saveGame.get().currentBattle.get();
-		const partyCharacters = battle.partyCharacters.filter((ch) => ch !== this.model).map((ch) => ch.position.round());
-		const npcCharacters = battle.npcCharacters.map((ch) => ch.position.round());
-		const battleMap = battle.battleMap.get();
+		const partyCharacters = this.battle.partyCharacters.filter((ch) => ch !== this.model).map((ch) => ch.position.round());
+		const npcCharacters = this.battle.npcCharacters.filter((ch) => ch !== this.model).map((ch) => ch.position.round());
+		const battleMap = this.battle.battleMap.get();
 		const mapBlocks = battleMap.getBlocks();
 		return mapBlocks.concat(partyCharacters).concat(npcCharacters);
 	}

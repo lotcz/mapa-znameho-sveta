@@ -166,6 +166,8 @@ export default class SaveGameController extends ControllerNode {
 					const npc = new BattleNpcCharacterModel();
 					npc.characterId.set(character.id.get());
 					npc.position.set(spawn.position);
+					npc.homePosition.set(npc.position);
+					npc.rotation.set(Math.PI);
 					battle.npcCharacters.add(npc);
 				}
 			);

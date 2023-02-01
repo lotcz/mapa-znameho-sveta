@@ -13,10 +13,11 @@ export default class ConversationRenderer extends DomRenderer {
 	 */
 	model;
 
-	constructor(game, model, dom) {
+	constructor(game, model, dom, saveGame) {
 		super(game, model, dom);
 
 		this.model = model;
+		this.saveGame = saveGame;
 
 		this.container = null;
 
@@ -38,12 +39,13 @@ export default class ConversationRenderer extends DomRenderer {
 		this.container.addEventListener('click', this.onContainerEvent);
 		this.container.addEventListener('wheel', this.onContainerEvent);
 
-		this.panel = Pixies.createElement(this.container, 'div', 'panel');
+		this.panel = Pixies.createElement(this.container, 'div', 'panel paper');
 		this.inner = Pixies.createElement(this.panel, 'div', 'inner');
 
 		const header = Pixies.createElement(this.inner, 'div', 'header');
-		const title = Pixies.createElement(header, 'h2', 'title');
-		title.innerText = this.model.name.get();
+		const title = Pixies.createElement(header, 'div', 'row');
+		const titleText = Pixies.createElement(title, 'h2', 'title');
+		titleText.innerText = this.model.name.get();
 
 		const info = Pixies.createElement(header, 'div', 'info row');
 
@@ -55,14 +57,14 @@ export default class ConversationRenderer extends DomRenderer {
 			});
 		}
 
-		const description = Pixies.createElement(info, 'div', 'description flex-1');
-		description.innerText = this.model.description.get();
+		const description = Pixies.createElement(info, 'div', 'description text flex-1');
+		description.innerHTML = Pixies.paragraphize(this.model.description.get());
 
 		if (this.game.isInDebugMode.get()) {
-			Pixies.magicEditor(title, (value) => this.model.name.set(value));
+			Pixies.magicEditor(titleText, (value) => this.model.name.set(value));
 			Pixies.magicEditor(description, (value) => this.model.description.set(value), true);
 
-			const buttons = Pixies.createElement(info, 'div');
+			const buttons = Pixies.createElement(title, 'div', 'editor-section buttons');
 			const back = Pixies.createElement(buttons, 'button');
 			back.innerText = 'Back';
 			back.addEventListener('click', () => {
@@ -82,7 +84,7 @@ export default class ConversationRenderer extends DomRenderer {
 			const close = Pixies.createElement(buttons, 'button');
 			close.innerText = 'Close';
 			close.addEventListener('click', () => {
-				this.game.saveGame.get().conversation.set(null);
+				this.saveGame.conversation.set(null);
 			});
 		}
 
@@ -94,7 +96,7 @@ export default class ConversationRenderer extends DomRenderer {
 
 		this.responses = Pixies.createElement(this.inner, 'div', ['responses', 'scroll']);
 		if (this.game.isInDebugMode.get()) {
-			const buttons = Pixies.createElement(this.inner, 'div', 'buttons');
+			const buttons = Pixies.createElement(this.inner, 'div', 'editor-section buttons');
 			const add = Pixies.createElement(buttons, 'button');
 			add.innerText = 'Add Response';
 			add.addEventListener('click', () => {
@@ -102,9 +104,21 @@ export default class ConversationRenderer extends DomRenderer {
 				const newEntry = currentEntry.entries.add(new ConversationEntryModel());
 			});
 		}
+
+		this.bottom = Pixies.createElement(this.inner, 'div', 'row center');
+		this.exit = Pixies.createElement(
+			this.bottom,
+			'button',
+			null,
+			'Odejít',
+			(e) => {
+				e.preventDefault();
+				this.saveGame.conversation.set(null);
+			}
+		);
+
 		this.updateResponses();
 		this.model.currentEntry.addOnChangeListener(this.onCurrentEntryChanged);
-
 	}
 
 	deactivateInternal() {
@@ -116,11 +130,24 @@ export default class ConversationRenderer extends DomRenderer {
 	updateResponses() {
 		if (this.responsesRenderer) {
 			this.removeChild(this.responsesRenderer);
+			this.responsesRenderer = null;
+		}
+		if (this.parentResponsesRenderer) {
+			this.removeChild(this.parentResponsesRenderer);
+			this.parentResponsesRenderer = null;
 		}
 		const currentEntry = this.model.currentEntry.get();
 		if (currentEntry) {
 			this.responsesRenderer = new CollectionRenderer(this.game, currentEntry.entries, (model) => new ConversationResponseRenderer(this.game, model, this.responses, currentEntry));
 			this.addChild(this.responsesRenderer);
+
+			if (currentEntry.showParentResponses.get() > 0) {
+				const parentEntry = this.findEntryParent(currentEntry, currentEntry.showParentResponses.get());
+				if (parentEntry) {
+					this.parentResponsesRenderer = new CollectionRenderer(this.game, parentEntry.entries, (model) => new ConversationResponseRenderer(this.game, model, this.responses, currentEntry));
+					this.addChild(this.parentResponsesRenderer);
+				}
+			}
 		}
 
 		this.scrollDown();
@@ -149,5 +176,11 @@ export default class ConversationRenderer extends DomRenderer {
 			clearInterval(this.scrollTimer);
 			this.scrollTimer = null;
 		}
+	}
+
+	findEntryParent(entry, i) {
+		if (!entry) return null;
+		if (i === 0) return entry;
+		return this.findEntryParent(entry.parentEntry.get(), i - 1);
 	}
 }
