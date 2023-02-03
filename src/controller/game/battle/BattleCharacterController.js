@@ -40,7 +40,16 @@ export default class BattleCharacterController extends ControllerWithBattle {
 		this.addAutoEvent(
 			this.model,
 			'go-to',
-			(p) => this.goTo(p)
+			(p) => {
+				this.model.followBattleCharacter.set(null);
+				this.goTo(p);
+			}
+		);
+
+		this.addAutoEvent(
+			this.model,
+			'talk-to',
+			(bc) => this.startFollowing(bc, 3)
 		);
 
 		this.addAutoEvent(
@@ -82,10 +91,6 @@ export default class BattleCharacterController extends ControllerWithBattle {
 			true
 		);
 
-	}
-
-	activateInternal() {
-		super.activateInternal();
 	}
 
 	deactivateInternal() {
@@ -137,17 +142,17 @@ export default class BattleCharacterController extends ControllerWithBattle {
 
 		if (PathFinder.isTileBlocked(position, blocks)) {
 			console.log('Blocked');
-			return;
+			return false;
 		}
 
 		if (!this.checkBlocks(blocks)) {
-			return;
+			return false;
 		}
 
 		const path = PathFinder.findBestPath(this.model.position.round(), position.round(), blocks);
 		if (!path) {
 			console.log('No path');
-			return;
+			return false;
 		}
 
 		//console.log(path);
@@ -156,6 +161,7 @@ export default class BattleCharacterController extends ControllerWithBattle {
 		this.pathToGo = path;
 		this.startMovement(this.pathToGo.shift());
 
+		return true;
 	}
 
 	startMovement(target) {
@@ -171,7 +177,7 @@ export default class BattleCharacterController extends ControllerWithBattle {
 	}
 
 	arrived() {
-		this.model.triggerEvent('arrived', this.model.position);
+		//this.model.triggerEvent('arrived', this.model.position);
 
 		if (this.pathToGo.length > 0) {
 			this.startMovement(this.pathToGo.shift());
@@ -182,7 +188,9 @@ export default class BattleCharacterController extends ControllerWithBattle {
 		if (this.checkBlocks(blocks)) {
 			this.model.state.set(CHARACTER_STATE_IDLE);
 			this.model.targetPosition.set(null);
-			this.model.triggerEvent('arrived-idle', this.model.position);
+			if (!this.updateFollowing()) {
+				this.model.triggerEvent('arrived-idle', this.model.position);
+			}
 		}
 	}
 
@@ -197,7 +205,7 @@ export default class BattleCharacterController extends ControllerWithBattle {
 
 	stepAside(blocks) {
 		const position = this.model.position.round();
-		const candidates = PathFinder.positionNeighbors(position);
+		const candidates = PathFinder.getNeighborPositions(position);
 		const free = candidates.filter((c) => !PathFinder.isTileBlocked(c, blocks));
 		if (free.length > 0) {
 			const winner = Pixies.randomElement(free);
@@ -219,4 +227,45 @@ export default class BattleCharacterController extends ControllerWithBattle {
 		}
 	}
 
+	startFollowing(battleCharacter, steps = 1) {
+		this.model.followStepsRemaining.set(steps + 1);
+		this.model.followBattleCharacter.set(battleCharacter);
+		return this.updateFollowing();
+	}
+
+	follow() {
+		const battleCharacter = this.model.followBattleCharacter.get();
+		if (!battleCharacter) return false;
+
+		const free = PathFinder.getFreeNeighborPositions(battleCharacter.position, this.getBlocks());
+		if (free.length > 0) {
+			const closest = PathFinder.findClosest(this.model.position, free);
+			return this.goTo(closest);
+		}
+
+		return false;
+	}
+
+	updateFollowing() {
+		if (this.model.followBattleCharacter.isSet()) {
+			const followed = this.model.followBattleCharacter.get();
+			const neighbors = PathFinder.getNeighborPositions(this.model.position);
+			const caught = neighbors.some((n) => n.equalsTo(followed.position.round()));
+			if (caught) {
+				this.model.triggerEvent('caught-up', followed);
+				this.model.followStepsRemaining.set(0);
+				this.model.followBattleCharacter.set(null);
+				return true;
+			}
+		}
+
+		this.model.followStepsRemaining.increase(-1);
+		if (this.model.followStepsRemaining.get() <= 0 || this.model.followBattleCharacter.isEmpty()) {
+			this.model.followStepsRemaining.set(0);
+			this.model.followBattleCharacter.set(null);
+			return false;
+		}
+
+		return this.follow();
+	}
 }

@@ -268,31 +268,32 @@ export default class BattleController extends ControllerWithSaveGame {
 	}
 
 	onClick() {
-
 		if (this.model.isMouseOver.get() === false) {
 			return;
 		}
 
-		const tile = this.model.mouseHoveringTile
+		const occupant = this.model.hoveringBattleCharacter.get();
+		const isParty = occupant && this.model.partyCharacters.contains(occupant);
 
-		const occupant = this.model.partyCharacters.find((ch) => ch.position.round().equalsTo(tile));
-		if (occupant) {
-			const save = this.game.saveGame.get();
-			save.party.triggerEvent('character-selected', occupant.characterId.get());
-		} else {
-			const character = this.model.partyCharacters.selectedNode.get();
-			if (character) {
-				let target = tile;
-				const battleMap = this.model.battleMap.get();
-				const special = battleMap.specials.find((s) => s.position.equalsTo(tile));
-				if (special) {
-					const linked = this.extractLinkedSpecial(special.data.get());
-					if (linked) {
-						target = linked.position;
-					}
-				}
-				character.triggerEvent('go-to', target);
-			}
+		if (isParty) {
+			this.saveGame.party.triggerEvent('character-selected', occupant.characterId.get());
+			return;
 		}
+
+		const character = this.model.partyCharacters.selectedNode.get();
+		if (!character) return;
+
+		if (occupant && occupant.character.get().npcConversationId.isSet()) {
+			character.triggerEvent('talk-to', occupant);
+			return;
+		}
+
+		const special = this.model.hoveringSpecial.get();
+		if (special) {
+			character.triggerEvent('go-to', special.position);
+			return;
+		}
+
+		character.triggerEvent('go-to', this.model.mouseHoveringTile);
 	}
 }

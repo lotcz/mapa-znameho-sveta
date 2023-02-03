@@ -58,6 +58,16 @@ export default class SelectedBattleCharacterController extends ControllerWithSav
 			}
 		);
 
+		this.addAutoEvent(
+			this.model,
+			'caught-up',
+			(battleCharacter) => {
+				if (!battleCharacter) return;
+				const character = battleCharacter.character.get();
+				const conversation = this.game.resources.conversations.getById(character.npcConversationId.get());
+				this.saveGame.conversation.set(conversation);
+			}
+		);
 	}
 
 }

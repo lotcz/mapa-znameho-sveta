@@ -19,14 +19,12 @@ export default class NpcBattleCharacterController extends ControllerWithBattle {
 		this.battleMap = this.battle.battleMap.get();
 
 		this.idleTimeout = IDLE_ACTION_TIMEOUT;
-
 	}
 
 	updateInternal(delta) {
 		this.idleTimeout -= delta;
 		if (this.idleTimeout <= 0) {
 			this.idleTimeout += IDLE_ACTION_TIMEOUT;
-			console.log(this.idleTimeout);
 			if (Math.random() < IDLE_ACTION_CHANCE) {
 				this.performIdleAction();
 			}

@@ -6,4 +6,7 @@ export default class IntValue extends DirtyValue {
 		super.set(typeof value === 'string' ? parseInt(value) : value);
 	}
 
+	increase(num) {
+		this.set(this.get() + num);
+	}
 }

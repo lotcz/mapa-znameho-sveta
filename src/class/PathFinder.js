@@ -207,10 +207,10 @@ export default class PathFinder {
 		return sum;
 	}
 
-	static positionNeighbors(position) {
+	static getNeighborPositions(position, size = 1) {
 		const neighbors = [];
-		for (let x = position.x - 1; x <= position.x + 1; x++) {
-			for (let y = position.y - 1; y <= position.y + 1; y++) {
+		for (let x = position.x - size; x <= position.x + size; x++) {
+			for (let y = position.y - size; y <= position.y + size; y++) {
 				const n = new Vector2(x, y);
 				if (!position.equalsTo(n)) {
 					neighbors.push(n);
@@ -220,4 +220,23 @@ export default class PathFinder {
 		return neighbors;
 	}
 
+	static getFreeNeighborPositions(position, blocks) {
+		const candidates = PathFinder.getNeighborPositions(position);
+		return candidates.filter((c) => !PathFinder.isTileBlocked(c, blocks));
+	}
+
+	static findClosest(start, destinations) {
+		if ((!destinations) || destinations.length === 0) return null;
+		if (destinations.length === 1) return destinations[0];
+		let closest = destinations[0];
+		let distance = start.distanceTo(closest);
+		for (let i = 1, max = destinations.length; i < max; i++) {
+			const d = start.distanceTo(destinations[i]);
+			if (d < distance) {
+				closest = destinations[i];
+				distance = d;
+			}
+		}
+		return closest;
+	}
 }

@@ -43,6 +43,16 @@ export default class BattleCharacterModel extends ModelNode {
 	 */
 	character;
 
+	/**
+	 * @type NullableNode<BattleCharacterModel>
+	 */
+	followBattleCharacter;
+
+	/**
+	 * @type IntValue
+	 */
+	followStepsRemaining;
+
 	constructor() {
 		super();
 
@@ -52,6 +62,8 @@ export default class BattleCharacterModel extends ModelNode {
 		this.state = this.addProperty('state', new DirtyValue(CHARACTER_STATE_IDLE, false));
 		this.characterId = this.addProperty('characterId', new IntValue());
 		this.character = this.addProperty('character', new NullableNode(null, false));
+		this.followBattleCharacter = this.addProperty('followBattleCharacter', new NullableNode(null, false));
+		this.followStepsRemaining = this.addProperty('followStepsRemaining', new IntValue(0, false));
 	}
 
 }
