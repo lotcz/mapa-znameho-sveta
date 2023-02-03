@@ -25,7 +25,9 @@ const FIELD_TABLE_MAPPINGS = {
 	statId: 'statDefinitions',
 	parentStageId: 'quests',
 	requiresStageId: 'quests',
-	completesStageId: 'quests'
+	completesStageId: 'quests',
+	npcConversationId: 'conversations',
+	partyConversationId: 'conversations'
 }
 
 const RENDER_FIELDS = ['id', 'name'];

@@ -265,10 +265,7 @@ export default class Pixies {
 		if ((!text) || typeof text !== 'string') return '';
 		const arr = text.split(/(\<br\>|\<br\/\>|\n)/);
 		const strings = arr.filter((t) => Pixies.stripHtmlTags(t.trim()).length > 0);
-		console.log(strings);
-		const result = strings.reduce((prev, current) => prev.concat(`<p>${current}</p>`), '');
-		console.log(result);
-		return result;
+		return strings.reduce((prev, current) => prev.concat(`<p>${current}</p>`), '');
 	}
 
 	static stripHtmlTags(text) {

@@ -392,6 +392,9 @@ h4 {
 .editor-layer .editor table td {
   border-left: 1px gray solid;
   white-space: nowrap;
+  max-height: 1em;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .editor-layer .editor table td:last-of-type {
   border-right: 1px gray solid;
@@ -491,6 +494,9 @@ h4 {
 .savegame-layer button {
   cursor: url('img/cursor/cursor.png'), auto;
 }
+.savegame-layer .battle.no-go {
+  cursor: url('img/cursor/cursor-red.png'), not-allowed;
+}
 .savegame-layer .battle.seq-hover,
 .savegame-layer .battle.c-eye-hover {
   cursor: url('img/cursor/cursor-eye.png'), pointer;
@@ -499,8 +505,14 @@ h4 {
 .savegame-layer .battle.c-loc-hover {
   cursor: url('img/cursor/cursor-walk.png'), move;
 }
-.savegame-layer .battle.no-go {
-  cursor: url('img/cursor/cursor-red.png'), not-allowed !important;
+.savegame-layer .battle.talk-hover {
+  cursor: url('img/cursor/cursor-mouth.png'), move;
+}
+.savegame-layer .battle.attack-hover {
+  cursor: url('img/cursor/cursor-dagger.png'), copy;
+}
+.savegame-layer .battle.switch-character-hover {
+  cursor: url('img/cursor/cursor-character.png'), copy;
 }
 .portrait img {
   width: 100%;
@@ -944,7 +956,7 @@ h4 {
   margin-bottom: 10px;
 }
 .conversation .info .portrait {
-  margin-right: 10px;
+  margin-right: 20px;
 }
 .conversation .info .portrait img {
   max-width: 320px;

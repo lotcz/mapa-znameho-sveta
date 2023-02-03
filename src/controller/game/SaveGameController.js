@@ -27,7 +27,6 @@ export default class SaveGameController extends ControllerNode {
 			this.model,
 			'to-battle',
 			(battleMapId) => {
-				console.log('to battle', this.model.currentLocation.get());
 				if (this.model.currentLocation.isSet() && !battleMapId) {
 					battleMapId = this.model.currentLocation.get().battleMapId.get();
 				}
@@ -47,7 +46,6 @@ export default class SaveGameController extends ControllerNode {
 			this.model,
 			'to-map',
 			() => {
-				console.log('to map');
 				const battle = this.model.currentBattle.get();
 				if (battle) {
 					battle.partyCharacters.reset();

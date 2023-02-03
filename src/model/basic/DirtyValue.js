@@ -35,7 +35,12 @@ export default class DirtyValue extends ModelNode {
 	}
 
 	equalsTo(value) {
-		return (this.value === value || (typeof value === 'object' && value !== null && value.value === this.value));
+		if (this.value === value) {
+			return true;
+		}
+		if (typeof value === 'object' && value !== null && value !== undefined && value.value !== undefined) {
+			return value.value === this.value;
+		}
 	}
 
 	restoreStateInternal(state) {

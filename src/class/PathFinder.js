@@ -2,7 +2,7 @@ import Pixies from "./basic/Pixies";
 import Vector2 from "../model/basic/Vector2";
 
 const DEBUG_PATH_FINDER = false;
-const SHOW_PATH_FINDER_STATS = true;
+const SHOW_PATH_FINDER_STATS = false;
 
 export default class PathFinder {
 

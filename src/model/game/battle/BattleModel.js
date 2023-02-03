@@ -8,7 +8,6 @@ import BoolValue from "../../basic/BoolValue";
 import BattleItemModel from "./BattleItemModel";
 import BattlePartyCharacterModel from "./BattlePartyCharacterModel";
 import BattleNpcCharacterModel from "./BattleNpcCharacterModel";
-import StringValue from "../../basic/StringValue";
 
 export default class BattleModel extends ModelNode {
 
@@ -76,12 +75,22 @@ export default class BattleModel extends ModelNode {
 	isHoveringNoGo;
 
 	/**
-	 * @type BoolValue
+	 * @type NullableNode<BattleCharacterModel>
 	 */
-	isHoveringPartyCharacter;
+	hoveringBattleCharacterTile;
 
 	/**
-	 * @type StringValue
+	 * @type NullableNode<BattleCharacterModel>
+	 */
+	hoveringBattleCharacterRaycast;
+
+	/**
+	 * @type NullableNode<BattleCharacterModel|BattleNpcCharacterModel>
+	 */
+	hoveringBattleCharacter;
+
+	/**
+	 * @type NullableNode<BattleSpecialModel>
 	 */
 	hoveringSpecial;
 
@@ -103,9 +112,15 @@ export default class BattleModel extends ModelNode {
 		this.mouseCoordinates = this.addProperty('mouseCoordinates', new Vector2(0, 0, false));
 		this.mouseHoveringTile = this.addProperty('mouseHoveringTile', new Vector2(0, 0, false));
 		this.isHoveringNoGo = this.addProperty('isHoveringNoGo', new BoolValue(false, false));
-		this.isHoveringPartyCharacter = this.addProperty('isHoveringPartyCharacter', new BoolValue(false, false));
-
-		this.hoveringSpecial = this.addProperty('hoveringSpecial', new StringValue('', false));
+		this.hoveringBattleCharacterTile = this.addProperty('hoveringBattleCharacterTile', new NullableNode(null, false));
+		this.hoveringBattleCharacterTile.addOnChangeListener(() => this.updateHoveringCharacter());
+		this.hoveringBattleCharacterRaycast = this.addProperty('hoveringBattleCharacterRaycast', new NullableNode(null, false));
+		this.hoveringBattleCharacterRaycast.addOnChangeListener(() => this.updateHoveringCharacter());
+		this.hoveringBattleCharacter = this.addProperty('hoveringBattleCharacter', new NullableNode(null, false));
+		this.hoveringSpecial = this.addProperty('hoveringSpecial', new NullableNode(null, false));
 	}
 
+	updateHoveringCharacter() {
+		this.hoveringBattleCharacter.set(this.hoveringBattleCharacterRaycast.isSet() ? this.hoveringBattleCharacterRaycast.get() : this.hoveringBattleCharacterTile.get());
+	}
 }

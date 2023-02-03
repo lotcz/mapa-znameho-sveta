@@ -88,8 +88,8 @@ export default class BattleRenderer extends DomRenderer {
 		this.addChild(
 			new ConditionalNodeRenderer(
 				this.game,
-				this.model.isHoveringPartyCharacter,
-				() => this.model.isHoveringPartyCharacter.get() || this.game.isInDebugMode.get(),
+				this.model.hoveringBattleCharacterTile,
+				() => this.model.hoveringBattleCharacterTile.get() || this.game.isInDebugMode.get(),
 				() => new BattleCursorRenderer(
 					this.game,
 					this.model,
@@ -113,10 +113,15 @@ export default class BattleRenderer extends DomRenderer {
 			this.game.isInDebugMode,
 			'change',
 			() => {
-				this.model.isHoveringPartyCharacter.triggerEvent('change');
+				this.model.hoveringBattleCharacterTile.triggerEvent('change');
 			}
 		);
 
+		this.addAutoEvent(
+			this.model.mouseCoordinates,
+			'change',
+			() => this.raycast()
+		);
 	}
 
 	activateInternal() {
@@ -243,14 +248,68 @@ export default class BattleRenderer extends DomRenderer {
 		}
 
 		if (this.model.hoveringSpecial.isDirty) {
+			SPECIAL_TYPES.forEach((type) => Pixies.removeClass(this.container, `${type}-hover`));
 			if (this.model.hoveringSpecial.isSet()) {
-				Pixies.addClass(this.container, `${this.model.hoveringSpecial.get()}-hover`);
-			} else {
-				SPECIAL_TYPES.forEach((type) => Pixies.removeClass(this.container, `${type}-hover`));
+				Pixies.addClass(this.container, `${this.model.hoveringSpecial.get().type.get()}-hover`);
+			}
+		}
+
+		if (this.model.hoveringBattleCharacter.isDirty) {
+			Pixies.removeClass(this.container, `talk-hover`);
+			Pixies.removeClass(this.container, `attack-hover`);
+			Pixies.removeClass(this.container, `switch-character-hover`);
+			if (this.model.hoveringBattleCharacter.isSet()) {
+				const battleChar = this.model.hoveringBattleCharacter.get();
+				const isParty = this.model.partyCharacters.contains(battleChar);
+				const isSelected = isParty && this.model.partyCharacters.selectedNode.equalsTo(battleChar);
+				if (isParty) {
+					if (!isSelected) {
+						Pixies.addClass(this.container, `switch-character-hover`);
+					}
+				} else {
+					if (battleChar.isAggressive.get()) {
+						Pixies.addClass(this.container, `attack-hover`);
+					} else {
+						const char = battleChar.character.get();
+						if (char.npcConversationId.isSet()) {
+							Pixies.addClass(this.container, `talk-hover`);
+						}
+					}
+				}
 			}
 		}
 
 		this.composer.render();
+	}
+
+	raycast() {
+		const raycaster = new THREE.Raycaster();
+		const mouse = new THREE.Vector2();
+		mouse.x = (this.game.mainLayerMouseCoordinates.x / this.game.mainLayerSize.x) * 2 - 1;
+		mouse.y = -(this.game.mainLayerMouseCoordinates.y / this.game.mainLayerSize.y) * 2 + 1;
+
+		raycaster.setFromCamera(mouse, this.camera);
+		const intersects = raycaster.intersectObject(this.scene, true);
+
+		if (intersects.length > 0) {
+			let battleCharacter = null;
+			for (let i = 0, max = intersects.length; i < max && battleCharacter === null; i++) {
+				battleCharacter = this.findParentCharacter(intersects[i].object);
+			}
+			this.model.triggerEvent('raycast-character', battleCharacter);
+		} else {
+			this.model.triggerEvent('raycast-character', null);
+		}
+	}
+
+	findParentCharacter(mesh) {
+		if (typeof mesh.userData === 'object' && mesh.userData.battleCharacter) {
+			return mesh.userData.battleCharacter;
+		}
+		if (mesh.parent) {
+			return this.findParentCharacter(mesh.parent);
+		}
+		return null;
 	}
 
 	renderBgImage() {

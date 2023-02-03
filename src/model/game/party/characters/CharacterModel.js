@@ -77,6 +77,16 @@ export default class CharacterModel extends TemplateNode {
 	 */
 	additionalItemsSlots;
 
+	/**
+	 * @type IntValue
+	 */
+	npcConversationId;
+
+	/**
+	 * @type IntValue
+	 */
+	partyConversationId;
+
 	constructor(id = 0) {
 		super(id);
 
@@ -88,6 +98,9 @@ export default class CharacterModel extends TemplateNode {
 		this.hairMaterialId = this.addProperty('hairMaterialId', new IntValue());
 		this.hairItemDefinitionId = this.addProperty('hairItemDefinitionId', new IntValue());
 		this.scale = this.addProperty('scale', new Vector3(1,1,1));
+
+		this.npcConversationId = this.addProperty('npcConversationId', new IntValue());
+		this.partyConversationId = this.addProperty('partyConversationId', new IntValue());
 
 		this.stats = this.addProperty('stats', new CharacterStatsModel());
 

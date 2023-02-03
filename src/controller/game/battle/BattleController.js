@@ -7,6 +7,7 @@ import SelectedBattleCharacterController from "./SelectedBattleCharacterControll
 import {ImageHelper} from "../../../class/basic/ImageHelper";
 import ControllerWithSaveGame from "../../basic/ControllerWithSaveGame";
 import NpcBattleCharacterController from "./NpcBattleCharacterController";
+import Vector2 from "../../../model/basic/Vector2";
 
 export default class BattleController extends ControllerWithSaveGame {
 
@@ -70,6 +71,14 @@ export default class BattleController extends ControllerWithSaveGame {
 			},
 			true
 		);
+
+		this.addAutoEvent(
+			this.model,
+			'raycast-character',
+			(battleCharacter) => {
+				this.model.hoveringBattleCharacterRaycast.set(battleCharacter);
+			}
+		)
 
 		this.addAutoEventMultiple(
 			[this.game.mainLayerSize, this.model.coordinates, this.model.zoom],
@@ -218,15 +227,40 @@ export default class BattleController extends ControllerWithSaveGame {
 		const blocked = battleMap.isTileBlocked(tile);
 		this.model.isHoveringNoGo.set(blocked);
 
-		const occupant = this.model.partyCharacters.find((ch) => ch.position.round().equalsTo(tile));
-		this.model.isHoveringPartyCharacter.set(occupant);
-
-		const special = battleMap.specials.find((s) => s.position.equalsTo(tile));
+		let special = battleMap.specials.find((s) => s.position.equalsTo(tile));
 		if (special) {
-			this.model.hoveringSpecial.set(special.type.get());
+			if (special.data.isSet()) {
+				const linked = this.extractLinkedSpecial(special.data.get());
+				if (linked) {
+					special = linked;
+				}
+			}
+			this.model.hoveringSpecial.set(special);
 		} else {
 			this.model.hoveringSpecial.set(null);
 		}
+
+		const occupant = this.model.partyCharacters.find((ch) => ch.position.round().equalsTo(tile));
+		this.model.hoveringBattleCharacterTile.set(occupant);
+
+		if (occupant) return;
+
+		const npc = this.model.npcCharacters.find((n) => n.position.round().equalsTo(tile));
+		this.model.hoveringBattleCharacterTile.set(npc);
+
+	}
+
+	extractLinkedSpecial(data) {
+		const battleMap = this.model.battleMap.get();
+		const arr = data.split(':');
+		if (arr.length > 1 && arr[0] === 'link') {
+			const arr2 = arr[1].split(',');
+			if (arr2.length > 1) {
+				const pos = new Vector2(arr2[0], arr2[1]);
+				return battleMap.specials.find((s) => s.position.equalsTo(pos));
+			}
+		}
+		return null;
 	}
 
 	onZoom(param) {
@@ -248,7 +282,16 @@ export default class BattleController extends ControllerWithSaveGame {
 		} else {
 			const character = this.model.partyCharacters.selectedNode.get();
 			if (character) {
-				character.triggerEvent('go-to', tile);
+				let target = tile;
+				const battleMap = this.model.battleMap.get();
+				const special = battleMap.specials.find((s) => s.position.equalsTo(tile));
+				if (special) {
+					const linked = this.extractLinkedSpecial(special.data.get());
+					if (linked) {
+						target = linked.position;
+					}
+				}
+				character.triggerEvent('go-to', target);
 			}
 		}
 	}

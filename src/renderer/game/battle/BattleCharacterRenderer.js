@@ -85,6 +85,11 @@ export default class BattleCharacterRenderer extends RendererNode {
 			)
 		);
 
+		inner.userData.battleCharacter = this.model;
+		const bounding = new THREE.Mesh(new THREE.BoxGeometry(0.5, 1.8, 0.5), new THREE.MeshBasicMaterial({visible: false, wireframe: true}));
+		bounding.position.y = 0.9;
+		inner.add(bounding);
+
 		this.updatePosition();
 		this.updateRotation();
 		this.switchAnimation();
