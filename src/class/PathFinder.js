@@ -220,8 +220,8 @@ export default class PathFinder {
 		return neighbors;
 	}
 
-	static getFreeNeighborPositions(position, blocks) {
-		const candidates = PathFinder.getNeighborPositions(position);
+	static getFreeNeighborPositions(position, blocks, size = 1) {
+		const candidates = PathFinder.getNeighborPositions(position, size);
 		return candidates.filter((c) => !PathFinder.isTileBlocked(c, blocks));
 	}
 

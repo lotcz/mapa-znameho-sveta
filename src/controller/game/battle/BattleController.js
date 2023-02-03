@@ -67,7 +67,7 @@ export default class BattleController extends ControllerWithSaveGame {
 			this.model.battleMapId,
 			'change',
 			() => {
-				this.model.battleMap.set(this.game.resources.map.battleMaps.getById(this.model.battleMapId));
+				this.model.battleMap.set(this.game.resources.map.battleMaps.getById(this.model.battleMapId.get()));
 			},
 			true
 		);

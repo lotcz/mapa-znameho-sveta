@@ -1,6 +1,6 @@
 import ControllerWithBattle from "../../basic/ControllerWithBattle";
-import Vector2 from "../../../model/basic/Vector2";
 import Pixies from "../../../class/basic/Pixies";
+import PathFinder from "../../../class/PathFinder";
 
 const IDLE_ACTION_TIMEOUT = 15000;
 const IDLE_ACTION_CHANCE = 0.5;
@@ -16,9 +16,8 @@ export default class NpcBattleCharacterController extends ControllerWithBattle {
 		super(game, model);
 
 		this.model = model;
-		this.battleMap = this.battle.battleMap.get();
 
-		this.idleTimeout = IDLE_ACTION_TIMEOUT;
+		this.idleTimeout = Math.random() * IDLE_ACTION_TIMEOUT;
 	}
 
 	updateInternal(delta) {
@@ -32,7 +31,10 @@ export default class NpcBattleCharacterController extends ControllerWithBattle {
 	}
 
 	performIdleAction() {
-		const rand = this.model.homePosition.add(new Vector2(Pixies.random(-5, 5), Pixies.random(-5, 5))).round();
+		const battleMap = this.battle.battleMap.get();
+		const free = PathFinder.getFreeNeighborPositions(this.model.homePosition, battleMap.getBlocks(), 5);
+		if (free.length === 0) return;
+		const rand = Pixies.randomElement(free);
 		this.model.triggerEvent('go-to', rand);
 	}
 }

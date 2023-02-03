@@ -80,6 +80,9 @@ export default class GlobalAudioRenderer extends RendererNode {
 	}
 
 	renderInternal() {
+		if (this.audioContext.state === "suspended") {
+			this.audioContext.resume();
+		}
 		if (this.model.masterVolume.isDirty) {
 			this.updateMasterVolume();
 		}
