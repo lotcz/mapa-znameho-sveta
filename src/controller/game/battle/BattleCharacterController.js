@@ -1,11 +1,12 @@
 import AnimatedVector2 from "../../../class/animating/AnimatedVector2";
 import {CHARACTER_STATE_IDLE, CHARACTER_STATE_RUN} from "../../../model/game/battle/BattleCharacterModel";
 import AnimatedRotation from "../../../class/animating/AnimatedRotation";
-import PathFinder from "../../../class/PathFinder";
+import PathFinder from "../../../class/pathfinder/PathFinder";
 import Pixies from "../../../class/basic/Pixies";
 import ItemModel from "../../../model/game/items/ItemModel";
 import BattleItemSlotController from "./BattleItemSlotController";
 import ControllerWithBattle from "../../basic/ControllerWithBattle";
+import AbsolutePathFinder from "../../../class/pathfinder/AbsolutePathFinder";
 
 const TRAVEL_SPEED = 3.25 / 1000; // position units per milisecond
 const ROTATION_SPEED = (Math.PI * 4) / 1000; // radians per milisecond
@@ -93,6 +94,11 @@ export default class BattleCharacterController extends ControllerWithBattle {
 
 	}
 
+	activateInternal() {
+		this.model.state.set(CHARACTER_STATE_IDLE);
+		this.checkBlocks(this.getBlocks());
+	}
+
 	deactivateInternal() {
 		this.resetChildren();
 
@@ -145,11 +151,9 @@ export default class BattleCharacterController extends ControllerWithBattle {
 			return false;
 		}
 
-		if (!this.checkBlocks(blocks)) {
-			return false;
-		}
-
-		const path = PathFinder.findBestPath(this.model.position.round(), position.round(), blocks);
+		//const path = PathFinder.findBestPath(this.model.position.round(), position.round(), blocks);
+		const absolutePathFinder = new AbsolutePathFinder(this.model.position, position, blocks);
+		const path = absolutePathFinder.findPath();
 		if (!path) {
 			console.log('No path');
 			return false;

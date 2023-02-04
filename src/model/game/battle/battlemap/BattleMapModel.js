@@ -6,7 +6,7 @@ import ModelNodeCollection from "../../../basic/ModelNodeCollection";
 import BattleSpriteModel from "./BattleSpriteModel";
 import BattleSpecialModel, {SPECIAL_TYPE_BLOCK} from "./BattleSpecialModel";
 import BattleSprite3dModel from "./BattleSprite3dModel";
-import PathFinder from "../../../../class/PathFinder";
+import PathFinder from "../../../../class/pathfinder/PathFinder";
 import BoolValue from "../../../basic/BoolValue";
 import BattleNpcSpawnModel from "./BattleNpcSpawnModel";
 

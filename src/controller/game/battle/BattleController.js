@@ -24,18 +24,10 @@ export default class BattleController extends ControllerWithSaveGame {
 		this.scrolling = false;
 
 		this.addChild(
-			new CollectionController(
-				this.game,
-				this.model.partyCharacters,
-				(m) => new BattleCharacterController(game, m)
-			)
-		);
-
-		this.addChild(
 			new NullableNodeController(
 				this.game,
-				this.model.partyCharacters.selectedNode,
-				(m) => new SelectedBattleCharacterController(game, m, this.saveGame, this.model)
+				this.model.battleMap,
+				(m) => new BattleMapController(game, m)
 			)
 		);
 
@@ -56,10 +48,18 @@ export default class BattleController extends ControllerWithSaveGame {
 		);
 
 		this.addChild(
+			new CollectionController(
+				this.game,
+				this.model.partyCharacters,
+				(m) => new BattleCharacterController(game, m)
+			)
+		);
+
+		this.addChild(
 			new NullableNodeController(
 				this.game,
-				this.model.battleMap,
-				(m) => new BattleMapController(game, m)
+				this.model.partyCharacters.selectedNode,
+				(m) => new SelectedBattleCharacterController(game, m, this.saveGame, this.model)
 			)
 		);
 
@@ -68,8 +68,7 @@ export default class BattleController extends ControllerWithSaveGame {
 			'change',
 			() => {
 				this.model.battleMap.set(this.game.resources.map.battleMaps.getById(this.model.battleMapId.get()));
-			},
-			true
+			}
 		);
 
 		this.addAutoEvent(
@@ -181,6 +180,10 @@ export default class BattleController extends ControllerWithSaveGame {
 			}
 		);
 
+	}
+
+	activateInternal() {
+		this.model.battleMap.set(this.game.resources.map.battleMaps.getById(this.model.battleMapId.get()));
 	}
 
 	updateInternal(delta) {

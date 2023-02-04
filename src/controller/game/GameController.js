@@ -147,6 +147,7 @@ export default class GameController extends ControllerNode {
 
 	startNewGame() {
 		const save = new SaveGameModel();
+		save.time.set(0.3);
 		const avelard = this.model.resources.characterTemplates.getById(1);
 		save.addCharacterToParty(avelard);
 		const residence = this.model.resources.map.locations.getById(1);

@@ -1,8 +1,8 @@
-import Pixies from "./basic/Pixies";
-import Vector2 from "../model/basic/Vector2";
+import Pixies from "../basic/Pixies";
+import Vector2 from "../../model/basic/Vector2";
 
 const DEBUG_PATH_FINDER = false;
-const SHOW_PATH_FINDER_STATS = false;
+const SHOW_PATH_FINDER_STATS = true;
 
 export default class PathFinder {
 
@@ -96,14 +96,14 @@ export default class PathFinder {
 
 		const offset = new Vector2();
 
-		if (width <= 1 || height <= 1) {
+		if (width <= 3 || height <= 3) {
 			if (expanded) {
 				if (DEBUG_PATH_FINDER) console.log(`Too thin and blocked. No more expansion.`);
 				return false;
 			}
 			if (DEBUG_PATH_FINDER) console.log(`Too thin and blocked. Expanding range`);
-			const offsetX = (width <= 1) ? 2 : 0;
-			const offsetY = (height <= 1) ? 2 : 0;
+			const offsetX = (width <= 3) ? 3 - width : 0;
+			const offsetY = (height <= 3) ? 3 - height : 0;
 			offset.set(offsetX, offsetY);
 			expanded = true;
 		}

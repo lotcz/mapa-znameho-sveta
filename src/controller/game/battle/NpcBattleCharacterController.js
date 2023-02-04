@@ -1,6 +1,6 @@
 import ControllerWithBattle from "../../basic/ControllerWithBattle";
 import Pixies from "../../../class/basic/Pixies";
-import PathFinder from "../../../class/PathFinder";
+import PathFinder from "../../../class/pathfinder/PathFinder";
 
 const IDLE_ACTION_TIMEOUT = 15000;
 const IDLE_ACTION_CHANCE = 0.5;

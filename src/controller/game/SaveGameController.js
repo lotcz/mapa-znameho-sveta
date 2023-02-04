@@ -8,7 +8,7 @@ import BattlePartyCharacterModel from "../../model/game/battle/BattlePartyCharac
 import Vector2 from "../../model/basic/Vector2";
 import Pixies from "../../class/basic/Pixies";
 import {SPECIAL_TYPE_SPAWN} from "../../model/game/battle/battlemap/BattleSpecialModel";
-import PathFinder from "../../class/PathFinder";
+import PathFinder from "../../class/pathfinder/PathFinder";
 
 export default class SaveGameController extends ControllerNode {
 
