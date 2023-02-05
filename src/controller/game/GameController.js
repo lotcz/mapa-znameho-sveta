@@ -6,6 +6,7 @@ import SaveGameController from "./SaveGameController";
 import NullableNodeController from "../basic/NullableNodeController";
 import SaveGameModel from "../../model/game/SaveGameModel";
 import ConditionalNodeController from "../basic/ConditionalNodeController";
+import {TIME_MORNING} from "../../model/game/TimeModel";
 
 export default class GameController extends ControllerNode {
 
@@ -147,7 +148,7 @@ export default class GameController extends ControllerNode {
 
 	startNewGame() {
 		const save = new SaveGameModel();
-		save.time.set(0.3);
+		save.time.timeOfDay.set(TIME_MORNING);
 		const avelard = this.model.resources.characterTemplates.getById(1);
 		save.addCharacterToParty(avelard);
 		const residence = this.model.resources.map.locations.getById(1);

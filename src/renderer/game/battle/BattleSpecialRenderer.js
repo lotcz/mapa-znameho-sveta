@@ -18,6 +18,8 @@ export default class BattleSpecialRenderer extends SvgRenderer {
 		this.model = model;
 		this.group = null;
 
+		this.helperLabel = null;
+
 		this.battleMap = this.game.saveGame.get().currentBattle.get().battleMap.get();
 	}
 
@@ -38,10 +40,11 @@ export default class BattleSpecialRenderer extends SvgRenderer {
 				break;
 		}
 
-		const size = this.battleMap.tileSize.get();
-		this.circle = this.group.ellipse(size, size / 2).stroke({width: 5, color:  color});
+		this.size = this.battleMap.tileSize.get();
+		this.circle = this.group.ellipse(this.size, this.size / 2).stroke({width: 5, color:  color});
 
 		this.updatePosition();
+		this.updateDataHelper();
 	}
 
 	deactivateInternal() {
@@ -53,11 +56,26 @@ export default class BattleSpecialRenderer extends SvgRenderer {
 		if (this.model.position.isDirty) {
 			this.updatePosition();
 		}
+		if (this.model.data.isDirty) {
+			this.updateDataHelper();
+		}
 	}
 
 	updatePosition() {
-		const coords = this.game.saveGame.get().currentBattle.get().battleMap.get().positionToScreenCoords(this.model.position);
+		const coords = this.battleMap.positionToScreenCoords(this.model.position);
 		this.group.center(coords.x, coords.y);
+	}
+
+	updateDataHelper() {
+		if (this.helperLabel) {
+			this.helperLabel.remove();
+			this.helperLabel = null;
+		}
+		if (this.model.data.isSet()) {
+			this.helperLabel = this.group.text(this.model.data.get())
+				.font({ fill: 'white', size: 25})
+				.center(this.size/2, this.size/4);
+		}
 	}
 
 }

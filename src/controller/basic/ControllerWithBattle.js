@@ -8,6 +8,11 @@ export default class ControllerWithBattle extends ControllerWithSaveGame {
 	battle;
 
 	/**
+	 * @type BattleMapModel
+	 */
+	battleMap;
+
+	/**
 	 * @param {GameModel} game
 	 * @param {ModelNode} model
 	 * @param {BattleModel} battle
@@ -22,6 +27,7 @@ export default class ControllerWithBattle extends ControllerWithSaveGame {
 		if (!this.battle) {
 			console.error('no BattleModel provided for controller!');
 		}
+		this.battleMap = this.battle.battleMap.get();
 	}
 
 }

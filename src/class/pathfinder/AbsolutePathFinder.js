@@ -64,8 +64,13 @@ export default class AbsolutePathFinder {
 				neighbor = new TileCache(PathFinder.isTileBlocked(n, this.blocks));
 				this.setCache(n, neighbor);
 			}
+
 			if (neighbor.blocked === true) return;
-			const nDist = distance + tile.distanceTo(n);
+
+			const dist = tile.distanceTo(n);
+			if (dist > 1 && this.isDiameterBlocked(tile, n)) return;
+
+			const nDist = distance + dist;
 			if (nDist > this.maxSteps) return;
 			if (neighbor.distance === null || neighbor.distance > nDist) {
 				neighbor.distance = nDist;
@@ -93,6 +98,23 @@ export default class AbsolutePathFinder {
 			this.cache[v.x] = {};
 		}
 		this.cache[v.x][v.y] = value;
+	}
+
+	isBlocked(v) {
+		let cache = this.getCache(v);
+		if (cache === null) {
+			cache = new TileCache(PathFinder.isTileBlocked(v, this.blocks));
+			this.setCache(v, cache);
+		}
+		return cache.blocked;
+	}
+
+	isDiameterBlocked(start, end) {
+		const dX = end.x - start.x;
+		const dY = end.y - start.y;
+		const one = start.add(new Vector2(dX, 0));
+		const two = start.add(new Vector2(0, dY));
+		return (this.isBlocked(one) || this.isBlocked(two));
 	}
 
 }

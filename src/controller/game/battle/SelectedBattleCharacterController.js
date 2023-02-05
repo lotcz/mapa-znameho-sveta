@@ -3,21 +3,19 @@ import {
 	SPECIAL_TYPE_EXIT,
 	SPECIAL_TYPE_SEQUENCE
 } from "../../../model/game/battle/battlemap/BattleSpecialModel";
-import ControllerWithSaveGame from "../../basic/ControllerWithSaveGame";
+import ControllerWithBattle from "../../basic/ControllerWithBattle";
 
-export default class SelectedBattleCharacterController extends ControllerWithSaveGame {
+export default class SelectedBattleCharacterController extends ControllerWithBattle {
 
 	/**
 	 * @type BattleCharacterModel
 	 */
 	model;
 
-	constructor(game, model, saveGame, battle) {
-		super(game, model, saveGame);
+	constructor(game, model) {
+		super(game, model);
 
 		this.model = model;
-		this.battle = battle;
-		this.battleMap = battle.battleMap.get();
 
 		this.addAutoEvent(
 			this.model.position,

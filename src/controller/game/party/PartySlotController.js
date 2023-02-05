@@ -1,8 +1,8 @@
-import ControllerNode from "../../basic/ControllerNode";
 import NullableNodeController from "../../basic/NullableNodeController";
 import CharacterController from "./CharacterController";
+import ControllerWithSaveGame from "../../basic/ControllerWithSaveGame";
 
-export default class PartySlotController extends ControllerNode {
+export default class PartySlotController extends ControllerWithSaveGame {
 
 	/**
 	 * @type PartySlotModel
@@ -26,7 +26,7 @@ export default class PartySlotController extends ControllerNode {
 	}
 
 	updateCharacter() {
-		const character = this.game.saveGame.get().characters.getById(this.model.characterId.get());
+		const character = this.saveGame.characters.getById(this.model.characterId.get());
 		if (character) {
 			this.model.character.set(character);
 		} else {

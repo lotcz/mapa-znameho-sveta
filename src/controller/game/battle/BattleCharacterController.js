@@ -137,8 +137,7 @@ export default class BattleCharacterController extends ControllerWithBattle {
 	getBlocks() {
 		const partyCharacters = this.battle.partyCharacters.filter((ch) => ch !== this.model).map((ch) => ch.position.round());
 		const npcCharacters = this.battle.npcCharacters.filter((ch) => ch !== this.model).map((ch) => ch.position.round());
-		const battleMap = this.battle.battleMap.get();
-		const mapBlocks = battleMap.getBlocks();
+		const mapBlocks = this.battleMap.getBlocks();
 		return mapBlocks.concat(partyCharacters).concat(npcCharacters);
 	}
 

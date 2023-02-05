@@ -144,6 +144,7 @@ export default class EditorBattleController extends ControllerNode {
 							special.position.set(pos);
 							special.type.set(editorSpecialType);
 							this.model.battleMap.get().specials.add(special);
+							this.game.editor.activeForm.set(special);
 						}
 					}
 				}

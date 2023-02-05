@@ -11,6 +11,7 @@ import BoolValue from "../basic/BoolValue";
 import ModelNodeCollection from "../basic/ModelNodeCollection";
 import CompletedQuestsModel from "./quests/CompletedQuestsModel";
 import PartySlotModel from "./party/PartySlotModel";
+import TimeModel from "./TimeModel";
 
 export default class SaveGameModel extends ModelNode {
 
@@ -20,7 +21,7 @@ export default class SaveGameModel extends ModelNode {
 	mapSize;
 
 	/**
-	 * @type FloatValue
+	 * @type TimeModel
 	 */
 	time;
 
@@ -158,7 +159,7 @@ export default class SaveGameModel extends ModelNode {
 		super();
 
 		this.mapSize = this.addProperty('mapSize', new Vector2(8192, 6144, false));
-		this.time = this.addProperty('time', new FloatValue(0));
+		this.time = this.addProperty('time', new TimeModel());
 		this.characters = this.addProperty('characters', new ModelNodeTable((id) => new CharacterModel(id)));
 		this.battles = this.addProperty('battles', new ModelNodeCollection(() => new BattleModel()));
 		this.lastBattleMapId = this.addProperty('lastBattleMapId', new IntValue());
@@ -209,32 +210,6 @@ export default class SaveGameModel extends ModelNode {
 		this.completedStages = this.addProperty('completedStages', new CompletedQuestsModel());
 
 		this.animationSequence = this.addProperty('animationSequence', new NullableNode(null, false));
-	}
-
-	passTime(duration) {
-		let time = this.time.get() + duration;
-		if (time > 1) {
-			time = time - 1;
-		}
-		this.time.set(time);
-
-		this.party.slots.forEach((slot) => {
-			let character = slot.character.get();
-			if (!character) {
-				character = this.characters.getById(slot.characterId.get());
-			}
-			if (this.partyResting.get() > 0) {
-				character.stats.basic.stamina.restore(duration * 5);
-				character.stats.basic.health.restore(duration);
-				character.stats.consumption.hunger.consume(duration * 0.25);
-				character.stats.consumption.thirst.consume(duration * 0.25);
-			} else {
-				character.stats.basic.stamina.consume(duration * 5);
-				character.stats.consumption.hunger.consume(duration);
-				character.stats.consumption.thirst.consume(duration * 1.5);
-
-			}
-		})
 	}
 
 	addCharacterToParty(character) {

@@ -1,6 +1,6 @@
-import ControllerNode from "../../basic/ControllerNode";
+import ControllerWithSaveGame from "../../basic/ControllerWithSaveGame";
 
-export default class ConnectionController extends ControllerNode {
+export default class ConnectionController extends ControllerWithSaveGame {
 
 	/**
 	 * @type ConnectionModel
@@ -27,20 +27,17 @@ export default class ConnectionController extends ControllerNode {
 			console.log('path has not enough waypoints', path.waypoints);
 			return;
 		}
-		const nextWaypoint = this.model.forward.get() ? path.waypoints.get(1) : path.waypoints.get(path.waypoints.count() - 2);
-
-		const next = nextWaypoint.coordinates;
-
-		this.model.direction.set(next);
+		const nextWaypoint = this.model.forward.get() ? path.waypoints.get(0) : path.waypoints.get(path.waypoints.count() - 1);
+		const point = this.model.forward.get() ? nextWaypoint.a : nextWaypoint.b;
+		this.model.direction.set(point);
 	}
 
 	connectionSelected(connection) {
 		const path = this.game.resources.map.paths.getById(connection.pathId.get());
-		const save = this.game.saveGame.get();
-		save.forward.set(connection.forward.get());
-		save.pathProgress.set(connection.forward.get() ? 0 : path.length.get());
-		save.currentPathId.set(path.id.get());
-		save.partyTraveling.set(true);
+		this.saveGame.forward.set(connection.forward.get());
+		this.saveGame.pathProgress.set(connection.forward.get() ? 0 : path.length.get());
+		this.saveGame.currentPathId.set(path.id.get());
+		this.saveGame.partyTraveling.set(true);
 	}
 }
 

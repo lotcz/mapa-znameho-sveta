@@ -1,7 +1,7 @@
-import ControllerNode from "../../basic/ControllerNode";
 import CharacterStatsController from "./stats/CharacterStatsController";
+import ControllerWithSaveGame from "../../basic/ControllerWithSaveGame";
 
-export default class CharacterController extends ControllerNode {
+export default class CharacterController extends ControllerWithSaveGame {
 
 	/**
 	 * @type CharacterModel
@@ -25,6 +25,24 @@ export default class CharacterController extends ControllerNode {
 			'item-changed',
 			() => this.updateInventoryEffects(),
 			true
+		);
+
+		this.addAutoEvent(
+			this.saveGame.time,
+			'time-passed',
+			(duration) => {
+				if (!(duration > 0)) return;
+				if (this.saveGame.partyResting.get() > 0) {
+					this.model.stats.basic.stamina.restore(duration * 5);
+					this.model.stats.basic.health.restore(duration);
+					this.model.stats.consumption.hunger.consume(duration * 0.25);
+					this.model.stats.consumption.thirst.consume(duration * 0.25);
+				} else {
+					this.model.stats.basic.stamina.consume(duration * 5);
+					this.model.stats.consumption.hunger.consume(duration);
+					this.model.stats.consumption.thirst.consume(duration * 1.5);
+				}
+			}
 		);
 	}
 

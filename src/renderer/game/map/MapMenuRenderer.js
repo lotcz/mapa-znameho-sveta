@@ -1,5 +1,6 @@
 import DomRenderer from "../../basic/DomRenderer";
 import Pixies from "../../../class/basic/Pixies";
+import {TIME_TYPE_NAMES} from "../../../model/game/TimeModel";
 
 export default class MapMenuRenderer extends DomRenderer {
 
@@ -24,6 +25,7 @@ export default class MapMenuRenderer extends DomRenderer {
 		this.artUpperImg = null;
 
 		this.time = Pixies.createElement(this.inner,'div', 'time');
+		this.timeType = Pixies.createElement(this.inner,'div', 'time-type');
 
 		this.buttons = Pixies.createElement(this.inner, 'div', 'buttons column center');
 		const start = Pixies.createElement(this.buttons, 'button', null, 'Start/Stop', () => {
@@ -40,6 +42,8 @@ export default class MapMenuRenderer extends DomRenderer {
 		});
 
 		this.updateArt();
+		this.updateTime();
+		this.updateTimeType();
 
 		this.model.triggerEvent('trigger-resize');
 	}
@@ -50,9 +54,14 @@ export default class MapMenuRenderer extends DomRenderer {
 	}
 
 	renderInternal() {
-		if (this.model.currentBiotope.isDirty || this.model.time.isDirty) {
-			this.time.innerText = Pixies.round(this.model.time.get(), 2);
+		if (this.model.currentBiotope.isDirty || this.model.time.timeOfDay.isDirty) {
 			this.updateArt();
+		}
+		if (this.model.time.timeOfDay.isDirty) {
+			this.updateTime();
+		}
+		if (this.model.time.timeType.isDirty) {
+			this.updateTimeType();
 		}
 	}
 
@@ -61,6 +70,14 @@ export default class MapMenuRenderer extends DomRenderer {
 		this.artUpperImg = null;
 		Pixies.emptyElement(this.artLower);
 		Pixies.emptyElement(this.artUpper);
+	}
+
+	updateTime() {
+		this.time.innerText = Pixies.round(this.model.time.timeOfDay.get(), 2);
+	}
+
+	updateTimeType() {
+		this.timeType.innerText = TIME_TYPE_NAMES[this.model.time.timeType.get()];
 	}
 
 	updateArt() {
@@ -73,7 +90,7 @@ export default class MapMenuRenderer extends DomRenderer {
 			return;
 		}
 
-		const time = this.model.time.get();
+		const time = this.model.time.timeOfDay.get();
 		let lower = biotope.images.first();
 		let upper = null;
 

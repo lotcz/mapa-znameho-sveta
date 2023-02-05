@@ -1,9 +1,10 @@
-import ControllerNode from "../../basic/ControllerNode";
+import {TIME_HOUR} from "../../../model/game/TimeModel";
+import ControllerWithSaveGame from "../../basic/ControllerWithSaveGame";
 
 const TRAVEL_SPEED = 40; // px per second
-const TIME_SPEED = 0.05; // portion of day per second
+const TIME_SPEED = TIME_HOUR; // portion of day per second
 
-export default class CurrentPathController extends ControllerNode {
+export default class CurrentPathController extends ControllerWithSaveGame {
 
 	/**
 	 * @type PathModel
@@ -16,67 +17,60 @@ export default class CurrentPathController extends ControllerNode {
 		this.model = model;
 
 		this.addAutoEvent(this.model, 'path-marker-position', (pos) => {
-			const save = this.game.saveGame.get();
-			this.runOnUpdate(() => save.partyCoordinates.set(pos));
-			if (this.game.saveGame.get().partyTraveling.get()) {
-				this.runOnUpdate(() => save.mapCenterCoordinates.set(pos));
+			this.runOnUpdate(() => this.saveGame.partyCoordinates.set(pos));
+			if (this.saveGame.partyTraveling.get()) {
+				this.runOnUpdate(() => this.saveGame.mapCenterCoordinates.set(pos));
 			}
 		});
 
 		this.addAutoEvent(this.game.saveGame.get(), 'go-back', () => {
 			this.runOnUpdate(() => {
-				const save = this.game.saveGame.get();
-				save.forward.set(!save.forward.get());
-				save.partyTraveling.set(true);
+				this.saveGame.forward.set(!this.saveGame.forward.get());
+				this.saveGame.partyTraveling.set(true);
 			});
 		});
 
 		this.addAutoEvent(this.game.saveGame.get(), 'go-forward', () => {
 			this.runOnUpdate(() => {
-				const save = this.game.saveGame.get();
-				save.partyTraveling.set(true);
+				this.saveGame.partyTraveling.set(true);
 			});
 		});
 
 		this.addAutoEvent(this.game.controls, 'right-click', () => {
 			this.runOnUpdate(() => {
-				const save = this.game.saveGame.get();
-				save.partyTraveling.set(false);
+				this.saveGame.partyTraveling.set(false);
 			});
 		});
 
 	}
 
 	activateInternal() {
-		//this.ui.editor.activeForm.set(this.model);
-		this.game.saveGame.get().currentLocationId.set(0);
+		this.saveGame.currentLocationId.set(null);
 	}
 
 	updateInternal(delta) {
 
-		if (!this.game.saveGame.get().partyTraveling.get()) {
+		if (!this.saveGame.partyTraveling.get()) {
 			return;
 		}
 
 		// travel
 
-		const save = this.game.saveGame.get();
-
-		let progress = this.model.pathProgress.get() + ((delta / 1000) * TRAVEL_SPEED * (save.forward.get() ? 1 : -1));
+		let progress = this.model.pathProgress.get() + ((delta / 1000) * TRAVEL_SPEED * (this.saveGame.forward.get() ? 1 : -1));
 
 		if (progress > this.model.length.get()) {
-			save.currentLocationId.set(this.model.endLocationId.get());
+			this.saveGame.currentLocationId.set(this.model.endLocationId.get());
 		}
 
 		if (progress < 0) {
-			save.currentLocationId.set(this.model.startLocationId.get());
+			this.saveGame.currentLocationId.set(this.model.startLocationId.get());
 		}
 
 		this.model.pathProgress.set(progress);
-		save.pathProgress.set(progress);
+		this.saveGame.pathProgress.set(progress);
 
-		const diff = (delta / 1000) * TIME_SPEED;
-		save.passTime(diff);
+		const duration = (delta / 1000) * TIME_SPEED;
+		this.saveGame.time.passTime(duration);
 	}
 
 }

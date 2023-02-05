@@ -59,7 +59,7 @@ export default class BattleController extends ControllerWithSaveGame {
 			new NullableNodeController(
 				this.game,
 				this.model.partyCharacters.selectedNode,
-				(m) => new SelectedBattleCharacterController(game, m, this.saveGame, this.model)
+				(m) => new SelectedBattleCharacterController(game, m)
 			)
 		);
 
@@ -68,7 +68,8 @@ export default class BattleController extends ControllerWithSaveGame {
 			'change',
 			() => {
 				this.model.battleMap.set(this.game.resources.map.battleMaps.getById(this.model.battleMapId.get()));
-			}
+			},
+			true
 		);
 
 		this.addAutoEvent(
@@ -147,13 +148,11 @@ export default class BattleController extends ControllerWithSaveGame {
 			(param) => this.onZoom(param)
 		);
 
-		const save = this.saveGame;
-
 		this.addAutoEvent(
-			save.party.selectedCharacterId,
+			this.saveGame.party.selectedCharacterId,
 			'change',
 			() => {
-				this.model.partyCharacters.selectedNode.set(this.model.partyCharacters.find((chr) => chr.characterId.equalsTo(save.party.selectedCharacterId)));
+				this.model.partyCharacters.selectedNode.set(this.model.partyCharacters.find((chr) => chr.characterId.equalsTo(this.saveGame.party.selectedCharacterId)));
 			},
 			true
 		);
@@ -180,10 +179,6 @@ export default class BattleController extends ControllerWithSaveGame {
 			}
 		);
 
-	}
-
-	activateInternal() {
-		this.model.battleMap.set(this.game.resources.map.battleMaps.getById(this.model.battleMapId.get()));
 	}
 
 	updateInternal(delta) {

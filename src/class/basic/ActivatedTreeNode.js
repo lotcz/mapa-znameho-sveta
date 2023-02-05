@@ -94,9 +94,8 @@ export default class ActivatedTreeNode {
 
 	activate() {
 		if (!this.isActivated) {
+
 			this.activateInternal();
-			this.children.forEach((c) => c.activate());
-			this.isActivated = true;
 
 			if (this.autoRegisterEvents) {
 				this.autoRegisterEvents.forEach((event) => {
@@ -106,6 +105,9 @@ export default class ActivatedTreeNode {
 					}
 				});
 			}
+
+			this.children.forEach((c) => c.activate());
+			this.isActivated = true;
 		}
 	}
 

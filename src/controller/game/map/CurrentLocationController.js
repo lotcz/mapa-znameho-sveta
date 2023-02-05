@@ -1,8 +1,8 @@
-import ControllerNode from "../../basic/ControllerNode";
 import CollectionController from "../../basic/CollectionController";
 import ConnectionController from "./ConnectionController";
+import ControllerWithSaveGame from "../../basic/ControllerWithSaveGame";
 
-export default class CurrentLocationController extends ControllerNode {
+export default class CurrentLocationController extends ControllerWithSaveGame {
 
 	/**
 	 * @type LocationModel
@@ -19,9 +19,9 @@ export default class CurrentLocationController extends ControllerNode {
 	}
 
 	activateInternal() {
-		this.game.saveGame.get().currentPathId.set(0);
-		this.game.saveGame.get().partyCoordinates.set(this.model.coordinates);
-		this.game.saveGame.get().partyTraveling.set(false);
+		this.saveGame.currentPathId.set(null);
+		this.saveGame.partyCoordinates.set(this.model.coordinates);
+		this.saveGame.partyTraveling.set(false);
 	}
 
 }

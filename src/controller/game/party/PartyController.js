@@ -1,8 +1,8 @@
-import ControllerNode from "../../basic/ControllerNode";
 import CollectionController from "../../basic/CollectionController";
 import PartySlotController from "./PartySlotController";
+import ControllerWithSaveGame from "../../basic/ControllerWithSaveGame";
 
-export default class PartyController extends ControllerNode {
+export default class PartyController extends ControllerWithSaveGame {
 
 	/**
 	 * @type PartyModel
@@ -21,7 +21,7 @@ export default class PartyController extends ControllerNode {
 			this.model.selectedCharacterId,
 			'change',
 			() => {
-				this.model.selectedCharacter.set(this.game.saveGame.get().characters.getById(this.model.selectedCharacterId.get()));
+				this.model.selectedCharacter.set(this.saveGame.characters.getById(this.model.selectedCharacterId.get()));
 			},
 			true
 		);

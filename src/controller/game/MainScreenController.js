@@ -6,8 +6,9 @@ import PartyController from "./party/PartyController";
 import BattleItemModel from "../../model/game/battle/BattleItemModel";
 import {ImageHelper} from "../../class/basic/ImageHelper";
 import NullableNodeController from "../basic/NullableNodeController";
+import {TIME_HOUR} from "../../model/game/TimeModel";
 
-const REST_SPEED = 0.15; // portion of day per second
+const REST_SPEED = 2 * TIME_HOUR; // portion of day per second
 
 export default class MainScreenController extends ControllerNode {
 
@@ -219,10 +220,8 @@ export default class MainScreenController extends ControllerNode {
 				diff = resting;
 			}
 			resting -= diff;
-			this.model.passTime(diff);
+			this.model.time.passTime(diff);
 			this.model.partyResting.set(resting);
-		} else {
-			this.model.partyResting.set(0);
 		}
 	}
 
