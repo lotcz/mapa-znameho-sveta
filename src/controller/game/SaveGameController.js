@@ -23,6 +23,15 @@ export default class SaveGameController extends ControllerNode {
 		this.model = model;
 		this.map = game.resources.map;
 
+		this.addChild(
+			new NullableNodeController(
+				this.game,
+				this.model.animationSequence,
+				(m) => new SequenceController(this.game, m, this.model),
+				() => new MainScreenController(this.game, this.model)
+			)
+		);
+
 		this.addAutoEvent(
 			this.model,
 			'to-battle',
@@ -62,7 +71,8 @@ export default class SaveGameController extends ControllerNode {
 					this.model.lastBattleMapId.set(param.oldValue);
 				}
 				if (this.model.currentBattleMapId.isSet()) {
-					this.model.currentBattle.set(this.obtainBattle(this.model.currentBattleMapId.get()));
+					const battle = this.obtainBattle(this.model.currentBattleMapId.get());
+					this.model.currentBattle.set(battle);
 				} else {
 					this.model.currentBattle.set(null);
 				}
@@ -99,15 +109,6 @@ export default class SaveGameController extends ControllerNode {
 			(id) => {
 
 			}
-		);
-
-		this.addChild(
-			new NullableNodeController(
-				this.game,
-				this.model.animationSequence,
-				(m) => new SequenceController(this.game, m, this.model),
-				() => new MainScreenController(this.game, this.model)
-			)
 		);
 
 		this.addAutoEvent(

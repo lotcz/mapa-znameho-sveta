@@ -4,6 +4,7 @@ import IntValue from "../../../basic/IntValue";
 import Vector3 from "../../../basic/Vector3";
 import ModelNodeCollection from "../../../basic/ModelNodeCollection";
 import StatEffectDefinitionModel from "../rituals/StatEffectDefinitionModel";
+import EffectSourceModel, {EFFECT_SOURCE_RACE} from "../rituals/EffectSourceModel";
 
 export default class RaceModel extends IdentifiedModelNode {
 
@@ -38,9 +39,19 @@ export default class RaceModel extends IdentifiedModelNode {
 	scale;
 
 	/**
+	 * @type EffectSourceModel
+	 */
+	effectSource;
+
+	/**
 	 * @type ModelNodeCollection<StatEffectDefinitionModel>
 	 */
 	statEffects;
+
+	/**
+	 * @type ModelNodeCollection<StatEffectDefinitionModel>
+	 */
+	permanentEffects;
 
 	constructor(id) {
 		super(id);
@@ -54,7 +65,12 @@ export default class RaceModel extends IdentifiedModelNode {
 
 		this.scale = this.addProperty('scale', new Vector3(1,1,1));
 
-		this.statEffects = this.addProperty('statEffects', new ModelNodeCollection(() => new StatEffectDefinitionModel()));
+		this.effectSource = new EffectSourceModel(EFFECT_SOURCE_RACE);
+		this.effectSource.name.set(this.name.get());
+		this.name.addOnChangeListener(() => this.effectSource.name.set(this.name.get()));
+
+		this.statEffects = this.addProperty('statEffects', new ModelNodeCollection(() => new StatEffectDefinitionModel(this.effectSource)));
+		this.permanentEffects = this.addProperty('permanentEffects', new ModelNodeCollection(() => new StatEffectDefinitionModel(this.effectSource)));
 
 	}
 

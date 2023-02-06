@@ -31,12 +31,6 @@ export default class MainScreenRenderer extends DomRenderer {
 		);
 
 		this.addAutoEvent(
-			this.model.party.isInventoryVisible,
-			'change',
-			() => this.mainLayerResized()
-		);
-
-		this.addAutoEvent(
 			this.model,
 			'trigger-resize',
 			() => this.mainLayerResized()

@@ -64,7 +64,6 @@ export default class CharacterController extends ControllerWithSaveGame {
 		});
 		this.model.stats.inventoryStatEffects.reset();
 		items.forEach((item) => {
-			item.statEffects.forEach((eff) => this.model.stats.inventoryStatEffects.add(eff));
 			const def = this.game.resources.itemDefinitions.getById(item.definitionId.get());
 			if (def) {
 				def.statEffects.forEach((eff) => this.model.stats.inventoryStatEffects.add(eff));

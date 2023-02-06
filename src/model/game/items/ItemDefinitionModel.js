@@ -7,6 +7,7 @@ import ModelNodeCollection from "../../basic/ModelNodeCollection";
 import BoolValue from "../../basic/BoolValue";
 import AdditionalItemModel from "./AdditionalItemModel";
 import StatEffectDefinitionModel from "../party/rituals/StatEffectDefinitionModel";
+import EffectSourceModel, {EFFECT_SOURCE_ITEM} from "../party/rituals/EffectSourceModel";
 
 export default class ItemDefinitionModel extends IdentifiedModelNode {
 
@@ -91,6 +92,11 @@ export default class ItemDefinitionModel extends IdentifiedModelNode {
 	additionalItems;
 
 	/**
+	 * @type EffectSourceModel
+	 */
+	effectSource;
+
+	/**
 	 * @type ModelNodeCollection<StatEffectDefinitionModel>
 	 */
 	statEffects;
@@ -119,8 +125,10 @@ export default class ItemDefinitionModel extends IdentifiedModelNode {
 		this.hideWhenAddingItems = this.addProperty('hideWhenAddingItems', new BoolValue());
 		this.additionalItems = this.addProperty('additionalItems', new ModelNodeCollection(() => new AdditionalItemModel()));
 
-		this.statEffects = this.addProperty('statEffects', new ModelNodeCollection(() => new StatEffectDefinitionModel()));
-
+		this.effectSource = new EffectSourceModel(EFFECT_SOURCE_ITEM);
+		this.effectSource.name.set(this.name.get());
+		this.name.addOnChangeListener(() => this.effectSource.name.set(this.name.get()));
+		this.statEffects = this.addProperty('statEffects', new ModelNodeCollection(() => new StatEffectDefinitionModel(this.effectSource)));
 	}
 
 }

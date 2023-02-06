@@ -12,26 +12,31 @@ export default class CollectionController extends ControllerNode {
 		this.model = model;
 
 		this.controllerFactory = controllerFactory;
+
+		this.addAutoEvent(
+			this.model.children,
+			'add',
+			(model) => this.createController(model)
+		);
+
+		this.addAutoEvent(
+			this.model.children,
+			'remove',
+			(model) => this.removeController(model)
+		);
 	}
 
 	activateInternal() {
 		this.resetChildren();
-
 		this.model.children.forEach((model) => this.createController(model));
-
-		this.model.children.addOnAddListener((model) => this.createController(model));
-		this.model.children.addOnRemoveListener((model) => this.removeController(model));
 	}
 
 	deactivateInternal() {
-		this.model.children.removeOnAddListener((model) => this.createController(model));
-		this.model.children.removeOnRemoveListener((model) => this.removeController(model));
 		this.resetChildren();
 	}
 
 	createController(model) {
-		const controller = this.addChild(this.controllerFactory(model));
-		return controller;
+		return this.addChild(this.controllerFactory(model));
 	}
 
 	removeController(model) {

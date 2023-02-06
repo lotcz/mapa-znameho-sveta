@@ -3,6 +3,7 @@ import BiotopeImageModel from "./BiotopeImageModel";
 import DirtyValue from "../../basic/DirtyValue";
 import IdentifiedModelNode from "../../basic/IdentifiedModelNode";
 import StatEffectDefinitionModel from "../party/rituals/StatEffectDefinitionModel";
+import EffectSourceModel, {EFFECT_SOURCE_WEATHER} from "../party/rituals/EffectSourceModel";
 
 export default class BiotopeModel extends IdentifiedModelNode {
 
@@ -29,7 +30,11 @@ export default class BiotopeModel extends IdentifiedModelNode {
 		this.images.addOnAddListener(() => this.sortImages());
 		this.images.addOnRemoveListener(() => this.sortImages());
 
-		this.statEffects = this.addProperty('statEffects', new ModelNodeCollection(() => new StatEffectDefinitionModel()));
+		this.effectSource = new EffectSourceModel(EFFECT_SOURCE_WEATHER);
+		this.effectSource.name.set(this.name.get());
+		this.name.addOnChangeListener(() => this.effectSource.name.set(this.name.get()));
+
+		this.statEffects = this.addProperty('statEffects', new ModelNodeCollection(() => new StatEffectDefinitionModel(this.effectSource)));
 
 	}
 
