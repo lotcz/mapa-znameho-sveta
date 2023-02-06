@@ -1,8 +1,8 @@
-import SvgRenderer from "../../basic/SvgRenderer";
 import NullableNodeRenderer from "../../basic/NullableNodeRenderer";
 import BattleCharacterTargetRenderer from "./BattleCharacterTargetRenderer";
+import SvgRendererWithBattle from "../../basic/SvgRendererWithBattle";
 
-export default class BattleCharacterRingRenderer extends SvgRenderer {
+export default class BattleCharacterRingRenderer extends SvgRendererWithBattle {
 
 	/**
 	 * @type BattleCharacterModel
@@ -14,8 +14,6 @@ export default class BattleCharacterRingRenderer extends SvgRenderer {
 
 		this.model = model;
 		this.group = null;
-
-		this.battleMap = this.game.saveGame.get().currentBattle.get().battleMap.get();
 
 		this.addChild(
 			new NullableNodeRenderer(
@@ -29,8 +27,8 @@ export default class BattleCharacterRingRenderer extends SvgRenderer {
 	activateInternal() {
 		this.group = this.draw.group();
 
-		const size = this.battleMap.tileSize.get();
-		const width = size / 25;
+		const size = this.battleMap.tileSize.get() * 0.85;
+		const width = 3;
 		this.circle = this.group.ellipse(size - (2 * width), (size / 2) - (2 * width));
 		this.radial = this.draw.gradient(
 			'radial',

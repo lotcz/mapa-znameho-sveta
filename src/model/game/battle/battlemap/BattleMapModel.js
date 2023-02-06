@@ -135,6 +135,7 @@ export default class BattleMapModel extends IdentifiedModelNode {
 	getBlocks() {
 		if (!this.blocksCache) {
 			const sprites = this.getBlocksSprites();
+			console.log(sprites);
 			const sprites3d = this.getBlocksSprites3d();
 			const specials = this.getBlocksSpecials();
 			this.blocksCache = sprites.concat(sprites3d).concat(specials);

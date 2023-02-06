@@ -1,6 +1,6 @@
-import SvgRenderer from "../../basic/SvgRenderer";
+import SvgRendererWithBattle from "../../basic/SvgRendererWithBattle";
 
-export default class BattleNpcSpawnRenderer extends SvgRenderer {
+export default class BattleNpcSpawnRenderer extends SvgRendererWithBattle {
 
 	/**
 	 * @type BattleNpcSpawnModel
@@ -13,7 +13,6 @@ export default class BattleNpcSpawnRenderer extends SvgRenderer {
 		this.model = model;
 		this.group = null;
 
-		this.battleMap = this.game.saveGame.get().currentBattle.get().battleMap.get();
 	}
 
 	activateInternal() {
@@ -24,6 +23,7 @@ export default class BattleNpcSpawnRenderer extends SvgRenderer {
 		this.circle = this.group.ellipse(size, size / 2).stroke({width: 5, color:  color});
 
 		this.updatePosition();
+		this.updateDataHelper();
 	}
 
 	deactivateInternal() {
@@ -35,11 +35,34 @@ export default class BattleNpcSpawnRenderer extends SvgRenderer {
 		if (this.model.position.isDirty) {
 			this.updatePosition();
 		}
+		if (this.model.characterTemplateId.isDirty) {
+			this.updateDataHelper();
+		}
 	}
 
 	updatePosition() {
-		const coords = this.game.saveGame.get().currentBattle.get().battleMap.get().positionToScreenCoords(this.model.position);
+		const coords = this.battleMap.positionToScreenCoords(this.model.position);
 		this.group.center(coords.x, coords.y);
+		this.updateDataHelperPosition();
+	}
+
+	updateDataHelper() {
+		if (this.helperLabel) {
+			this.helperLabel.remove();
+			this.helperLabel = null;
+		}
+		if (this.model.characterTemplateId.isSet()) {
+			this.helperLabel = this.group.plain(this.model.characterTemplateId.get())
+				.font({ fill: 'white', size: 25});
+			this.updateDataHelperPosition();
+		}
+	}
+
+	updateDataHelperPosition() {
+		if (this.helperLabel) {
+			const coords = this.battleMap.positionToScreenCoords(this.model.position);
+			this.helperLabel.center(coords.x, coords.y);
+		}
 	}
 
 }

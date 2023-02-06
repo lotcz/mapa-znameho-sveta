@@ -8,8 +8,8 @@ import BattleItemSlotController from "./BattleItemSlotController";
 import ControllerWithBattle from "../../basic/ControllerWithBattle";
 import AbsolutePathFinder from "../../../class/pathfinder/AbsolutePathFinder";
 
-const TRAVEL_SPEED = 3.25 / 1000; // position units per milisecond
-const ROTATION_SPEED = (Math.PI * 4) / 1000; // radians per milisecond
+const TRAVEL_SPEED = 3.25 / 1000; // position units per millisecond
+const ROTATION_SPEED = (Math.PI * 4) / 1000; // radians per millisecond
 
 export default class BattleCharacterController extends ControllerWithBattle {
 

@@ -1,11 +1,11 @@
-import SvgRenderer from "../../basic/SvgRenderer";
 import {
 	SPECIAL_TYPE_BLOCK,
 	SPECIAL_TYPE_EXIT,
 	SPECIAL_TYPE_SPAWN
 } from "../../../model/game/battle/battlemap/BattleSpecialModel";
+import SvgRendererWithBattle from "../../basic/SvgRendererWithBattle";
 
-export default class BattleSpecialRenderer extends SvgRenderer {
+export default class BattleSpecialRenderer extends SvgRendererWithBattle {
 
 	/**
 	 * @type BattleSpecialModel
@@ -19,8 +19,6 @@ export default class BattleSpecialRenderer extends SvgRenderer {
 		this.group = null;
 
 		this.helperLabel = null;
-
-		this.battleMap = this.game.saveGame.get().currentBattle.get().battleMap.get();
 	}
 
 	activateInternal() {
@@ -64,6 +62,7 @@ export default class BattleSpecialRenderer extends SvgRenderer {
 	updatePosition() {
 		const coords = this.battleMap.positionToScreenCoords(this.model.position);
 		this.group.center(coords.x, coords.y);
+		this.updateDataHelperPosition();
 	}
 
 	updateDataHelper() {
@@ -72,9 +71,16 @@ export default class BattleSpecialRenderer extends SvgRenderer {
 			this.helperLabel = null;
 		}
 		if (this.model.data.isSet()) {
-			this.helperLabel = this.group.text(this.model.data.get())
-				.font({ fill: 'white', size: 25})
-				.center(this.size/2, this.size/4);
+			this.helperLabel = this.group.plain(this.model.data.get())
+				.font({ fill: 'white', size: 25});
+			this.updateDataHelperPosition();
+		}
+	}
+
+	updateDataHelperPosition() {
+		if (this.helperLabel) {
+			const coords = this.battleMap.positionToScreenCoords(this.model.position);
+			this.helperLabel.center(coords.x, coords.y);
 		}
 	}
 

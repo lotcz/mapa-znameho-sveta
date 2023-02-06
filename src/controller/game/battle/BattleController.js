@@ -118,22 +118,19 @@ export default class BattleController extends ControllerWithSaveGame {
 		this.addAutoEvent(
 			this.game.mainLayerMouseCoordinates,
 			'change',
-			() => this.onMouseMove(),
-			true
+			() => this.onMouseMove()
 		);
 
 		this.addAutoEvent(
 			this.model.mouseCoordinates,
 			'change',
-			() => this.onMouseCoordinatesChanged(),
-			true
+			() => this.onMouseCoordinatesChanged()
 		);
 
 		this.addAutoEvent(
 			this.model.mouseHoveringTile,
 			'change',
-			() => this.onHoveringTileChanged(),
-			true
+			() => this.onHoveringTileChanged()
 		);
 
 		this.addAutoEvent(

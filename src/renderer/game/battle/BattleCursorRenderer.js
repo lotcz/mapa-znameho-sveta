@@ -16,8 +16,8 @@ export default class BattleCursorRenderer extends SvgRenderer {
 
 	activateInternal() {
 		this.group = this.draw.group();
-		const size = this.model.battleMap.get().tileSize.get();
-		const width = size / 25;
+		const size = this.model.battleMap.get().tileSize.get() * 0.85;
+		const width = 3;
 		this.circle = this.group.ellipse(size, size / 2);
 		this.circle.fill('rgba(0, 0, 0, 0)');
 		this.circle.stroke({width: width, color: 'rgba(255, 255, 255, 1)'});

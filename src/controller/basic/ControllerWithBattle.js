@@ -28,6 +28,10 @@ export default class ControllerWithBattle extends ControllerWithSaveGame {
 			console.error('no BattleModel provided for controller!');
 		}
 		this.battleMap = this.battle.battleMap.get();
+
+		if (!this.battleMap) {
+			console.error('no BattleMapModel provided for controller!');
+		}
 	}
 
 }
