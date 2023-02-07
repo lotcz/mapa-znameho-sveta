@@ -25,6 +25,9 @@ export default class EditorBattleController extends ControllerNode {
 		super(game, model);
 
 		this.model = model;
+		this.battleMap = this.model.battleMap.get();
+
+		this.dragging = null;
 
 		this.addAutoEvent(
 			this.game.controls,
@@ -34,17 +37,45 @@ export default class EditorBattleController extends ControllerNode {
 			}
 		);
 
-	}
-
-	onMouseMove() {
-		if (this.game.controls.mouseDownRight.get()) {
-			if (this.scrolling) {
-				const offset = this.game.controls.mouseCoordinates.subtract(this.scrolling);
-				const mapCoords = this.model.coordinates.subtract(offset.multiply(1/this.model.zoom.get()));
-				this.model.coordinates.set(mapCoords);
+		this.addAutoEvent(
+			this.model.mouseCoordinates,
+			'change',
+			() => {
+				if (!this.game.controls.mouseDownLeft.get()) {
+					this.dragging = null;
+					return;
+				}
+				if (this.dragging) {
+					return;
+				}
+				const battleEditorModel = this.game.editor.battleEditor;
+				const editorModeType = battleEditorModel.modeType.get();
+				switch (editorModeType) {
+					case MODE_TYPE_SPRITE:
+						this.dragging = this.battleMap.sprites.find((s) => s.position.equalsTo(this.model.mouseHoveringTile));
+						break;
+					case MODE_TYPE_SPECIAL:
+						this.dragging = this.battleMap.specials.find((s) => s.position.equalsTo(this.model.mouseHoveringTile));
+						break;
+					case MODE_TYPE_3D:
+						this.dragging = this.battleMap.sprites3d.find((s) => s.position.equalsTo(this.model.mouseHoveringTile));
+						break;
+					case MODE_TYPE_NPC:
+						this.dragging = this.battleMap.npcSpawns.find((s) => s.position.equalsTo(this.model.mouseHoveringTile));
+						break;
+				}
 			}
-			this.scrolling = this.game.controls.mouseCoordinates.clone();
-		}
+		);
+
+		this.addAutoEvent(
+			this.model.mouseHoveringTile,
+			'change',
+			() => {
+				if (this.dragging) {
+					this.dragging.position.set(this.model.mouseHoveringTile);
+				}
+			}
+		);
 
 	}
 
@@ -53,9 +84,7 @@ export default class EditorBattleController extends ControllerNode {
 			return;
 		}
 
-		const corner = this.model.coordinates.subtract(this.game.mainLayerSize.multiply(0.5 / this.model.zoom.get()));
-		const coords = corner.add(this.game.mainLayerMouseCoordinates.multiply(1/this.model.zoom.get()));
-		const position = this.model.battleMap.get().screenCoordsToPosition(coords);
+		const position = this.model.mouseHoveringTile;
 		const tile = position.round();
 
 		const battleEditorModel = this.game.editor.battleEditor;
@@ -80,7 +109,7 @@ export default class EditorBattleController extends ControllerNode {
 	}
 
 	processClickSprites(tile, action) {
-		const sprite = this.model.battleMap.get().sprites.find((ch) => ch.position.round().equalsTo(tile));
+		const sprite = this.battleMap.sprites.find((ch) => ch.position.equalsTo(tile));
 		if (sprite) {
 			if (action === MODE_ACTION_DELETE) {
 				console.log('deleting sprite', sprite);
@@ -98,7 +127,7 @@ export default class EditorBattleController extends ControllerNode {
 	}
 
 	processClickSprites3d(tile, action) {
-		const sprite = this.model.battleMap.get().sprites3d.find((ch) => ch.position.round().equalsTo(tile));
+		const sprite = this.battleMap.sprites3d.find((ch) => ch.position.round().equalsTo(tile));
 
 		switch (action) {
 			case MODE_ACTION_ADD:
@@ -110,12 +139,12 @@ export default class EditorBattleController extends ControllerNode {
 					const battleSprite = new BattleSprite3dModel();
 					battleSprite.position.set(tile);
 					battleSprite.sprite3dId.set(id);
-					this.model.battleMap.get().sprites3d.add(battleSprite);
+					this.battleMap.sprites3d.add(battleSprite);
 				}
 				break;
 			case MODE_ACTION_DELETE:
 				console.log('deleting 3D sprite', sprite);
-				this.model.battleMap.get().sprites3d.remove(sprite);
+				this.battleMap.sprites3d.remove(sprite);
 				break;
 			case MODE_ACTION_SELECT:
 				if (sprite) {
@@ -138,7 +167,7 @@ export default class EditorBattleController extends ControllerNode {
 				for (let x = startX; x <= endX; x++) {
 					for (let y = startY; y <= endY; y++) {
 						const pos = new Vector2(x, y);
-						const existing = this.model.battleMap.get().specials.find((s) => s.position.equalsTo(pos));
+						const existing = this.battleMap.specials.find((s) => s.position.equalsTo(pos));
 						if (!existing) {
 							const special = new BattleSpecialModel();
 							special.position.set(pos);
@@ -153,7 +182,7 @@ export default class EditorBattleController extends ControllerNode {
 				for (let x = startX; x <= endX; x++) {
 					for (let y = startY; y <= endY; y++) {
 						const pos = new Vector2(x, y);
-						const existing = this.model.battleMap.get().specials.find((s) => s.position.equalsTo(pos));
+						const existing = this.battleMap.specials.find((s) => s.position.equalsTo(pos));
 						if (existing) {
 							this.model.battleMap.get().specials.remove(existing);
 						}
@@ -161,7 +190,7 @@ export default class EditorBattleController extends ControllerNode {
 				}
 				break;
 			case MODE_ACTION_SELECT:
-				const existing = this.model.battleMap.get().specials.filter((s) => s.position.equalsTo(tile));
+				const existing = this.battleMap.specials.filter((s) => s.position.equalsTo(tile));
 				if (existing.length > 0) {
 					const special = existing[0];
 					this.game.editor.activeForm.set(special);
@@ -171,7 +200,7 @@ export default class EditorBattleController extends ControllerNode {
 	}
 
 	processClickNpcSpawn(tile, action) {
-		const spawn = this.model.battleMap.get().npcSpawns.find((s) => s.position.round().equalsTo(tile));
+		const spawn = this.battleMap.npcSpawns.find((s) => s.position.round().equalsTo(tile));
 
 		switch (action) {
 			case MODE_ACTION_ADD:
