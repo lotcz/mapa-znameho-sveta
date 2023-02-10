@@ -1,7 +1,7 @@
 import ControllerNode from "../../../basic/ControllerNode";
 import Collection from "../../../../class/basic/Collection";
 
-export default class SkillController extends ControllerNode {
+export default class StatController extends ControllerNode {
 
 	/**
 	 * @type StatModel
@@ -20,8 +20,8 @@ export default class SkillController extends ControllerNode {
 		this.stats = stats;
 
 		this.cache = new Collection();
-
 		this.sources = [this.stats.inventoryStatEffects, this.stats.environmentStatEffects, this.stats.raceStatEffects];
+
 		this.addEffectHandler = (eff) => {
 			if (eff.statId.equalsTo(this.model.definitionId.get())) {
 				this.cache.add(eff);
@@ -43,6 +43,13 @@ export default class SkillController extends ControllerNode {
 			this.model.baseValue,
 			'change',
 			() => this.updateCurrent(),
+			true
+		);
+
+		this.addAutoEvent(
+			this.model.definitionId,
+			'change',
+			() => this.model.definition.set(this.game.resources.statDefinitions.getById(this.model.definitionId.get())),
 			true
 		);
 	}

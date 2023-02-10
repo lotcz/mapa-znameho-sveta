@@ -17,12 +17,6 @@ export default class Pixies {
 		return short;
 	}
 
-	static extractId(str, pos = 1) {
-		const words = str.split('/');
-		if (words.length > pos) return words[pos];
-		return null;
-	}
-
 	static random(min, max) {
 		const diff = max - min;
 		return min + (diff * Math.random());
@@ -271,6 +265,16 @@ export default class Pixies {
 	static stripHtmlTags(text) {
 		if ((!text) || typeof text !== 'string') return '';
 		return text.replace(/(<([^>]+)>)/gi, '');
+	}
+
+	static extractWord(str, pos = 0, sep = ' ') {
+		const words = str.split(sep);
+		if (words.length > pos) return words[pos];
+		return null;
+	}
+
+	static extractId(str, pos = 1) {
+		return Pixies.extractWord(str, pos, '/');
 	}
 
 }

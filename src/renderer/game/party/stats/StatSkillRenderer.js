@@ -1,6 +1,8 @@
 import DomRenderer from "../../../basic/DomRenderer";
 import Pixies from "../../../../class/basic/Pixies";
 import StatNumberRenderer from "./StatNumberRenderer";
+import StatNameRenderer from "./StatNameRenderer";
+import NullableNodeRenderer from "../../../basic/NullableNodeRenderer";
 
 export default class StatSkillRenderer extends DomRenderer {
 
@@ -18,7 +20,16 @@ export default class StatSkillRenderer extends DomRenderer {
 
 	activateInternal() {
 		this.container = this.addElement( 'div', 'stat-skill row my-1');
+
 		this.name = Pixies.createElement(this.container, 'div', 'name');
+		this.addChild(
+			new NullableNodeRenderer(
+				this.game,
+				this.model.definition,
+				(m) => new StatNameRenderer(this.game, m, this.name)
+			)
+		);
+
 		this.numeric = Pixies.createElement(this.container, 'div');
 		this.addChild(
 			new StatNumberRenderer(
@@ -27,13 +38,14 @@ export default class StatSkillRenderer extends DomRenderer {
 				this.numeric
 			)
 		);
+
 		this.right = Pixies.createElement(this.container, 'div', 'flex-1');
 		this.value = Pixies.createElement(this.right, 'div', 'row value');
-		this.statDef = this.game.resources.statDefinitions.getById(this.model.definitionId.get());
 		this.updateStat();
 	}
 
 	deactivateInternal() {
+		this.resetChildren();
 		this.removeElement(this.container);
 	}
 
@@ -42,12 +54,11 @@ export default class StatSkillRenderer extends DomRenderer {
 	}
 
 	updateStat() {
+		this.statDef = this.model.definition.get();
 		if (!this.statDef) {
 			console.log('stat def empty', this.model.definitionId.get());
 			return;
 		}
-
-		this.name.innerText = this.statDef.name.get();
 
 		const max = this.statDef.max.get();
 		const base = this.model.baseValue.get();

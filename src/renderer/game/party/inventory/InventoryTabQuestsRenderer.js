@@ -16,7 +16,7 @@ export default class InventoryTabQuestsRenderer extends DomRenderer {
 		this.addAutoEvent(
 			this.model,
 			'quest-completed',
-			(id) => this.renderQuests(),
+			() => this.renderQuests(),
 			true
 		);
 	}
@@ -37,12 +37,11 @@ export default class InventoryTabQuestsRenderer extends DomRenderer {
 		const activeGroup = Pixies.createElement(this.quests, 'div');
 		const completedGroup = Pixies.createElement(this.quests, 'div', 'completed');
 
-
 		const completedQuests = [];
 
 		this.model.forEach((id) => {
 			const quest = this.game.resources.quests.getById(id);
-			if (quest.isQuest()) {
+			if (quest && quest.isQuest()) {
 				const [stage, completed] = this.getQuestActiveStage(quest);
 
 				if (completed) {

@@ -1,6 +1,5 @@
 import DirtyValue from "../../../basic/DirtyValue";
 import Vector2 from "../../../basic/Vector2";
-import IdentifiedModelNode from "../../../basic/IdentifiedModelNode";
 import IntValue from "../../../basic/IntValue";
 import ModelNodeCollection from "../../../basic/ModelNodeCollection";
 import BattleSpriteModel from "./BattleSpriteModel";
@@ -9,8 +8,9 @@ import BattleSprite3dModel from "./BattleSprite3dModel";
 import PathFinder from "../../../../class/pathfinder/PathFinder";
 import BoolValue from "../../../basic/BoolValue";
 import BattleNpcSpawnModel from "./BattleNpcSpawnModel";
+import IdentifiedModelNodeWithResources from "../../../basic/IdentifiedModelNodeWithResources";
 
-export default class BattleMapModel extends IdentifiedModelNode {
+export default class BattleMapModel extends IdentifiedModelNodeWithResources {
 
 	/**
 	 * @type DirtyValue
@@ -60,8 +60,8 @@ export default class BattleMapModel extends IdentifiedModelNode {
 	 */
 	npcSpawns;
 
-	constructor(id) {
-		super(id);
+	constructor(resources, id) {
+		super(resources, id);
 
 		this.name = this.addProperty('name', new DirtyValue(`Battle Map ${id}`));
 		this.isPersistent = this.addProperty('isPersistent', new BoolValue(true));
@@ -71,7 +71,7 @@ export default class BattleMapModel extends IdentifiedModelNode {
 		this.size = this.addProperty('size', new Vector2());
 
 		this.blocksCache = null;
-		this.sprites = this.addProperty('sprites', new ModelNodeCollection(() => new BattleSpriteModel()));
+		this.sprites = this.addProperty('sprites', new ModelNodeCollection(() => new BattleSpriteModel(this.resources)));
 		this.blocksSpritesCache = null;
 		this.sprites.addOnAddListener(() => this.blocksCache = this.blocksSpritesCache = null);
 		this.sprites.addOnRemoveListener(() => this.blocksCache = this.blocksSpritesCache = null);
@@ -135,6 +135,7 @@ export default class BattleMapModel extends IdentifiedModelNode {
 	getBlocks() {
 		if (!this.blocksCache) {
 			const sprites = this.getBlocksSprites();
+			//debugger;
 			console.log(sprites);
 			const sprites3d = this.getBlocksSprites3d();
 			const specials = this.getBlocksSpecials();

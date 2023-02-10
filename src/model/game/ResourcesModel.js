@@ -78,7 +78,6 @@ export default class ResourcesModel extends ModelNode {
 	constructor() {
 		super();
 
-		this.map = this.addProperty('map', new MapModel());
 		this.materials = this.addProperty('materials', new ModelNodeTable((id) => new MaterialModel(id)));
 		this.sprites = this.addProperty('sprites', new ModelNodeTable((id) => new SpriteModel(id)));
 		this.models3d = this.addProperty('models3d', new ModelNodeTable((id) => new Model3dModel(id)));
@@ -88,10 +87,10 @@ export default class ResourcesModel extends ModelNode {
 		this.conversations = this.addProperty('conversations', new ModelNodeTable((id) => new ConversationModel(id)));
 		this.itemDefinitions = this.addProperty('itemDefinitions', new ModelNodeTable((id) => new ItemDefinitionModel(id)));
 		this.statDefinitions = this.addProperty('statDefinitions', new ModelNodeTable((id) => new StatDefinitionModel(id)));
-
 		this.quests = this.addProperty('quests', new ModelNodeTable((id) => new QuestStageModel(id)));
-
 		this.sequences = this.addProperty('sequences', new ModelNodeTable((id) => new SequenceModel(id)));
+
+		this.map = this.addProperty('map', new MapModel(this));
 	}
 
 }

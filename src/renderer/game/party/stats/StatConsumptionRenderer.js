@@ -1,5 +1,8 @@
 import DomRenderer from "../../../basic/DomRenderer";
 import Pixies from "../../../../class/basic/Pixies";
+import StatBarRenderer from "./StatBarRenderer";
+import StatNameRenderer from "./StatNameRenderer";
+import NullableNodeRenderer from "../../../basic/NullableNodeRenderer";
 
 export default class StatConsumptionRenderer extends DomRenderer {
 
@@ -18,36 +21,21 @@ export default class StatConsumptionRenderer extends DomRenderer {
 		this.container = this.addElement('div', 'stat-wrapper column mb-1');
 		this.top = Pixies.createElement(this.container, 'div', 'row center');
 		this.name = Pixies.createElement(this.top, 'div', 'stat-name');
+		this.addChild(
+			new NullableNodeRenderer(
+				this.game,
+				this.model.definition,
+				(m) => new StatNameRenderer(this.game, m, this.name)
+			)
+		);
 
-		this.bottom = Pixies.createElement(this.container, 'div', 'row');
-		this.progress = Pixies.createElement(this.bottom, 'div', 'stat-bar flex-1 row stretch');
-		this.bar = Pixies.createElement(this.progress, 'div', `stat-${this.model.definitionId.get()}`);
-
-		this.statDef = this.game.resources.statDefinitions.getById(this.model.definitionId.get());
-		if (!this.statDef) {
-			console.log('stat def not found', this.model.definitionId.get());
-			return;
-		}
-		this.name.innerText = this.statDef.name.get();
-		this.updateStat();
+		this.bottom = Pixies.createElement(this.container, 'div', 'flex-1');
+		this.addChild(new StatBarRenderer(this.game, this.model, this.bottom));
 	}
 
 	deactivateInternal() {
 		this.resetChildren();
 		this.removeElement(this.container);
-	}
-
-	renderInternal() {
-		if (this.model.currentFloat.isDirty || this.model.baseValue.isDirty) {
-			this.updateStat();
-		}
-	}
-
-	updateStat() {
-		const ratio = this.model.currentFloat.get() / this.model.baseValue.get();
-		const width = Pixies.round(ratio * 100, 3);
-		this.bar.style.width = `${Pixies.between(0, 100, width)}%`;
-		this.bar.style.opacity = Pixies.between(0.1, 1, ratio);
 	}
 
 }

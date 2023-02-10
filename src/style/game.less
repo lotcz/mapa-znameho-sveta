@@ -21,11 +21,15 @@
   src: url('font/IMFellEnglishSC-Regular.ttf') format('truetype');
 }
 
+.default-cursor {
+  cursor: url('img/cursor/cursor.png'), default;
+}
+
 .savegame-layer {
+  .default-cursor();
   font-family: 'Vollkorn',  'Bookman Old Style', 'Times New Roman', serif;
   color: @dark-brown;
   font-size: 16pt;
-  cursor: url('img/cursor.png'), auto;
 
   h1, h2, h3, h4 {
 	font-family: 'Fell', 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
@@ -41,12 +45,16 @@
 	-ms-user-select: none;
   }
 
-  button {
-	cursor: url('img/cursor/cursor.png'), auto;
+  button, a {
+	.default-cursor();
+  }
+
+  .battle {
+	cursor: url('img/cursor/cursor-walk.png'), pointer;
   }
 
   .battle.no-go {
-	cursor: url('img/cursor/cursor-red.png'), not-allowed;
+	.default-cursor();
   }
 
   .battle.seq-hover,
@@ -56,19 +64,19 @@
 
   .battle.exit-hover,
   .battle.c-loc-hover {
-	cursor: url('img/cursor/cursor-walk.png'), move;
+	cursor: url('img/cursor/cursor-exit.png'), pointer;
   }
 
   .battle.talk-hover {
-	cursor: url('img/cursor/cursor-mouth.png'), move;
+	cursor: url('img/cursor/cursor-mouth.png'), pointer;
   }
 
   .battle.attack-hover {
-	cursor: url('img/cursor/cursor-dagger.png'), copy;
+	cursor: url('img/cursor/cursor-dagger.png'), pointer;
   }
 
   .battle.switch-character-hover {
-	cursor: url('img/cursor/cursor-character.png'), copy;
+	cursor: url('img/cursor/cursor-character.png'), pointer;
   }
 
 }
@@ -117,6 +125,27 @@
 	  padding: 0;
 	  margin: 0;
 	}
+  }
+}
+
+.scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-color: @dark-brown @orange;
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+	width: @m-2;
+	height: @m-2;
+	.default-cursor();
+  }
+
+  &::-webkit-scrollbar-thumb { /* Foreground */
+	background: #311a0a;
+  }
+
+  &::-webkit-scrollbar-track { /* Background */
+	background: sandybrown;
   }
 }
 

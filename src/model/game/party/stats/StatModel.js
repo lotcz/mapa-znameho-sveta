@@ -2,6 +2,7 @@ import Pixies from "../../../../class/basic/Pixies";
 import IntValue from "../../../basic/IntValue";
 import ModelNode from "../../../basic/ModelNode";
 import FloatValue from "../../../basic/FloatValue";
+import NullableNode from "../../../basic/NullableNode";
 
 export default class StatModel extends ModelNode {
 
@@ -9,6 +10,11 @@ export default class StatModel extends ModelNode {
 	 * @type IntValue
 	 */
 	definitionId;
+
+	/**
+	 * @type NullableNode<StatDefinitionModel>
+	 */
+	definition;
 
 	/**
 	 * @type IntValue
@@ -25,27 +31,16 @@ export default class StatModel extends ModelNode {
 	 */
 	current;
 
-	constructor(definitionId) {
-		super();
+	constructor(definitionId, initialValue = 0, persistent = true) {
+		super(persistent);
 
-		this.definitionId = this.addProperty('definitionId', new IntValue(definitionId));
-		this.baseValue = this.addProperty('baseValue', new IntValue(1));
-		this.currentFloat = this.addProperty('currentFloat', new FloatValue(1));
-		this.current = this.addProperty('current', new IntValue(1, false));
-		this.currentFloat.addOnChangeListener(
-			() => {
-				const f = this.currentFloat.get();
-				/*
-				if (f < 0) {
-					this.currentFloat.set(0);
-					return;
-				}
+		this.definitionId = this.addProperty('definitionId', new IntValue(definitionId, false));
+		this.definition = this.addProperty('definition', new NullableNode(null, false));
+		this.baseValue = this.addProperty('baseValue', new IntValue(initialValue));
+		this.currentFloat = this.addProperty('currentFloat', new FloatValue(initialValue));
+		this.current = this.addProperty('current', new IntValue(initialValue, false));
 
-				 */
-				const r = Math.round(f);
-				this.current.set(r);
-			}
-		);
+		this.currentFloat.addOnChangeListener(() => this.current.set(Math.ceil(this.currentFloat.get())));
 	}
 
 	restore(amount) {
@@ -55,5 +50,9 @@ export default class StatModel extends ModelNode {
 
 	consume(amount) {
 		this.restore( - amount );
+	}
+
+	getProgress() {
+		return this.baseValue.get() / this.currentFloat.get();
 	}
 }

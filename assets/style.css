@@ -28,9 +28,17 @@ h4 {
   display: flex;
   flex-direction: row;
 }
+.row-reverse {
+  display: flex;
+  flex-direction: row-reverse;
+}
 .column {
   display: flex;
   flex-direction: column;
+}
+.column-reverse {
+  display: flex;
+  flex-direction: column-reverse;
 }
 .stretch {
   align-items: stretch;
@@ -63,7 +71,6 @@ h4 {
 }
 .container-host {
   position: relative;
-  flex: 1;
 }
 .container-host > .container {
   position: absolute !important;
@@ -71,6 +78,39 @@ h4 {
   left: 0;
   bottom: 0;
   right: 0;
+}
+.with-tooltip {
+  position: relative;
+  display: inline-block;
+}
+.with-tooltip .tooltip {
+  position: absolute;
+  z-index: 1;
+  visibility: hidden;
+  bottom: 125%;
+  left: 50%;
+  background-color: #101010;
+  color: #fff;
+  text-align: left;
+  padding: 5px;
+  border-radius: 5px;
+  font-weight: normal;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.with-tooltip .tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #101010 transparent transparent transparent;
+}
+.with-tooltip:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
 }
 .m-0,
 .mt-0,
@@ -470,11 +510,14 @@ h4 {
   font-family: 'Fell';
   src: url('font/IMFellEnglishSC-Regular.ttf') format('truetype');
 }
+.default-cursor {
+  cursor: url('img/cursor/cursor.png'), default;
+}
 .savegame-layer {
+  cursor: url('img/cursor/cursor.png'), default;
   font-family: 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
   color: #311a0a;
   font-size: 16pt;
-  cursor: url('img/cursor.png'), auto;
 }
 .savegame-layer h1,
 .savegame-layer h2,
@@ -491,11 +534,15 @@ h4 {
   -webkit-touch-callout: none;
   -ms-user-select: none;
 }
-.savegame-layer button {
-  cursor: url('img/cursor/cursor.png'), auto;
+.savegame-layer button,
+.savegame-layer a {
+  cursor: url('img/cursor/cursor.png'), default;
+}
+.savegame-layer .battle {
+  cursor: url('img/cursor/cursor-walk.png'), pointer;
 }
 .savegame-layer .battle.no-go {
-  cursor: url('img/cursor/cursor-red.png'), not-allowed;
+  cursor: url('img/cursor/cursor.png'), default;
 }
 .savegame-layer .battle.seq-hover,
 .savegame-layer .battle.c-eye-hover {
@@ -503,16 +550,16 @@ h4 {
 }
 .savegame-layer .battle.exit-hover,
 .savegame-layer .battle.c-loc-hover {
-  cursor: url('img/cursor/cursor-walk.png'), move;
+  cursor: url('img/cursor/cursor-exit.png'), pointer;
 }
 .savegame-layer .battle.talk-hover {
-  cursor: url('img/cursor/cursor-mouth.png'), move;
+  cursor: url('img/cursor/cursor-mouth.png'), pointer;
 }
 .savegame-layer .battle.attack-hover {
-  cursor: url('img/cursor/cursor-dagger.png'), copy;
+  cursor: url('img/cursor/cursor-dagger.png'), pointer;
 }
 .savegame-layer .battle.switch-character-hover {
-  cursor: url('img/cursor/cursor-character.png'), copy;
+  cursor: url('img/cursor/cursor-character.png'), pointer;
 }
 .portrait img {
   width: 100%;
@@ -553,6 +600,25 @@ h4 {
   height: 25px;
   padding: 0;
   margin: 0;
+}
+.scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-color: #311a0a sandybrown;
+  scrollbar-width: thin;
+}
+.scroll::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+  cursor: url('img/cursor/cursor.png'), default;
+}
+.scroll::-webkit-scrollbar-thumb {
+  /* Foreground */
+  background: #311a0a;
+}
+.scroll::-webkit-scrollbar-track {
+  /* Background */
+  background: sandybrown;
 }
 .sequence-container .sequence-background canvas {
   position: absolute;
@@ -667,10 +733,6 @@ h4 {
 .party .portraits .selected .portrait {
   border: 2px solid white;
 }
-.party .portraits .character {
-  display: flex;
-  flex-direction: row;
-}
 .party .portraits .stats {
   display: flex;
   flex-direction: row;
@@ -706,7 +768,7 @@ h4 {
   width: 750px;
 }
 .inventory .portrait {
-  width: 200px;
+  width: 235px;
 }
 .inventory .tabs > .tab-header {
   border-width: 0;
@@ -727,7 +789,7 @@ h4 {
   box-shadow: #311a0a 10px -10px 20px -10px;
 }
 .inventory .tabs > .filler {
-  box-shadow: #311a0a 4px -4px 10px -8px inset;
+  box-shadow: #311a0a 4px -8px 9px -9px inset;
 }
 .inventory .tab-content {
   box-shadow: #311a0a 0 10px 22px -11px;
@@ -764,7 +826,7 @@ h4 {
   position: relative;
   right: -7px;
 }
-.inventory .inventory-basic .stats-basic .stat-bar {
+.inventory .inventory-basic .stats-basic .stat-basic-bar .stat-bar {
   box-shadow: #311a0a 4px 1px 9px -1px;
   padding-left: 4px;
 }
@@ -812,7 +874,7 @@ h4 {
   padding: 5px;
   margin: 5px 0;
 }
-.inventory .inventory-items .inventory-character .stats-consumption .stat-wrapper .stat-bar {
+.inventory .inventory-items .inventory-character .stats-consumption .stat-wrapper .stat-bar div {
   height: 10px;
 }
 .inventory .inventory-items .inventory-character .slot {
@@ -864,8 +926,7 @@ h4 {
   align-items: center;
 }
 .inventory .inventory-stats .stat-skill .name {
-  width: 150px;
-  font-size: 120%;
+  width: 200px;
 }
 .inventory .inventory-stats .stat-skill .number {
   width: 50px;
@@ -887,6 +948,10 @@ h4 {
 }
 .inventory .inventory-stats .stat-skill .value .stat-brick.loss {
   background-color: rgba(200, 100, 100, 0.75);
+}
+.inventory .inventory-stats .stat-level .stat-bar div {
+  height: 15px;
+  background-color: #885f32;
 }
 .inventory .inventory-quests .completed {
   color: black;
@@ -933,24 +998,6 @@ h4 {
   flex: 1;
   flex-direction: column;
   justify-content: space-between;
-}
-.conversation .scroll {
-  overflow-y: auto;
-  overflow-x: hidden;
-  scrollbar-color: #311a0a sandybrown;
-  scrollbar-width: thin;
-}
-.conversation .scroll::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-.conversation .scroll::-webkit-scrollbar-thumb {
-  /* Foreground */
-  background: #311a0a;
-}
-.conversation .scroll::-webkit-scrollbar-track {
-  /* Background */
-  background: sandybrown;
 }
 .conversation .title {
   margin-bottom: 10px;

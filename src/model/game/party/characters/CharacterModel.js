@@ -9,6 +9,7 @@ import InventorySlotModel from "./InventorySlotModel";
 import ModelNodeCollection from "../../../basic/ModelNodeCollection";
 import AdditionalItemModel from "../../items/AdditionalItemModel";
 import ItemModel from "../../items/ItemModel";
+import NullableNode from "../../../basic/NullableNode";
 
 export default class CharacterModel extends TemplateNode {
 
@@ -21,6 +22,11 @@ export default class CharacterModel extends TemplateNode {
 	 * @type IntValue
 	 */
 	raceId;
+
+	/**
+	 * @type NullableNode<RaceModel>
+	 */
+	race;
 
 	/**
 	 * @type BoolValue
@@ -92,6 +98,7 @@ export default class CharacterModel extends TemplateNode {
 
 		this.name = this.addProperty('name', new DirtyValue('Jinka'));
 		this.raceId = this.addProperty('raceId', new IntValue());
+		this.race = this.addProperty('race', new NullableNode(null, false));
 		this.sex = this.addProperty('sex', new BoolValue(true));
 		this.portrait = this.addProperty('portrait', new DirtyValue('img/portrait/kalinga/female-1.jpg'));
 

@@ -7,11 +7,14 @@ export default class Node {
 	 */
 	eventManager;
 
-	addEventListener(eventName, eventHandler) {
+	addEventListener(eventName, eventHandler, runImmediately = false) {
 		if (!this.eventManager) {
 			this.eventManager = new EventManager();
 		}
 		this.eventManager.addEventListener(eventName, eventHandler);
+		if (runImmediately) {
+			eventHandler();
+		}
 	}
 
 	removeEventListener(eventName, eventHandler) {

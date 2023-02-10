@@ -1,6 +1,6 @@
-import StatControllerBase from "../StatControllerBase";
+import ComputedStatControllerBase from "../ComputedStatControllerBase";
 
-export default class DefensePowerStatController extends StatControllerBase {
+export default class DefensePowerStatController extends ComputedStatControllerBase {
 
 	constructor(game, model, stats) {
 		super(game, model, stats, [stats.abilities.toughness.current]);

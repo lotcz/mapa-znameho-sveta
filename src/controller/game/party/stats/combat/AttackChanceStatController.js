@@ -1,6 +1,6 @@
-import StatControllerBase from "../StatControllerBase";
+import ComputedStatControllerBase from "../ComputedStatControllerBase";
 
-export default class AttackChanceStatController extends StatControllerBase {
+export default class AttackChanceStatController extends ComputedStatControllerBase {
 
 	constructor(game, model, stats) {
 		super(game, model, stats, [stats.abilities.agility.current, stats.skills.meleeWeapons.current, stats.skills.missileWeapons.current]);
@@ -10,7 +10,7 @@ export default class AttackChanceStatController extends StatControllerBase {
 		const meleeWeapons = this.stats.skills.meleeWeapons.current.get();
 		const missileWeapons = this.stats.skills.missileWeapons.current.get();
 		const agility = this.stats.abilities.agility.current.get();
-		const chance = (1 * agility) + (1 * meleeWeapons)+ (1 * missileWeapons);
+		const chance = (1 * agility) + (1 * meleeWeapons) + (1 * missileWeapons);
 		this.model.baseValue.set(chance);
 	}
 

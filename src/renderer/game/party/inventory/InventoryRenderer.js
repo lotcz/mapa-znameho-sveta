@@ -1,6 +1,4 @@
-import DomRenderer from "../../../basic/DomRenderer";
 import Pixies from "../../../../class/basic/Pixies";
-import ImageRenderer from "../../../basic/ImageRenderer";
 import InventoryTabItemsRenderer from "./InventoryTabItemsRenderer";
 import ConditionalNodeRenderer from "../../../basic/ConditionalNodeRenderer";
 import {
@@ -14,8 +12,10 @@ import CollectionRenderer from "../../../basic/CollectionRenderer";
 import StatCombatRenderer from "../stats/StatCombatRenderer";
 import StatBasicRenderer from "../stats/StatBasicRenderer";
 import InventoryTabQuestsRenderer from "./InventoryTabQuestsRenderer";
+import DomRendererWithSaveGame from "../../../basic/DomRendererWithSaveGame";
+import DirtyValueRenderer from "../../../basic/DirtyValueRenderer";
 
-export default class InventoryRenderer extends DomRenderer {
+export default class InventoryRenderer extends DomRendererWithSaveGame {
 
 	/**
 	 * @type CharacterModel
@@ -50,9 +50,12 @@ export default class InventoryRenderer extends DomRenderer {
 		this.inner = Pixies.createElement(this.container, 'div', 'column flex-1');
 
 		this.top = Pixies.createElement(this.inner, 'div', 'inventory-top column');
-		this.heading = Pixies.createElement(this.top, 'div', 'row space-between');
-		this.name = Pixies.createElement(this.heading, 'h1', 'name', this.model.name.get());
-		this.name = Pixies.createElement(
+		this.heading = Pixies.createElement(this.top, 'div', 'row');
+		this.name = Pixies.createElement(this.heading, 'div', 'flex-1 center');
+		this.nameInner = Pixies.createElement(this.name, 'h1', 'name');
+		this.addChild(new DirtyValueRenderer(this.game, this.model.name, this.nameInner));
+
+		this.close = Pixies.createElement(
 			this.heading,
 			'button',
 			'close',
@@ -62,17 +65,9 @@ export default class InventoryRenderer extends DomRenderer {
 			}
 		);
 
-		this.middle = Pixies.createElement(this.top, 'div', 'row');
-		this.col1 = Pixies.createElement(this.middle, 'div', 'column');
-
-		this.portrait = Pixies.createElement(this.col1, 'div', 'portrait');
-		this.addChild(
-			new ImageRenderer(this.game, this.model.portrait, this.portrait)
-		);
-
-		this.col2 = Pixies.createElement(this.middle, 'div', 'inventory-basic column flex-1 space-around');
-		this.basic = Pixies.createElement(this.col2, 'div','stats-basic row px-3');
-		this.combat = Pixies.createElement(this.col2, 'div', 'stats-combat row');
+		this.middle = Pixies.createElement(this.top, 'div', 'inventory-basic column flex-1 space-around my-2');
+		this.basic = Pixies.createElement(this.middle, 'div','stats-basic row px-3');
+		this.combat = Pixies.createElement(this.middle, 'div', 'stats-combat row');
 
 		this.addChild(
 			new CollectionRenderer(
@@ -139,7 +134,7 @@ export default class InventoryRenderer extends DomRenderer {
 			'flex-1 filler'
 		);
 
-		this.content = Pixies.createElement(this.bottom, 'div', 'tab-content row stretch flex-1');
+		this.content = Pixies.createElement(this.bottom, 'div', 'tab-content container-host stretch flex-1');
 
 		this.addChild(
 			new ConditionalNodeRenderer(
@@ -162,7 +157,7 @@ export default class InventoryRenderer extends DomRenderer {
 				this.game,
 				this.party.inventoryMode,
 				() => this.party.inventoryMode.equalsTo(INVENTORY_MODE_QUESTS),
-				() => new InventoryTabQuestsRenderer(this.game, this.game.saveGame.get().completedStages, this.content)
+				() => new InventoryTabQuestsRenderer(this.game, this.saveGame.completedStages, this.content)
 			)
 		);
 

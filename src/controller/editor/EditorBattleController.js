@@ -118,7 +118,7 @@ export default class EditorBattleController extends ControllerNode {
 		} else {
 			const id = this.game.editor.battleEditor.spriteId.get();
 			if (id && (action === MODE_ACTION_ADD)) {
-				const battleSprite = new BattleSpriteModel();
+				const battleSprite = new BattleSpriteModel(this.game.resources);
 				battleSprite.position.set(tile);
 				battleSprite.spriteId.set(id);
 				this.model.battleMap.get().sprites.add(battleSprite);

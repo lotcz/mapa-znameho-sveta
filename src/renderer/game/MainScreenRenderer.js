@@ -44,6 +44,8 @@ export default class MainScreenRenderer extends DomRenderer {
 		this.topLayer = Pixies.createElement(this.container, 'div', 'top-layer ');
 
 		this.partyPanel = Pixies.createElement(bottomLayer, 'div', 'savegame-party row stretch');
+		this.partyPanel.addEventListener('wheel', (e) => e.stopPropagation());
+
 		this.mainLayer = Pixies.createElement(bottomLayer, 'div', 'main row stretch flex-1');
 		this.mainLayer.addEventListener(
 			'mousemove',

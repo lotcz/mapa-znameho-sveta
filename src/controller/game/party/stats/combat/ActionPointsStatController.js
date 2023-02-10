@@ -1,6 +1,6 @@
-import StatControllerBase from "../StatControllerBase";
+import ComputedStatControllerBase from "../ComputedStatControllerBase";
 
-export default class ActionPointsStatController extends StatControllerBase {
+export default class ActionPointsStatController extends ComputedStatControllerBase {
 
 	constructor(game, model, stats) {
 		super(game, model, stats, [stats.abilities.agility.current]);

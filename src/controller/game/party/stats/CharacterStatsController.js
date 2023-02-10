@@ -1,6 +1,6 @@
 import ControllerNode from "../../../basic/ControllerNode";
 import CollectionController from "../../../basic/CollectionController";
-import SkillController from "./SkillController";
+import StatController from "./StatController";
 import HealthStatController from "./basic/HealthStatController";
 import StaminaStatController from "./basic/StaminaStatController";
 import DefenseChanceStatController from "./combat/DefenseChanceStatController";
@@ -33,22 +33,15 @@ export default class CharacterStatsController extends ControllerNode {
 		this.addChild(new AttackChanceStatController(this.game, this.model.combat.offensiveChance, this.model));
 		this.addChild(new AttackPowerStatController(this.game, this.model.combat.offensivePower, this.model));
 
+		this.addChild(new StatController(this.game, this.model.consumption.thirst, this.model));
+		this.addChild(new StatController(this.game, this.model.consumption.hunger, this.model));
 		this.addChild(new TemperatureStatController(this.game, this.model.consumption.temperature, this.model));
-		this.addChild(new SkillController(this.game, this.model.consumption.temperature, this.model));
-
-		this.addChild(
-			new CollectionController(
-				this.game,
-				this.model.combat.all,
-				(m) => new SkillController(this.game, m, this.model)
-			)
-		);
 
 		this.addChild(
 			new CollectionController(
 				this.game,
 				this.model.abilities.all,
-				(m) => new SkillController(this.game, m, this.model)
+				(m) => new StatController(this.game, m, this.model)
 			)
 		);
 
@@ -56,7 +49,7 @@ export default class CharacterStatsController extends ControllerNode {
 			new CollectionController(
 				this.game,
 				this.model.skills.all,
-				(m) => new SkillController(this.game, m, this.model)
+				(m) => new StatController(this.game, m, this.model)
 			)
 		);
 

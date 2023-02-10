@@ -1,6 +1,6 @@
-import StatControllerBase from "../StatControllerBase";
+import ComputedStatControllerBase from "../ComputedStatControllerBase";
 
-export default class DefenseChanceStatController extends StatControllerBase {
+export default class DefenseChanceStatController extends ComputedStatControllerBase {
 
 	constructor(game, model, stats) {
 		super(game, model, stats, [stats.abilities.agility.current, stats.skills.evasion.current]);

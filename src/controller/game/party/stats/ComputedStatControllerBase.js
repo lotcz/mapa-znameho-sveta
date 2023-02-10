@@ -1,19 +1,14 @@
-import ControllerNode from "../../../basic/ControllerNode";
+import StatController from "./StatController";
 
-export default class StatControllerBase extends ControllerNode {
+export default class ComputedStatControllerBase extends StatController {
 
 	/**
 	 * @type StatModel
 	 */
 	model;
 
-	/**
-	 * @type CharacterStatsModel
-	 */
-	stats;
-
 	constructor(game, model, stats, dependencies = []) {
-		super(game, model);
+		super(game, model, stats);
 
 		this.model = model;
 		this.stats = stats;
@@ -28,6 +23,7 @@ export default class StatControllerBase extends ControllerNode {
 	}
 
 	activateInternal() {
+		super.activateInternal();
 		this.updateBase();
 	}
 

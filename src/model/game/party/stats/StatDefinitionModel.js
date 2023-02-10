@@ -1,6 +1,6 @@
-import DirtyValue from "../../../basic/DirtyValue";
 import IdentifiedModelNode from "../../../basic/IdentifiedModelNode";
 import IntValue from "../../../basic/IntValue";
+import StringValue from "../../../basic/StringValue";
 
 // stats
 export const STAT_HEALTH = 1;
@@ -28,25 +28,30 @@ export const STAT_THROWN_WEAPONS = 102;
 export const STAT_MISSILE_WEAPONS = 103;
 export const STAT_EVASION = 104;
 export const STAT_HUNTING = 105;
-
-// level progress
-export const STAT_LEVEL = 1001;
-export const STAT_EXPERIENCE = 1002;
-export const STAT_ABILITY_POINTS = 1003;
-export const STAT_SKILL_POINTS = 1004;
+export const STAT_CRAFTSMANSHIP = 106;
+export const STAT_COOKING = 107;
+export const STAT_HERBALISM = 108;
+export const STAT_TRADING = 109;
+export const STAT_PERUN = 110;
+export const STAT_LESAN = 111;
+export const STAT_VODAN = 112;
+export const STAT_ZIVA = 113;
+export const STAT_MORANA = 114;
+export const STAT_SCIENTIA = 115;
 
 // other
+export const STAT_LEVEL_PROGRESS = 1001;
 export const STAT_ITEM_CONDITION = 2000;
 
 export default class StatDefinitionModel extends IdentifiedModelNode {
 
 	/**
-	 * @type DirtyValue
+	 * @type StringValue
 	 */
 	name;
 
 	/**
-	 * @type DirtyValue
+	 * @type StringValue
 	 */
 	description;
 
@@ -58,8 +63,8 @@ export default class StatDefinitionModel extends IdentifiedModelNode {
 	constructor(id) {
 		super(id);
 
-		this.name = this.addProperty('name', new DirtyValue(`Stat ${id}`));
-		this.description = this.addProperty('description', new DirtyValue('description'));
+		this.name = this.addProperty('name', new StringValue(`Stat ${id}`));
+		this.description = this.addProperty('description', new StringValue('description'));
 		this.max = this.addProperty('max', new IntValue(10));
 	}
 

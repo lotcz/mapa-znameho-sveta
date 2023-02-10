@@ -12,7 +12,7 @@ export default class CharacterStatsModel extends ModelNode {
 	/**
 	 * @type LevelStatsModel
 	 */
-	levelProgress;
+	level;
 
 	/**
 	 * @type BasicStatsModel
@@ -52,7 +52,7 @@ export default class CharacterStatsModel extends ModelNode {
 	constructor() {
 		super();
 
-		this.levelProgress = this.addProperty('levelProgress', new LevelStatsModel());
+		this.level = this.addProperty('level', new LevelStatsModel());
 		this.basic = this.addProperty('basic', new BasicStatsModel());
 		this.consumption = this.addProperty('consumption', new ConsumptionStatsModel());
 		this.combat = this.addProperty('combat', new CombatStatsModel());

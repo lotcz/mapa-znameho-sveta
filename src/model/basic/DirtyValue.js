@@ -47,8 +47,8 @@ export default class DirtyValue extends ModelNode {
 		this.set(state);
 	}
 
-	addOnChangeListener(eventHandler) {
-		this.addEventListener('change', eventHandler);
+	addOnChangeListener(eventHandler, runImmediately = false) {
+		this.addEventListener('change', eventHandler, runImmediately);
 	}
 
 	removeOnChangeListener(eventHandler) {

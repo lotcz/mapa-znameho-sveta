@@ -1,6 +1,8 @@
 import DomRenderer from "../../../basic/DomRenderer";
 import Pixies from "../../../../class/basic/Pixies";
 import StatNumberRenderer from "./StatNumberRenderer";
+import StatNameRenderer from "./StatNameRenderer";
+import NullableNodeRenderer from "../../../basic/NullableNodeRenderer";
 
 export default class StatCombatRenderer extends DomRenderer {
 
@@ -17,23 +19,19 @@ export default class StatCombatRenderer extends DomRenderer {
 
 	activateInternal() {
 		this.container = this.addElement('div', 'stat-wrapper column flex-1 p-1');
+
 		this.name = Pixies.createElement(this.container, 'div', 'stat-name center mb-1');
-		this.bottom = Pixies.createElement(this.container, 'div', 'column center');
-		this.numeric = Pixies.createElement(this.bottom, 'div', 'stat-badge row center');
 		this.addChild(
-			new StatNumberRenderer(
+			new NullableNodeRenderer(
 				this.game,
-				this.model.currentFloat,
-				this.numeric
+				this.model.definition,
+				(m) => new StatNameRenderer(this.game, m, this.name)
 			)
 		);
 
-		this.statDef = this.game.resources.statDefinitions.getById(this.model.definitionId.get());
-		if (!this.statDef) {
-			console.log('stat def not found', this.model.definitionId.get());
-			return;
-		}
-		this.name.innerText = this.statDef.name.get();
+		this.bottom = Pixies.createElement(this.container, 'div', 'column center');
+		this.numeric = Pixies.createElement(this.bottom, 'div', 'stat-badge row center');
+		this.addChild(new StatNumberRenderer(this.game, this.model.currentFloat, this.numeric));
 	}
 
 	deactivateInternal() {

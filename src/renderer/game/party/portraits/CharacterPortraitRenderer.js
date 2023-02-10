@@ -1,9 +1,11 @@
-import DomRenderer from "../../../basic/DomRenderer";
 import Pixies from "../../../../class/basic/Pixies";
 import PortraitStatRenderer from "./PortraitStatRenderer";
 import CollectionRenderer from "../../../basic/CollectionRenderer";
+import DomRendererWithSaveGame from "../../../basic/DomRendererWithSaveGame";
+import ImageRenderer from "../../../basic/ImageRenderer";
+import DirtyValueRenderer from "../../../basic/DirtyValueRenderer";
 
-export default class CharacterPortraitRenderer extends DomRenderer {
+export default class CharacterPortraitRenderer extends DomRendererWithSaveGame {
 
 	/**
 	 * @type CharacterModel
@@ -15,7 +17,17 @@ export default class CharacterPortraitRenderer extends DomRenderer {
 
 		this.model = model;
 		this.container = null;
+	}
 
+	activateInternal() {
+		this.container = this.addElement('div', 'character column');
+		this.container.addEventListener('click', () => this.saveGame.party.triggerEvent('character-selected', this.model.id.get()));
+
+		this.top = Pixies.createElement(this.container, 'div', 'row');
+		this.portrait = Pixies.createElement(this.top, 'div', 'portrait');
+		this.addChild(new ImageRenderer(this.game, this.model.portrait, this.portrait));
+
+		this.stats = Pixies.createElement(this.top, 'div', 'stats');
 		this.addChild(
 			new CollectionRenderer(
 				this.game,
@@ -23,43 +35,15 @@ export default class CharacterPortraitRenderer extends DomRenderer {
 				(m) => new PortraitStatRenderer(this.game, m, this.stats)
 			)
 		);
-	}
 
-	activateInternal() {
-		this.container = this.addElement('div', 'character');
-		this.container.addEventListener('click', () => this.game.saveGame.get().party.triggerEvent('character-selected', this.model.id.get()));
-
-		this.portraitWrapper = Pixies.createElement(this.container, 'div');
-		this.renderPortrait();
-
-		this.stats = Pixies.createElement(this.container, 'div', 'stats');
-		/*
-		this.addChild(new PortraitStatRenderer(this.game, this.model.stats.basic.health, this.stats));
-		this.addChild(new PortraitStatRenderer(this.game, this.model.stats.basic.stamina, this.stats));
-*/
+		this.bottom = Pixies.createElement(this.container, 'div', 'center');
+		this.name = Pixies.createElement(this.bottom, 'div');
+		this.addChild(new DirtyValueRenderer(this.game, this.model.name, this.name, Pixies.extractWord));
 	}
 
 	deactivateInternal() {
+		this.resetChildren();
 		this.removeElement(this.container);
-	}
-
-	renderInternal() {
-		if (this.model.portrait.isDirty || this.model.name.isDirty) {
-			this.renderPortrait();
-		}
-	}
-
-	renderPortrait() {
-		Pixies.emptyElement(this.portraitWrapper);
-		let portraitUri = this.model.portrait.get();
-
-		if (portraitUri) {
-			const portrait = Pixies.createElement(this.portraitWrapper, 'div', 'portrait');
-			this.game.assets.getAsset(portraitUri, (img) => portrait.appendChild(img.cloneNode(true)));
-		}
-
-		this.text = Pixies.createElement(this.portraitWrapper, 'div', 'text center');
-		this.text.innerText = this.model.name.get();
 	}
 
 }
