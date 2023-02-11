@@ -20,10 +20,7 @@ export default class SelectedBattleCharacterController extends ControllerWithBat
 		this.addAutoEvent(
 			this.model.position,
 			'change',
-			() => {
-				const coords = this.battleMap.positionToScreenCoords(this.model.position);
-				this.battle.coordinates.set(coords);
-			}
+			() => this.battle.coordinates.set(this.battleMap.positionToScreenCoords(this.model.position))
 		);
 
 		this.addAutoEvent(

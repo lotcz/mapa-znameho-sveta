@@ -46,7 +46,6 @@ export default class AnimationHelper {
 
 	activateAction(name, duration, synchronize) {
 		const action = this.actions[name];
-
 		if (this.currentAction === action) {
 			this.currentAction.reset();
 			return;

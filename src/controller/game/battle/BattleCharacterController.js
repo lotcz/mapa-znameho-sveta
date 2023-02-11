@@ -112,16 +112,15 @@ export default class BattleCharacterController extends ControllerWithBattle {
 	updateInternal(delta) {
 		if (this.positionAnimation) {
 			if (this.positionAnimation.isFinished()) {
-				this.removeChild(this.positionAnimation);
 				this.positionAnimation = null;
 				this.arrived();
-			} else {
+			}
+			if (this.positionAnimation) {
 				this.model.position.set(this.positionAnimation.get(delta));
 			}
 		}
 		if (this.rotationAnimation) {
 			if (this.rotationAnimation.isFinished()) {
-				this.removeChild(this.rotationAnimation);
 				this.rotationAnimation = null;
 			} else {
 				this.model.rotation.set(this.rotationAnimation.get(delta));
@@ -150,7 +149,6 @@ export default class BattleCharacterController extends ControllerWithBattle {
 			return false;
 		}
 
-		//const path = PathFinder.findBestPath(this.model.position.round(), position.round(), blocks);
 		const absolutePathFinder = new AbsolutePathFinder(this.model.position, position, blocks);
 		const path = absolutePathFinder.findPath();
 		if (!path) {
@@ -175,8 +173,10 @@ export default class BattleCharacterController extends ControllerWithBattle {
 
 		const rotation = this.model.position.getRotationFromYAxis(target);
 		const diff = this.model.rotation.subtract(rotation.get());
-		const duration = Math.abs(diff.get()) / ROTATION_SPEED;
-		this.rotationAnimation = new AnimatedRotation(this.model.rotation.get(), rotation.get(), duration);
+		if (!diff.equalsTo(0)) {
+			const duration = Math.abs(diff.get()) / ROTATION_SPEED;
+			this.rotationAnimation = new AnimatedRotation(this.model.rotation.get(), rotation.get(), duration);
+		}
 	}
 
 	arrived() {
@@ -189,9 +189,10 @@ export default class BattleCharacterController extends ControllerWithBattle {
 
 		const blocks = this.getBlocks();
 		if (this.checkBlocks(blocks)) {
-			this.model.state.set(CHARACTER_STATE_IDLE);
 			this.model.targetPosition.set(null);
 			if (!this.updateFollowing()) {
+				this.model.state.set(CHARACTER_STATE_IDLE);
+				this.model.position.set(this.model.position.round());
 				this.model.triggerEvent('arrived-idle', this.model.position);
 			}
 		}
