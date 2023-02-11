@@ -63,6 +63,7 @@ export default class SelectedBattleCharacterController extends ControllerWithBat
 				const conversation = this.game.resources.conversations.getById(character.npcConversationId.get());
 				if (conversation) {
 					this.model.state.set(CHARACTER_STATE_IDLE);
+					this.model.position.set(this.model.position.round());
 					this.saveGame.conversation.set(conversation);
 				}
 			}

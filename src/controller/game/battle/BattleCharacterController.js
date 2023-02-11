@@ -255,7 +255,7 @@ export default class BattleCharacterController extends ControllerWithBattle {
 	updateFollowing() {
 		if (this.model.followBattleCharacter.isSet()) {
 			const followed = this.model.followBattleCharacter.get();
-			const neighbors = PathFinder.getNeighborPositions(this.model.position);
+			const neighbors = PathFinder.getNeighborPositions(this.model.position.round());
 			const caught = neighbors.some((n) => n.equalsTo(followed.position.round()));
 			if (caught) {
 				this.model.triggerEvent('caught-up', followed);
