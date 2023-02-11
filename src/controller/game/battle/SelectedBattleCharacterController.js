@@ -4,6 +4,7 @@ import {
 	SPECIAL_TYPE_SEQUENCE
 } from "../../../model/game/battle/battlemap/BattleSpecialModel";
 import ControllerWithBattle from "../../basic/ControllerWithBattle";
+import {CHARACTER_STATE_IDLE} from "../../../model/game/battle/BattleCharacterModel";
 
 export default class SelectedBattleCharacterController extends ControllerWithBattle {
 
@@ -60,7 +61,10 @@ export default class SelectedBattleCharacterController extends ControllerWithBat
 				if (!battleCharacter) return;
 				const character = battleCharacter.character.get();
 				const conversation = this.game.resources.conversations.getById(character.npcConversationId.get());
-				this.saveGame.conversation.set(conversation);
+				if (conversation) {
+					this.model.state.set(CHARACTER_STATE_IDLE);
+					this.saveGame.conversation.set(conversation);
+				}
 			}
 		);
 	}

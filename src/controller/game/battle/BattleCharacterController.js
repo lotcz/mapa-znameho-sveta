@@ -7,6 +7,7 @@ import ItemModel from "../../../model/game/items/ItemModel";
 import BattleItemSlotController from "./BattleItemSlotController";
 import ControllerWithBattle from "../../basic/ControllerWithBattle";
 import AbsolutePathFinder from "../../../class/pathfinder/AbsolutePathFinder";
+import {EASING_FLAT, EASING_QUAD_IN} from "../../../class/animating/ProgressValue";
 
 const TRAVEL_SPEED = 3.25 / 1000; // position units per millisecond
 const ROTATION_SPEED = (Math.PI * 4) / 1000; // radians per millisecond
@@ -111,12 +112,13 @@ export default class BattleCharacterController extends ControllerWithBattle {
 
 	updateInternal(delta) {
 		if (this.positionAnimation) {
+			this.positionAnimation.addElapsed(delta);
 			if (this.positionAnimation.isFinished()) {
 				this.positionAnimation = null;
-				this.arrived();
+				this.arrived(delta);
 			}
 			if (this.positionAnimation) {
-				this.model.position.set(this.positionAnimation.get(delta));
+				this.model.position.set(this.positionAnimation.get());
 			}
 		}
 		if (this.rotationAnimation) {
@@ -165,25 +167,25 @@ export default class BattleCharacterController extends ControllerWithBattle {
 		return true;
 	}
 
-	startMovement(target) {
+	startMovement(target, delta = 0) {
 		this.model.state.set(CHARACTER_STATE_RUN);
 		const distance = this.model.position.distanceTo(target);
 		const time = distance / TRAVEL_SPEED;
-		this.positionAnimation = new AnimatedVector2(this.model.position, target, time);
+		this.positionAnimation = new AnimatedVector2(this.model.position, target, time, EASING_FLAT, delta);
 
 		const rotation = this.model.position.getRotationFromYAxis(target);
 		const diff = this.model.rotation.subtract(rotation.get());
 		if (!diff.equalsTo(0)) {
 			const duration = Math.abs(diff.get()) / ROTATION_SPEED;
-			this.rotationAnimation = new AnimatedRotation(this.model.rotation.get(), rotation.get(), duration);
+			this.rotationAnimation = new AnimatedRotation(this.model.rotation.get(), rotation.get(), duration, EASING_QUAD_IN);
 		}
 	}
 
-	arrived() {
+	arrived(delta) {
 		//this.model.triggerEvent('arrived', this.model.position);
 
 		if (this.pathToGo.length > 0) {
-			this.startMovement(this.pathToGo.shift());
+			this.startMovement(this.pathToGo.shift(), delta);
 			return;
 		}
 

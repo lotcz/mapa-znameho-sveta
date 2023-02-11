@@ -1,5 +1,6 @@
 import Pixies from "../basic/Pixies";
 import ProgressRotation from "./ProgressRotation";
+import {EASING_FLAT} from "./ProgressValue";
 
 export default class AnimatedRotation {
 
@@ -25,8 +26,8 @@ export default class AnimatedRotation {
 	 * @param {Number} duration
 	 * @param {Number} elapsed
 	 */
-	constructor(start, end, duration, elapsed = 0) {
-		this.progress = new ProgressRotation(start, end);
+	constructor(start, end, duration, easing = EASING_FLAT, elapsed = 0) {
+		this.progress = new ProgressRotation(start, end, easing);
 		this.duration = duration;
 		this.elapsed = elapsed;
 	}
