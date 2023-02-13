@@ -21,18 +21,31 @@
   src: url('font/IMFellEnglishSC-Regular.ttf') format('truetype');
 }
 
+.normal-text {
+  font-family: 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
+  font-size: 16pt;
+}
+
+.decor-text {
+  font-family: 'Fell', 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
+}
+
+.small-text {
+  font-family: 'Bookman Old Style', 'Times New Roman', serif;
+}
+
 .default-cursor {
   cursor: url('img/cursor/cursor.png'), default;
 }
 
 .savegame-layer {
   .default-cursor();
-  font-family: 'Vollkorn',  'Bookman Old Style', 'Times New Roman', serif;
+  .normal-text();
   color: @dark-brown;
   font-size: 16pt;
 
   h1, h2, h3, h4 {
-	font-family: 'Fell', 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
+	.decor-text();
   }
 
   & > * {
@@ -140,11 +153,13 @@
 	.default-cursor();
   }
 
-  &::-webkit-scrollbar-thumb { /* Foreground */
+  &::-webkit-scrollbar-thumb {
+	.default-cursor();
 	background: #311a0a;
   }
 
-  &::-webkit-scrollbar-track { /* Background */
+  &::-webkit-scrollbar-track {
+	.default-cursor();
 	background: sandybrown;
   }
 }

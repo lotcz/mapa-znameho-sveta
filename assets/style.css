@@ -510,6 +510,16 @@ h4 {
   font-family: 'Fell';
   src: url('font/IMFellEnglishSC-Regular.ttf') format('truetype');
 }
+.normal-text {
+  font-family: 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
+  font-size: 16pt;
+}
+.decor-text {
+  font-family: 'Fell', 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
+}
+.small-text {
+  font-family: 'Bookman Old Style', 'Times New Roman', serif;
+}
 .default-cursor {
   cursor: url('img/cursor/cursor.png'), default;
 }
@@ -613,11 +623,11 @@ h4 {
   cursor: url('img/cursor/cursor.png'), default;
 }
 .scroll::-webkit-scrollbar-thumb {
-  /* Foreground */
+  cursor: url('img/cursor/cursor.png'), default;
   background: #311a0a;
 }
 .scroll::-webkit-scrollbar-track {
-  /* Background */
+  cursor: url('img/cursor/cursor.png'), default;
   background: sandybrown;
 }
 .sequence-container .sequence-background canvas {
@@ -1012,7 +1022,6 @@ h4 {
 .conversation .text p {
   margin-top: 0;
   margin-bottom: 10px;
-  text-indent: 1.5em;
 }
 .conversation .entries {
   flex: 1 2;
@@ -1030,6 +1039,7 @@ h4 {
   display: flex;
   flex-direction: row;
   margin-top: 10px;
+  margin-left: 10px;
   align-items: flex-start;
 }
 .conversation .line .portrait {
@@ -1043,4 +1053,7 @@ h4 {
 .conversation .line.response {
   padding-left: 20px;
   color: saddlebrown;
+}
+.conversation .line.narrator {
+  font-family: 'Bookman Old Style', 'Times New Roman', serif;
 }

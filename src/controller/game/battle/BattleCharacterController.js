@@ -55,6 +55,12 @@ export default class BattleCharacterController extends ControllerWithBattle {
 		);
 
 		this.addAutoEvent(
+			this.model,
+			'follow',
+			(bc) => this.startFollowing(bc, 99)
+		);
+
+		this.addAutoEvent(
 			this.model.characterId,
 			'change',
 			() => {

@@ -60,10 +60,26 @@ export default class ConversationLineRenderer extends DomRenderer {
 			});
 
 		}
+
+		this.updateLineText();
 	}
 
 	deactivateInternal() {
 		this.removeElement(this.container);
 	}
 
+	renderInternal() {
+		if (this.model.text.isDirty || this.model.isNarrator.isDirty) {
+			this.updateLineText();
+		}
+	}
+
+	updateLineText() {
+		this.text.innerHTML = Pixies.paragraphize(this.model.text.get());
+		if (this.model.isNarrator.get()) {
+			Pixies.addClass(this.container, 'narrator');
+		} else {
+			Pixies.removeClass(this.container, 'narrator');
+		}
+	}
 }

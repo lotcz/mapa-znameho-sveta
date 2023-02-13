@@ -44,6 +44,7 @@ export default class PartyController extends ControllerWithSaveGame {
 			() => this.runOnUpdate(() => this.saveGame.triggerEvent('trigger-resize'))
 		);
 
+
 	}
 
 }

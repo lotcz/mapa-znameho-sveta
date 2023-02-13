@@ -57,7 +57,6 @@
   .text p {
 	margin-top: 0;
 	margin-bottom: @m-2;
-	text-indent: 1.5em;
   }
 
   .entries {
@@ -79,7 +78,8 @@
   .line {
 	display: flex;
 	flex-direction: row;
-	margin-top: 10px;
+	margin-top: @m-2;
+	margin-left: @m-2;
 	align-items: flex-start;
 
 	.portrait {
@@ -95,6 +95,10 @@
 	&.response {
 	  padding-left: 20px;
 	  color: saddlebrown;
+	}
+
+	&.narrator {
+	  .small-text();
 	}
   }
 }
