@@ -13,7 +13,7 @@ export default class EditorBattleController extends ControllerNode {
 		super(game, model);
 
 		this.model = model;
-		
+
 		this.addChild(
 			new NullableNodeController(
 				this.game,

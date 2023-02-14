@@ -7,6 +7,7 @@ import NullableNodeController from "../basic/NullableNodeController";
 import SaveGameModel from "../../model/game/SaveGameModel";
 import ConditionalNodeController from "../basic/ConditionalNodeController";
 import {TIME_MORNING} from "../../model/game/TimeModel";
+import MenuModel from "../../model/menu/MenuModel";
 
 export default class GameController extends ControllerNode {
 
@@ -84,6 +85,7 @@ export default class GameController extends ControllerNode {
 		this.loadResourcesFromStorage().then(() => {
 			this.model.resources.addOnDirtyListener(() => this.isResourcesDirty = true);
 			console.log('resources loaded');
+			this.showMainMenu();
 			/*
 			this.loadGameFromStorage().then(() => {
 				console.log('savegame loaded');
@@ -133,6 +135,7 @@ export default class GameController extends ControllerNode {
 				const saveGame = new SaveGameModel();
 				saveGame.restoreState(state);
 				this.model.saveGame.set(saveGame);
+				this.model.menu.set(null);
 			} else {
 				console.log('no saved ui in storage');
 			}
@@ -164,5 +167,20 @@ export default class GameController extends ControllerNode {
 		const sequence = this.model.resources.sequences.getById(1);
 		save.animationSequence.set(sequence);
 		this.model.saveGame.set(save);
+		this.model.menu.set(null);
 	}
+
+	showMainMenu() {
+		const options = [
+			{text: 'Nová hra', onClick: () => this.startNewGame()},
+			{text: 'Nahrát pozici', onClick: () => this.loadGameFromStorage()},
+			{text: 'Nastavení', onClick: () => this.loadGameFromStorage()}
+		];
+		if (this.model.saveGame.isSet()) {
+			options.push({text: 'Pokračovat', onClick: () => this.startNewGame()});
+		}
+		const menu = MenuModel.createMenu('Menu', options);
+		this.model.menu.set(menu);
+	}
+
 }

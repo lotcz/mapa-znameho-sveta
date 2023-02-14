@@ -13,12 +13,29 @@
   pointer-events: none;
 
   div {
-	width: 250px;
-	height: 150px;
-	text-align: center;
-	line-height: 150px;
-	background-size: contain;
-	background-repeat: no-repeat;
-	background-image: url('img/paper.png');
+	border-radius: @m-2;
+  }
+}
+
+.main-menu-layer {
+  .default-cursor();
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .main-menu {
+	.decor-text();
+	border-radius: @m-2;
+
+	.item {
+	  &:hover {
+		color: #885f32;
+	  }
+	}
   }
 }

@@ -7,6 +7,10 @@ export default class DomRenderer extends RendererNode {
 	constructor(game, model, dom) {
 		super(game, model);
 		this.dom = dom;
+
+		if (!this.dom) {
+			console.error('DOM renderer created without DOM!');
+		}
 	}
 
 	addClass(css) {
