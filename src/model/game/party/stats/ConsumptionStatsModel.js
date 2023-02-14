@@ -30,13 +30,13 @@ export default class ConsumptionStatsModel extends ModelNode {
 
 		this.all = this.addProperty('all', new ModelNodeCollection(null, false));
 
-		this.hunger = this.addProperty('hunger', new StatModel(STAT_HUNGER, 1));
+		this.hunger = this.addProperty('hunger', new StatModel(STAT_HUNGER, 10));
 		this.all.add(this.hunger);
 
-		this.thirst = this.addProperty('thirst', new StatModel(STAT_THIRST, 1));
+		this.thirst = this.addProperty('thirst', new StatModel(STAT_THIRST, 10));
 		this.all.add(this.thirst);
 
-		this.temperature = this.addProperty('temperature', new StatModel(STAT_TEMPERATURE, 1));
+		this.temperature = this.addProperty('temperature', new StatModel(STAT_TEMPERATURE, 10));
 		this.all.add(this.temperature);
 	}
 

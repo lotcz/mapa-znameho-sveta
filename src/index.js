@@ -3,11 +3,11 @@ import GameController from "./controller/game/GameController";
 import GameRenderer from "./renderer/game/GameRenderer";
 import Stats from 'three/examples/jsm/libs/stats.module'
 
-const MAX_DELTA = 500;
-const DEBUG_MASTER = true;
+const MAX_DELTA = 1000;
+const DEBUG_MODE_ENABLED = true;
 const SHOW_STATS = false;
 
-const game = new GameModel();
+const game = new GameModel(DEBUG_MODE_ENABLED);
 
 const controller = new GameController(game);
 controller.activate();
@@ -15,7 +15,7 @@ controller.activate();
 const renderer = new GameRenderer(game, window.document.body);
 renderer.activate();
 
-if (DEBUG_MASTER) {
+if (DEBUG_MODE_ENABLED) {
 	window['game'] = game;
 }
 

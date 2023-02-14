@@ -3,7 +3,6 @@ import Vector2 from "../basic/Vector2";
 import ControlsModel from "./ControlsModel";
 import AssetCache from "../../class/AssetCache";
 import ResourcesModel from "./ResourcesModel";
-import SaveGameModel from "./SaveGameModel";
 import EditorModel from "../editor/EditorModel";
 import NullableNode from "../basic/NullableNode";
 
@@ -54,32 +53,38 @@ export default class GameModel extends ModelNode {
 	mainLayerMouseCoordinates;
 
 	/**
-	 * @type NullableNode
+	 * @type NullableNode<SaveGameModel>
 	 */
 	saveGame;
+
+	/**
+	 * @type NullableNode<MenuModel>
+	 */
+	menu;
 
 	/**
 	 * @type GlobalAudioModel
 	 */
 	audio;
 
-	constructor() {
-		super();
+	constructor(debugModeEnabled = true) {
+		super(false);
 
-		this.isInDebugMode = this.addProperty('isInDebugMode', new BoolValue(true));
+		this.isInDebugMode = this.addProperty('isInDebugMode', new BoolValue(debugModeEnabled));
 		this.resources = this.addProperty('resources', new ResourcesModel());
 		this.resources.restoreState(ResourcesJson);
 		this.assets = new AssetCache(this.resources);
+		this.audio = this.addProperty('audio', new GlobalAudioModel());
 		this.controls = this.addProperty('controls', new ControlsModel());
 		this.editor = this.addProperty('editor', new EditorModel());
+
 		this.viewBoxSize = this.addProperty('viewBoxSize', new Vector2());
 		this.mainLayerSize = this.addProperty('mainLayerSize', new Vector2());
 		this.mainLayerMouseCoordinates = this.addProperty('mainLayerMouseCoordinates', new Vector2());
 
-		this.saveGame = this.addProperty('saveGame', new NullableNode(() => new SaveGameModel()));
-		this.saveGame.set(new SaveGameModel());
+		this.saveGame = this.addProperty('saveGame', new NullableNode());
+		this.menu = this.addProperty('menu', new NullableNode());
 
-		this.audio = this.addProperty('audio', new GlobalAudioModel());
 	}
 
 	getTableByName(name) {

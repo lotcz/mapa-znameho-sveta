@@ -84,9 +84,11 @@ export default class GameController extends ControllerNode {
 		this.loadResourcesFromStorage().then(() => {
 			this.model.resources.addOnDirtyListener(() => this.isResourcesDirty = true);
 			console.log('resources loaded');
+			/*
 			this.loadGameFromStorage().then(() => {
 				console.log('savegame loaded');
 			});
+			 */
 		});
 	}
 
@@ -128,7 +130,9 @@ export default class GameController extends ControllerNode {
 		try {
 			const state = await localForage.getItem('kobok-autosave');
 			if (state) {
-				this.model.saveGame.restoreState(state);
+				const saveGame = new SaveGameModel();
+				saveGame.restoreState(state);
+				this.model.saveGame.set(saveGame);
 			} else {
 				console.log('no saved ui in storage');
 			}
@@ -138,7 +142,9 @@ export default class GameController extends ControllerNode {
 	}
 
 	async saveGameToStorage() {
-		const state = this.model.saveGame.getState();
+		const saveGame = this.model.saveGame.get();
+		if (!saveGame) return;
+		const state = saveGame.getState();
 		try {
 			await localForage.setItem('kobok-autosave', state);
 		} catch (err) {
