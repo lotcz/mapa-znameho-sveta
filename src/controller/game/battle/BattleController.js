@@ -8,6 +8,7 @@ import {ImageHelper} from "../../../class/basic/ImageHelper";
 import ControllerWithSaveGame from "../../basic/ControllerWithSaveGame";
 import NpcBattleCharacterController from "./NpcBattleCharacterController";
 import Vector2 from "../../../model/basic/Vector2";
+import {CURSOR_TYPE_DEFAULT} from "../../../model/game/battle/BattleModel";
 
 export default class BattleController extends ControllerWithSaveGame {
 
@@ -298,5 +299,18 @@ export default class BattleController extends ControllerWithSaveGame {
 		});
 
 		 */
+	}
+
+	updateCursorType() {
+		this.model.cursorType.set(this.getCursorType());
+	}
+
+	getCursorType() {
+		if (this.model.isHoveringNoGo.get()) {
+			return CURSOR_TYPE_DEFAULT;
+		}
+		if (this.hoveringBattleCharacter.isSet()) {
+			const battleCh
+		}
 	}
 }

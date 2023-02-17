@@ -37,18 +37,16 @@ export default class BattleCharacterRenderer extends RendererNode {
 			return;
 		}
 
+		if (this.children.length > 0) {
+			console.log('resources loaded once again after initialized');
+			return;
+		}
+
 		if (!this.animation) {
-			console.log('no animation');
 			return;
 		}
 
 		if (this.useSkinMaterial && !this.skinMaterial) {
-			console.log('no skin material');
-			return;
-		}
-
-		if (this.children.length > 0) {
-			console.log('resources loaded once again after initialized');
 			return;
 		}
 

@@ -84,7 +84,6 @@ export default class GameController extends ControllerNode {
 	activateInternal() {
 		this.loadResourcesFromStorage().then(() => {
 			this.model.resources.addOnDirtyListener(() => this.isResourcesDirty = true);
-			console.log('resources loaded');
 			this.showMainMenu();
 			/*
 			this.loadGameFromStorage().then(() => {
@@ -137,10 +136,10 @@ export default class GameController extends ControllerNode {
 				this.model.saveGame.set(saveGame);
 				this.model.menu.set(null);
 			} else {
-				console.log('no saved ui in storage');
+				console.log('no saved game in storage');
 			}
 		} catch (err) {
-			console.error('Error when loading ui.', err);
+			console.error('Error when loading saved game.', err);
 		}
 	}
 

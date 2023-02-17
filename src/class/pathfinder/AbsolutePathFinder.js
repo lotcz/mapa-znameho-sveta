@@ -25,7 +25,6 @@ export default class AbsolutePathFinder {
 		}
 		const cache = this.getCache(this.end);
 		if (cache === null || cache.cameFrom === null) return false;
-		console.log(cache.distance);
 		return this.backtrack([this.end], cache.cameFrom);
 	}
 

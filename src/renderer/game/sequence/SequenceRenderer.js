@@ -46,7 +46,6 @@ export default class SequenceRenderer extends DomRenderer {
 		// preload sounds
 		const sounds = this.model.stepsText.filter((step) => step.audioUrl.isSet()).map((step) => step.audioUrl.get());
 		const uris = Pixies.arrayUnique(sounds);
-		console.log(uris);
 		uris.forEach((uri) => this.game.assets.getAsset(uri));
 	}
 

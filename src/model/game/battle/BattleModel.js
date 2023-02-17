@@ -8,6 +8,21 @@ import BoolValue from "../../basic/BoolValue";
 import BattleItemModel from "./BattleItemModel";
 import BattlePartyCharacterModel from "./BattlePartyCharacterModel";
 import BattleNpcCharacterModel from "./BattleNpcCharacterModel";
+import StringValue from "../../basic/StringValue";
+
+export const CURSOR_TYPE_DEFAULT = 'default';
+export const CURSOR_TYPE_WALK = 'walk';
+export const CURSOR_TYPE_EXIT = 'exit';
+export const CURSOR_TYPE_TALK = 'talk';
+export const CURSOR_TYPE_EYE = 'eye';
+
+export const CURSOR_TYPES = [
+	CURSOR_TYPE_DEFAULT,
+	CURSOR_TYPE_WALK,
+	CURSOR_TYPE_EXIT,
+	CURSOR_TYPE_TALK,
+	CURSOR_TYPE_EYE
+];
 
 export default class BattleModel extends ModelNode {
 
@@ -94,6 +109,11 @@ export default class BattleModel extends ModelNode {
 	 */
 	hoveringSpecial;
 
+	/**
+	 * @type StringValue
+	 */
+	cursorType;
+
 	constructor() {
 		super();
 
@@ -118,9 +138,11 @@ export default class BattleModel extends ModelNode {
 		this.hoveringBattleCharacterRaycast.addOnChangeListener(() => this.updateHoveringCharacter());
 		this.hoveringBattleCharacter = this.addProperty('hoveringBattleCharacter', new NullableNode(null, false));
 		this.hoveringSpecial = this.addProperty('hoveringSpecial', new NullableNode(null, false));
+		this.cursorType = this.addProperty('cursorType', new StringValue(CURSOR_TYPE_DEFAULT, false));
 	}
 
 	updateHoveringCharacter() {
 		this.hoveringBattleCharacter.set(this.hoveringBattleCharacterRaycast.isSet() ? this.hoveringBattleCharacterRaycast.get() : this.hoveringBattleCharacterTile.get());
 	}
+
 }

@@ -53,11 +53,11 @@ export default class GameRenderer extends DomRenderer {
 		if (initLoading) Pixies.destroyElement(initLoading);
 
 		this.saveGameLayer = this.addElement('div', 'savegame-layer container container-host row');
-		//this.menuLayer = this.addElement('div', 'menu-layer');
 		this.editorLayer = this.addElement('div', 'editor-layer');
 
 		this.updateLoading();
 		this.model.assets.isLoading.addOnChangeListener(this.updateLoadingHandler);
+		this.model.assets.loaders.addEventListener('change', this.updateLoadingHandler);
 
 		this.updateDebugMenu();
 		this.model.isInDebugMode.addOnChangeListener(this.updateDebugMenuHandler);
@@ -66,23 +66,30 @@ export default class GameRenderer extends DomRenderer {
 
 	deactivateInternal() {
 		this.model.assets.isLoading.removeOnChangeListener(this.updateLoadingHandler);
+		this.model.assets.loaders.removeEventListener('change', this.updateLoadingHandler);
 		this.model.isInDebugMode.removeOnChangeListener(this.updateDebugMenuHandler);
 		this.removeElement(this.saveGameLayer);
-		//this.removeElement(this.menuLayer);
 		this.removeElement(this.editorLayer);
 	}
 
 	updateLoading() {
-		if (this.loading) {
+		const isLoading = this.model.assets.isLoading.get();
+		if (this.loading && !isLoading) {
 			this.removeElement(this.loading);
 			this.loading = null;
 		}
-		if (this.model.assets.isLoading.get()) {
-			this.loading = this.addElement( 'div', 'loading container');
-			const paper = Pixies.createElement(this.loading, 'div', 'paper');
-			const inner = Pixies.createElement(paper, 'div', 'inner p-3');
-			const content = Pixies.createElement(inner, 'div', 'm-3 p-3');
-			content.innerText = Pixies.randomElement(['Obětuji ovci...', 'Rozdělávám oheň...', 'Zpívám bohům...', 'Zahajuji rituál...']);
+		if (isLoading) {
+			if (!this.loading) {
+				this.loading = this.addElement('div', 'loading container');
+				const paper = Pixies.createElement(this.loading, 'div', 'paper');
+				const inner = Pixies.createElement(paper, 'div', 'inner p-3');
+				this.loadingContent = Pixies.createElement(inner, 'div', 'm-3 p-3');
+				this.loadersCount = this.game.assets.loaders.count();
+			}
+			if (this.game.assets.loaders.count() > this.loadersCount) {
+				this.loadersCount = this.game.assets.loaders.count();
+			}
+			this.loadingContent.innerText = `${this.game.assets.loaders.count()}/${this.loadersCount}`;
 		}
 	}
 
