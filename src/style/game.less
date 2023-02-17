@@ -58,37 +58,31 @@
 	-ms-user-select: none;
   }
 
-  button, a {
+  .battle, button, a {
 	.default-cursor();
   }
 
-  .battle {
-	cursor: url('img/cursor/cursor-walk.png'), pointer;
-  }
-
-  .battle.no-go {
-	.default-cursor();
-  }
-
-  .battle.seq-hover,
-  .battle.c-eye-hover {
+  .battle.cursor-eye {
 	cursor: url('img/cursor/cursor-eye.png'), pointer;
   }
 
-  .battle.exit-hover,
-  .battle.c-loc-hover {
+  .battle.cursor-walk {
+	cursor: url('img/cursor/cursor-walk.png'), pointer;
+  }
+
+  .battle.cursor-exit {
 	cursor: url('img/cursor/cursor-exit.png'), pointer;
   }
 
-  .battle.talk-hover {
+  .battle.cursor-talk {
 	cursor: url('img/cursor/cursor-mouth.png'), pointer;
   }
 
-  .battle.attack-hover {
+  .battle.cursor-attack {
 	cursor: url('img/cursor/cursor-dagger.png'), pointer;
   }
 
-  .battle.switch-character-hover {
+  .battle.cursor-switch-character {
 	cursor: url('img/cursor/cursor-character.png'), pointer;
   }
 

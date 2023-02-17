@@ -13,8 +13,8 @@ import NullableNodeRenderer from "../../basic/NullableNodeRenderer";
 import BattleMapRenderer from "./BattleMapRenderer";
 import BattleItemRenderer from "./BattleItemRenderer";
 import ConditionalNodeRenderer from "../../basic/ConditionalNodeRenderer";
-import {SPECIAL_TYPES} from "../../../model/game/battle/battlemap/BattleSpecialModel";
 import BattleRingRenderer from "./BattleRingRenderer";
+import {CURSOR_TYPES} from "../../../model/game/battle/BattleModel";
 
 export default class BattleRenderer extends DomRenderer {
 
@@ -237,47 +237,12 @@ export default class BattleRenderer extends DomRenderer {
 			this.renderBgImage();
 			this.updateSvgViewBox();
 		}
-
-		if (this.model.isHoveringNoGo.isDirty) {
-			if (this.model.isHoveringNoGo.get()) {
-				Pixies.addClass(this.container, 'no-go');
-			} else {
-				Pixies.removeClass(this.container, 'no-go');
+		if (this.model.cursorType.isDirty) {
+			CURSOR_TYPES.forEach((type) => Pixies.removeClass(this.container, `cursor-${type}`));
+			if (this.model.cursorType.isSet()) {
+				Pixies.addClass(this.container, `cursor-${this.model.cursorType.get()}`);
 			}
 		}
-
-		if (this.model.hoveringSpecial.isDirty) {
-			SPECIAL_TYPES.forEach((type) => Pixies.removeClass(this.container, `${type}-hover`));
-			if (this.model.hoveringSpecial.isSet()) {
-				Pixies.addClass(this.container, `${this.model.hoveringSpecial.get().type.get()}-hover`);
-			}
-		}
-
-		if (this.model.hoveringBattleCharacter.isDirty) {
-			Pixies.removeClass(this.container, `talk-hover`);
-			Pixies.removeClass(this.container, `attack-hover`);
-			Pixies.removeClass(this.container, `switch-character-hover`);
-			if (this.model.hoveringBattleCharacter.isSet()) {
-				const battleChar = this.model.hoveringBattleCharacter.get();
-				const isParty = this.model.partyCharacters.contains(battleChar);
-				const isSelected = isParty && this.model.partyCharacters.selectedNode.equalsTo(battleChar);
-				if (isParty) {
-					if (!isSelected) {
-						Pixies.addClass(this.container, `switch-character-hover`);
-					}
-				} else {
-					if (battleChar.isAggressive.get()) {
-						Pixies.addClass(this.container, `attack-hover`);
-					} else {
-						const char = battleChar.character.get();
-						if (char.npcConversationId.isSet()) {
-							Pixies.addClass(this.container, `talk-hover`);
-						}
-					}
-				}
-			}
-		}
-
 		this.composer.render();
 	}
 

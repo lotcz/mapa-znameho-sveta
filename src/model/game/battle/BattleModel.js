@@ -15,13 +15,17 @@ export const CURSOR_TYPE_WALK = 'walk';
 export const CURSOR_TYPE_EXIT = 'exit';
 export const CURSOR_TYPE_TALK = 'talk';
 export const CURSOR_TYPE_EYE = 'eye';
+export const CURSOR_TYPE_ATTACK = 'attack';
+export const CURSOR_TYPE_SWITCH_CHARACTER = 'switch-character';
 
 export const CURSOR_TYPES = [
 	CURSOR_TYPE_DEFAULT,
 	CURSOR_TYPE_WALK,
 	CURSOR_TYPE_EXIT,
 	CURSOR_TYPE_TALK,
-	CURSOR_TYPE_EYE
+	CURSOR_TYPE_EYE,
+	CURSOR_TYPE_ATTACK,
+	CURSOR_TYPE_SWITCH_CHARACTER
 ];
 
 export default class BattleModel extends ModelNode {

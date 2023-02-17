@@ -544,31 +544,27 @@ h4 {
   -webkit-touch-callout: none;
   -ms-user-select: none;
 }
+.savegame-layer .battle,
 .savegame-layer button,
 .savegame-layer a {
   cursor: url('img/cursor/cursor.png'), default;
 }
-.savegame-layer .battle {
-  cursor: url('img/cursor/cursor-walk.png'), pointer;
-}
-.savegame-layer .battle.no-go {
-  cursor: url('img/cursor/cursor.png'), default;
-}
-.savegame-layer .battle.seq-hover,
-.savegame-layer .battle.c-eye-hover {
+.savegame-layer .battle.cursor-eye {
   cursor: url('img/cursor/cursor-eye.png'), pointer;
 }
-.savegame-layer .battle.exit-hover,
-.savegame-layer .battle.c-loc-hover {
+.savegame-layer .battle.cursor-walk {
+  cursor: url('img/cursor/cursor-walk.png'), pointer;
+}
+.savegame-layer .battle.cursor-exit {
   cursor: url('img/cursor/cursor-exit.png'), pointer;
 }
-.savegame-layer .battle.talk-hover {
+.savegame-layer .battle.cursor-talk {
   cursor: url('img/cursor/cursor-mouth.png'), pointer;
 }
-.savegame-layer .battle.attack-hover {
+.savegame-layer .battle.cursor-attack {
   cursor: url('img/cursor/cursor-dagger.png'), pointer;
 }
-.savegame-layer .battle.switch-character-hover {
+.savegame-layer .battle.cursor-switch-character {
   cursor: url('img/cursor/cursor-character.png'), pointer;
 }
 .portrait img {

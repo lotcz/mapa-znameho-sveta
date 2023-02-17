@@ -8,7 +8,21 @@ import {ImageHelper} from "../../../class/basic/ImageHelper";
 import ControllerWithSaveGame from "../../basic/ControllerWithSaveGame";
 import NpcBattleCharacterController from "./NpcBattleCharacterController";
 import Vector2 from "../../../model/basic/Vector2";
-import {CURSOR_TYPE_DEFAULT} from "../../../model/game/battle/BattleModel";
+import {
+	CURSOR_TYPE_ATTACK,
+	CURSOR_TYPE_DEFAULT,
+	CURSOR_TYPE_EXIT,
+	CURSOR_TYPE_EYE,
+	CURSOR_TYPE_SWITCH_CHARACTER,
+	CURSOR_TYPE_TALK,
+	CURSOR_TYPE_WALK
+} from "../../../model/game/battle/BattleModel";
+import {
+	SPECIAL_TYPE_CONVERSATION_EYE,
+	SPECIAL_TYPE_CONVERSATION_LOC,
+	SPECIAL_TYPE_EXIT,
+	SPECIAL_TYPE_SEQUENCE
+} from "../../../model/game/battle/battlemap/BattleSpecialModel";
 
 export default class BattleController extends ControllerWithSaveGame {
 
@@ -97,6 +111,13 @@ export default class BattleController extends ControllerWithSaveGame {
 				this.model.cornerCoordinates.set(this.model.coordinates.subtract(halfScreenSize));
 				this.onMouseMove();
 			},
+			true
+		);
+
+		this.addAutoEventMultiple(
+			[this.model.isHoveringNoGo, this.model.hoveringSpecial, this.model.hoveringBattleCharacter, this.model.partyCharacters.selectedNode],
+			'change',
+			() => this.updateCursorType(),
 			true
 		);
 
@@ -306,11 +327,34 @@ export default class BattleController extends ControllerWithSaveGame {
 	}
 
 	getCursorType() {
-		if (this.model.isHoveringNoGo.get()) {
-			return CURSOR_TYPE_DEFAULT;
+		if (this.model.hoveringBattleCharacter.isSet()) {
+			const battleChar = this.model.hoveringBattleCharacter.get();
+			const isParty = this.model.partyCharacters.contains(battleChar);
+			if (isParty) {
+				const isSelected = this.model.partyCharacters.selectedNode.equalsTo(battleChar);
+				if (!isSelected) {
+					return CURSOR_TYPE_SWITCH_CHARACTER;
+				}
+			} else {
+				if (battleChar.isAggressive.get()) {
+					return CURSOR_TYPE_ATTACK;
+				} else {
+					const char = battleChar.character.get();
+					if (char.npcConversationId.isSet()) {
+						return CURSOR_TYPE_TALK;
+					}
+				}
+			}
 		}
-		if (this.hoveringBattleCharacter.isSet()) {
-			const battleCh
+		if (this.model.hoveringSpecial.isSet()) {
+			const special = this.model.hoveringSpecial.get();
+			if (special.type.equalsTo(SPECIAL_TYPE_EXIT) || special.type.equalsTo(SPECIAL_TYPE_CONVERSATION_LOC)) {
+				return CURSOR_TYPE_EXIT;
+			}
+			if (special.type.equalsTo(SPECIAL_TYPE_SEQUENCE) ||special.type.equalsTo(SPECIAL_TYPE_CONVERSATION_EYE)) {
+				return CURSOR_TYPE_EYE;
+			}
 		}
+		return (this.model.isHoveringNoGo.get()) ? CURSOR_TYPE_DEFAULT : CURSOR_TYPE_WALK;
 	}
 }
