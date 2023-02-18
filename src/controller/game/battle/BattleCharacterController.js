@@ -239,17 +239,12 @@ export default class BattleCharacterController extends ControllerWithBattle {
 		}
 	}
 
-	startFollowing(battleCharacter, steps = 1) {
-		this.model.followStepsRemaining.set(steps + 1);
-		this.model.followBattleCharacter.set(battleCharacter);
-		return this.updateFollowing();
-	}
-
 	follow() {
 		const battleCharacter = this.model.followBattleCharacter.get();
 		if (!battleCharacter) return false;
 
-		const free = PathFinder.getFreeNeighborPositions(battleCharacter.position, this.getBlocks());
+		const position = battleCharacter.targetPosition.isSet() ? battleCharacter.targetPosition.get() : battleCharacter.position;
+		const free = PathFinder.getFreeNeighborPositions(position, this.getBlocks());
 		if (free.length > 0) {
 			const closest = PathFinder.findClosest(this.model.position, free);
 			return this.goTo(closest);
@@ -261,13 +256,17 @@ export default class BattleCharacterController extends ControllerWithBattle {
 	updateFollowing() {
 		if (this.model.followBattleCharacter.isSet()) {
 			const followed = this.model.followBattleCharacter.get();
-			const neighbors = PathFinder.getNeighborPositions(this.model.position.round());
-			const caught = neighbors.some((n) => n.equalsTo(followed.position.round()));
-			if (caught) {
-				this.model.triggerEvent('caught-up', followed);
-				this.model.followStepsRemaining.set(0);
-				this.model.followBattleCharacter.set(null);
-				return true;
+			const isMoving = followed.targetPosition.isSet();
+			if (!isMoving) {
+				const neighbors = PathFinder.getNeighborPositions(this.model.position.round());
+				const caught = neighbors.some((n) => n.equalsTo(followed.position.round()));
+				if (caught) {
+					this.model.triggerEvent('caught-up', followed);
+					this.model.state.set(CHARACTER_STATE_IDLE);
+					this.model.followStepsRemaining.set(0);
+					this.model.followBattleCharacter.set(null);
+					return true;
+				}
 			}
 		}
 
@@ -279,5 +278,11 @@ export default class BattleCharacterController extends ControllerWithBattle {
 		}
 
 		return this.follow();
+	}
+
+	startFollowing(battleCharacter, steps = 1) {
+		this.model.followStepsRemaining.set(steps + 1);
+		this.model.followBattleCharacter.set(battleCharacter);
+		return this.updateFollowing();
 	}
 }

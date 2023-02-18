@@ -12,7 +12,6 @@ import {SVG} from "@svgdotjs/svg.js";
 import NullableNodeRenderer from "../../basic/NullableNodeRenderer";
 import BattleMapRenderer from "./BattleMapRenderer";
 import BattleItemRenderer from "./BattleItemRenderer";
-import ConditionalNodeRenderer from "../../basic/ConditionalNodeRenderer";
 import BattleRingRenderer from "./BattleRingRenderer";
 import {CURSOR_TYPES} from "../../../model/game/battle/BattleModel";
 
@@ -85,13 +84,12 @@ export default class BattleRenderer extends DomRenderer {
 		);
 
 		this.addChild(
-			new ConditionalNodeRenderer(
+			new NullableNodeRenderer(
 				this.game,
-				this.model.hoveringBattleCharacterTile,
-				() => this.model.hoveringBattleCharacterTile.get() || this.game.isInDebugMode.get(),
-				() => new BattleRingRenderer(
+				this.model.hoveringBattleCharacter,
+				(m) => new BattleRingRenderer(
 					this.game,
-					this.model.mouseHoveringTile,
+					m.position,
 					this.drawForeground
 				)
 			)

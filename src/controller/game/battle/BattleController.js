@@ -312,14 +312,11 @@ export default class BattleController extends ControllerWithSaveGame {
 		}
 
 		character.triggerEvent('go-to', this.model.mouseHoveringTile);
-		/*
 		this.model.partyCharacters.forEach((ch) => {
 			if (ch !== character) {
 				ch.triggerEvent('follow', character);
 			}
 		});
-
-		 */
 	}
 
 	updateCursorType() {
