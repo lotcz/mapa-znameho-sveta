@@ -79,39 +79,6 @@ h4 {
   bottom: 0;
   right: 0;
 }
-.with-tooltip {
-  position: relative;
-  display: inline-block;
-}
-.with-tooltip .tooltip {
-  position: absolute;
-  z-index: 1;
-  visibility: hidden;
-  bottom: 125%;
-  left: 50%;
-  background-color: #101010;
-  color: #fff;
-  text-align: left;
-  padding: 5px;
-  border-radius: 5px;
-  font-weight: normal;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.with-tooltip .tooltip::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #101010 transparent transparent transparent;
-}
-.with-tooltip:hover .tooltip {
-  visibility: visible;
-  opacity: 1;
-}
 .m-0,
 .mt-0,
 .my-0 {
@@ -516,6 +483,7 @@ h4 {
 }
 .decor-text {
   font-family: 'Fell', 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
+  font-size: 22pt;
 }
 .small-text {
   font-family: 'Bookman Old Style', 'Times New Roman', serif;
@@ -526,14 +494,15 @@ h4 {
 .savegame-layer {
   cursor: url('img/cursor/cursor.png'), default;
   font-family: 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
-  color: #311a0a;
   font-size: 16pt;
+  color: #311a0a;
 }
 .savegame-layer h1,
 .savegame-layer h2,
 .savegame-layer h3,
 .savegame-layer h4 {
   font-family: 'Fell', 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
+  font-size: 22pt;
 }
 .savegame-layer > * {
   -webkit-user-select: none;
@@ -614,9 +583,9 @@ h4 {
   scrollbar-width: thin;
 }
 .scroll::-webkit-scrollbar {
+  cursor: url('img/cursor/cursor.png'), default;
   width: 10px;
   height: 10px;
-  cursor: url('img/cursor/cursor.png'), default;
 }
 .scroll::-webkit-scrollbar-thumb {
   cursor: url('img/cursor/cursor.png'), default;
@@ -625,6 +594,39 @@ h4 {
 .scroll::-webkit-scrollbar-track {
   cursor: url('img/cursor/cursor.png'), default;
   background: sandybrown;
+}
+.with-tooltip {
+  position: relative;
+  display: inline-block;
+}
+.with-tooltip .tooltip {
+  position: absolute;
+  z-index: 1;
+  visibility: hidden;
+  bottom: 125%;
+  left: 50%;
+  background-color: #101010;
+  color: #fff;
+  text-align: left;
+  padding: 5px;
+  border-radius: 5px;
+  font-weight: normal;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.with-tooltip .tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #101010 transparent transparent transparent;
+}
+.with-tooltip:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
 }
 .sequence-container .sequence-background canvas {
   position: absolute;
@@ -664,17 +666,10 @@ h4 {
   text-align: center;
 }
 .sequence-container .sequence-text div {
+  font-family: 'Fell', 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
+  font-size: 22pt;
   padding: 20px;
   color: #e0e0e0;
-  font-size: 22pt;
-}
-.board {
-  display: flex;
-  border-radius: 10px;
-  box-shadow: #311a0a 0 0 60px;
-}
-.overlay {
-  background-color: rgba(150, 150, 150, 0.5);
 }
 .loading {
   position: fixed;
@@ -702,10 +697,11 @@ h4 {
 }
 .main-menu-layer .main-menu {
   font-family: 'Fell', 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
+  font-size: 22pt;
   border-radius: 10px;
 }
 .main-menu-layer .main-menu .item:hover {
-  color: #885f32;
+  color: darkred;
 }
 .map-menu {
   display: flex;

@@ -4,12 +4,8 @@
 
 @orange: sandybrown;
 @gold: #e0b050;
-
-@light: #E2E2E2;
-@medium: #606060;
-@dark: #202020;
-
-@inventory-slot-size: 65px;
+@red: darkred;
+@white: #e0e0e0;
 
 @font-face {
   font-family: 'Vollkorn';
@@ -28,6 +24,7 @@
 
 .decor-text {
   font-family: 'Fell', 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
+  font-size: 22pt;
 }
 
 .small-text {
@@ -42,7 +39,6 @@
   .default-cursor();
   .normal-text();
   color: @dark-brown;
-  font-size: 16pt;
 
   h1, h2, h3, h4 {
 	.decor-text();
@@ -142,20 +138,57 @@
   scrollbar-width: thin;
 
   &::-webkit-scrollbar {
+	.default-cursor();
 	width: @m-2;
 	height: @m-2;
-	.default-cursor();
   }
 
   &::-webkit-scrollbar-thumb {
 	.default-cursor();
-	background: #311a0a;
+	background: @dark-brown;
   }
 
   &::-webkit-scrollbar-track {
 	.default-cursor();
-	background: sandybrown;
+	background: @orange;
   }
+}
+
+.with-tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.with-tooltip .tooltip {
+  position: absolute;
+  z-index: 1;
+  visibility: hidden;
+  bottom: 125%;
+  left: 50%;
+  background-color: #101010;
+  color: #fff;
+  text-align: left;
+  padding: @m-1;
+  border-radius: @m-1;
+  font-weight: normal;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.with-tooltip .tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #101010 transparent transparent transparent;
+}
+
+.with-tooltip:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
 }
 
 .sequence-container {
@@ -195,16 +228,10 @@
 	text-align: center;
 
 	div {
+	  .decor-text();
 	  padding: @m-3;
-	  color: #e0e0e0;
-	  font-size: 22pt;
+	  color: @white;
 	}
 
   }
-}
-
-.board {
-  display: flex;
-  border-radius: 10px;
-  box-shadow: #311a0a 0 0 60px;
 }

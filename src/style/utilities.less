@@ -96,43 +96,6 @@ h1, h2, h3, h4 {
   right: 0;
 }
 
-.with-tooltip {
-  position: relative;
-  display: inline-block;
-}
-
-.with-tooltip .tooltip {
-  position: absolute;
-  z-index: 1;
-  visibility: hidden;
-  bottom: 125%;
-  left: 50%;
-  background-color: #101010;
-  color: #fff;
-  text-align: left;
-  padding: @m-1;
-  border-radius: @m-1;
-  font-weight: normal;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.with-tooltip .tooltip::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #101010 transparent transparent transparent;
-}
-
-.with-tooltip:hover .tooltip {
-  visibility: visible;
-  opacity: 1;
-}
-
 .m-0, .mt-0, .my-0 {
   margin-top: 0;
 }

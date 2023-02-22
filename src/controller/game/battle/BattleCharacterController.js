@@ -149,6 +149,9 @@ export default class BattleCharacterController extends ControllerWithBattle {
 	}
 
 	goTo(position) {
+		if (this.model.position.round().equalsTo(position)) {
+			return;
+		}
 
 		const blocks = this.getBlocks();
 
@@ -190,12 +193,16 @@ export default class BattleCharacterController extends ControllerWithBattle {
 	arrived(delta) {
 		//this.model.triggerEvent('arrived', this.model.position);
 
+		const blocks = this.getBlocks();
+
 		if (this.pathToGo.length > 0) {
-			this.startMovement(this.pathToGo.shift(), delta);
-			return;
+			const next = this.pathToGo.shift();
+			if (!PathFinder.isTileBlocked(next, blocks)) {
+				this.startMovement(next, delta);
+				return;
+			}
 		}
 
-		const blocks = this.getBlocks();
 		if (this.checkBlocks(blocks)) {
 			this.model.targetPosition.set(null);
 			if (!this.updateFollowing()) {

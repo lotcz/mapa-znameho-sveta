@@ -24,6 +24,8 @@ import {
 	SPECIAL_TYPE_SEQUENCE
 } from "../../../model/game/battle/battlemap/BattleSpecialModel";
 
+const CURSOR_OFFSET = new Vector2(12, 12);
+
 export default class BattleController extends ControllerWithSaveGame {
 
 	/**
@@ -216,7 +218,7 @@ export default class BattleController extends ControllerWithSaveGame {
 		this.runOnUpdate( () => {
 			const corner = this.model.coordinates.subtract(this.game.mainLayerSize.multiply(0.5 / this.model.zoom.get()));
 			const coords = corner.add(this.game.mainLayerMouseCoordinates.multiply(1 / this.model.zoom.get()));
-			this.model.mouseCoordinates.set(coords);
+			this.model.mouseCoordinates.set(coords.add(CURSOR_OFFSET));
 		});
 		this.mouseMoved = true;
 	}
@@ -324,14 +326,15 @@ export default class BattleController extends ControllerWithSaveGame {
 	}
 
 	getCursorType() {
+		if (this.model.partyCharacters.selectedNode.isEmpty()) {
+			return CURSOR_TYPE_DEFAULT;
+		}
 		if (this.model.hoveringBattleCharacter.isSet()) {
 			const battleChar = this.model.hoveringBattleCharacter.get();
 			const isParty = this.model.partyCharacters.contains(battleChar);
 			if (isParty) {
 				const isSelected = this.model.partyCharacters.selectedNode.equalsTo(battleChar);
-				if (!isSelected) {
-					return CURSOR_TYPE_SWITCH_CHARACTER;
-				}
+				return isSelected ? CURSOR_TYPE_DEFAULT : CURSOR_TYPE_SWITCH_CHARACTER;
 			} else {
 				if (battleChar.isAggressive.get()) {
 					return CURSOR_TYPE_ATTACK;
