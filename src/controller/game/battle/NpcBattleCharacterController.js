@@ -1,6 +1,5 @@
 import ControllerWithBattle from "../../basic/ControllerWithBattle";
 import Pixies from "../../../class/basic/Pixies";
-import PathFinder from "../../../class/pathfinder/PathFinder";
 
 const IDLE_ACTION_TIMEOUT = 15000;
 const IDLE_ACTION_CHANCE = 0.5;
@@ -31,7 +30,7 @@ export default class NpcBattleCharacterController extends ControllerWithBattle {
 	}
 
 	performIdleAction() {
-		const free = PathFinder.getFreeNeighborPositions(this.model.homePosition, this.battleMap.getBlocks(), 5);
+		const free = this.battle.pathFinder.getFreeNeighborPositions(this.model.homePosition, 5);
 		if (free.length === 0) return;
 		const rand = Pixies.randomElement(free);
 		this.model.triggerEvent('go-to', rand);

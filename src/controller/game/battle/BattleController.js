@@ -200,6 +200,17 @@ export default class BattleController extends ControllerWithSaveGame {
 			}
 		);
 
+		this.addAutoEventMultiple(
+			[this.model.partyCharacters, this.model.npcCharacters],
+			'change',
+			() => {
+				const partyCharacters = this.model.partyCharacters.map((ch) => ch.position);
+				const npcCharacters = this.model.npcCharacters.map((ch) => ch.position);
+				this.model.pathFinder.setDynamicBlocks(partyCharacters.concat(npcCharacters));
+			},
+			true
+		);
+
 	}
 
 	updateInternal(delta) {
@@ -243,7 +254,7 @@ export default class BattleController extends ControllerWithSaveGame {
 	onHoveringTileChanged() {
 		const battleMap = this.model.battleMap.get();
 		const tile = this.model.mouseHoveringTile;
-		const blocked = battleMap.isTileBlocked(tile);
+		const blocked = this.model.pathFinder.isBlockedStatic(tile);
 		this.model.isHoveringNoGo.set(blocked);
 
 		let special = battleMap.specials.find((s) => s.position.equalsTo(tile));
@@ -314,11 +325,14 @@ export default class BattleController extends ControllerWithSaveGame {
 		}
 
 		character.triggerEvent('go-to', this.model.mouseHoveringTile);
+		/*
 		this.model.partyCharacters.forEach((ch) => {
 			if (ch !== character) {
 				ch.triggerEvent('follow', character);
 			}
 		});
+		
+		 */
 	}
 
 	updateCursorType() {

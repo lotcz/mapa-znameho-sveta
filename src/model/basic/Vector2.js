@@ -92,12 +92,6 @@ export default class Vector2 extends ModelNode {
 		}
 	}
 
-	static fromArray(arr) {
-		const v = new Vector2();
-		v.setFromArray(arr);
-		return v;
-	}
-
 	clone() {
 		return new Vector2(this.x, this.y);
 	}
@@ -124,6 +118,36 @@ export default class Vector2 extends ModelNode {
 			Math.PI - angle :
 			angle;
 		return result || 0;
+	}
+
+	getNeighborPositions(size = 1, includeCenter = false) {
+		const neighbors = [];
+		const maxX = this.x + size;
+		for (let x = this.x - size; x <= maxX; x++) {
+			const maxY = this.y + size;
+			for (let y = this.y - size; y <= maxY; y++) {
+				const n = new Vector2(x, y);
+				if (includeCenter || !this.equalsTo(n)) {
+					neighbors.push(n);
+				}
+			}
+		}
+		return neighbors;
+	}
+
+	getClosest(positions) {
+		if ((!positions) || positions.length === 0) return null;
+		if (positions.length === 1) return positions[0];
+		let closest = positions[0];
+		let distance = this.distanceTo(closest);
+		for (let i = 1, max = positions.length; i < max; i++) {
+			const d = this.distanceTo(positions[i]);
+			if (d < distance) {
+				closest = positions[i];
+				distance = d;
+			}
+		}
+		return closest;
 	}
 
 	/**

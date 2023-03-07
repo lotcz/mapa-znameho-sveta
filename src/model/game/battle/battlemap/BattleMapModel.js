@@ -5,7 +5,6 @@ import ModelNodeCollection from "../../../basic/ModelNodeCollection";
 import BattleSpriteModel from "./BattleSpriteModel";
 import BattleSpecialModel, {SPECIAL_TYPE_BLOCK} from "./BattleSpecialModel";
 import BattleSprite3dModel from "./BattleSprite3dModel";
-import PathFinder from "../../../../class/pathfinder/PathFinder";
 import BoolValue from "../../../basic/BoolValue";
 import BattleNpcSpawnModel from "./BattleNpcSpawnModel";
 import IdentifiedModelNodeWithResources from "../../../basic/IdentifiedModelNodeWithResources";
@@ -73,18 +72,33 @@ export default class BattleMapModel extends IdentifiedModelNodeWithResources {
 		this.blocksCache = null;
 		this.sprites = this.addProperty('sprites', new ModelNodeCollection(() => new BattleSpriteModel(this.resources)));
 		this.blocksSpritesCache = null;
-		this.sprites.addOnAddListener(() => this.blocksCache = this.blocksSpritesCache = null);
-		this.sprites.addOnRemoveListener(() => this.blocksCache = this.blocksSpritesCache = null);
+		this.sprites.addEventListener(
+			'change',
+			() => {
+				this.blocksCache = this.blocksSpritesCache = null;
+				this.triggerEvent('blocks-changed');
+			}
+		);
 
 		this.sprites3d = this.addProperty('sprites3d', new ModelNodeCollection(() => new BattleSprite3dModel()));
 		this.blocksSprites3dCache = null;
-		this.sprites3d.addOnAddListener(() => this.blocksCache = this.blocksSprites3dCache = null);
-		this.sprites3d.addOnRemoveListener(() => this.blocksCache = this.blocksSprites3dCache = null);
+		this.sprites3d.addEventListener(
+			'change',
+			() => {
+				this.blocksCache = this.blocksSprites3dCache = null;
+				this.triggerEvent('blocks-changed');
+			}
+		);
 
 		this.specials = this.addProperty('specials', new ModelNodeCollection(() => new BattleSpecialModel()));
 		this.blocksSpecialsCache = null;
-		this.specials.addOnAddListener(() => this.blocksCache = this.blocksSpecialsCache = null);
-		this.specials.addOnRemoveListener(() => this.blocksCache = this.blocksSpecialsCache = null);
+		this.specials.addEventListener(
+			'change',
+			() => {
+				this.blocksCache = this.blocksSpecialsCache = null;
+				this.triggerEvent('blocks-changed');
+			}
+		);
 
 		this.npcSpawns = this.addProperty('npcSpawns', new ModelNodeCollection(() => new BattleNpcSpawnModel()));
 	}
@@ -126,10 +140,6 @@ export default class BattleMapModel extends IdentifiedModelNodeWithResources {
 	screenCoordsToTile(coords) {
 		const position = this.screenCoordsToPosition(coords);
 		return position.round();
-	}
-
-	isTileBlocked(position) {
-		return PathFinder.isTileBlocked(position, this.getBlocks());
 	}
 
 	getBlocks() {

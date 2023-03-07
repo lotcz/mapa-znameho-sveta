@@ -8,7 +8,6 @@ import BattlePartyCharacterModel from "../../model/game/battle/BattlePartyCharac
 import Vector2 from "../../model/basic/Vector2";
 import Pixies from "../../class/basic/Pixies";
 import {SPECIAL_TYPE_SPAWN} from "../../model/game/battle/battlemap/BattleSpecialModel";
-import PathFinder from "../../class/pathfinder/PathFinder";
 
 export default class SaveGameController extends ControllerNode {
 
@@ -196,7 +195,7 @@ export default class SaveGameController extends ControllerNode {
 				const character = new BattlePartyCharacterModel();
 				character.characterId.set(slot.characterId.get());
 				let position = spawnPosition;
-				while (PathFinder.isTileBlocked(position, blocks)) {
+				while (blocks.some((b) => b.equalsTo(position))) {
 					position = spawnPosition.add(new Vector2(Pixies.random(-5, 5), Pixies.random(-5, 5))).round();
 				}
 				character.position.set(position);

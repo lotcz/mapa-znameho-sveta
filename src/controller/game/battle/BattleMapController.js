@@ -1,9 +1,9 @@
-import ControllerNode from "../../basic/ControllerNode";
 import CollectionController from "../../basic/CollectionController";
 import BattleSpriteController from "./BattleSpriteController";
 import BattleSprite3dController from "./BattleSprite3dController";
+import ControllerWithBattle from "../../basic/ControllerWithBattle";
 
-export default class BattleMapController extends ControllerNode {
+export default class BattleMapController extends ControllerWithBattle {
 
 	/**
 	 * @type BattleMapModel
@@ -11,7 +11,7 @@ export default class BattleMapController extends ControllerNode {
 	model;
 
 	constructor(game, model) {
-		super(game, model);
+		super(game, model, null, model);
 
 		this.model = model;
 
@@ -29,6 +29,15 @@ export default class BattleMapController extends ControllerNode {
 				this.model.sprites3d,
 				(m) => new BattleSprite3dController(this.game, m)
 			)
+		);
+
+		this.addAutoEvent(
+			this.model,
+			'blocks-changed',
+			() => {
+				this.battle.pathFinder.setStaticBlocks(this.model.getBlocks());
+			},
+			true
 		);
 
 	}

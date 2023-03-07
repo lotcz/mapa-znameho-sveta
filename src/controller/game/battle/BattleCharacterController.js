@@ -1,12 +1,10 @@
 import AnimatedVector2 from "../../../class/animating/AnimatedVector2";
 import {CHARACTER_STATE_IDLE, CHARACTER_STATE_RUN} from "../../../model/game/battle/BattleCharacterModel";
 import AnimatedRotation from "../../../class/animating/AnimatedRotation";
-import PathFinder from "../../../class/pathfinder/PathFinder";
 import Pixies from "../../../class/basic/Pixies";
 import ItemModel from "../../../model/game/items/ItemModel";
 import BattleItemSlotController from "./BattleItemSlotController";
 import ControllerWithBattle from "../../basic/ControllerWithBattle";
-import AbsolutePathFinder from "../../../class/pathfinder/AbsolutePathFinder";
 import {EASING_FLAT, EASING_QUAD_IN} from "../../../class/animating/ProgressValue";
 
 const TRAVEL_SPEED = 3.25 / 1000; // position units per millisecond
@@ -103,7 +101,7 @@ export default class BattleCharacterController extends ControllerWithBattle {
 
 	activateInternal() {
 		this.model.state.set(CHARACTER_STATE_IDLE);
-		this.checkBlocks(this.getBlocks());
+		this.checkBlocks();
 	}
 
 	deactivateInternal() {
@@ -141,34 +139,14 @@ export default class BattleCharacterController extends ControllerWithBattle {
 		return (this.positionAnimation !== null);
 	}
 
-	getBlocks() {
-		const partyCharacters = this.battle.partyCharacters.filter((ch) => ch !== this.model).map((ch) => ch.position.round());
-		const npcCharacters = this.battle.npcCharacters.filter((ch) => ch !== this.model).map((ch) => ch.position.round());
-		const mapBlocks = this.battleMap.getBlocks();
-		return mapBlocks.concat(partyCharacters).concat(npcCharacters);
-	}
-
 	goTo(position) {
-		if (this.model.position.round().equalsTo(position)) {
-			return;
-		}
-
-		const blocks = this.getBlocks();
-
-		if (PathFinder.isTileBlocked(position, blocks)) {
-			console.log('Blocked');
-			return false;
-		}
-
-		const absolutePathFinder = new AbsolutePathFinder(this.model.position, position, blocks);
-		const path = absolutePathFinder.findPath();
+		const path = this.battle.pathFinder.findPath(this.model.position, position);
 		if (!path) {
 			console.log('No path');
 			return false;
 		}
 
-		//console.log(path);
-		this.model.targetPosition.set(position.clone());
+		this.model.targetPosition.set(position.round());
 
 		this.pathToGo = path;
 		this.startMovement(this.pathToGo.shift());
@@ -191,19 +169,15 @@ export default class BattleCharacterController extends ControllerWithBattle {
 	}
 
 	arrived(delta) {
-		//this.model.triggerEvent('arrived', this.model.position);
-
-		const blocks = this.getBlocks();
-
 		if (this.pathToGo.length > 0) {
 			const next = this.pathToGo.shift();
-			if (!PathFinder.isTileBlocked(next, blocks)) {
+			if (!this.battle.pathFinder.isBlocked(next)) {
 				this.startMovement(next, delta);
 				return;
 			}
 		}
 
-		if (this.checkBlocks(blocks)) {
+		if (this.checkBlocks()) {
 			this.model.targetPosition.set(null);
 			if (!this.updateFollowing()) {
 				this.model.state.set(CHARACTER_STATE_IDLE);
@@ -213,19 +187,17 @@ export default class BattleCharacterController extends ControllerWithBattle {
 		}
 	}
 
-	checkBlocks(blocks) {
-		const blocked = PathFinder.isTileBlocked(this.model.position.round(), blocks);
+	checkBlocks() {
+		const blocked = this.battle.pathFinder.isBlocked(this.model.position.round(), this.model.position);
 		if (blocked) {
 			console.log('Stepping aside');
-			this.stepAside(blocks);
+			this.stepAside();
 		}
 		return !blocked;
 	}
 
-	stepAside(blocks) {
-		const position = this.model.position.round();
-		const candidates = PathFinder.getNeighborPositions(position);
-		const free = candidates.filter((c) => !PathFinder.isTileBlocked(c, blocks));
+	stepAside() {
+		const free = this.battle.pathFinder.getFreeNeighborPositions(this.model.position.round());
 		if (free.length > 0) {
 			const winner = Pixies.randomElement(free);
 			this.startMovement(winner);
@@ -251,9 +223,9 @@ export default class BattleCharacterController extends ControllerWithBattle {
 		if (!battleCharacter) return false;
 
 		const position = battleCharacter.targetPosition.isSet() ? battleCharacter.targetPosition.get() : battleCharacter.position;
-		const free = PathFinder.getFreeNeighborPositions(position, this.getBlocks());
+		const free = this.battle.pathFinder.getFreeNeighborPositions(position);
 		if (free.length > 0) {
-			const closest = PathFinder.findClosest(this.model.position, free);
+			const closest = this.model.position.getClosest(free);
 			return this.goTo(closest);
 		}
 
@@ -265,7 +237,7 @@ export default class BattleCharacterController extends ControllerWithBattle {
 			const followed = this.model.followBattleCharacter.get();
 			const isMoving = followed.targetPosition.isSet();
 			if (!isMoving) {
-				const neighbors = PathFinder.getNeighborPositions(this.model.position.round());
+				const neighbors = this.model.position.round().getNeighborPositions();
 				const caught = neighbors.some((n) => n.equalsTo(followed.position.round()));
 				if (caught) {
 					this.model.triggerEvent('caught-up', followed);

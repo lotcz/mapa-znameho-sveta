@@ -6,7 +6,7 @@ export default class TileCache {
 	blocked;
 
 	/**
-	 * @type float|null
+	 * @type Number|null
 	 */
 	distance;
 

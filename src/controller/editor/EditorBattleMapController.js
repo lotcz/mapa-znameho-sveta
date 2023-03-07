@@ -50,16 +50,16 @@ export default class EditorBattleMapController extends ControllerWithBattle {
 				const editorModeType = battleEditorModel.modeType.get();
 				switch (editorModeType) {
 					case MODE_TYPE_SPRITE:
-						this.dragging = this.battleMap.sprites.find((s) => s.position.equalsTo(this.model.mouseHoveringTile));
+						this.dragging = this.battleMap.sprites.find((s) => s.position.equalsTo(this.battle.mouseHoveringTile));
 						break;
 					case MODE_TYPE_SPECIAL:
-						this.dragging = this.battleMap.specials.find((s) => s.position.equalsTo(this.model.mouseHoveringTile));
+						this.dragging = this.battleMap.specials.find((s) => s.position.equalsTo(this.battle.mouseHoveringTile));
 						break;
 					case MODE_TYPE_3D:
-						this.dragging = this.battleMap.sprites3d.find((s) => s.position.equalsTo(this.model.mouseHoveringTile));
+						this.dragging = this.battleMap.sprites3d.find((s) => s.position.equalsTo(this.battle.mouseHoveringTile));
 						break;
 					case MODE_TYPE_NPC:
-						this.dragging = this.battleMap.npcSpawns.find((s) => s.position.equalsTo(this.model.mouseHoveringTile));
+						this.dragging = this.battleMap.npcSpawns.find((s) => s.position.equalsTo(this.battle.mouseHoveringTile));
 						break;
 				}
 			}

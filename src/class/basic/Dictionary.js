@@ -3,6 +3,10 @@ import Node from "./Node";
 const DEBUG_HASH_TABLE = false;
 
 export default class Dictionary extends Node {
+
+	/**
+	 * @type object
+	 */
 	keyValues;
 
 	constructor() {
@@ -54,7 +58,7 @@ export default class Dictionary extends Node {
 	reset() {
 		const keys = this.keys();
 		keys.forEach((key) => this.remove(key));
-		this.keyValues = [];
+		this.keyValues = {};
 	}
 
 	count() {

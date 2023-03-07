@@ -1,6 +1,7 @@
 import Node from "./Node";
 
 export default class Collection extends Node {
+
 	/**
 	 * @type array
 	 */
@@ -26,10 +27,7 @@ export default class Collection extends Node {
 	}
 
 	prepend(element) {
-		this.items.unshift(element);
-		this.triggerEvent('add', element);
-		this.triggerEvent('change');
-		return element;
+		return this.insert(element, 0);
 	}
 
 	remove(element) {

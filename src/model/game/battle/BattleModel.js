@@ -9,6 +9,7 @@ import BattleItemModel from "./BattleItemModel";
 import BattlePartyCharacterModel from "./BattlePartyCharacterModel";
 import BattleNpcCharacterModel from "./BattleNpcCharacterModel";
 import StringValue from "../../basic/StringValue";
+import CachedPathFinder from "../../../class/pathfinder/CachedPathFinder";
 
 export const CURSOR_TYPE_DEFAULT = 'default';
 export const CURSOR_TYPE_WALK = 'walk';
@@ -57,13 +58,13 @@ export default class BattleModel extends ModelNode {
 
 	/**
 	 * @type Vector2
-	 * current startCoordinates of center of the screen, in px of background image
+	 * current startCoordinates of the center of the screen, in px of background image
 	 */
 	coordinates;
 
 	/**
 	 * @type Vector2
-	 * current startCoordinates of top left corner, in px of background image
+	 * current startCoordinates of the top left corner, in px of background image
 	 */
 	cornerCoordinates;
 
@@ -130,7 +131,7 @@ export default class BattleModel extends ModelNode {
 
 		this.coordinates = this.addProperty('startCoordinates', new Vector2());
 		this.cornerCoordinates = this.addProperty('cornerCoordinates', new Vector2());
-		this.zoom = this.addProperty('startZoom', new FloatValue(1));
+		this.zoom = this.addProperty('zoom', new FloatValue(1));
 
 		this.isMouseOver = this.addProperty('isMouseOver', new BoolValue(false, false));
 		this.mouseCoordinates = this.addProperty('mouseCoordinates', new Vector2(0, 0, false));
@@ -143,6 +144,9 @@ export default class BattleModel extends ModelNode {
 		this.hoveringBattleCharacter = this.addProperty('hoveringBattleCharacter', new NullableNode(null, false));
 		this.hoveringSpecial = this.addProperty('hoveringSpecial', new NullableNode(null, false));
 		this.cursorType = this.addProperty('cursorType', new StringValue(CURSOR_TYPE_DEFAULT, false));
+
+		this.pathFinder = new CachedPathFinder();
+
 	}
 
 	updateHoveringCharacter() {

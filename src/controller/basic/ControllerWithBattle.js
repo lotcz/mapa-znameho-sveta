@@ -16,8 +16,9 @@ export default class ControllerWithBattle extends ControllerWithSaveGame {
 	 * @param {GameModel} game
 	 * @param {ModelNode} model
 	 * @param {BattleModel} battle
+	 * @param {BattleMapModel} battleMap
 	 */
-	constructor(game, model, battle = null) {
+	constructor(game, model, battle = null, battleMap = null) {
 		super(game, model);
 		if (!battle) {
 			battle = this.saveGame.currentBattle.get();
@@ -27,7 +28,11 @@ export default class ControllerWithBattle extends ControllerWithSaveGame {
 		if (!this.battle) {
 			console.error('no BattleModel provided for controller!');
 		}
-		this.battleMap = this.battle.battleMap.get();
+
+		if (!battleMap) {
+			battleMap = this.battle.battleMap.get();
+		}
+		this.battleMap = battleMap;
 
 		if (!this.battleMap) {
 			console.error('no BattleMapModel provided for controller!');

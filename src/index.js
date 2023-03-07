@@ -3,7 +3,7 @@ import GameController from "./controller/game/GameController";
 import GameRenderer from "./renderer/game/GameRenderer";
 import Stats from 'three/examples/jsm/libs/stats.module'
 
-const MAX_DELTA = 1000;
+const MAX_DELTA = 100;
 const DEBUG_MODE_ENABLED = true;
 const SHOW_STATS = false;
 
@@ -28,7 +28,7 @@ let lastTime = performance.now();
 
 const updateLoop = function () {
 	const time = performance.now();
-	const delta = (time - lastTime);
+	const delta = time - lastTime;
 	lastTime = time;
 
 	if (delta < MAX_DELTA)
