@@ -34,12 +34,17 @@ export default class BattleMapController extends ControllerWithBattle {
 		this.addAutoEvent(
 			this.model,
 			'blocks-changed',
-			() => {
-				this.battle.pathFinder.setStaticBlocks(this.model.getBlocks());
-			},
-			true
+			() => this.updateStaticBlocks()
 		);
 
+	}
+
+	updateStaticBlocks() {
+		this.battle.pathFinder.setStaticBlocks(this.model.getBlocks());
+	}
+
+	afterActivatedInternal() {
+		this.updateStaticBlocks();
 	}
 
 }

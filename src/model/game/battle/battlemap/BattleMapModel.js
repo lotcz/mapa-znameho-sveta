@@ -65,7 +65,16 @@ export default class BattleMapModel extends IdentifiedModelNodeWithResources {
 		this.name = this.addProperty('name', new DirtyValue(`Battle Map ${id}`));
 		this.isPersistent = this.addProperty('isPersistent', new BoolValue(true));
 		this.backgroundImage = this.addProperty('backgroundImage', new DirtyValue('img/camp.jpg'));
-		this.tileSize = this.addProperty('tileSize', new IntValue(70));
+
+		this.tileWidthHalf = 1;
+		this.tileHeightHalf = 1;
+
+		this.tileSize = this.addProperty('tileSize', new IntValue());
+		this.tileSize.addOnChangeListener(() => {
+			const w = this.tileSize.get();
+			this.tileWidthHalf = 0.815 * 0.5 * Math.sqrt(3) * w;
+			this.tileHeightHalf = 0.815 * 0.5 * w;
+		});
 
 		this.size = this.addProperty('size', new Vector2());
 
@@ -108,13 +117,9 @@ export default class BattleMapModel extends IdentifiedModelNodeWithResources {
 	 * @returns {Vector2}
 	 */
 	screenCoordsToPosition(coords) {
-		const w = this.tileSize.get();
-		const tileWidthHalf = 0.815 * 0.5 * Math.sqrt(3) * w;
-		const tileHeightHalf = 0.815 * 0.5 * w;
-
 		const position = new Vector2();
-		position.x = 0.5 * ((-coords.x / tileWidthHalf) + (-coords.y / tileHeightHalf));
-		position.y = 0.5 * ((coords.x / tileWidthHalf) + (-coords.y / tileHeightHalf));
+		position.x = 0.5 * ((-coords.x / this.tileWidthHalf) + (-coords.y / this.tileHeightHalf));
+		position.y = 0.5 * ((coords.x / this.tileWidthHalf) + (-coords.y / this.tileHeightHalf));
 		return position;
 	}
 
@@ -123,13 +128,9 @@ export default class BattleMapModel extends IdentifiedModelNodeWithResources {
 	 * @returns {Vector2}
 	 */
 	positionToScreenCoords(position) {
-		const w = this.tileSize.get();
-		const tileWidthHalf = 0.815 * 0.5 * Math.sqrt(3) * w;
-		const tileHeightHalf = 0.815 * 0.5 * w;
-
 		const coords = new Vector2();
-		coords.x = (position.y - position.x) * tileWidthHalf;
-		coords.y = (-position.y - position.x) * tileHeightHalf;
+		coords.x = (position.y - position.x) * this.tileWidthHalf;
+		coords.y = (-position.y - position.x) * this.tileHeightHalf;
 		return coords;
 	}
 
@@ -138,8 +139,7 @@ export default class BattleMapModel extends IdentifiedModelNodeWithResources {
 	 * @returns {Vector2}
 	 */
 	screenCoordsToTile(coords) {
-		const position = this.screenCoordsToPosition(coords);
-		return position.round();
+		return this.screenCoordsToPosition(coords).round();
 	}
 
 	getBlocks() {

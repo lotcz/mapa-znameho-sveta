@@ -126,7 +126,6 @@ export default class CachedPathFinder {
 			const blocked = this.staticBlocks.some((b) => v.equalsTo(b));
 			tile = new TileCache(blocked);
 			this.setCachedTile(v, tile);
-			console.log('created cache');
 		}
 		return tile;
 	}
@@ -206,10 +205,7 @@ export default class CachedPathFinder {
 			}
 		}
 
-		//console.log(this.cache);
-
 		if (endTile.cameFrom === null) return false;
-
 		return this.backtrack([end], endTile.cameFrom);
 	}
 

@@ -43,6 +43,16 @@ export default class PartyModel extends ModelNode {
 	 */
 	slots;
 
+	/**
+	* @type BoolValue
+	 */
+	battleScrollWhenMove;
+
+	/**
+	 * @type BoolValue
+	 */
+	battleFollowTheLeader;
+
 	constructor() {
 		super();
 

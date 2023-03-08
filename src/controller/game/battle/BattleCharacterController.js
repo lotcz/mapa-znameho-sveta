@@ -188,6 +188,7 @@ export default class BattleCharacterController extends ControllerWithBattle {
 	}
 
 	checkBlocks() {
+		this.battle.pathFinder.resetDynamicBlocksCache(); // reset dynamic blocks to allow ignoring position
 		const blocked = this.battle.pathFinder.isBlocked(this.model.position.round(), this.model.position);
 		if (blocked) {
 			console.log('Stepping aside');
