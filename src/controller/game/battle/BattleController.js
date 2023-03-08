@@ -214,6 +214,8 @@ export default class BattleController extends ControllerWithSaveGame {
 	}
 
 	updateInternal(delta) {
+		this.model.pathFinder.resetDynamicBlocksCache();
+
 		// dragging and scrolling
 		if (!this.game.controls.mouseDownLeft.get()) {
 			this.dragging = false;
@@ -331,7 +333,7 @@ export default class BattleController extends ControllerWithSaveGame {
 				ch.triggerEvent('follow', character);
 			}
 		});
-		
+
 		 */
 	}
 

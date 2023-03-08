@@ -23,6 +23,11 @@ export default class CachedPathFinder {
 	dynamicBlocks = [];
 
 	/**
+	 * @type object
+	 */
+	dynamicBlocksCache;
+
+	/**
 	 * @type Vector2
 	 * @desc start position, when it changes, all distances must be reset
 	 */
@@ -35,6 +40,7 @@ export default class CachedPathFinder {
 			this.setCachedTile(this.start, new TileCache(false, 0));
 		});
 		this.resetCache();
+		this.resetDynamicBlocksCache();
 	}
 
 	setStaticBlocks(blocks) {
@@ -44,10 +50,30 @@ export default class CachedPathFinder {
 
 	setDynamicBlocks(blocks) {
 		this.dynamicBlocks = blocks;
+		this.resetDynamicBlocksCache();
 	}
 
 	resetCache() {
 		this.cache = {};
+	}
+
+	resetDynamicBlocksCache() {
+		this.dynamicBlocksCache = null;
+	}
+
+	rebuildDynamicBlocksCache(ignore = null) {
+		this.dynamicBlocksCache = {};
+		this.dynamicBlocks.forEach((b) => {
+			if (b !== ignore) {
+				const v = b.round();
+				let row = this.dynamicBlocksCache[v.x];
+				if (row === undefined) {
+					row = {};
+					this.dynamicBlocksCache[v.x] = row;
+				}
+				row[v.y] = true;
+			}
+		});
 	}
 
 	forEachCache(func) {
@@ -106,7 +132,12 @@ export default class CachedPathFinder {
 	}
 
 	isBlockedDynamic(v, ignore = null) {
-		return this.dynamicBlocks.some((b) => b !== ignore && v.equalsTo(b.round()));
+		if (!this.dynamicBlocksCache) {
+			this.rebuildDynamicBlocksCache(ignore);
+		}
+		const row = this.dynamicBlocksCache[v.x];
+		if (row === undefined) return false;
+		return (row[v.y] === true);
 	}
 
 	isBlockedStatic(v) {
@@ -158,7 +189,7 @@ export default class CachedPathFinder {
 			for (let i = 0, max = neighbors.length; i < max; i++) {
 				const neighborPosition = neighbors[i];
 				const neighborTile = this.obtainCachedTile(neighborPosition);
-				if (neighborTile.blocked === true) continue;
+				if (neighborTile.blocked || this.isBlockedDynamic(neighborPosition)) continue;
 
 				const dist = currentPosition.distanceTo(neighborPosition);
 				if (dist > 1 && this.isDiameterBlocked(currentPosition, neighborPosition)) continue;
