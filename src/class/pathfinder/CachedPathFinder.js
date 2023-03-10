@@ -61,18 +61,16 @@ export default class CachedPathFinder {
 		this.dynamicBlocksCache = null;
 	}
 
-	rebuildDynamicBlocksCache(ignore = null) {
+	rebuildDynamicBlocksCache() {
 		this.dynamicBlocksCache = {};
 		this.dynamicBlocks.forEach((b) => {
-			if (b !== ignore) {
-				const v = b.round();
-				let row = this.dynamicBlocksCache[v.x];
-				if (row === undefined) {
-					row = {};
-					this.dynamicBlocksCache[v.x] = row;
-				}
-				row[v.y] = true;
+			const v = b.round();
+			let row = this.dynamicBlocksCache[v.x];
+			if (row === undefined) {
+				row = {};
+				this.dynamicBlocksCache[v.x] = row;
 			}
+			row[v.y] = b;
 		});
 	}
 
@@ -132,11 +130,12 @@ export default class CachedPathFinder {
 
 	isBlockedDynamic(v, ignore = null) {
 		if (!this.dynamicBlocksCache) {
-			this.rebuildDynamicBlocksCache(ignore);
+			this.rebuildDynamicBlocksCache();
 		}
 		const row = this.dynamicBlocksCache[v.x];
 		if (row === undefined) return false;
-		return (row[v.y] === true);
+		const b = row[v.y];
+		return (b !== undefined && b !== ignore);
 	}
 
 	isBlockedStatic(v) {
@@ -209,9 +208,9 @@ export default class CachedPathFinder {
 		return this.backtrack([end], endTile.cameFrom);
 	}
 
-	getFreeNeighborPositions(position, size = 1) {
+	getFreeNeighborPositions(position, size = 1, ignore = null) {
 		const candidates = position.getNeighborPositions(size);
-		return candidates.filter((c) => !this.isBlocked(c));
+		return candidates.filter((c) => !this.isBlocked(c, ignore));
 	}
 
 }

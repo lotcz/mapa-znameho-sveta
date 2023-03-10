@@ -21,7 +21,11 @@ export default class SelectedBattleCharacterController extends ControllerWithBat
 		this.addAutoEvent(
 			this.model.position,
 			'change',
-			() => this.battle.coordinates.set(this.battleMap.positionToScreenCoords(this.model.position))
+			() => {
+				if (this.saveGame.party.battleScrollWhenMove.get()) {
+					this.battle.coordinates.set(this.battleMap.positionToScreenCoords(this.model.position));
+				}
+			}
 		);
 
 		this.addAutoEvent(

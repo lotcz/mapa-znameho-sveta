@@ -477,15 +477,45 @@ h4 {
   font-family: 'Fell';
   src: url('font/IMFellEnglishSC-Regular.ttf') format('truetype');
 }
+.no-text-select {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -ms-user-select: none;
+}
 .normal-text {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -ms-user-select: none;
   font-family: 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
   font-size: 16pt;
 }
 .decor-text {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -ms-user-select: none;
   font-family: 'Fell', 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
   font-size: 22pt;
 }
 .small-text {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -ms-user-select: none;
   font-family: 'Bookman Old Style', 'Times New Roman', serif;
 }
 .default-cursor {
@@ -493,6 +523,13 @@ h4 {
 }
 .savegame-layer {
   cursor: url('img/cursor/cursor.png'), default;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -ms-user-select: none;
   font-family: 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
   font-size: 16pt;
   color: #311a0a;
@@ -501,10 +538,6 @@ h4 {
 .savegame-layer h2,
 .savegame-layer h3,
 .savegame-layer h4 {
-  font-family: 'Fell', 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
-  font-size: 22pt;
-}
-.savegame-layer > * {
   -webkit-user-select: none;
   -khtml-user-select: none;
   -moz-user-select: none;
@@ -512,6 +545,8 @@ h4 {
   user-select: none;
   -webkit-touch-callout: none;
   -ms-user-select: none;
+  font-family: 'Fell', 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
+  font-size: 22pt;
 }
 .savegame-layer .battle,
 .savegame-layer button,
@@ -535,6 +570,19 @@ h4 {
 }
 .savegame-layer .battle.cursor-switch-character {
   cursor: url('img/cursor/cursor-character.png'), pointer;
+}
+.savegame-layer .switch {
+  width: 20px;
+  height: 20px;
+  font-size: 15px;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  vertical-align: middle;
+  background-color: #885f32;
+  box-shadow: #311a0a 1px 1px 10px;
+  border-width: #e0b050;
+  border-radius: 4px;
+  color: #e0b050;
 }
 .portrait img {
   width: 100%;
@@ -666,6 +714,13 @@ h4 {
   text-align: center;
 }
 .sequence-container .sequence-text div {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -ms-user-select: none;
   font-family: 'Fell', 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
   font-size: 22pt;
   padding: 20px;
@@ -696,9 +751,17 @@ h4 {
   justify-content: center;
 }
 .main-menu-layer .main-menu {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -ms-user-select: none;
   font-family: 'Fell', 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
   font-size: 22pt;
   border-radius: 10px;
+  text-align: center;
 }
 .main-menu-layer .main-menu .item:hover {
   color: darkred;
@@ -743,6 +806,12 @@ h4 {
   height: 100px;
   border: 2px solid transparent;
   border-radius: 5px;
+}
+.party .switch-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-right: 4px;
 }
 .party .portraits .selected .portrait {
   border: 2px solid white;
@@ -1059,5 +1128,12 @@ h4 {
   color: saddlebrown;
 }
 .conversation .line.narrator {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -ms-user-select: none;
   font-family: 'Bookman Old Style', 'Times New Roman', serif;
 }

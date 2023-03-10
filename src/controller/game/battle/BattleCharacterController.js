@@ -55,7 +55,18 @@ export default class BattleCharacterController extends ControllerWithBattle {
 		this.addAutoEvent(
 			this.model,
 			'follow',
-			(bc) => this.startFollowing(bc, 99)
+			(bc) => {
+				this.startFollowing(bc, 99);
+				if (this.saveGame.party.battleFollowTheLeader.get()) {
+					this.followMe();
+				}
+			}
+		);
+
+		this.addAutoEvent(
+			this.model,
+			'follow-me',
+			() => this.followMe()
 		);
 
 		this.addAutoEvent(
@@ -171,9 +182,11 @@ export default class BattleCharacterController extends ControllerWithBattle {
 	arrived(delta) {
 		if (this.pathToGo.length > 0) {
 			const next = this.pathToGo.shift();
-			if (!this.battle.pathFinder.isBlocked(next)) {
+			if (!this.battle.pathFinder.isBlocked(next, this.model.position)) {
 				this.startMovement(next, delta);
 				return;
+			} else {
+				if (this.goTo(this.model.targetPosition.get())) return;
 			}
 		}
 
@@ -188,7 +201,6 @@ export default class BattleCharacterController extends ControllerWithBattle {
 	}
 
 	checkBlocks() {
-		this.battle.pathFinder.resetDynamicBlocksCache(); // reset dynamic blocks to allow ignoring position
 		const blocked = this.battle.pathFinder.isBlocked(this.model.position.round(), this.model.position);
 		if (blocked) {
 			console.log('Stepping aside');
@@ -224,7 +236,7 @@ export default class BattleCharacterController extends ControllerWithBattle {
 		if (!battleCharacter) return false;
 
 		const position = battleCharacter.targetPosition.isSet() ? battleCharacter.targetPosition.get() : battleCharacter.position;
-		const free = this.battle.pathFinder.getFreeNeighborPositions(position);
+		const free = this.battle.pathFinder.getFreeNeighborPositions(position, 1, this.model.position);
 		if (free.length > 0) {
 			const closest = this.model.position.getClosest(free);
 			return this.goTo(closest);
@@ -264,5 +276,18 @@ export default class BattleCharacterController extends ControllerWithBattle {
 		this.model.followStepsRemaining.set(steps + 1);
 		this.model.followBattleCharacter.set(battleCharacter);
 		return this.updateFollowing();
+	}
+
+	followMe() {
+		const next = this.saveGame.party.findNextInLine(this.model.characterId.get());
+		if (next) {
+			const battleCharacter = this.battle.partyCharacters.find((bc) => bc.characterId.equalsTo(next.id.get()));
+			if (battleCharacter) {
+				this.runAfterTimeout(
+					500,
+					() => battleCharacter.triggerEvent('follow', this.model)
+				);
+			}
+		}
 	}
 }

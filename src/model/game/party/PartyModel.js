@@ -66,6 +66,9 @@ export default class PartyModel extends ModelNode {
 
 		this.slots = this.addProperty('slots', new ModelNodeCollection(() => new PartySlotModel()));
 
+		this.battleScrollWhenMove = this.addProperty('battleScrollWhenMove', new BoolValue());
+		this.battleFollowTheLeader = this.addProperty('battleFollowTheLeader', new BoolValue());
+
 	}
 
 	containsCharacter(characterId) {
@@ -76,6 +79,21 @@ export default class PartyModel extends ModelNode {
 		this.slots.forEach((s) => {
 			if (s.character.isSet()) func(s.character.get());
 		});
+	}
+
+	findNextInLine(characterId) {
+		for (let i = 0, max = this.slots.count(); i < max; i++) {
+			const slot = this.slots.get(i);
+			if (slot.characterId.equalsTo(characterId)) {
+				const nextSlot = this.slots.get(i + 1);
+				if (nextSlot) {
+					return nextSlot.character.get();
+				} else {
+					return null;
+				}
+			}
+		}
+		return null;
 	}
 
 }

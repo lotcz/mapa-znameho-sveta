@@ -17,17 +17,30 @@
   src: url('font/IMFellEnglishSC-Regular.ttf') format('truetype');
 }
 
+.no-text-select {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -ms-user-select: none;
+}
+
 .normal-text {
+  .no-text-select();
   font-family: 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
   font-size: 16pt;
 }
 
 .decor-text {
+  .no-text-select();
   font-family: 'Fell', 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
   font-size: 22pt;
 }
 
 .small-text {
+  .no-text-select();
   font-family: 'Bookman Old Style', 'Times New Roman', serif;
 }
 
@@ -42,16 +55,6 @@
 
   h1, h2, h3, h4 {
 	.decor-text();
-  }
-
-  & > * {
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-o-user-select: none;
-	user-select: none;
-	-webkit-touch-callout: none;
-	-ms-user-select: none;
   }
 
   .battle, button, a {
@@ -82,6 +85,19 @@
 	cursor: url('img/cursor/cursor-character.png'), pointer;
   }
 
+  .switch {
+	width: @m-3;
+	height: @m-3;
+	font-size: 15px;
+	font-family: Arial, sans-serif;
+	text-align: center;
+	vertical-align: middle;
+	background-color: @medium-brown;
+	box-shadow: @dark-brown 1px 1px 10px;
+	border-width: @gold;
+	border-radius: 4px;
+	color: @gold;
+  }
 }
 
 .portrait img {

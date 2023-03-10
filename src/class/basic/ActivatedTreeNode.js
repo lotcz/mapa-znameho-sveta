@@ -1,6 +1,7 @@
 import Pixies from "./Pixies";
 
 export default class ActivatedTreeNode {
+
 	children;
 
 	/**

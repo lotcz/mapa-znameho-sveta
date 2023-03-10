@@ -1,6 +1,6 @@
-import ControllerNode from "./ControllerNode";
+import ControllerWithTimeout from "./ControllerWithTimeout";
 
-export default class ControllerWithSaveGame extends ControllerNode {
+export default class ControllerWithSaveGame extends ControllerWithTimeout {
 
 	/**
 	 * @type SaveGameModel

@@ -171,8 +171,8 @@ export default class GameController extends ControllerNode {
 
 	showMainMenu() {
 		const options = [
-			{text: 'Nová hra', onClick: () => this.startNewGame()},
-			{text: 'Nahrát pozici', onClick: () => this.loadGameFromStorage()},
+			{text: 'Začít novou hru', onClick: () => this.startNewGame()},
+			{text: 'Obnovit uloženou pozici', onClick: () => this.loadGameFromStorage()},
 			{text: 'Nastavení', onClick: () => this.loadGameFromStorage()}
 		];
 		if (this.model.saveGame.isSet()) {

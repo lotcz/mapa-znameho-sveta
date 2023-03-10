@@ -40,7 +40,19 @@ export default class BattleRenderer extends DomRenderer {
 			new NullableNodeRenderer(
 				this.game,
 				this.model.partyCharacters.selectedNode,
-				(m) => new BattleRingRenderer(this.game, m.position, this.drawForeground, true)
+				(m) => new BattleRingRenderer(this.game, m.position, this.drawForeground, 'white', 'radial')
+			)
+		);
+
+		this.addChild(
+			new NullableNodeRenderer(
+				this.game,
+				this.model.partyCharacters.selectedNode,
+				(m) => new NullableNodeRenderer(
+					this.game,
+					m.targetPosition,
+					(v) => new BattleRingRenderer(this.game, v, this.drawForeground, 'red')
+				)
 			)
 		);
 
