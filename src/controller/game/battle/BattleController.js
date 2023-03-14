@@ -204,9 +204,7 @@ export default class BattleController extends ControllerWithSaveGame {
 			[this.model.partyCharacters, this.model.npcCharacters],
 			'change',
 			() => {
-				const partyCharacters = this.model.partyCharacters.map((ch) => ch.position);
-				const npcCharacters = this.model.npcCharacters.map((ch) => ch.position);
-				this.model.pathFinder.setDynamicBlocks(partyCharacters.concat(npcCharacters));
+				this.model.pathFinder.setBattleCharacters(this.model.partyCharacters.children.items.concat(this.model.npcCharacters.children.items));
 			},
 			true
 		);

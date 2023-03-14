@@ -21,6 +21,11 @@ export default class BattleCharacterModel extends ModelNode {
 	/**
 	 * @type NullableNode<Vector2>
 	 */
+	nextPosition;
+
+	/**
+	 * @type NullableNode<Vector2>
+	 */
 	targetPosition;
 
 	/**
@@ -57,6 +62,7 @@ export default class BattleCharacterModel extends ModelNode {
 		super();
 
 		this.position = this.addProperty('position', new Vector2(0, 0));
+		this.nextPosition = this.addProperty('nextPosition', new NullableNode(null, false));
 		this.targetPosition = this.addProperty('targetPosition', new NullableNode(null, false));
 		this.rotation = this.addProperty('rotation', new Rotation(0));
 		this.state = this.addProperty('state', new DirtyValue(CHARACTER_STATE_IDLE, false));

@@ -9,6 +9,7 @@ import {EASING_FLAT, EASING_QUAD_IN} from "../../../class/animating/ProgressValu
 
 const TRAVEL_SPEED = 3.25 / 1000; // position units per millisecond
 const ROTATION_SPEED = (Math.PI * 4) / 1000; // radians per millisecond
+const MAX_WALK_DISTANCE = 100;
 
 export default class BattleCharacterController extends ControllerWithBattle {
 
@@ -146,18 +147,28 @@ export default class BattleCharacterController extends ControllerWithBattle {
 		this.model.makeDirty();
 	}
 
-	isMoving() {
-		return (this.positionAnimation !== null);
+	updateHair() {
+		const character = this.model.character.get();
+		if (character.inventory.head.item.isEmpty() && character.hairItemDefinitionId.get() > 0) {
+			const item = new ItemModel();
+			item.definitionId.set(character.hairItemDefinitionId.get());
+			item.primaryMaterialId.set(character.hairMaterialId.get());
+			character.hairSlot.item.set(item);
+		} else {
+			character.hairSlot.item.set(null);
+		}
 	}
 
 	goTo(position) {
-		const path = this.battle.pathFinder.findPath(this.model.position, position);
+		position = position.round();
+
+		const path = this.battle.pathFinder.findPath(this.model.position, position, MAX_WALK_DISTANCE, this.model);
 		if (!path) {
 			console.log('No path');
 			return false;
 		}
 
-		this.model.targetPosition.set(position.round());
+		this.model.targetPosition.set(position);
 
 		this.pathToGo = path;
 		this.startMovement(this.pathToGo.shift());
@@ -167,6 +178,7 @@ export default class BattleCharacterController extends ControllerWithBattle {
 
 	startMovement(target, delta = 0) {
 		this.model.state.set(CHARACTER_STATE_RUN);
+		this.model.nextPosition.set(target);
 		const distance = this.model.position.distanceTo(target);
 		const time = distance / TRAVEL_SPEED;
 		this.positionAnimation = new AnimatedVector2(this.model.position, target, time, EASING_FLAT, delta);
@@ -180,12 +192,15 @@ export default class BattleCharacterController extends ControllerWithBattle {
 	}
 
 	arrived(delta) {
+		this.model.nextPosition.set(null);
+
 		if (this.pathToGo.length > 0) {
 			const next = this.pathToGo.shift();
-			if (!this.battle.pathFinder.isBlocked(next, this.model.position)) {
+			if (!this.battle.pathFinder.isBlocked(next, this.model)) {
 				this.startMovement(next, delta);
 				return;
 			} else {
+				console.log('changing path');
 				if (this.goTo(this.model.targetPosition.get())) return;
 			}
 		}
@@ -201,7 +216,7 @@ export default class BattleCharacterController extends ControllerWithBattle {
 	}
 
 	checkBlocks() {
-		const blocked = this.battle.pathFinder.isBlocked(this.model.position.round(), this.model.position);
+		const blocked = this.battle.pathFinder.isBlocked(this.model.position.round(), this.model);
 		if (blocked) {
 			console.log('Stepping aside');
 			this.stepAside();
@@ -210,7 +225,7 @@ export default class BattleCharacterController extends ControllerWithBattle {
 	}
 
 	stepAside() {
-		const free = this.battle.pathFinder.getFreeNeighborPositions(this.model.position.round());
+		const free = this.battle.pathFinder.getFreeNeighborPositions(this.model.position.round(), 1, this.model);
 		if (free.length > 0) {
 			const winner = Pixies.randomElement(free);
 			this.startMovement(winner);
@@ -219,24 +234,12 @@ export default class BattleCharacterController extends ControllerWithBattle {
 		}
 	}
 
-	updateHair() {
-		const character = this.model.character.get();
-		if (character.inventory.head.item.isEmpty() && character.hairItemDefinitionId.get() > 0) {
-			const item = new ItemModel();
-			item.definitionId.set(character.hairItemDefinitionId.get());
-			item.primaryMaterialId.set(character.hairMaterialId.get());
-			character.hairSlot.item.set(item);
-		} else {
-			character.hairSlot.item.set(null);
-		}
-	}
-
 	follow() {
 		const battleCharacter = this.model.followBattleCharacter.get();
 		if (!battleCharacter) return false;
 
-		const position = battleCharacter.targetPosition.isSet() ? battleCharacter.targetPosition.get() : battleCharacter.position;
-		const free = this.battle.pathFinder.getFreeNeighborPositions(position, 1, this.model.position);
+		const position = battleCharacter.targetPosition.isSet() ? battleCharacter.targetPosition.get() : battleCharacter.position.round();
+		const free = this.battle.pathFinder.getFreeNeighborPositions(position, 1, this.model);
 		if (free.length > 0) {
 			const closest = this.model.position.getClosest(free);
 			return this.goTo(closest);
@@ -284,7 +287,7 @@ export default class BattleCharacterController extends ControllerWithBattle {
 			const battleCharacter = this.battle.partyCharacters.find((bc) => bc.characterId.equalsTo(next.id.get()));
 			if (battleCharacter) {
 				this.runAfterTimeout(
-					500,
+					450,
 					() => battleCharacter.triggerEvent('follow', this.model)
 				);
 			}

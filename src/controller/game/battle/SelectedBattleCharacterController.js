@@ -29,6 +29,16 @@ export default class SelectedBattleCharacterController extends ControllerWithBat
 		);
 
 		this.addAutoEvent(
+			this.saveGame.party.battleFollowTheLeader,
+			'change',
+			() => {
+				if (this.saveGame.party.battleFollowTheLeader.get()) {
+					this.model.triggerEvent('follow-me');
+				}
+			}
+		);
+
+		this.addAutoEvent(
 			this.model,
 			'arrived-idle',
 			(position) => {

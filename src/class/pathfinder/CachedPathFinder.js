@@ -1,11 +1,12 @@
 import Vector2 from "../../model/basic/Vector2";
-import TileCache from "./TileCache";
+import CachedTile from "./CachedTile";
 import Collection from "../basic/Collection";
+import VectorCache from "./VectorCache";
 
 export default class CachedPathFinder {
 
 	/**
-	 * @type object
+	 * @type VectorCache
 	 * @desc cached fixed blocks and distances, distances must be reset when start position changes, blocks must be reset during level editing
 	 */
 	cache;
@@ -17,15 +18,20 @@ export default class CachedPathFinder {
 	staticBlocks = [];
 
 	/**
-	 * @type array
-	 * @desc array of vectors representing dynamic blocks - NPCs and other moving objects
+	 * @type array<BattleCharacterModel>
+	 * @desc array of NPCs and party characters
 	 */
-	dynamicBlocks = [];
+	battleCharacters = [];
 
 	/**
-	 * @type object
+	 * @type VectorCache
 	 */
 	dynamicBlocksCache;
+
+	/**
+	 * @type boolean
+	 */
+	dynamicBlocksCacheNeedsRebuild;
 
 	/**
 	 * @type Vector2
@@ -34,58 +40,43 @@ export default class CachedPathFinder {
 	start;
 
 	constructor() {
+		this.cache = new VectorCache();
+		this.dynamicBlocksCache = new VectorCache();
+		this.resetDynamicBlocksCache();
 		this.start = new Vector2();
 		this.start.addOnChangeListener(() => {
 			this.resetCachedDistances();
-			this.setCachedTile(this.start, new TileCache(false, 0));
+			this.cache.set(this.start, new CachedTile(false, 0));
 		});
-		this.resetCache();
-		this.resetDynamicBlocksCache();
 	}
 
 	setStaticBlocks(blocks) {
 		this.staticBlocks = blocks;
-		this.resetCache();
+		this.cache.reset();
 	}
 
-	setDynamicBlocks(blocks) {
-		this.dynamicBlocks = blocks;
+	setBattleCharacters(bcs) {
+		this.battleCharacters = bcs;
 		this.resetDynamicBlocksCache();
 	}
 
-	resetCache() {
-		this.cache = {};
-	}
-
 	resetDynamicBlocksCache() {
-		this.dynamicBlocksCache = null;
+		this.dynamicBlocksCacheNeedsRebuild = true;
 	}
 
 	rebuildDynamicBlocksCache() {
-		this.dynamicBlocksCache = {};
-		this.dynamicBlocks.forEach((b) => {
-			const v = b.round();
-			let row = this.dynamicBlocksCache[v.x];
-			if (row === undefined) {
-				row = {};
-				this.dynamicBlocksCache[v.x] = row;
+		this.dynamicBlocksCache.reset();
+		this.battleCharacters.forEach((bc) => {
+			this.dynamicBlocksCache.set(bc.position.round(), bc);
+			if (bc.nextPosition.isSet()) {
+				this.dynamicBlocksCache.set(bc.nextPosition.get(), bc);
 			}
-			row[v.y] = b;
 		});
-	}
-
-	forEachCache(func) {
-		for (let x in this.cache) {
-			const yRow = this.cache[x];
-			for (let y in yRow) {
-				const tile = yRow[y];
-				func(x, y, tile);
-			}
-		}
+		this.dynamicBlocksCacheNeedsRebuild = false;
 	}
 
 	resetCachedDistances() {
-		this.forEachCache((x, y, tile) => {
+		this.cache.forEach((x, y, tile) => {
 			tile.distance = null;
 			tile.cameFrom = null;
 		});
@@ -93,49 +84,25 @@ export default class CachedPathFinder {
 
 	/**
 	 *
-	 * @param v {Vector2}
-	 * @returns {undefined|TileCache}
-	 */
-	getCachedTile(v) {
-		const yRow = this.cache[v.x];
-		if (yRow === undefined) {
-			return undefined;
-		}
-		return yRow[v.y];
-	}
-
-	setCachedTile(v, tile) {
-		let yRow = this.cache[v.x];
-		if (yRow === undefined) {
-			yRow = {};
-			this.cache[v.x] = yRow;
-		}
-		yRow[v.y] = tile;
-	}
-
-	/**
-	 *
-	 * @param v {Vector2}
-	 * @returns {TileCache}
+	 * @param {Vector2} v
+	 * @returns {CachedTile}
 	 */
 	obtainCachedTile(v) {
-		let tile = this.getCachedTile(v);
+		let tile = this.cache.get(v);
 		if (tile === undefined) {
 			const blocked = this.staticBlocks.some((b) => v.equalsTo(b));
-			tile = new TileCache(blocked);
-			this.setCachedTile(v, tile);
+			tile = new CachedTile(blocked);
+			this.cache.set(v, tile);
 		}
 		return tile;
 	}
 
 	isBlockedDynamic(v, ignore = null) {
-		if (!this.dynamicBlocksCache) {
+		if (this.dynamicBlocksCacheNeedsRebuild) {
 			this.rebuildDynamicBlocksCache();
 		}
-		const row = this.dynamicBlocksCache[v.x];
-		if (row === undefined) return false;
-		const b = row[v.y];
-		return (b !== undefined && b !== ignore);
+		const bc = this.dynamicBlocksCache.get(v);
+		return (bc !== undefined && bc !== ignore);
 	}
 
 	isBlockedStatic(v) {
@@ -149,17 +116,17 @@ export default class CachedPathFinder {
 		return this.isBlockedStatic(v);
 	}
 
-	isDiameterBlocked(start, end) {
+	isDiameterBlocked(start, end, ignore = null) {
 		const one = start.add(new Vector2(end.x - start.x, 0));
-		if (this.isBlocked(one)) {
+		if (this.isBlocked(one, ignore)) {
 			return true;
 		}
 		const two = start.add(new Vector2(0, end.y - start.y));
-		return this.isBlocked(two);
+		return this.isBlocked(two, ignore);
 	}
 
 	backtrack(path, v) {
-		const tile = this.getCachedTile(v);
+		const tile = this.cache.get(v);
 		if (tile.distance === 0) {
 			return path;
 		}
@@ -167,12 +134,17 @@ export default class CachedPathFinder {
 		return this.backtrack(path, tile.cameFrom);
 	}
 
-	findPath(start, end, maxDistance = 100) {
+	findPath(start, end, maxDistance = 100, ignore = null) {
 		start = start.round();
 		end = end.round();
 
+		if (start.equalsTo(end)) {
+			console.log('same');
+			return false;
+		}
+
 		const endTile = this.obtainCachedTile(end);
-		if (endTile.blocked || this.isBlockedDynamic(end)) return false;
+		if (endTile.blocked || this.isBlockedDynamic(end, ignore)) return false;
 
 		this.start.set(start);
 		let currentPosition = null;
@@ -187,10 +159,13 @@ export default class CachedPathFinder {
 			for (let i = 0, max = neighbors.length; i < max; i++) {
 				const neighborPosition = neighbors[i];
 				const neighborTile = this.obtainCachedTile(neighborPosition);
-				if (neighborTile.blocked || this.isBlockedDynamic(neighborPosition)) continue;
+				if (neighborTile.blocked) continue;
+				if (this.isBlockedDynamic(neighborPosition, ignore)) continue;
 
 				const dist = currentPosition.distanceTo(neighborPosition);
-				if (dist > 1 && this.isDiameterBlocked(currentPosition, neighborPosition)) continue;
+				if (dist > 1) {
+					if (this.isDiameterBlocked(currentPosition, neighborPosition, ignore)) continue;
+				}
 
 				const nDist = currentTile.distance + dist;
 				if (nDist > maxDistance) continue;

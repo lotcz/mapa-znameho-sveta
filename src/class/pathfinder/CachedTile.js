@@ -1,4 +1,4 @@
-export default class TileCache {
+export default class CachedTile {
 
 	/**
 	 * @type boolean

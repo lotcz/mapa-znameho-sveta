@@ -85,12 +85,9 @@ export default class PartyModel extends ModelNode {
 		for (let i = 0, max = this.slots.count(); i < max; i++) {
 			const slot = this.slots.get(i);
 			if (slot.characterId.equalsTo(characterId)) {
-				const nextSlot = this.slots.get(i + 1);
-				if (nextSlot) {
-					return nextSlot.character.get();
-				} else {
-					return null;
-				}
+				const nextSlot = this.slots.get((i + 1) % max);
+				if (nextSlot.characterId.equalsTo(this.selectedCharacterId.get())) return null;
+				return nextSlot.character.get();
 			}
 		}
 		return null;
