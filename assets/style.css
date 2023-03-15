@@ -739,6 +739,16 @@ h4 {
 .loading div {
   border-radius: 10px;
 }
+.loading .progress-wrapper {
+  border-width: 1px;
+  padding: 1px;
+  border-style: solid;
+  border-color: #311a0a;
+}
+.loading .progress-wrapper div {
+  height: 10px;
+  background-color: #311a0a;
+}
 .main-menu-layer {
   cursor: url('img/cursor/cursor.png'), default;
   position: fixed;

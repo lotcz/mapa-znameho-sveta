@@ -67,9 +67,13 @@ export default class CachedPathFinder {
 	rebuildDynamicBlocksCache() {
 		this.dynamicBlocksCache.reset();
 		this.battleCharacters.forEach((bc) => {
-			this.dynamicBlocksCache.set(bc.position.round(), bc);
+			const pos = bc.position.round();
+			this.dynamicBlocksCache.set(pos, bc);
 			if (bc.nextPosition.isSet()) {
-				this.dynamicBlocksCache.set(bc.nextPosition.get(), bc);
+				const nex = bc.nextPosition.get();
+				if (!pos.equalsTo(nex)) {
+					this.dynamicBlocksCache.set(nex, bc);
+				}
 			}
 		});
 		this.dynamicBlocksCacheNeedsRebuild = false;

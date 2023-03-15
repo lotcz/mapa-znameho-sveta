@@ -169,7 +169,6 @@ export default class BattleCharacterController extends ControllerWithBattle {
 		}
 
 		this.model.targetPosition.set(position);
-
 		this.pathToGo = path;
 		this.startMovement(this.pathToGo.shift());
 
@@ -254,7 +253,8 @@ export default class BattleCharacterController extends ControllerWithBattle {
 			const isMoving = followed.targetPosition.isSet();
 			if (!isMoving) {
 				const neighbors = this.model.position.round().getNeighborPositions();
-				const caught = neighbors.some((n) => n.equalsTo(followed.position.round()));
+				const followedPos = followed.position.round();
+				const caught = neighbors.some((n) => n.equalsTo(followedPos));
 				if (caught) {
 					this.model.triggerEvent('caught-up', followed);
 					this.model.state.set(CHARACTER_STATE_IDLE);

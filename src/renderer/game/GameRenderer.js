@@ -80,16 +80,21 @@ export default class GameRenderer extends DomRenderer {
 		}
 		if (isLoading) {
 			if (!this.loading) {
+				this.loadersCount = 1;
 				this.loading = this.addElement('div', 'loading container');
 				const paper = Pixies.createElement(this.loading, 'div', 'paper');
 				const inner = Pixies.createElement(paper, 'div', 'inner p-3');
-				this.loadingContent = Pixies.createElement(inner, 'div', 'm-3 p-3');
-				this.loadersCount = this.game.assets.loaders.count();
+				const content = Pixies.createElement(inner, 'div', 'm-3 p-3');
+				const label1 = Pixies.createElement(content, 'h2', null, 'Nahrávám');
+				const progressWrapper = Pixies.createElement(content, 'div', 'progress-wrapper mt-2');
+				this.loadingProgress = Pixies.createElement(progressWrapper, 'div', 'stretch');
 			}
 			if (this.game.assets.loaders.count() > this.loadersCount) {
 				this.loadersCount = this.game.assets.loaders.count();
 			}
-			this.loadingContent.innerText = `${this.game.assets.loaders.count()}/${this.loadersCount}`;
+			const remaining = this.game.assets.loaders.count();
+			const portion = 1 - (remaining / this.loadersCount);
+			this.loadingProgress.style.width = `${Math.round(portion*100)}%`;
 		}
 	}
 
