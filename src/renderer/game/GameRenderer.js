@@ -25,7 +25,7 @@ export default class GameRenderer extends DomRenderer {
 			new NullableNodeRenderer(
 				this.game,
 				this.model.menu,
-				(m) => new MenuRenderer(this.game, m, this.dom)
+				(m) => new MenuRenderer(this.game, m, this.menuLayer)
 			)
 		);
 
@@ -53,6 +53,7 @@ export default class GameRenderer extends DomRenderer {
 		if (initLoading) Pixies.destroyElement(initLoading);
 
 		this.saveGameLayer = this.addElement('div', 'savegame-layer container container-host row');
+		this.menuLayer = this.addElement('div', 'menu-layer');
 		this.editorLayer = this.addElement('div', 'editor-layer');
 
 		this.updateLoading();

@@ -34,16 +34,18 @@ export default class ItemInventoryImageHelper {
 
 		const directLight = new THREE.DirectionalLight( 0xe0e0e0, 1);
 		directLight.position.set( 0, 10, 0 );
+		/*
 		directLight.castShadow = true;
 		directLight.shadow.bias = 0;
-		directLight.shadow.camera.near = 0.5;
-		directLight.shadow.camera.far = 25;
+		directLight.shadow.camera.near = 0.01;
+		directLight.shadow.camera.far = 250;
 		directLight.shadow.camera.right = 15;
 		directLight.shadow.camera.left = -15;
 		directLight.shadow.camera.top	= 15;
 		directLight.shadow.camera.bottom = - 15;
 		directLight.shadow.mapSize.width = 1024;
 		directLight.shadow.mapSize.height = 1024;
+		 */
 		scene.add(directLight);
 
 		const composer = new EffectComposer( renderer );
@@ -59,7 +61,9 @@ export default class ItemInventoryImageHelper {
 		composer.addPass( effectFXAA );
 
 		const m = mesh.clone();
+		const p = itemDef.itemPosition;
 		const r = itemDef.itemRotation;
+		m.position.set(p.x, p.y, p.z);
 		m.rotation.set(r.x, r.y, r.z);
 		scene.add(m);
 
@@ -73,7 +77,9 @@ export default class ItemInventoryImageHelper {
 
 		const position = itemDef.cameraPosition;
 		camera.position.set(position.x, position.y, position.z);
+
 		camera.lookAt(0, 0, 0);
+
 		composer.render();
 
 		const image = new Image();

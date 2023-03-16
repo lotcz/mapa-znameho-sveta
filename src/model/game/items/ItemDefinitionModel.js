@@ -49,6 +49,11 @@ export default class ItemDefinitionModel extends IdentifiedModelNode {
 	/**
 	 * @type Vector3
 	 */
+	itemPosition;
+
+	/**
+	 * @type Vector3
+	 */
 	cameraPosition;
 
 	/**
@@ -113,6 +118,7 @@ export default class ItemDefinitionModel extends IdentifiedModelNode {
 		this.scale = this.addProperty('scale', new Vector3(1,1,1));
 
 		this.itemRotation = this.addProperty('itemRotation', new Vector3());
+		this.itemPosition = this.addProperty('itemPosition', new Vector3());
 		this.cameraPosition = this.addProperty('cameraPosition', new Vector3());
 		this.cameraSize = this.addProperty('cameraSize', new FloatValue(20));
 
