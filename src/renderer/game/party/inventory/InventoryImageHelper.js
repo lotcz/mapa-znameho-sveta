@@ -23,8 +23,8 @@ export default class ItemInventoryImageHelper {
 		const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true});
 		container.appendChild(renderer.domElement);
 		renderer.setSize(IMAGE_SIZE.x, IMAGE_SIZE.y);
-		renderer.shadowMap.enabled = true;
-		renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+		//renderer.shadowMap.enabled = true;
+		//renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 		const scene = new THREE.Scene();
 		const camera = new THREE.OrthographicCamera(-10,10, 10, -10);

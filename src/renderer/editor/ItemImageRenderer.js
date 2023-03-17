@@ -26,11 +26,11 @@ export default class ItemImageRenderer extends DomRenderer {
 		this.inner = Pixies.createElement(this.slot, 'div', 'inner');
 
 		this.gui = GUIHelper.createGUI();
-		const position = GUIHelper.addVector3(this.gui, this.model.cameraPosition, 'camera position', -30, 30, 0.1);
+		const position = GUIHelper.addVector3(this.gui, this.model.cameraPosition, 'camera position', -50, 50, 0.1);
 		position.open();
-		const size = GUIHelper.addScaler(this.gui, this.model.cameraSize, 'value', 10, 40, 1);
+		const size = GUIHelper.addScaler(this.gui, this.model.cameraSize, 'value', 10, 50, 1);
 
-		const pos = GUIHelper.addVector3(this.gui, this.model.itemPosition, 'item position', -30, 30, 0.1);
+		const pos = GUIHelper.addVector3(this.gui, this.model.itemPosition, 'item position', -50, 50, 0.1);
 		pos.open();
 
 		const quaternion = GUIHelper.addRotationVector3(this.gui, this.model.itemRotation, 'item rotation');
