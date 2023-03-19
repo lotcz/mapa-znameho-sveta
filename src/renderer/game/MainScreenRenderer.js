@@ -32,7 +32,7 @@ export default class MainScreenRenderer extends DomRenderer {
 
 		this.addAutoEvent(
 			this.model,
-			'trigger-resize',
+			'resize',
 			() => this.mainLayerResized()
 		);
 
@@ -80,7 +80,7 @@ export default class MainScreenRenderer extends DomRenderer {
 
 	mainLayerResized() {
 		const size = new Vector2(this.mainLayer.offsetWidth, this.mainLayer.offsetHeight);
-		this.model.triggerEvent('main-layer-resized', size);
+		this.model.triggerEvent('resized', size);
 	}
 
 }

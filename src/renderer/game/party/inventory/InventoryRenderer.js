@@ -161,13 +161,13 @@ export default class InventoryRenderer extends DomRendererWithSaveGame {
 			)
 		);
 
-		this.party.triggerEvent('inventory-resize');
+		this.saveGame.triggerEvent('trigger-resize');
 	}
 
 	deactivateInternal() {
 		this.resetChildren();
 		this.removeElement(this.container);
-		this.party.triggerEvent('inventory-resize');
+		this.saveGame.triggerEvent('trigger-resize');
 	}
 
 	updateMode() {

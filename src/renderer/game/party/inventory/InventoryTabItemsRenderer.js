@@ -26,7 +26,7 @@ export default class InventoryTabItemsRenderer extends DomRenderer {
 	}
 
 	activateInternal() {
-		this.container = Pixies.createElement(this.dom, 'div', 'inventory-items row stretch flex-1');
+		this.container = Pixies.createElement(this.dom, 'div', 'inventory-items row container');
 
 		this.inventoryCharacter = Pixies.createElement(this.container, 'div', 'inventory-character flex-1');
 		this.consumption = Pixies.createElement(this.inventoryCharacter, 'div', 'stats-consumption column');
@@ -46,12 +46,12 @@ export default class InventoryTabItemsRenderer extends DomRenderer {
 		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.feet, this.inventoryCharacter));
 
 		this.inventorySlots = Pixies.createElement(this.container, 'div', 'inventory-slots');
-		this.inventorySlotsTop = Pixies.createElement(this.inventorySlots, 'div', 'inventory-slots-top');
+		this.inventorySlotsTop = Pixies.createElement(this.inventorySlots, 'div', 'inventory-slots-top inventory-slots-container');
 		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.slot1, this.inventorySlotsTop));
 		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.slot2, this.inventorySlotsTop));
 		this.addChild(new InventorySlotRenderer(this.game, this.model.inventory.slot3, this.inventorySlotsTop));
 
-		this.inventorySlotsBottom = Pixies.createElement(this.inventorySlots, 'div', 'inventory-slots-bottom');
+		this.inventorySlotsBottom = Pixies.createElement(this.inventorySlots, 'div', 'inventory-slots-bottom inventory-slots-container row-reverse');
 		this.addChild(new InventorySlotRenderer(this.game, this.model.dropSlot, this.inventorySlotsBottom));
 
 		Pixies.createElement(this.inventorySlotsBottom, 'button', 'special', 'Add item', () => {

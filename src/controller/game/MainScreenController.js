@@ -137,7 +137,15 @@ export default class MainScreenController extends ControllerNode {
 
 		this.addAutoEvent(
 			this.model,
-			'main-layer-resized',
+			'trigger-resize',
+			() => {
+				this.runOnUpdate(() => this.model.triggerEvent('resize'));
+			}
+		);
+
+		this.addAutoEvent(
+			this.model,
+			'resized',
 			(size) => {
 				this.runOnUpdate(() => this.game.mainLayerSize.set(size));
 			}

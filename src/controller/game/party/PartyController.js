@@ -38,13 +38,6 @@ export default class PartyController extends ControllerWithSaveGame {
 			}
 		);
 
-		this.addAutoEvent(
-			this.model.isInventoryVisible,
-			'change',
-			() => this.runOnUpdate(() => this.saveGame.triggerEvent('trigger-resize'))
-		);
-
-
 	}
 
 }

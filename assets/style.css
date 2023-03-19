@@ -930,6 +930,11 @@ h4 {
 .inventory .inventory-basic .stats-combat {
   font-size: 85%;
 }
+.inventory .inventory-items .inventory-slots {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 .inventory .inventory-items .slot {
   margin: 5px;
 }
@@ -1000,12 +1005,7 @@ h4 {
 .inventory .inventory-items .slot.drop .inner {
   background-color: rgba(200, 0, 0, 0.2);
 }
-.inventory-slots {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.inventory-slots > div {
+.inventory-slots-container {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
