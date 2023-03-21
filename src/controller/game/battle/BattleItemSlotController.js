@@ -1,11 +1,11 @@
 import ControllerNode from "../../basic/ControllerNode";
 import ItemModel from "../../../model/game/items/ItemModel";
-import InventorySlotModel from "../../../model/game/party/characters/InventorySlotModel";
+import ItemSlotModel from "../../../model/game/items/ItemSlotModel";
 
 export default class BattleItemSlotController extends ControllerNode {
 
 	/**
-	 * @type InventorySlotModel
+	 * @type ItemSlotModel
 	 */
 	model;
 
@@ -30,7 +30,7 @@ export default class BattleItemSlotController extends ControllerNode {
 					(ai) => {
 						const item = new ItemModel();
 						item.definitionId.set(ai.definitionId.get());
-						const slot = new InventorySlotModel(['all'], ai.slotName.get());
+						const slot = new ItemSlotModel(['all'], ai.slotName.get());
 						slot.item.set(item);
 						this.model.additionalItemsSlots.add(slot);
 					}

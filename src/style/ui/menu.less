@@ -1,0 +1,40 @@
+@menu-content-width: 288px;
+
+.main-menu {
+  	.paper();
+
+	display: flex;
+	text-align: center;
+
+  & > .inner {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	border-radius: 0;
+  }
+
+  .buttons {
+	padding: 20px;
+  }
+
+  .art {
+	position: relative;
+	width: @menu-content-width;
+
+	div.upper {
+	  position: absolute;
+	  top: 0;
+	  left: 0;
+	}
+
+	img {
+	  border-radius: 3px;
+	  width: @menu-content-width;
+	}
+  }
+
+  .inventory-slots-container {
+	max-width: @menu-content-width;
+	padding: 0;
+  }
+}

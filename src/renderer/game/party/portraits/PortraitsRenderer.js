@@ -18,7 +18,7 @@ export default class PortraitsRenderer extends DomRenderer {
 	}
 
 	activateInternal() {
-		this.container = Pixies.createElement(this.dom, 'div', 'column p-1');
+		this.container = Pixies.createElement(this.dom, 'div', 'column p-1 flex-1 space-between');
 		this.portraits = Pixies.createElement(this.container, 'div');
 
 		this.addChild(
@@ -30,17 +30,6 @@ export default class PortraitsRenderer extends DomRenderer {
 		);
 
 		this.controls = Pixies.createElement(this.container, 'div');
-
-		Pixies.createElement(
-			this.controls,
-			'button',
-			null,
-			'None',
-			(e) => {
-				e.preventDefault();
-				this.model.selectedCharacterId.set(null);
-			}
-		);
 
 		this.addChild(
 			new SwitchRenderer(
@@ -56,7 +45,7 @@ export default class PortraitsRenderer extends DomRenderer {
 				this.game,
 				this.model.battleFollowTheLeader,
 				this.controls,
-				'Follow'
+				'img/icon/follow.png'
 			)
 		);
 	}

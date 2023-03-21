@@ -1,8 +1,11 @@
-import DomRenderer from "../../basic/DomRenderer";
-import Pixies from "../../../class/basic/Pixies";
-import {TIME_TYPE_NAMES} from "../../../model/game/TimeModel";
+import Pixies from "../../class/basic/Pixies";
+import {TIME_TYPE_NAMES} from "../../model/game/TimeModel";
+import DomRendererWithSaveGame from "../basic/DomRendererWithSaveGame";
+import NullableNodeRenderer from "../basic/NullableNodeRenderer";
+import MapButtonsRenderer from "./map/MapButtonsRenderer";
+import BattleButtonsRenderer from "./battle/BattleButtonsRenderer";
 
-export default class MapMenuRenderer extends DomRenderer {
+export default class MainMenuRenderer extends DomRendererWithSaveGame {
 
 	/**
 	 * @type SaveGameModel
@@ -13,10 +16,20 @@ export default class MapMenuRenderer extends DomRenderer {
 		super(game, model, dom);
 
 		this.model = model;
+
+		this.addChild(
+			new NullableNodeRenderer(
+				this.game,
+				this.model.currentBattle,
+				() => new BattleButtonsRenderer(this.game, this.model, this.menuButtons),
+				() => new MapButtonsRenderer(this.game, this.model, this.menuButtons)
+			)
+		);
+
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', 'map-menu paper');
+		this.container = this.addElement('div', 'main-menu');
 		this.inner = Pixies.createElement(this.container,'div', 'inner p-3');
 		this.art = Pixies.createElement(this.inner,'div', 'art');
 		this.artLower = Pixies.createElement(this.art, 'div', 'lower');
@@ -27,22 +40,9 @@ export default class MapMenuRenderer extends DomRenderer {
 		this.time = Pixies.createElement(this.inner,'div', 'time');
 		this.timeType = Pixies.createElement(this.inner,'div', 'time-type');
 
-		this.buttons = Pixies.createElement(this.inner, 'div', 'buttons column center');
-		const start = Pixies.createElement(this.buttons, 'button', null, 'Start/Stop', () => {
-			this.model.partyTraveling.invert();
-		});
-		const revert = Pixies.createElement(this.buttons, 'button', null, 'Revert', () => {
-			this.model.forward.invert();
-		});
-		const sleep = Pixies.createElement(this.buttons, 'button', null, 'Sleep', () => {
-			this.model.partyResting.set(0.4);
-		});
-		const battle = Pixies.createElement(this.buttons, 'button', 'special', 'To Battle', () => {
-			this.model.triggerEvent('to-battle');
-		});
+		this.menuButtons = Pixies.createElement(this.inner, 'div', 'menu-buttons');
 
 		this.updateArt();
-		this.updateTime();
 		this.updateTimeType();
 
 		this.model.triggerEvent('trigger-resize');
@@ -57,9 +57,6 @@ export default class MapMenuRenderer extends DomRenderer {
 		if (this.model.currentBiotope.isDirty || this.model.time.timeOfDay.isDirty) {
 			this.updateArt();
 		}
-		if (this.model.time.timeOfDay.isDirty) {
-			this.updateTime();
-		}
 		if (this.model.time.timeType.isDirty) {
 			this.updateTimeType();
 		}
@@ -70,10 +67,6 @@ export default class MapMenuRenderer extends DomRenderer {
 		this.artUpperImg = null;
 		Pixies.emptyElement(this.artLower);
 		Pixies.emptyElement(this.artUpper);
-	}
-
-	updateTime() {
-		this.time.innerText = Pixies.round(this.model.time.timeOfDay.get(), 2);
 	}
 
 	updateTimeType() {

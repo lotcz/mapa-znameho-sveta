@@ -141,7 +141,7 @@ export default class SaveGameModel extends ModelNode {
 	conversation;
 
 	/**
-	 * @type NullableNode<InventorySlotModel>
+	 * @type NullableNode<ItemSlotModel>
 	 */
 	selectedInventorySlot;
 

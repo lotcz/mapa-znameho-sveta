@@ -1,10 +1,10 @@
-import DomRenderer from "../../../basic/DomRenderer";
 import Pixies from "../../../../class/basic/Pixies";
+import DomRendererWithSaveGame from "../../../basic/DomRendererWithSaveGame";
 
-export default class InventorySlotRenderer extends DomRenderer {
+export default class ItemSlotRenderer extends DomRendererWithSaveGame {
 
 	/**
-	 * @type InventorySlotModel
+	 * @type ItemSlotModel
 	 */
 	model;
 
@@ -12,14 +12,12 @@ export default class InventorySlotRenderer extends DomRenderer {
 		super(game, model, dom);
 
 		this.model = model;
-
-
 	}
 
 	activateInternal() {
 		this.container = this.addElement('div', ['slot', this.model.name]);
 		this.container.addEventListener('click', () => {
-			this.game.saveGame.get().triggerEvent('item-slot-selected', this.model);
+			this.saveGame.triggerEvent('item-slot-selected', this.model);
 		});
 
 		this.inner = Pixies.createElement(this.container, 'div', 'inner');

@@ -1,67 +1,67 @@
 import ModelNode from "../../../basic/ModelNode";
-import InventorySlotModel from "./InventorySlotModel";
+import ItemSlotModel from "../../items/ItemSlotModel";
 
 export default class InventoryModel extends ModelNode {
 
 	/**
-	 * @type InventorySlotModel
+	 * @type ItemSlotModel
 	 */
 	head;
 
 	/**
-	 * @type InventorySlotModel
+	 * @type ItemSlotModel
 	 */
 	leftHand;
 
 	/**
-	 * @type InventorySlotModel
+	 * @type ItemSlotModel
 	 */
 	rightHand;
 
 	/**
-	 * @type InventorySlotModel
+	 * @type ItemSlotModel
 	 */
 	body;
 
 	/**
-	 * @type InventorySlotModel
+	 * @type ItemSlotModel
 	 */
 	hips;
 
 	/**
-	 * @type InventorySlotModel
+	 * @type ItemSlotModel
 	 */
 	feet;
 
 	/**
-	 * @type InventorySlotModel
+	 * @type ItemSlotModel
 	 */
 	slot1;
 
 	/**
-	 * @type InventorySlotModel
+	 * @type ItemSlotModel
 	 */
 	slot2;
 
 	/**
-	 * @type InventorySlotModel
+	 * @type ItemSlotModel
 	 */
 	slot3;
 
 	constructor() {
 		super();
 
-		this.head = this.addProperty('head', new InventorySlotModel(['head'], 'head'));
-		this.leftHand = this.addProperty('leftHand', new InventorySlotModel(['all'], 'leftHand'));
-		this.rightHand = this.addProperty('rightHand', new InventorySlotModel(['all'], 'rightHand'));
+		this.head = this.addProperty('head', new ItemSlotModel(['head'], 'head'));
+		this.leftHand = this.addProperty('leftHand', new ItemSlotModel(['all'], 'leftHand'));
+		this.rightHand = this.addProperty('rightHand', new ItemSlotModel(['all'], 'rightHand'));
 
-		this.body = this.addProperty('body', new InventorySlotModel(['body'], 'body'));
-		this.hips = this.addProperty('hips', new InventorySlotModel(['hips'], 'hips'));
-		this.feet = this.addProperty('feet', new InventorySlotModel(['feet'], 'feet'));
+		this.body = this.addProperty('body', new ItemSlotModel(['body'], 'body'));
+		this.hips = this.addProperty('hips', new ItemSlotModel(['hips'], 'hips'));
+		this.feet = this.addProperty('feet', new ItemSlotModel(['feet'], 'feet'));
 
-		this.slot1 = this.addProperty('slot1', new InventorySlotModel(['all']));
-		this.slot2 = this.addProperty('slot2', new InventorySlotModel(['all']));
-		this.slot3 = this.addProperty('slot3', new InventorySlotModel(['all']));
+		this.slot1 = this.addProperty('slot1', new ItemSlotModel(['all']));
+		this.slot2 = this.addProperty('slot2', new ItemSlotModel(['all']));
+		this.slot3 = this.addProperty('slot3', new ItemSlotModel(['all']));
 
 		this.bodySlots = [this.head, this.leftHand, this.rightHand, this.body, this.hips, this.feet];
 		this.bodySlots.forEach((slot) => {

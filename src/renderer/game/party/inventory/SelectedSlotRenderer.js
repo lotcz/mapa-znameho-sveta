@@ -5,7 +5,7 @@ import {IMAGE_SIZE} from "./InventoryImageHelper";
 export default class SelectedSlotRenderer extends DomRenderer {
 
 	/**
-	 * @type InventorySlotModel
+	 * @type ItemSlotModel
 	 */
 	model;
 

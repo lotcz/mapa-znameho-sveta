@@ -1,5 +1,6 @@
 import DomRenderer from "./DomRenderer";
 import Pixies from "../../class/basic/Pixies";
+import AssetLoader from "../../class/loaders/AssetLoader";
 
 export default class SwitchRenderer extends DomRenderer {
 
@@ -18,10 +19,21 @@ export default class SwitchRenderer extends DomRenderer {
 
 	activateInternal() {
 		this.container = Pixies.createElement(this.dom, 'div', 'switch-container');
+		this.labelContainer = Pixies.createElement(this.container, 'div', 'label-container');
 		if (this.label) {
-			Pixies.createElement(this.container, 'span', 'switch-label', this.label);
+			const type = Pixies.extractId(this.label, 0);
+			if (type === 'img') {
+	 			const url = AssetLoader.urlFromUri(this.label);
+				this.labelImage = Pixies.createElement(this.labelContainer, 'img');
+				this.labelImage.src = url;
+			} else {
+				Pixies.createElement(this.labelContainer, 'span', 'switch-label', this.label);
+			}
 		}
-		this.switch = Pixies.createElement(this.container, 'div', 'switch');
+
+		this.switchContainer = Pixies.createElement(this.container, 'div', 'switch-inner-container');
+		this.switch = Pixies.createElement(this.switchContainer, 'div', 'switch');
+
 		this.container.addEventListener(
 			'click',
 			(e) => {
@@ -29,6 +41,7 @@ export default class SwitchRenderer extends DomRenderer {
 				this.model.invert();
 			}
 		);
+
 		this.updateValue();
 	}
 

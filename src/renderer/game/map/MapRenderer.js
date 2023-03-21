@@ -4,7 +4,6 @@ import PathRenderer from "./PathRenderer";
 import CollectionRenderer from "../../basic/CollectionRenderer";
 import LocationRenderer from "./LocationRenderer";
 import Pixies from "../../../class/basic/Pixies";
-import MapMenuRenderer from "./MapMenuRenderer";
 import MapPartyRenderer from "./MapPartyRenderer";
 import CurrentLocationRenderer from "./CurrentLocationRenderer";
 import NullableNodeRenderer from "../../basic/NullableNodeRenderer";
@@ -32,11 +31,10 @@ export default class MapRenderer extends DomRenderer {
 	 */
 	draw;
 
-	constructor(game, model, dom, rightPanel) {
+	constructor(game, model, dom) {
 		super(game, model, dom);
 
 		this.model = model;
-		this.rightPanel = rightPanel;
 		this.map = game.resources.map;
 
 		this.addAutoEvent(
@@ -65,7 +63,6 @@ export default class MapRenderer extends DomRenderer {
 		this.addChild(new CollectionRenderer(this.game, this.map.paths, (model) => new PathRenderer(this.game, model, this.pathsGroup)));
 		this.addChild(new CollectionRenderer(this.game, this.map.locations, (model) => new LocationRenderer(this.game, model, this.locationsGroup)));
 		this.addChild(new MapPartyRenderer(this.game, this.model, this.partyGroup));
-		this.addChild(new MapMenuRenderer(this.game, this.model, this.rightPanel));
 
 		this.mapImage = null;
 		this.game.assets.getAsset(

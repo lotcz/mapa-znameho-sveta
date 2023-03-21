@@ -7,6 +7,7 @@ import PartyRenderer from "./party/PartyRenderer";
 import SelectedSlotRenderer from "./party/inventory/SelectedSlotRenderer";
 import Pixies from "../../class/basic/Pixies";
 import Vector2 from "../../model/basic/Vector2";
+import MainMenuRenderer from "./MainMenuRenderer";
 
 export default class MainScreenRenderer extends DomRenderer {
 
@@ -63,9 +64,11 @@ export default class MainScreenRenderer extends DomRenderer {
 				this.game,
 				this.model.currentBattle,
 				(m) => new BattleRenderer(this.game, m, this.mainLayer),
-				() => new MapRenderer(this.game, this.model, this.mainLayer, this.rightPanel)
+				() => new MapRenderer(this.game, this.model, this.mainLayer)
 			)
 		);
+
+		this.addChild(new MainMenuRenderer(this.game, this.model, this.rightPanel));
 
 		this.addChild(new NullableNodeRenderer(this.game, this.model.conversation, (m) => new ConversationRenderer(this.game, m, this.topLayer, this.model)));
 		this.addChild(new NullableNodeRenderer(this.game, this.model.selectedInventorySlot, (m) => new SelectedSlotRenderer(this.game, m, this.container)));

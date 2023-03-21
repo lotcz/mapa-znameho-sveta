@@ -8,6 +8,7 @@ import BattlePartyCharacterModel from "../../model/game/battle/BattlePartyCharac
 import Vector2 from "../../model/basic/Vector2";
 import Pixies from "../../class/basic/Pixies";
 import {SPECIAL_TYPE_SPAWN} from "../../model/game/battle/battlemap/BattleSpecialModel";
+import ItemSlotsController from "./items/ItemSlotsController";
 
 export default class SaveGameController extends ControllerNode {
 
@@ -21,6 +22,13 @@ export default class SaveGameController extends ControllerNode {
 
 		this.model = model;
 		this.map = game.resources.map;
+
+		this.addChild(
+			new ItemSlotsController(
+				this.game,
+				this.model
+			)
+		);
 
 		this.addChild(
 			new NullableNodeController(

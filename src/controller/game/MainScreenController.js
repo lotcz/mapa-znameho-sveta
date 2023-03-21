@@ -3,7 +3,6 @@ import MapController from "./map/MapController";
 import BattleController from "./battle/BattleController";
 import ConversationController from "./conversation/ConversationController";
 import PartyController from "./party/PartyController";
-import BattleItemModel from "../../model/game/battle/BattleItemModel";
 import {ImageHelper} from "../../class/basic/ImageHelper";
 import NullableNodeController from "../basic/NullableNodeController";
 import {TIME_HOUR} from "../../model/game/TimeModel";
@@ -82,57 +81,6 @@ export default class MainScreenController extends ControllerNode {
 			'change',
 			() => this.updateConversation(),
 			true
-		);
-
-		this.addAutoEvent(
-			this.model,
-			'item-slot-selected',
-			(slot) => {
-				// handle items
-				// todo: move to some separate controller
-				if (this.model.selectedInventorySlot.equalsTo(slot)) {
-					this.model.selectedInventorySlot.set(null);
-					return;
-				}
-
-				if (this.model.selectedInventorySlot.isSet()) {
-					const oldItem = this.model.selectedInventorySlot.get().item.get();
-
-					if (slot.name === 'drop') {
-						if (oldItem && this.model.currentBattle.isSet()) {
-							const battleItem = new BattleItemModel();
-							battleItem.item.set(oldItem);
-							const character = this.model.party.selectedCharacter.get();
-							const battle = this.model.currentBattle.get();
-							const battleCharacter = battle.partyCharacters.find((chr) => chr.characterId.equalsTo(character.id));
-							battleItem.position.set(battleCharacter.position);
-							battle.items.add(battleItem);
-						}
-
-						this.model.selectedInventorySlot.get().item.set(null);
-						this.model.selectedInventorySlot.set(null);
-						return;
-					}
-
-					const def = this.game.resources.itemDefinitions.getById(oldItem.definitionId.get());
-					if (!slot.accepts(def.type.get())) {
-						return;
-					}
-					if (slot.item.isSet()) {
-						const newItem = slot.item.get();
-						slot.item.set(oldItem);
-						this.model.selectedInventorySlot.get().item.set(newItem);
-						return;
-					}
-					slot.item.set(oldItem)
-					this.model.selectedInventorySlot.get().item.set(null);
-					this.model.selectedInventorySlot.set(null);
-					return;
-				}
-				if (slot.item.isSet()) {
-					this.model.selectedInventorySlot.set(slot);
-				}
-			}
 		);
 
 		this.addAutoEvent(

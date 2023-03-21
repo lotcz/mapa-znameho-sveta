@@ -1,25 +1,23 @@
+.item-slot {
+  .inner {
+	box-shadow: @dark-brown 0 0 40px;
+	width: @inventory-slot-size;
+	height: @inventory-slot-size;
+	padding: 0;
+	border-radius: 10px;
+
+	img {
+	  width: 100%;
+	}
+  }
+}
+
 .inventory .inventory-items {
 
   .inventory-slots {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-  }
-
-  .slot {
-	margin: 5px;
-
-	.inner {
-	  box-shadow: @dark-brown 0 0 40px;
-	  width: @inventory-slot-size;
-	  height: @inventory-slot-size;
-	  padding: 0;
-	  border-radius: 10px;
-
-	  img {
-		width: 100%;
-	  }
-	}
   }
 
   .inventory-character {
@@ -53,6 +51,7 @@
 	}
 
 	.slot {
+	  .item-slot();
 	  position: absolute;
 	}
 
@@ -96,7 +95,14 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  padding: 20px
+  padding: 20px;
+
+  .slot {
+	.item-slot();
+
+	margin: @m-1;
+  }
+
 }
 
 .selected-item-slot {

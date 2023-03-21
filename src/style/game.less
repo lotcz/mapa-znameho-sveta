@@ -85,19 +85,40 @@
 	cursor: url('img/cursor/cursor-character.png'), pointer;
   }
 
-  .switch {
-	width: @m-3;
-	height: @m-3;
-	font-size: 15px;
-	font-family: Arial, sans-serif;
-	text-align: center;
-	vertical-align: middle;
-	background-color: @medium-brown;
-	box-shadow: @dark-brown 1px 1px 10px;
-	border-width: @gold;
-	border-radius: 4px;
-	color: @gold;
+  .switch-container {
+	margin-top: @m-1;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	padding-right: 4px;
+
+	.label-container {
+	  display: flex;
+	  flex-direction: column;
+	  justify-content: center;
+	}
+
+	.switch-inner-container {
+	  display: flex;
+	  flex-direction: column;
+	  justify-content: center;
+
+	  .switch {
+		width: @m-3;
+		height: @m-3;
+		font-size: 15px;
+		font-family: Arial, sans-serif;
+		text-align: center;
+		vertical-align: middle;
+		background-color: @medium-brown;
+		box-shadow: @dark-brown 1px 1px 10px;
+		border-width: @gold;
+		border-radius: 4px;
+		color: @gold;
+	  }
+	}
   }
+
 }
 
 .portrait img {

@@ -119,6 +119,16 @@ export default class BattleModel extends ModelNode {
 	 */
 	cursorType;
 
+	/**
+	 * @type Vector2
+	 */
+	groundPosition;
+
+	/**
+	 * @type ModelNodeCollection<ItemSlotModel>
+	 */
+	groundItems;
+
 	constructor() {
 		super();
 
@@ -144,6 +154,9 @@ export default class BattleModel extends ModelNode {
 		this.hoveringBattleCharacter = this.addProperty('hoveringBattleCharacter', new NullableNode(null, false));
 		this.hoveringSpecial = this.addProperty('hoveringSpecial', new NullableNode(null, false));
 		this.cursorType = this.addProperty('cursorType', new StringValue(CURSOR_TYPE_DEFAULT, false));
+
+		this.groundPosition = this.addProperty('groundPosition', new Vector2(0, 0, false));
+		this.groundItems = this.addProperty('groundItems', new ModelNodeCollection(null, false));
 
 		this.pathFinder = new CachedPathFinder();
 

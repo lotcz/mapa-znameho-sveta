@@ -43,7 +43,11 @@ export default class AssetLoader extends Node {
 	}
 
 	url() {
-		return 'assets/' + this.uri;
+		return AssetLoader.urlFromUri(this.uri);
+	}
+
+	static urlFromUri(uri) {
+		return 'assets/' + uri;
 	}
 
 }

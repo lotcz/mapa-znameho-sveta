@@ -23,6 +23,7 @@ import {
 	SPECIAL_TYPE_EXIT,
 	SPECIAL_TYPE_SEQUENCE
 } from "../../../model/game/battle/battlemap/BattleSpecialModel";
+import ItemSlotModel from "../../../model/game/items/ItemSlotModel";
 
 const CURSOR_OFFSET = new Vector2(12, 12);
 
@@ -209,6 +210,15 @@ export default class BattleController extends ControllerWithSaveGame {
 			true
 		);
 
+		this.addAutoEvent(
+			this.model.groundPosition,
+			'change',
+			() => {
+				this.updateGroundItems();
+			},
+			true
+		);
+
 	}
 
 	updateInternal(delta) {
@@ -365,5 +375,22 @@ export default class BattleController extends ControllerWithSaveGame {
 			}
 		}
 		return (this.model.isHoveringNoGo.get()) ? CURSOR_TYPE_DEFAULT : CURSOR_TYPE_WALK;
+	}
+
+	updateGroundItems() {
+		this.model.groundItems.reset();
+		if (this.model.partyCharacters.selectedNode.isEmpty()) return;
+
+		const items = this.model.items.filter((item) => item.position.equalsTo(this.model.groundPosition));
+		const itemCount = Math.ceil((items.length + 3) / 3) * 3;
+
+		for (let i = 0; i < itemCount; i++) {
+			this.model.groundItems.add(new ItemSlotModel(['all'], 'ground'));
+		}
+
+		for (let i = 0; i < items.length; i++) {
+			const slot = this.model.groundItems.get(i);
+			slot.item.set(items[i].item.get());
+		}
 	}
 }

@@ -1,5 +1,4 @@
 import Pixies from "../../../class/basic/Pixies";
-import DomRenderer from "../../basic/DomRenderer";
 import ConditionalNodeRenderer from "../../basic/ConditionalNodeRenderer";
 import {
 	MODE_ACTIONS,
@@ -13,8 +12,9 @@ import BattleEditorSpritesRenderer from "./BattleEditorSpritesRenderer";
 import BattleEditorSpecialsRenderer from "./BattleEditorSpecialsRenderer";
 import BattleEditorSprites3dRenderer from "./BattleEditorSprites3dRenderer";
 import BattleEditorNpcsRenderer from "./BattleEditorNpcsRenderer";
+import DomRendererWithSaveGame from "../../basic/DomRendererWithSaveGame";
 
-export default class BattleEditorRenderer extends DomRenderer {
+export default class BattleEditorRenderer extends DomRendererWithSaveGame {
 
 	/**
 	 * @type BattleEditorModel
@@ -77,13 +77,24 @@ export default class BattleEditorRenderer extends DomRenderer {
 		this.bottom = Pixies.createElement(this.container, 'div');
 
 		const switches = Pixies.createElement(this.menu, 'div', 'row');
-		const label = Pixies.createElement(switches, 'label', null, 'Helpers');
+		const label = Pixies.createElement(switches, 'label', 'mt-1', 'Helpers');
 		label.setAttribute('for', 'show_helpers');
 		const check = Pixies.createElement(switches, 'input', null);
 		check.setAttribute('type', 'checkbox');
 		check.setAttribute('id', 'show_helpers');
 		check.checked = this.model.showHelpers.get();
 		check.addEventListener('change', () => this.model.showHelpers.set(check.checked));
+
+		Pixies.createElement(
+			switches,
+			'button',
+			null,
+			'None',
+			(e) => {
+				e.preventDefault();
+				this.saveGame.party.selectedCharacterId.set(null);
+			}
+		);
 
 		for (let i = 0; i <= 5; i++) {
 			const r = Pixies.createElement(this.brushSize, 'input');

@@ -19,7 +19,7 @@ const BONES = {
 export default class BattleItemSlotRenderer extends RendererNode {
 
 	/**
-	 * @type InventorySlotModel
+	 * @type ItemSlotModel
 	 */
 	model;
 

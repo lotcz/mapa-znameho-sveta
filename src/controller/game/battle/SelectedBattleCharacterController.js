@@ -18,12 +18,12 @@ export default class SelectedBattleCharacterController extends ControllerWithBat
 
 		this.model = model;
 
-		this.addAutoEvent(
-			this.model.position,
+		this.addAutoEventMultiple(
+			[this.model.position, this.saveGame.party.battleScrollWhenMove],
 			'change',
 			() => {
 				if (this.saveGame.party.battleScrollWhenMove.get()) {
-					this.battle.coordinates.set(this.battleMap.positionToScreenCoords(this.model.position));
+					this.centerScreen();
 				}
 			}
 		);
@@ -82,6 +82,22 @@ export default class SelectedBattleCharacterController extends ControllerWithBat
 				}
 			}
 		);
+
+		this.addAutoEvent(
+			this.model.position,
+			'change',
+			() => {
+				this.updateGroundPosition()
+			},
+			true
+		);
 	}
 
+	centerScreen() {
+		this.battle.coordinates.set(this.battleMap.positionToScreenCoords(this.model.position));
+	}
+
+	updateGroundPosition() {
+		this.battle.groundPosition.set(this.model.position.round());
+	}
 }
