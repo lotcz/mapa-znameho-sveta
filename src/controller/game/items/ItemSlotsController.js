@@ -41,6 +41,7 @@ export default class ItemSlotsController extends ControllerWithSaveGame {
 		}
 		const item = selectedSlot.item.get();
 		if (!item) {
+			console.error('empty item slot is selected!');
 			return;
 		}
 		const def = this.game.resources.itemDefinitions.getById(item.definitionId.get());
@@ -48,9 +49,6 @@ export default class ItemSlotsController extends ControllerWithSaveGame {
 			return;
 		}
 		selectedSlot.item.set(null);
-		if (slot.name === 'drop') {
-			this.dropToGround(item);
-		}
 		if (slot.name === 'ground' && selectedSlot.name !== 'ground') {
 			this.dropToGround(item);
 		}
@@ -58,7 +56,12 @@ export default class ItemSlotsController extends ControllerWithSaveGame {
 			this.removeFromGround(item);
 		}
 		this.pickUp(slot);
-		if (slot.name !== 'drop') {
+		if (slot.name === 'drop') {
+			this.dropToGround(item);
+			// trigger ground refresh
+			const battle = this.saveGame.currentBattle.get();
+			if (battle) battle.groundPosition.triggerEvent('change');
+		} else {
 			slot.item.set(item);
 		}
 	}
