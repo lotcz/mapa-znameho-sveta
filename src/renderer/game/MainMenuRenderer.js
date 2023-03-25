@@ -4,6 +4,7 @@ import DomRendererWithSaveGame from "../basic/DomRendererWithSaveGame";
 import NullableNodeRenderer from "../basic/NullableNodeRenderer";
 import MapButtonsRenderer from "./map/MapButtonsRenderer";
 import BattleButtonsRenderer from "./battle/BattleButtonsRenderer";
+import DirtyValueRenderer from "../basic/DirtyValueRenderer";
 
 export default class MainMenuRenderer extends DomRendererWithSaveGame {
 
@@ -26,11 +27,25 @@ export default class MainMenuRenderer extends DomRendererWithSaveGame {
 			)
 		);
 
+		this.addChild(
+			new NullableNodeRenderer(
+				this.game,
+				this.model.currentPath,
+				(m) => new DirtyValueRenderer(this.game, m.name, this.label),
+				() => new NullableNodeRenderer(
+					this.game,
+					this.model.currentLocation,
+					(m) => new DirtyValueRenderer(this.game, m.name, this.label)
+				)
+			)
+		);
+
 	}
 
 	activateInternal() {
 		this.container = this.addElement('div', 'main-menu');
 		this.inner = Pixies.createElement(this.container,'div', 'inner p-3');
+		this.label = Pixies.createElement(this.inner,'h2', 'title');
 		this.art = Pixies.createElement(this.inner,'div', 'art');
 		this.artLower = Pixies.createElement(this.art, 'div', 'lower');
 		this.artUpper = Pixies.createElement(this.art,'div', 'upper');

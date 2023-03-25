@@ -176,7 +176,7 @@ export default class SaveGameModel extends ModelNode {
 		this.partyCoordinates.addOnChangeListener((param) => {
 			this.lastPartyCoordinates.set(param.oldValue);
 		});
-		this.zoom = this.addProperty('startZoom', new FloatValue(1));
+		this.zoom = this.addProperty('zoom', new FloatValue(1));
 
 		this.pathProgress = this.addProperty('pathProgress', new FloatValue(0));
 		this.forward = this.addProperty('forward', new BoolValue(true));

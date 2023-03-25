@@ -842,7 +842,7 @@ h4 {
 }
 .main-menu .art {
   position: relative;
-  width: 288px;
+  width: 280px;
 }
 .main-menu .art div.upper {
   position: absolute;
@@ -851,10 +851,10 @@ h4 {
 }
 .main-menu .art img {
   border-radius: 3px;
-  width: 288px;
+  width: 280px;
 }
 .main-menu .inventory-slots-container {
-  max-width: 288px;
+  max-width: 280px;
   padding: 0;
 }
 .party {
@@ -976,8 +976,8 @@ h4 {
 }
 .item-slot .inner {
   box-shadow: #311a0a 0 0 40px;
-  width: 65px;
-  height: 65px;
+  width: 60px;
+  height: 60px;
   padding: 0;
   border-radius: 10px;
 }
@@ -1004,7 +1004,7 @@ h4 {
   right: 0;
   top: 0;
   font-size: 75%;
-  width: 65px;
+  width: 60px;
   padding: 5px;
 }
 .inventory .inventory-items .inventory-character .stats-consumption .stat-wrapper {
@@ -1021,8 +1021,8 @@ h4 {
 }
 .inventory .inventory-items .inventory-character .slot .inner {
   box-shadow: #311a0a 0 0 40px;
-  width: 65px;
-  height: 65px;
+  width: 60px;
+  height: 60px;
   padding: 0;
   border-radius: 10px;
 }
@@ -1067,8 +1067,8 @@ h4 {
 }
 .inventory-slots-container .slot .inner {
   box-shadow: #311a0a 0 0 40px;
-  width: 65px;
-  height: 65px;
+  width: 60px;
+  height: 60px;
   padding: 0;
   border-radius: 10px;
 }

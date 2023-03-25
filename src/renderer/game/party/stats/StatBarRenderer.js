@@ -31,7 +31,10 @@ export default class StatBarRenderer extends DomRenderer {
 	}
 
 	updateBar() {
-		const ratio = this.model.baseValue.get() > 0 ? this.model.currentFloat.get() / this.model.baseValue.get() : 1;
+		if (this.model.definition.isEmpty()) return;
+		//const statDef = this.model.definition.get();
+		const max = this.model.baseValue.get();
+		const ratio = max > 0 ? this.model.currentFloat.get() / max : 0;
 		const width = Pixies.round(ratio * 100, 3);
 		this.bar.style.width = `${Pixies.between(0, 100, width)}%`;
 		this.bar.style.opacity = Pixies.between(0.1, 1, ratio);

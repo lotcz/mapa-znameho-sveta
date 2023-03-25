@@ -4,6 +4,7 @@ import StringValue from "../../../basic/StringValue";
 export const EFFECT_SOURCE_ITEM = 'item';
 export const EFFECT_SOURCE_RACE = 'race';
 export const EFFECT_SOURCE_WEATHER = 'weather';
+export const EFFECT_SOURCE_RITUAL = 'ritual';
 
 export default class EffectSourceModel extends ModelNode {
 
@@ -21,7 +22,7 @@ export default class EffectSourceModel extends ModelNode {
 		super(false);
 
 		this.type = type;
-		this.name = this.addProperty('name', new StringValue(''));
+		this.name = this.addProperty('name', new StringValue());
 
 	}
 

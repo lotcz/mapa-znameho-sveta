@@ -7,8 +7,7 @@ export default class TemperatureStatController extends ComputedStatControllerBas
 	}
 
 	updateBase() {
-		const statDef = this.game.resources.statDefinitions.getById(this.model.definitionId.get());
-		this.model.baseValue.set(statDef.max.get());
+		this.model.baseValue.set(10);
 	}
 
 }

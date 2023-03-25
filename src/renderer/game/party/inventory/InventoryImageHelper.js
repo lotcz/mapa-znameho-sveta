@@ -6,7 +6,7 @@ import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 import {FXAAShader} from "three/examples/jsm/shaders/FXAAShader";
 import Vector2 from "../../../../model/basic/Vector2";
 
-export const IMAGE_SIZE = new Vector2(65, 65);
+export const IMAGE_SIZE = new Vector2(60, 60);
 
 export default class ItemInventoryImageHelper {
 

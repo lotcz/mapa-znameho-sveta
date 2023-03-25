@@ -51,6 +51,14 @@ export default class InventoryTabStatsRenderer extends DomRenderer {
 		this.experience = Pixies.createElement(this.level, 'div', 'flex-1');
 		this.addChild(new StatBarRenderer(this.game, this.model.stats.level.levelProgress, this.experience));
 
+		this.temperature = Pixies.createElement(this.info, 'div', 'row stat-skill');
+		Pixies.createElement(this.temperature, 'div', 'name', 'Teplota');
+		this.temperatureInner = Pixies.createElement(this.temperature, 'div', 'row');
+		this.addChild(new StatNumberRenderer(this.game, this.model.stats.consumption.temperature.baseValue, this.temperatureInner));
+		this.addChild(new StatBarRenderer(this.game, this.model.stats.consumption.temperature, this.temperatureInner));
+		this.addChild(new StatNumberRenderer(this.game, this.model.stats.consumption.temperature.currentFloat, this.temperatureInner));
+
+
 		Pixies.createElement(this.container, 'h2', 'center my-3', 'Vlastnosti');
 		this.abilities = Pixies.createElement(this.container, 'div');
 		this.addChild(

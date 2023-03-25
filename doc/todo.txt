@@ -1,0 +1,22 @@
+ITEMS:
+
+- main (right) menu visible all the time
+- time and temperature on top
+- items pop up in conversations
+
+in battle:
+- items stay on position
+
+on map - location without battle:
+- items stay bound to location
+
+on map - random path point or campsite:
+- create new permanent location?
+
+HINTS/POP-UPS:
+
+- show pop-ups inside topmost layer
+
+BIOTOPE
+- fix time images to dawn, day, dusk, night
+-

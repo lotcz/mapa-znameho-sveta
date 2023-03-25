@@ -382,7 +382,7 @@ export default class BattleController extends ControllerWithSaveGame {
 		if (this.model.partyCharacters.selectedNode.isEmpty()) return;
 
 		const items = this.model.items.filter((item) => item.position.equalsTo(this.model.groundPosition));
-		const itemCount = Math.ceil((items.length + 3) / 3) * 3;
+		const itemCount = Math.ceil((items.length + 4) / 4) * 4;
 
 		for (let i = 0; i < itemCount; i++) {
 			this.model.groundItems.add(new ItemSlotModel(['all'], 'ground'));
