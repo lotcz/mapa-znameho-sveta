@@ -1,7 +1,5 @@
 ITEMS:
 
-- main (right) menu visible all the time
-- time and temperature on top
 - items pop up in conversations
 
 in battle:
@@ -19,4 +17,4 @@ HINTS/POP-UPS:
 
 BIOTOPE
 - fix time images to dawn, day, dusk, night
--
+- temperature:

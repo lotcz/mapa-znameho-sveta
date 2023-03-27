@@ -134,7 +134,7 @@ export default class BattleRenderer extends DomRenderer {
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', 'battle container-host');
+		this.container = this.addElement('div', 'battle container container-host');
 		this.container.addEventListener('mouseover', () => {
 			this.model.isMouseOver.set(true);
 		});

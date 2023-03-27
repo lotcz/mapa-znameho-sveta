@@ -47,7 +47,10 @@ export default class MainScreenRenderer extends DomRenderer {
 		this.partyPanel = Pixies.createElement(bottomLayer, 'div', 'savegame-party row stretch');
 		this.partyPanel.addEventListener('wheel', (e) => e.stopPropagation());
 
-		this.mainLayer = Pixies.createElement(bottomLayer, 'div', 'main row stretch flex-1');
+		this.mainLayer = Pixies.createElement(bottomLayer, 'div', 'main stretch flex-1 container-host');
+		this.mainBottom = Pixies.createElement(this.mainLayer, 'div', 'container container-host');
+		this.conversationContainer = Pixies.createElement(this.mainLayer, 'div', 'conversation-container container-host');
+
 		this.mainLayer.addEventListener(
 			'mousemove',
 			(e) => {
@@ -63,14 +66,13 @@ export default class MainScreenRenderer extends DomRenderer {
 			new NullableNodeRenderer(
 				this.game,
 				this.model.currentBattle,
-				(m) => new BattleRenderer(this.game, m, this.mainLayer),
-				() => new MapRenderer(this.game, this.model, this.mainLayer)
+				(m) => new BattleRenderer(this.game, m, this.mainBottom),
+				() => new MapRenderer(this.game, this.model, this.mainBottom)
 			)
 		);
 
 		this.addChild(new MainMenuRenderer(this.game, this.model, this.rightPanel));
-
-		this.addChild(new NullableNodeRenderer(this.game, this.model.conversation, (m) => new ConversationRenderer(this.game, m, this.topLayer, this.model)));
+		this.addChild(new NullableNodeRenderer(this.game, this.model.conversation, (m) => new ConversationRenderer(this.game, m, this.conversationContainer, this.model)));
 		this.addChild(new NullableNodeRenderer(this.game, this.model.selectedInventorySlot, (m) => new SelectedSlotRenderer(this.game, m, this.container)));
 		this.addChild(new PartyRenderer(this.game, this.model.party, this.partyPanel, this.topLayer));
 	}

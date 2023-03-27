@@ -12,12 +12,10 @@ export default class PartyRenderer extends DomRenderer {
 	 */
 	model;
 
-	constructor(game, model, dom, topLayer) {
+	constructor(game, model, dom) {
 		super(game, model, dom);
 
 		this.model = model;
-		this.topLayer = topLayer;
-
 	}
 
 	activateInternal() {

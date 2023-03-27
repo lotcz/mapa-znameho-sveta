@@ -4,26 +4,20 @@
 }
 
 .conversation {
-  background-color: black;
   animation-name: fadeInAnim;
   animation-duration: 1s;
   animation-fill-mode: forwards;
-  display: flex;
-  position: fixed;
-  flex-direction: column;
-  align-items: center;
-  justify-items: center;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+
+  .overlay {
+	background-color: black;
+	opacity: 0.6;
+  }
 
   .panel {
-	margin: auto;
 	width: 900px;
 	max-width: 100%;
-	height: 85%;
-	max-height: 100%;
+	height: 600px;
+	max-height: 85%;
 	border-radius: 10px;
 	box-shadow: @dark-brown 0 0 60px;
 	display: flex;

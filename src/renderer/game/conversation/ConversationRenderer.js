@@ -34,12 +34,17 @@ export default class ConversationRenderer extends DomRenderer {
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', 'conversation');
+		Pixies.addClass(this.dom, 'container');
+
+		this.container = this.addElement('div', 'conversation container container-host');
 		this.container.addEventListener('mousemove', this.onContainerEvent);
 		this.container.addEventListener('click', this.onContainerEvent);
 		this.container.addEventListener('wheel', this.onContainerEvent);
 
-		this.panel = Pixies.createElement(this.container, 'div', 'panel paper');
+		this.overlay = Pixies.createElement(this.container, 'div', 'overlay container');
+
+		this.panelWrapper = Pixies.createElement(this.container, 'div', 'container column center p-3');
+		this.panel = Pixies.createElement(this.panelWrapper, 'div', 'panel paper left');
 		this.inner = Pixies.createElement(this.panel, 'div', 'inner');
 
 		const header = Pixies.createElement(this.inner, 'div', 'header');
@@ -125,6 +130,7 @@ export default class ConversationRenderer extends DomRenderer {
 		this.model.currentEntry.removeOnChangeListener(this.onCurrentEntryChanged);
 		this.resetChildren();
 		this.removeElement(this.container);
+		Pixies.removeClass(this.dom, 'container');
 	}
 
 	updateResponses() {

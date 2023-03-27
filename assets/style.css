@@ -906,9 +906,6 @@ h4 {
 .party .stat-bar .stat-5 {
   background-color: #311a0a;
 }
-.inventory {
-  width: 750px;
-}
 .inventory .portrait {
   width: 235px;
 }
@@ -997,7 +994,6 @@ h4 {
 .inventory .inventory-items .inventory-character {
   position: relative;
   display: block;
-  height: 500px;
   margin: 20px;
   background-image: url('../../../assets/img/ui/inventory-female.png');
   background-size: contain;
@@ -1128,26 +1124,19 @@ h4 {
   }
 }
 .conversation {
-  background-color: black;
   animation-name: fadeInAnim;
   animation-duration: 1s;
   animation-fill-mode: forwards;
-  display: flex;
-  position: fixed;
-  flex-direction: column;
-  align-items: center;
-  justify-items: center;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+}
+.conversation .overlay {
+  background-color: black;
+  opacity: 0.6;
 }
 .conversation .panel {
-  margin: auto;
   width: 900px;
   max-width: 100%;
-  height: 85%;
-  max-height: 100%;
+  height: 600px;
+  max-height: 85%;
   border-radius: 10px;
   box-shadow: #311a0a 0 0 60px;
   display: flex;
