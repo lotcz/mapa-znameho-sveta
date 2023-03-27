@@ -1,4 +1,4 @@
-import {TIME_HOUR} from "../../../model/game/TimeModel";
+import {TIME_HOUR} from "../../../model/game/environment/TimeModel";
 import ControllerWithSaveGame from "../../basic/ControllerWithSaveGame";
 
 const TRAVEL_SPEED = 40; // px per second

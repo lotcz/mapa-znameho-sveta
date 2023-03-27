@@ -1,10 +1,11 @@
 import Pixies from "../../class/basic/Pixies";
-import {TIME_TYPE_NAMES} from "../../model/game/TimeModel";
+import {TIME_TYPE_NAMES} from "../../model/game/environment/TimeModel";
 import DomRendererWithSaveGame from "../basic/DomRendererWithSaveGame";
 import NullableNodeRenderer from "../basic/NullableNodeRenderer";
 import MapButtonsRenderer from "./map/MapButtonsRenderer";
 import BattleButtonsRenderer from "./battle/BattleButtonsRenderer";
 import DirtyValueRenderer from "../basic/DirtyValueRenderer";
+import {TEMPERATURE_TYPE_NAMES} from "../../model/game/environment/TemperatureModel";
 
 export default class MainMenuRenderer extends DomRendererWithSaveGame {
 
@@ -27,38 +28,66 @@ export default class MainMenuRenderer extends DomRendererWithSaveGame {
 			)
 		);
 
+		// title
 		this.addChild(
 			new NullableNodeRenderer(
 				this.game,
 				this.model.currentPath,
-				(m) => new DirtyValueRenderer(this.game, m.name, this.label),
+				(m) => new DirtyValueRenderer(this.game, m.name, this.title),
 				() => new NullableNodeRenderer(
 					this.game,
 					this.model.currentLocation,
-					(m) => new DirtyValueRenderer(this.game, m.name, this.label)
+					(m) => new DirtyValueRenderer(this.game, m.name, this.title)
 				)
 			)
 		);
 
+		// time
+		this.addChild(
+			new NullableNodeRenderer(
+				this.game,
+				this.model.time.timeType,
+				() => new DirtyValueRenderer(this.game, this.model.time.timeType, this.timeType, (v) => TIME_TYPE_NAMES[v])
+			)
+		);
+
+		// biotope name
+		this.addChild(
+			new NullableNodeRenderer(
+				this.game,
+				this.model.currentBiotope,
+				(m) => new DirtyValueRenderer(this.game, m.name, this.biotopeName)
+			)
+		);
+
+		// temperature
+		this.addChild(
+			new NullableNodeRenderer(
+				this.game,
+				this.model.temperature.temperatureType,
+				() => new DirtyValueRenderer(this.game, this.model.temperature.temperatureType, this.temperature, (v) => TEMPERATURE_TYPE_NAMES[v])
+			)
+		);
 	}
 
 	activateInternal() {
 		this.container = this.addElement('div', 'main-menu');
 		this.inner = Pixies.createElement(this.container,'div', 'inner p-3');
-		this.label = Pixies.createElement(this.inner,'h2', 'title');
+		this.title = Pixies.createElement(this.inner,'h2', 'title');
 		this.art = Pixies.createElement(this.inner,'div', 'art');
 		this.artLower = Pixies.createElement(this.art, 'div', 'lower');
 		this.artUpper = Pixies.createElement(this.art,'div', 'upper');
 		this.artLowerImg = null;
 		this.artUpperImg = null;
 
-		this.time = Pixies.createElement(this.inner,'div', 'time');
-		this.timeType = Pixies.createElement(this.inner,'div', 'time-type');
+		this.info = Pixies.createElement(this.inner,'div', 'info row space-between');
+		this.timeType = Pixies.createElement(this.info,'div', 'time-type');
+		this.biotopeName = Pixies.createElement(this.info,'div', 'biotope-name');
+		this.temperature = Pixies.createElement(this.info,'div', 'temperature');
 
 		this.menuButtons = Pixies.createElement(this.inner, 'div', 'menu-buttons');
 
 		this.updateArt();
-		this.updateTimeType();
 
 		this.model.triggerEvent('trigger-resize');
 	}
@@ -72,9 +101,6 @@ export default class MainMenuRenderer extends DomRendererWithSaveGame {
 		if (this.model.currentBiotope.isDirty || this.model.time.timeOfDay.isDirty) {
 			this.updateArt();
 		}
-		if (this.model.time.timeType.isDirty) {
-			this.updateTimeType();
-		}
 	}
 
 	clearArt() {
@@ -82,10 +108,6 @@ export default class MainMenuRenderer extends DomRendererWithSaveGame {
 		this.artUpperImg = null;
 		Pixies.emptyElement(this.artLower);
 		Pixies.emptyElement(this.artUpper);
-	}
-
-	updateTimeType() {
-		this.timeType.innerText = TIME_TYPE_NAMES[this.model.time.timeType.get()];
 	}
 
 	updateArt() {

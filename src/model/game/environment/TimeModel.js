@@ -1,6 +1,6 @@
-import ModelNode from "../basic/ModelNode";
-import FloatValue from "../basic/FloatValue";
-import StringValue from "../basic/StringValue";
+import ModelNode from "../../basic/ModelNode";
+import FloatValue from "../../basic/FloatValue";
+import StringValue from "../../basic/StringValue";
 
 export const TIME_HOUR = 1/24;
 export const TIME_MINUTE = TIME_HOUR/60;
@@ -55,7 +55,7 @@ export default class TimeModel extends ModelNode {
 		super();
 
 		this.timeOfDay = this.addProperty('timeOfDay', new FloatValue(TIME_MIDNIGHT));
-		this.timeType = this.addProperty('timeType', new StringValue());
+		this.timeType = this.addProperty('timeType', new StringValue(TIME_TYPE_MIDNIGHT, false));
 
 		this.timeOfDay.addOnChangeListener(() => this.updateTimeType());
 		this.updateTimeType();

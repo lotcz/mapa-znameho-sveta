@@ -11,7 +11,8 @@ import BoolValue from "../basic/BoolValue";
 import ModelNodeCollection from "../basic/ModelNodeCollection";
 import CompletedQuestsModel from "./quests/CompletedQuestsModel";
 import PartySlotModel from "./party/PartySlotModel";
-import TimeModel from "./TimeModel";
+import TimeModel from "./environment/TimeModel";
+import TemperatureModel from "./environment/TemperatureModel";
 
 export default class SaveGameModel extends ModelNode {
 
@@ -121,6 +122,11 @@ export default class SaveGameModel extends ModelNode {
 	currentBiotope;
 
 	/**
+	 * @type TemperatureModel
+	 */
+	temperature;
+
+	/**
 	 * @type IntValue
 	 */
 	lastBattleMapId;
@@ -202,6 +208,7 @@ export default class SaveGameModel extends ModelNode {
 
 		this.currentBiotopeId = this.addProperty('currentBiotopeId', new IntValue());
 		this.currentBiotope = this.addProperty('currentBiotope', new NullableNode(null, false));
+		this.temperature = this.addProperty('temperature', new TemperatureModel());
 
 		this.conversation = this.addProperty('conversation', new NullableNode());
 
@@ -210,6 +217,8 @@ export default class SaveGameModel extends ModelNode {
 		this.completedStages = this.addProperty('completedStages', new CompletedQuestsModel());
 
 		this.animationSequence = this.addProperty('animationSequence', new NullableNode(null, false));
+
+
 	}
 
 	addCharacterToParty(character) {

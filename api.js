@@ -6,7 +6,7 @@ const path = 'src/resources.json';
 const port = 88;
 
 const corsOptions = {
-	origin: "http://localhost:8081"
+	origin: "http://localhost:8090"
 };
 
 const upload = (req, res) => {

@@ -5,7 +5,8 @@ import ConversationController from "./conversation/ConversationController";
 import PartyController from "./party/PartyController";
 import {ImageHelper} from "../../class/basic/ImageHelper";
 import NullableNodeController from "../basic/NullableNodeController";
-import {TIME_HOUR} from "../../model/game/TimeModel";
+import {TIME_HOUR} from "../../model/game/environment/TimeModel";
+import {STAT_TEMPERATURE} from "../../model/game/party/stats/StatDefinitionModel";
 
 const REST_SPEED = 2 * TIME_HOUR; // portion of day per second
 
@@ -145,26 +146,12 @@ export default class MainScreenController extends ControllerNode {
 		this.addAutoEvent(
 			this.model.currentBiotope,
 			'change',
-			() => {
-				// update environment effects on party
-				this.model.party.forEachCharacter((ch) => {
-					ch.stats.environmentStatEffects.reset();
-				});
-
-				if (this.model.currentBiotope.isEmpty()) {
-					return;
-				}
-
-				const biotope = this.model.currentBiotope.get();
-
-				this.model.party.forEachCharacter((ch) => {
-					biotope.statEffects.forEach((eff) => {
-						ch.stats.environmentStatEffects.add(eff)
-					});
-				});
-			},
-			true
+			() => this.updateBiotope()
 		);
+	}
+
+	afterActivatedInternal() {
+		this.updateBiotope();
 	}
 
 	updateInternal(delta) {
@@ -192,6 +179,29 @@ export default class MainScreenController extends ControllerNode {
 			this.addChild(this.conversationController);
 			if (this.mainController) this.mainController.deactivate();
 		}
+	}
+
+	updateBiotope() {
+		// update environment effects on party
+		this.model.party.forEachCharacter((ch) => {
+			ch.stats.environmentStatEffects.reset();
+		});
+
+		if (this.model.currentBiotope.isEmpty()) {
+			return;
+		}
+
+		const biotope = this.model.currentBiotope.get();
+
+		const temperatureEffect = biotope.statEffects.find((se) => se.statId.equalsTo(STAT_TEMPERATURE));
+		const effectAmount = temperatureEffect ? temperatureEffect.amount.get() : 0;
+		this.model.temperature.value.set(10 + effectAmount);
+
+		this.model.party.forEachCharacter((ch) => {
+			biotope.statEffects.forEach((eff) => {
+				ch.stats.environmentStatEffects.add(eff)
+			});
+		});
 	}
 
 }

@@ -6,7 +6,7 @@ import SaveGameController from "./SaveGameController";
 import NullableNodeController from "../basic/NullableNodeController";
 import SaveGameModel from "../../model/game/SaveGameModel";
 import ConditionalNodeController from "../basic/ConditionalNodeController";
-import {TIME_MORNING} from "../../model/game/TimeModel";
+import {TIME_MORNING} from "../../model/game/environment/TimeModel";
 import MenuModel from "../../model/menu/MenuModel";
 
 export default class GameController extends ControllerNode {
