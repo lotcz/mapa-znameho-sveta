@@ -68,6 +68,8 @@ export default class ConversationEntryModel extends ModelNode {
 		this.requiresStageId = this.addProperty('requiresStageId', new IntValue());
 		this.completesStageId = this.addProperty('completesStageId', new IntValue());
 
+		this.givesItemId = this.addProperty('givesItemId', new IntValue());
+
 		this.isExitAvailable = this.addProperty('isExitAvailable', new BoolValue(true));
 		this.showParentResponses = this.addProperty('showParentResponses', new IntValue(0));
 

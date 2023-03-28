@@ -1,6 +1,6 @@
 ITEMS:
 
-- items pop up in conversations
+- items pop up in conversations - drop to ground later
 
 in battle:
 - items stay on position
@@ -9,7 +9,7 @@ on map - location without battle:
 - items stay bound to location
 
 on map - random path point or campsite:
-- create new permanent location?
+- warn before leaving
 
 HINTS/POP-UPS:
 
@@ -17,4 +17,12 @@ HINTS/POP-UPS:
 
 BIOTOPE
 - fix time images to dawn, day, dusk, night
-- temperature:
+
+Temperature/Hunger/Thirst
+ - must create effect on character
+
+LEVELING
+
+CAMPING
+
+FIGHTING

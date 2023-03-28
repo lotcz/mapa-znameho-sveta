@@ -18,7 +18,7 @@ export default class BattleButtonsRenderer extends DomRendererWithBattle {
 		this.addChild(
 			new CollectionRenderer(
 				this.game,
-				this.battle.groundItems,
+				this.battle.groundSlots.slots,
 				(m) => new ItemSlotRenderer(this.game, m, this.items)
 			)
 		);

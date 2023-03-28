@@ -37,7 +37,7 @@ export default class ConversationRenderer extends DomRenderer {
 		Pixies.addClass(this.dom, 'container');
 
 		this.container = this.addElement('div', 'conversation container container-host');
-		this.container.addEventListener('mousemove', this.onContainerEvent);
+		//this.container.addEventListener('mousemove', this.onContainerEvent);
 		this.container.addEventListener('click', this.onContainerEvent);
 		this.container.addEventListener('wheel', this.onContainerEvent);
 

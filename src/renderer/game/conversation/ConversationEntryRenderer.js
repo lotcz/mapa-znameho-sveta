@@ -23,7 +23,7 @@ export default class ConversationEntryRenderer extends DomRenderer {
 		this.container = this.addElement('div', 'entry');
 
 		const response = Pixies.createElement(this.container, 'div', 'line response');
-		if (this.model.responseCharacter.isSet() && this.model.responseText.isSet() && this.model.responseText.get().length > 0) {
+		if (this.model.responseCharacter.isSet() && this.model.responseText.isSet()) {
 			const portrait = Pixies.createElement(response, 'div', 'portrait');
 			this.game.assets.getAsset(this.model.responseCharacter.get().portrait.get(), (img) => portrait.appendChild(img.cloneNode(false)));
 			this.text = Pixies.createElement(response, 'div', 'text');

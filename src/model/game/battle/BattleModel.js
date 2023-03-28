@@ -10,6 +10,7 @@ import BattlePartyCharacterModel from "./BattlePartyCharacterModel";
 import BattleNpcCharacterModel from "./BattleNpcCharacterModel";
 import StringValue from "../../basic/StringValue";
 import CachedPathFinder from "../../../class/pathfinder/CachedPathFinder";
+import GroundSlotsModel from "../items/GroundSlotsModel";
 
 export const CURSOR_TYPE_DEFAULT = 'default';
 export const CURSOR_TYPE_WALK = 'walk';
@@ -156,7 +157,7 @@ export default class BattleModel extends ModelNode {
 		this.cursorType = this.addProperty('cursorType', new StringValue(CURSOR_TYPE_DEFAULT, false));
 
 		this.groundPosition = this.addProperty('groundPosition', new Vector2(0, 0, false));
-		this.groundItems = this.addProperty('groundItems', new ModelNodeCollection(null, false));
+		this.groundSlots = this.addProperty('groundSlots', new GroundSlotsModel());
 
 		this.pathFinder = new CachedPathFinder();
 

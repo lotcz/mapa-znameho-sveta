@@ -5,6 +5,7 @@ import IdentifiedModelNode from "../../basic/IdentifiedModelNode";
 import CharacterModel from "../party/characters/CharacterModel";
 import NullableNode from "../../basic/NullableNode";
 import IntValue from "../../basic/IntValue";
+import GroundSlotsModel from "../items/GroundSlotsModel";
 
 export default class ConversationModel extends IdentifiedModelNode {
 
@@ -62,6 +63,7 @@ export default class ConversationModel extends IdentifiedModelNode {
 		this.currentEntry = this.addProperty('currentEntry', new NullableNode(() => new ConversationEntryModel(), false));
 		this.pastEntries = this.addProperty('pastEntries', new ModelNodeCollection(() => new ConversationEntryModel(), false));
 
+		this.groundSlots = this.addProperty('groundSlots', new GroundSlotsModel('conversation'));
 	}
 
 }

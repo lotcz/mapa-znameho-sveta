@@ -1,8 +1,8 @@
-import DomRenderer from "../../basic/DomRenderer";
 import Pixies from "../../../class/basic/Pixies";
 import TableLookupRenderer from "../../editor/TableLookupRenderer";
+import DomRendererWithSaveGame from "../../basic/DomRendererWithSaveGame";
 
-export default class ConversationResponseRenderer extends DomRenderer {
+export default class ConversationResponseRenderer extends DomRendererWithSaveGame {
 
 	/**
 	 * @type ConversationEntryModel
@@ -31,7 +31,7 @@ export default class ConversationResponseRenderer extends DomRenderer {
 		this.link.innerText = this.model.responseText.get();
 
 		this.link.addEventListener('click', () => {
-			this.game.saveGame.get().conversation.get().currentEntry.set(this.model);
+			this.saveGame.conversation.get().currentEntry.set(this.model);
 		});
 
 		if (this.game.isInDebugMode.get()) {
@@ -55,6 +55,14 @@ export default class ConversationResponseRenderer extends DomRenderer {
 				e.preventDefault();
 				const lookupRenderer = new TableLookupRenderer(this.game, this.model.completesStageId, this.container, 'completesStageId');
 				this.model.completesStageId.addEventListener('table-closed', () => {
+					lookupRenderer.deactivate();
+				});
+				lookupRenderer.activate();
+			});
+			Pixies.createElement(this.editorSection, 'button', null, 'gives', (e) => {
+				e.preventDefault();
+				const lookupRenderer = new TableLookupRenderer(this.game, this.model.givesItemId, this.container, 'givesItemId');
+				this.model.givesItemId.addEventListener('table-closed', () => {
 					lookupRenderer.deactivate();
 				});
 				lookupRenderer.activate();

@@ -11,6 +11,7 @@ const FIELD_TABLE_MAPPINGS = {
 	hairItemDefinitionId: 'itemDefinitions',
 	definitionId: 'itemDefinitions',
 	itemDefId: 'itemDefinitions',
+	givesItemId: 'itemDefinitions',
 	materialId: 'materials',
 	skinMaterialId: 'materials',
 	hairMaterialId: 'materials',

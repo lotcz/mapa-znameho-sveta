@@ -1,6 +1,7 @@
-import ControllerNode from "../../basic/ControllerNode";
+import ControllerWithSaveGame from "../../basic/ControllerWithSaveGame";
+import ItemModel from "../../../model/game/items/ItemModel";
 
-export default class ConversationController extends ControllerNode {
+export default class ConversationController extends ControllerWithSaveGame {
 
 	/**
 	 * @type ConversationModel
@@ -34,24 +35,35 @@ export default class ConversationController extends ControllerNode {
 	}
 
 	entrySelected() {
-		if (this.model.currentEntry.isSet()) {
-			const entry = this.model.currentEntry.get();
-
-			if (entry.completesStageId.isSet()) {
-				this.game.saveGame.get().completedStages.complete(entry.completesStageId.get());
-			}
-
-			entry.entries.forEach((responseEntry) => {
-				const slot = this.game.saveGame.get().party.slots.random();
-				const ch = this.game.saveGame.get().characters.getById(slot.characterId.get());
-				responseEntry.responseCharacter.set(ch);
-			});
-			entry.lines.forEach((line) => {
-				line.portrait.set(this.model.portrait.get());
-			});
-			this.model.pastEntries.add(entry);
-
+		if (this.model.currentEntry.isEmpty()) {
+			return;
 		}
+
+		/** @type ConversationEntryModel */
+		const entry = this.model.currentEntry.get();
+
+		/** @type CharacterModel */
+		const character = this.saveGame.party.selectedCharacter.get();
+
+		entry.responseCharacter.set(character);
+
+		if (entry.completesStageId.isSet()) {
+			this.saveGame.completedStages.complete(entry.completesStageId.get());
+		}
+
+		if (entry.givesItemId.isSet()) {
+			const item = new ItemModel();
+			item.definitionId.set(entry.givesItemId.get());
+			const slot = this.getFreeSlot();
+			slot.item.set(item);
+			this.saveGame.selectedInventorySlot.set(slot);
+		}
+
+		entry.lines.forEach((line) => {
+			line.portrait.set(this.model.portrait.get());
+		});
+
+		this.model.pastEntries.add(entry);
 	}
 
 	updateEntryParents(entry = null, parent = null) {
@@ -71,4 +83,9 @@ export default class ConversationController extends ControllerNode {
 		this.updateEntryParents();
 	}
 
+	getFreeSlot() {
+		const battle = this.saveGame.currentBattle.get();
+		if (battle) return battle.groundSlots.getFreeSlot();
+		return this.model.groundSlots.getFreeSlot;
+	}
 }
