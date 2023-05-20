@@ -30,14 +30,23 @@ export default class ModelNodeTable extends ModelNodeCollection {
 		return this.children.items.reduce((prev, current) => Math.max(prev, parseInt(current.id.get())), 0);
 	}
 
+	nextId() {
+		return this.maxId() + 1;
+	}
+
 	add(node) {
-		const id = this.maxId() + 1;
 		if (!node) {
-			node = this.nodeFactory(id);
+			node = this.nodeFactory();
 		}
-		node.id.set(id);
+		node.id.set(this.nextId());
 		super.add(node);
 		return node;
+	}
+
+	addClone(node) {
+		const clone = node.clone();
+		clone.id.set(this.nextId());
+		return this.insert(clone, this.indexOf(node) + 1);
 	}
 
 }

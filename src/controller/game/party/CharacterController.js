@@ -93,5 +93,14 @@ export default class CharacterController extends ControllerWithSaveGame {
 		} else {
 			this.model.eyesSlot.item.set(null);
 		}
+		if (this.model.beardItemDefinitionId.isSet()) {
+			const item = new ItemModel();
+			item.definitionId.set(this.model.beardItemDefinitionId.get());
+			item.primaryMaterialId.set(this.model.beardMaterialId.get());
+			this.model.beardSlot.item.set(item);
+		} else {
+			this.model.beardSlot.item.set(null);
+		}
+
 	}
 }

@@ -1,5 +1,7 @@
 import ControllerWithBattle from "../../basic/ControllerWithBattle";
 import Pixies from "../../../class/basic/Pixies";
+import CharacterController from "../party/CharacterController";
+import NullableNodeController from "../../basic/NullableNodeController";
 
 const IDLE_ACTION_TIMEOUT = 15000;
 const IDLE_ACTION_CHANCE = 0.5;
@@ -17,6 +19,15 @@ export default class NpcBattleCharacterController extends ControllerWithBattle {
 		this.model = model;
 
 		this.idleTimeout = Math.random() * IDLE_ACTION_TIMEOUT;
+
+		this.addChild(
+			new NullableNodeController(
+				this.game,
+				this.model.character,
+				(m) => new CharacterController(this.game, m)
+			)
+		);
+
 	}
 
 	updateInternal(delta) {

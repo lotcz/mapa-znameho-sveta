@@ -134,8 +134,7 @@ export default class EditorController extends ControllerNode {
 	cloneNode(param) {
 		const node = param.node;
 		const table = param.table;
-		const result = node.clone();
-		table.insert(result, table.indexOf(node) + 1);
+		const result = table.addClone(node);
 		table.selectedNode.set(result);
 		console.log('cloned node', result);
 	}

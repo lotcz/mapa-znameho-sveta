@@ -76,7 +76,12 @@ export default class BattleItemSlotRenderer extends RendererNode {
 		}
 		const item = this.model.item.get();
 
-		const itemDef = this.game.resources.itemDefinitions.getById(item.definitionId.get());
+		const defId = item.definitionId.get();
+		const itemDef = this.game.resources.itemDefinitions.getById(defId);
+		if (!itemDef) {
+			console.error(`Item definition ${defId} not found`);
+			return;
+		}
 		if (
 			itemDef.hideWhenAddingItems.get() &&
 			itemDef.additionalItems.count() > 0 &&

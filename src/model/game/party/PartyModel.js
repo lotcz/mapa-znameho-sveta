@@ -66,8 +66,8 @@ export default class PartyModel extends ModelNode {
 
 		this.slots = this.addProperty('slots', new ModelNodeCollection(() => new PartySlotModel()));
 
-		this.battleScrollWhenMove = this.addProperty('battleScrollWhenMove', new BoolValue());
-		this.battleFollowTheLeader = this.addProperty('battleFollowTheLeader', new BoolValue());
+		this.battleScrollWhenMove = this.addProperty('battleScrollWhenMove', new BoolValue(true));
+		this.battleFollowTheLeader = this.addProperty('battleFollowTheLeader', new BoolValue(true));
 
 	}
 

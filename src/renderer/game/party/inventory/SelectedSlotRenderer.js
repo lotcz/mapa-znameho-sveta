@@ -44,6 +44,10 @@ export default class SelectedSlotRenderer extends DomRenderer {
 			const item = this.model.item.get();
 			const defId = item.definitionId.get();
 			const itemDef = this.game.resources.itemDefinitions.getById(defId);
+			if (!itemDef) {
+				console.error(`Item definition ${defId} not found`);
+				return;
+			}
 			this.game.assets.getAsset(`itm/${itemDef.id.get()}`, (img) => {
 				this.img = img.cloneNode(true);
 				this.img.setAttribute('draggable', false);
