@@ -20,8 +20,8 @@ export default class ItemSlotModel extends ModelNode {
 	 */
 	additionalItemsSlots;
 
-	constructor(acceptsTypes = [], name = '') {
-		super();
+	constructor(acceptsTypes = [], name = '', persistent = true) {
+		super(persistent);
 
 		this.acceptsTypes = acceptsTypes
 		this.name = name;
@@ -31,7 +31,7 @@ export default class ItemSlotModel extends ModelNode {
 
 		this.additionalItemsSlots = this.addProperty('additionalItemsSlots', new ModelNodeCollection(null, false));
 	}
-	
+
 	accepts(type) {
 		if (this.acceptsTypes.includes('all')) return true;
 		return this.acceptsTypes.includes(type);

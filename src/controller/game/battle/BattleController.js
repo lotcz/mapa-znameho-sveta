@@ -132,7 +132,7 @@ export default class BattleController extends ControllerWithSaveGame {
 						this.model.battleMap.get().size,
 						this.game.mainLayerSize,
 						this.model.zoom.get(),
-						1
+						5
 					)
 				);
 			},
@@ -303,7 +303,7 @@ export default class BattleController extends ControllerWithSaveGame {
 	}
 
 	onZoom(param) {
-		this.model.zoom.set(Math.max(this.model.zoom.get() + (param * -0.1), 0.05));
+		this.model.zoom.set(Math.max(this.model.zoom.get() + (param * -0.1), 0));
 	}
 
 	onClick() {

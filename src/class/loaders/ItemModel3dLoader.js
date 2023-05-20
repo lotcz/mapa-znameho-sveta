@@ -40,6 +40,7 @@ export default class ItemModel3dLoader extends AssetLoader {
 								msh.material = material;
 								msh.castShadow = true;
 								msh.receiveShadow = false;
+								msh.userData.originalMaterialName = 'PrimaryMaterial';
 							}
 						});
 						this.primaryLoaded = true;
@@ -58,6 +59,7 @@ export default class ItemModel3dLoader extends AssetLoader {
 								msh.material = material;
 								msh.castShadow = true;
 								msh.receiveShadow = false;
+								msh.userData.originalMaterialName = 'SecondaryMaterial';
 							}
 						});
 						this.secondaryLoaded = true;

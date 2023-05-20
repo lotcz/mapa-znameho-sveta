@@ -1,5 +1,6 @@
 import CharacterStatsController from "./stats/CharacterStatsController";
 import ControllerWithSaveGame from "../../basic/ControllerWithSaveGame";
+import ItemModel from "../../../model/game/items/ItemModel";
 
 export default class CharacterController extends ControllerWithSaveGame {
 
@@ -83,4 +84,14 @@ export default class CharacterController extends ControllerWithSaveGame {
 		});
 	}
 
+	activateInternal() {
+		if (this.model.eyesItemDefinitionId.isSet()) {
+			const item = new ItemModel();
+			item.definitionId.set(this.model.eyesItemDefinitionId.get());
+			item.primaryMaterialId.set(this.model.eyesMaterialId.get());
+			this.model.eyesSlot.item.set(item);
+		} else {
+			this.model.eyesSlot.item.set(null);
+		}
+	}
 }

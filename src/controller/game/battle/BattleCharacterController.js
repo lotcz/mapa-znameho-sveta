@@ -149,10 +149,12 @@ export default class BattleCharacterController extends ControllerWithBattle {
 
 	updateHair() {
 		const character = this.model.character.get();
-		if (character.inventory.head.item.isEmpty() && character.hairItemDefinitionId.get() > 0) {
+		if (character.inventory.head.item.isEmpty() && character.hairItemDefinitionId.isSet()) {
 			const item = new ItemModel();
 			item.definitionId.set(character.hairItemDefinitionId.get());
-			item.primaryMaterialId.set(character.hairMaterialId.get());
+			if (character.hairMaterialId.isSet()) {
+				item.primaryMaterialId.set(character.hairMaterialId.get());
+			}
 			character.hairSlot.item.set(item);
 		} else {
 			character.hairSlot.item.set(null);

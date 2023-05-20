@@ -1,15 +1,10 @@
 ITEMS:
 
-- items pop up in conversations - drop to ground later
-
-in battle:
-- items stay on position
-
-on map - location without battle:
-- items stay bound to location
-
-on map - random path point or campsite:
-- warn before leaving
+- special additional cursor slot (remember last selected slot)
+- items pop up in conversation's ground slots
+- drop to ground when conversation finishes
+- items stay bound to location (on map - location without battle)
+- warn before leaving items on ground (on map - random path point or campsite)
 
 HINTS/POP-UPS:
 

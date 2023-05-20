@@ -30,11 +30,11 @@ export default class ItemMountingRenderer extends DomRenderer {
 		this.slot = Pixies.createElement(this.container, 'div', 'slot');
 
 		this.gui = GUIHelper.createGUI();
-		const position = GUIHelper.addVector3(this.gui, this.model.mountingPosition, 'mounting position', -30, 30, 0.1);
+		const position = GUIHelper.addVector3(this.gui, this.model.mountingPosition, 'mounting position', -50, 50, 0.1);
 		position.open();
 		const quaternion = GUIHelper.addRotationVector3(this.gui, this.model.mountingRotation, 'mounting rotation');
 		quaternion.open();
-		const position2 = GUIHelper.addVector3(this.gui, this.model.altMountingPosition, 'alt mounting position', -30, 30, 0.1);
+		const position2 = GUIHelper.addVector3(this.gui, this.model.altMountingPosition, 'alt mounting position', -50, 50, 0.1);
 		position2.open();
 		const quaternion2 = GUIHelper.addRotationVector3(this.gui, this.model.altMountingRotation, 'alt mounting rotation');
 		quaternion2.open();

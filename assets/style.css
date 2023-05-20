@@ -914,7 +914,7 @@ h4 {
   box-shadow: #311a0a 0 0 15px inset;
   background-color: transparent;
   border-radius: 5px 5px 0 0;
-  padding: 10px 50px;
+  padding: 10px 40px;
   opacity: 0.75;
 }
 .inventory .tabs > .tab-header.active {
@@ -1036,11 +1036,11 @@ h4 {
 }
 .inventory .inventory-items .inventory-character .slot.leftHand {
   top: 40%;
-  right: 20%;
+  right: 10%;
 }
 .inventory .inventory-items .inventory-character .slot.rightHand {
   top: 43%;
-  left: 15%;
+  left: 10%;
 }
 .inventory .inventory-items .inventory-character .slot.body {
   top: 20%;

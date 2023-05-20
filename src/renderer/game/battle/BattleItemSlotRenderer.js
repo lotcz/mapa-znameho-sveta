@@ -97,11 +97,13 @@ export default class BattleItemSlotRenderer extends RendererNode {
 						item.primaryMaterialId.get(),
 						(material) => {
 							this.mesh.traverse((mesh) => {
-								if (mesh.material && mesh.geometry) {
-									mesh.material.dispose();
+								if (mesh.material && mesh.geometry && (mesh.material.name === 'PrimaryMaterial' || mesh.userData.originalMaterialName === 'PrimaryMaterial')) {
+									//mesh.material.dispose();
 									mesh.material = material;
 									mesh.castShadow = true;
 									mesh.receiveShadow = false;
+									mesh.material.needsUpdate = true;
+									console.log('updating', item.primaryMaterialId.get());
 								}
 							});
 						}

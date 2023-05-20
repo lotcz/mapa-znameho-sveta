@@ -68,6 +68,8 @@ export default class BattleCharacterRenderer extends RendererNode {
 		this.group.add(inner);
 
 		this.addChild(new BattleItemSlotRenderer(this.game, this.character.hairSlot, this.animation.mesh));
+		this.addChild(new BattleItemSlotRenderer(this.game, this.character.beardSlot, this.animation.mesh));
+		this.addChild(new BattleItemSlotRenderer(this.game, this.character.eyesSlot, this.animation.mesh));
 		this.addChild(new BattleItemSlotRenderer(this.game, this.character.inventory.head, this.animation.mesh));
 		this.addChild(new BattleItemSlotRenderer(this.game, this.character.inventory.leftHand, this.animation.mesh));
 		this.addChild(new BattleItemSlotRenderer(this.game, this.character.inventory.rightHand, this.animation.mesh));

@@ -49,6 +49,26 @@ export default class CharacterModel extends TemplateNode {
 	hairMaterialId;
 
 	/**
+	 * @type IntValue
+	 */
+	eyesItemDefinitionId;
+
+	/**
+	 * @type IntValue
+	 */
+	eyesMaterialId;
+
+	/**
+	 * @type IntValue
+	 */
+	beardItemDefinitionId;
+
+	/**
+	 * @type IntValue
+	 */
+	beardMaterialId;
+
+	/**
 	 * @type Vector3
 	 */
 	scale;
@@ -104,6 +124,13 @@ export default class CharacterModel extends TemplateNode {
 
 		this.hairMaterialId = this.addProperty('hairMaterialId', new IntValue());
 		this.hairItemDefinitionId = this.addProperty('hairItemDefinitionId', new IntValue());
+
+		this.eyesMaterialId = this.addProperty('eyesMaterialId', new IntValue());
+		this.eyesItemDefinitionId = this.addProperty('eyesItemDefinitionId', new IntValue());
+
+		this.beardMaterialId = this.addProperty('beardMaterialId', new IntValue());
+		this.beardItemDefinitionId = this.addProperty('beardItemDefinitionId', new IntValue());
+
 		this.scale = this.addProperty('scale', new Vector3(1,1,1));
 
 		this.npcConversationId = this.addProperty('npcConversationId', new IntValue());
@@ -113,8 +140,11 @@ export default class CharacterModel extends TemplateNode {
 
 		this.inventory = this.addProperty('inventory', new InventoryModel());
 
-		this.hairSlot =  this.addProperty('hairSlot', new ItemSlotModel(['head'], 'head'));
-		this.dropSlot =  this.addProperty('dropSlot', new ItemSlotModel(['all'], 'drop'));
+		this.hairSlot =  this.addProperty('hairSlot', new ItemSlotModel(['head'], 'head', false));
+		this.eyesSlot =  this.addProperty('eyesSlot', new ItemSlotModel(['head'], 'head', false));
+		this.beardSlot =  this.addProperty('beardSlot', new ItemSlotModel(['head'], 'head', false));
+		this.dropSlot =  this.addProperty('dropSlot', new ItemSlotModel(['all'], 'drop', false));
+
 		this.additionalItems = this.addProperty('additionalItems', new ModelNodeCollection(() => new AdditionalItemModel()));
 		this.additionalItemsSlots = this.addProperty('additionalItemsSlots', new ModelNodeCollection(null, false));
 		this.additionalItems.addOnAddListener((ai) => this.createAdditionalSlot(ai));
