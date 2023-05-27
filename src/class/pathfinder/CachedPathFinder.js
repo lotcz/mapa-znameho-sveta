@@ -135,6 +135,7 @@ export default class CachedPathFinder {
 			return path;
 		}
 		path.unshift(v);
+		if (tile.cameFrom === null) return path;
 		return this.backtrack(path, tile.cameFrom);
 	}
 
@@ -143,8 +144,7 @@ export default class CachedPathFinder {
 		end = end.round();
 
 		if (start.equalsTo(end)) {
-			console.log('same');
-			return false;
+			return [];
 		}
 
 		const endTile = this.obtainCachedTile(end);

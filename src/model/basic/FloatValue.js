@@ -1,14 +1,6 @@
-import DirtyValue from "./DirtyValue";
+import IntValue from "./IntValue";
 
-export default class FloatValue extends DirtyValue {
-
-	set(value) {
-		super.set(typeof value === 'string' ? parseFloat(value) : value);
-	}
-
-	increase(num) {
-		this.set(this.get() + num);
-	}
+export default class FloatValue extends IntValue {
 
 	round() {
 		return Math.round(this.get());

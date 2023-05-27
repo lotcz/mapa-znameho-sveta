@@ -41,7 +41,7 @@ export default class NpcBattleCharacterController extends ControllerWithBattle {
 	}
 
 	performIdleAction() {
-		const free = this.battle.pathFinder.getFreeNeighborPositions(this.model.homePosition, 5);
+		const free = this.battle.pathFinder.getFreeNeighborPositions(this.model.homePosition, 2);
 		if (free.length === 0) return;
 		const rand = Pixies.randomElement(free);
 		this.model.triggerEvent('go-to', rand);

@@ -108,7 +108,6 @@ export default class BattleItemSlotRenderer extends RendererNode {
 									mesh.castShadow = true;
 									mesh.receiveShadow = false;
 									mesh.material.needsUpdate = true;
-									console.log('updating', item.primaryMaterialId.get());
 								}
 							});
 						}

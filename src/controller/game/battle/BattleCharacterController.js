@@ -169,6 +169,10 @@ export default class BattleCharacterController extends ControllerWithBattle {
 			console.log('No path');
 			return false;
 		}
+		if (path.length === 0) {
+			this.model.triggerEvent('arrived-idle', this.model.position);
+			return true;
+		}
 
 		this.model.targetPosition.set(position);
 		this.pathToGo = path;

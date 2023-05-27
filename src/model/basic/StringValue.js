@@ -14,7 +14,7 @@ export default class StringValue extends DirtyValue {
 	}
 
 	isEmpty() {
-		return this.value === '';
+		return super.isEmpty() || this.value === '';
 	}
 
 }

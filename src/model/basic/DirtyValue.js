@@ -1,7 +1,7 @@
 import ModelNode from "./ModelNode";
 
 export default class DirtyValue extends ModelNode {
-	/** @type object|number|string|null */
+	/** @type object|string|null */
 	value = null;
 
 	constructor(value = null, persistent = true) {
@@ -23,7 +23,7 @@ export default class DirtyValue extends ModelNode {
 	}
 
 	isEmpty() {
-		return this.value === null || this.value === undefined || Number.isNaN(this.value);
+		return this.value === null || this.value === undefined;
 	}
 
 	isSet() {

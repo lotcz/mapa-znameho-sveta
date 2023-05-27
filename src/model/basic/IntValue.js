@@ -3,7 +3,15 @@ import DirtyValue from "./DirtyValue";
 export default class IntValue extends DirtyValue {
 
 	set(value) {
-		super.set(typeof value === 'string' ? parseInt(value) : value);
+		if (value === null || value === undefined || value === '') {
+			super.set(Number.NaN);
+		} else {
+			super.set(Number(value));
+		}
+	}
+
+	isEmpty() {
+		return super.isEmpty() || Number.isNaN(this.value);
 	}
 
 	increase(num) {
