@@ -233,6 +233,10 @@ export default class BattleController extends ControllerWithSaveGame {
 		this.mouseMoved = false;
 	}
 
+	deactivateInternal() {
+		this.model.hoveringBattleCharacter.set(null);
+	}
+
 	onMouseMove() {
 		if (this.mouseMoved) return;
 		this.runOnUpdate( () => {

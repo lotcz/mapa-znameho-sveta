@@ -5,6 +5,7 @@ import Vector3 from "../../../basic/Vector3";
 import ModelNodeCollection from "../../../basic/ModelNodeCollection";
 import StatEffectDefinitionModel from "../rituals/StatEffectDefinitionModel";
 import EffectSourceModel, {EFFECT_SOURCE_RACE} from "../rituals/EffectSourceModel";
+import FloatValue from "../../../basic/FloatValue";
 
 export default class RaceModel extends IdentifiedModelNode {
 
@@ -39,6 +40,11 @@ export default class RaceModel extends IdentifiedModelNode {
 	scale;
 
 	/**
+	 * @type FloatValue
+	 */
+	runningSpeed;
+
+	/**
 	 * @type EffectSourceModel
 	 */
 	effectSource;
@@ -64,6 +70,8 @@ export default class RaceModel extends IdentifiedModelNode {
 		this.female3dModelId = this.addProperty('female3dModelId', new IntValue(2));
 
 		this.scale = this.addProperty('scale', new Vector3(1,1,1));
+
+		this.runningSpeed = this.addProperty('runningSpeed', new FloatValue(3.25));
 
 		this.effectSource = new EffectSourceModel(EFFECT_SOURCE_RACE);
 		this.effectSource.name.set(this.name.get());

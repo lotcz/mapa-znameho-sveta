@@ -7,7 +7,7 @@ import BattleItemSlotController from "./BattleItemSlotController";
 import ControllerWithBattle from "../../basic/ControllerWithBattle";
 import {EASING_FLAT, EASING_QUAD_IN} from "../../../class/animating/ProgressValue";
 
-const TRAVEL_SPEED = 3.25 / 1000; // position units per millisecond
+const RUNNING_SPEED = 3.25 / 1000; // position units per millisecond
 const ROTATION_SPEED = (Math.PI * 4) / 1000; // radians per millisecond
 const MAX_WALK_DISTANCE = 100;
 
@@ -170,8 +170,8 @@ export default class BattleCharacterController extends ControllerWithBattle {
 			return false;
 		}
 		if (path.length === 0) {
-			this.model.triggerEvent('arrived-idle', this.model.position);
-			return true;
+			console.log('Already there');
+			return false;
 		}
 
 		this.model.targetPosition.set(position);
@@ -185,7 +185,9 @@ export default class BattleCharacterController extends ControllerWithBattle {
 		this.model.state.set(CHARACTER_STATE_RUN);
 		this.model.nextPosition.set(target);
 		const distance = this.model.position.distanceTo(target);
-		const time = distance / TRAVEL_SPEED;
+		const raceSpeed = this.model.character.get().race.get().runningSpeed.get();
+		const runningSpeed = raceSpeed > 0 ? raceSpeed / 1000 : RUNNING_SPEED;
+		const time = distance / runningSpeed;
 		this.positionAnimation = new AnimatedVector2(this.model.position, target, time, EASING_FLAT, delta);
 
 		const rotation = this.model.position.getRotationFromYAxis(target);
@@ -207,7 +209,7 @@ export default class BattleCharacterController extends ControllerWithBattle {
 			} else {
 				console.log('changing path');
 				if (this.goTo(this.model.targetPosition.get())) return;
-			}
+			};
 		}
 
 		if (this.checkBlocks()) {
