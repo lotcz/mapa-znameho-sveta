@@ -41,6 +41,10 @@ export const STAT_SCIENTIA = 115;
 
 // other
 export const STAT_LEVEL_PROGRESS = 1001;
+export const STAT_EXPERIENCE = 1002;
+export const STAT_ABILITY_POINTS = 1003;
+export const STAT_SKILL_POINTS = 1004;
+
 export const STAT_ITEM_CONDITION = 2000;
 
 export default class StatDefinitionModel extends IdentifiedModelNode {

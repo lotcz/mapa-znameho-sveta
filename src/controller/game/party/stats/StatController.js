@@ -1,5 +1,7 @@
 import ControllerNode from "../../../basic/ControllerNode";
 import Collection from "../../../../class/basic/Collection";
+import StatEffectDefinitionModel from "../../../../model/game/party/rituals/StatEffectDefinitionModel";
+import {STAT_ABILITY_POINTS, STAT_SKILL_POINTS} from "../../../../model/game/party/stats/StatDefinitionModel";
 
 export default class StatController extends ControllerNode {
 
@@ -20,7 +22,7 @@ export default class StatController extends ControllerNode {
 		this.stats = stats;
 
 		this.cache = new Collection();
-		this.sources = [this.stats.inventoryStatEffects, this.stats.environmentStatEffects, this.stats.raceStatEffects];
+		this.sources = [this.stats.inventoryStatEffects, this.stats.environmentStatEffects, this.stats.raceStatEffects, this.stats.temporaryLevelUpEffects];
 
 		this.addEffectHandler = (eff) => {
 			if (eff.statId.equalsTo(this.model.definitionId.get())) {
@@ -52,6 +54,38 @@ export default class StatController extends ControllerNode {
 			() => this.model.definition.set(this.game.resources.statDefinitions.getById(this.model.definitionId.get())),
 			true
 		);
+
+		this.addAutoEvent(
+			this.model,
+			'add-ability-point',
+			() => {
+				if (this.stats.level.abilityPoints.current.get() > 0) {
+					this.addTemporaryLevelPoint(STAT_ABILITY_POINTS)
+				}
+			}
+		);
+
+		this.addAutoEvent(
+			this.model,
+			'add-skill-point',
+			() => {
+				if (this.stats.level.skillPoints.current.get() > 0) {
+					this.addTemporaryLevelPoint(STAT_SKILL_POINTS);
+				}
+			}
+		);
+
+		this.addAutoEvent(
+			this.model,
+			'remove-ability-point',
+			() => this.removeTemporaryLevelPoint(STAT_ABILITY_POINTS)
+		);
+
+		this.addAutoEvent(
+			this.model,
+			'remove-skill-point',
+			() => this.removeTemporaryLevelPoint(STAT_SKILL_POINTS)
+		);
 	}
 
 	activateInternal() {
@@ -72,6 +106,26 @@ export default class StatController extends ControllerNode {
 	updateCurrent() {
 		const total = this.cache.reduce((prev, current) => prev + current.amount.get(), 0);
 		this.model.currentFloat.set(this.model.baseValue.get() + total);
+	}
+
+	addTemporaryLevelPoint(pointStatDefId) {
+		const statEffect = new StatEffectDefinitionModel(this.stats.levelUpEffectSource);
+		statEffect.statId.set(this.model.definitionId.get());
+		statEffect.amount.set(1);
+		this.stats.temporaryLevelUpEffects.add(statEffect);
+		const pointEffect = new StatEffectDefinitionModel(this.stats.levelUpEffectSource);
+		pointEffect.statId.set(pointStatDefId);
+		pointEffect.amount.set(-1);
+		this.stats.temporaryLevelUpEffects.add(pointEffect);
+	}
+
+	removeTemporaryLevelPoint(pointStatDefId) {
+		const statEffect = this.stats.temporaryLevelUpEffects.find((eff) => eff.statId.equalsTo(this.model.definitionId.get()));
+		const pointEffect = this.stats.temporaryLevelUpEffects.find((eff) => eff.statId.equalsTo(pointStatDefId));
+		if (statEffect && pointEffect) {
+			this.stats.temporaryLevelUpEffects.remove(pointEffect);
+			this.stats.temporaryLevelUpEffects.remove(statEffect);
+		}
 	}
 
 }

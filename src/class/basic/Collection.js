@@ -12,6 +12,10 @@ export default class Collection extends Node {
 		this.items = [];
 	}
 
+	asArray() {
+		return this.items;
+	}
+
 	add(element) {
 		this.items.push(element);
 		this.triggerEvent('add', element);

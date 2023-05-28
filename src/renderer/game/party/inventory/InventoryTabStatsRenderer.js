@@ -7,6 +7,9 @@ import NullableNodeRenderer from "../../../basic/NullableNodeRenderer";
 import RaceNameRenderer from "../stats/RaceNameRenderer";
 import StatNumberRenderer from "../stats/StatNumberRenderer";
 import StatBarRenderer from "../stats/StatBarRenderer";
+import StatNameRenderer from "../stats/StatNameRenderer";
+import ConditionalNodeRenderer from "../../../basic/ConditionalNodeRenderer";
+import ButtonRenderer from "./ButtonRenderer";
 
 export default class InventoryTabStatsRenderer extends DomRenderer {
 
@@ -48,8 +51,13 @@ export default class InventoryTabStatsRenderer extends DomRenderer {
 		Pixies.createElement(this.level, 'div', 'name', 'Úroveň');
 		this.levelNumeric = Pixies.createElement(this.level, 'div');
 		this.addChild(new StatNumberRenderer(this.game, this.model.stats.level.currentLevel, this.levelNumeric));
-		this.experience = Pixies.createElement(this.level, 'div', 'flex-1');
-		this.addChild(new StatBarRenderer(this.game, this.model.stats.level.levelProgress, this.experience));
+		this.experience = Pixies.createElement(this.info, 'div', 'row');
+		const currentExp = Pixies.createElement(this.experience, 'div');
+		this.addChild(new StatNumberRenderer(this.game, this.model.stats.level.experience, currentExp));
+		this.levelProgress = Pixies.createElement(this.experience, 'div', 'flex-1 level-progress');
+		this.addChild(new StatBarRenderer(this.game, this.model.stats.level.levelProgress, this.levelProgress));
+		const nextExp = Pixies.createElement(this.experience, 'div');
+		this.addChild(new StatNumberRenderer(this.game, this.model.stats.level.experienceNextLevel, nextExp));
 
 		this.temperature = Pixies.createElement(this.info, 'div', 'row stat-skill');
 		Pixies.createElement(this.temperature, 'div', 'name', 'Teplota');
@@ -60,24 +68,70 @@ export default class InventoryTabStatsRenderer extends DomRenderer {
 
 
 		Pixies.createElement(this.container, 'h2', 'center my-3', 'Vlastnosti');
+
+		const abilityPoints= Pixies.createElement(this.container, 'div', 'row center mb-3');
+		const apLabel = Pixies.createElement(abilityPoints, 'div');
+		const apValue = Pixies.createElement(abilityPoints, 'div', 'stat-badge ml-3');
+		const apConfirm = Pixies.createElement(abilityPoints, 'div', 'ml-3');
+		this.addChild(
+			new ConditionalNodeRenderer(
+				this.game,
+				this.model.stats.level.abilityPoints.current,
+				() => this.model.stats.level.abilityPoints.current.get() < this.model.stats.level.abilityPoints.baseValue.get(),
+				() => new ButtonRenderer(this.game, this.model.stats.level.abilityPoints.current, apConfirm, 'Potvrdit', () => this.model.stats.triggerEvent('apply-ability-points'))
+			)
+		);
+
+		this.addChild(
+			new NullableNodeRenderer(
+				this.game,
+				this.model.stats.level.abilityPoints.definition,
+				(m) => new StatNameRenderer(this.game, m, apLabel)
+			)
+		);
+		this.addChild(new StatNumberRenderer(this.game, this.model.stats.level.abilityPoints.current, apValue));
+
 		this.abilities = Pixies.createElement(this.container, 'div');
 		this.addChild(
 			new CollectionRenderer(
 				this.game,
 				this.model.stats.abilities.all,
-				(m) => new StatSkillRenderer(this.game, m, this.abilities)
+				(m) => new StatSkillRenderer(this.game, m, this.abilities, true, false)
 			)
 		);
 
 		Pixies.createElement(this.container, 'h2', 'center my-3', 'Dovednosti');
+
+		const skillPoints= Pixies.createElement(this.container, 'div', 'row center mb-3');
+		const spLabel = Pixies.createElement(skillPoints, 'div');
+		const spValue = Pixies.createElement(skillPoints, 'div', 'stat-badge ml-3');
+		const spConfirm = Pixies.createElement(skillPoints, 'div', 'ml-3');
+		this.addChild(
+			new NullableNodeRenderer(
+				this.game,
+				this.model.stats.level.skillPoints.definition,
+				(m) => new StatNameRenderer(this.game, m, spLabel)
+			)
+		);
+		this.addChild(new StatNumberRenderer(this.game, this.model.stats.level.skillPoints.current, spValue));
+		this.addChild(
+			new ConditionalNodeRenderer(
+				this.game,
+				this.model.stats.level.skillPoints.current,
+				() => this.model.stats.level.skillPoints.current.get() < this.model.stats.level.skillPoints.baseValue.get(),
+				() => new ButtonRenderer(this.game, this.model.stats.level.abilityPoints.current, spConfirm, 'Potvrdit', () => this.model.stats.triggerEvent('apply-skill-points'))
+			)
+		);
+
 		this.skills = Pixies.createElement(this.container, 'div');
 		this.addChild(
 			new CollectionRenderer(
 				this.game,
 				this.model.stats.skills.all,
-				(m) => new StatSkillRenderer(this.game, m, this.skills)
+				(m) => new StatSkillRenderer(this.game, m, this.skills, false, true)
 			)
 		);
+
 	}
 
 	deactivateInternal() {

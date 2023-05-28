@@ -40,7 +40,8 @@ export default class StatModel extends ModelNode {
 		this.currentFloat = this.addProperty('currentFloat', new FloatValue(initialValue));
 		this.current = this.addProperty('current', new IntValue(initialValue, false));
 
-		this.currentFloat.addOnChangeListener(() => this.current.set(Math.ceil(this.currentFloat.get())));
+		this.currentFloat.addOnChangeListener(() => this.updateCurrent());
+		this.updateCurrent();
 	}
 
 	restore(amount) {
@@ -53,6 +54,13 @@ export default class StatModel extends ModelNode {
 	}
 
 	getProgress() {
-		return this.baseValue.get() / this.currentFloat.get();
+		if (this.currentFloat.isEmpty() || this.baseValue.isEmpty() || this.baseValue.equalsTo(0)) {
+			return 0;
+		}
+		return this.currentFloat.get() / this.baseValue.get();
+	}
+
+	updateCurrent() {
+		this.current.set(Math.ceil(this.currentFloat.get()));
 	}
 }

@@ -11,11 +11,14 @@ export default class StatSkillRenderer extends DomRenderer {
 	 */
 	model;
 
-	constructor(game, model, dom) {
+	constructor(game, model, dom, isAbility = false, isSkill = false) {
 		super(game, model, dom);
 
 		this.model = model;
 		this.statDef = null;
+
+		this.isAbility = isAbility;
+		this.isSkill = isSkill;
 	}
 
 	activateInternal() {
@@ -69,11 +72,24 @@ export default class StatSkillRenderer extends DomRenderer {
 			if (i < current) {
 				if (i >= base) {
 					Pixies.addClass(brick, 'extra');
+					if (this.isAbility) {
+						brick.addEventListener('click', () => this.model.triggerEvent('remove-ability-point'));
+					}
+					if (this.isSkill) {
+						brick.addEventListener('click', () => this.model.triggerEvent('remove-skill-point'));
+					}
 				} else {
 					Pixies.addClass(brick, 'normal');
 				}
 			} else if (i < base) {
 				Pixies.addClass(brick, 'loss');
+			} else {
+				if (this.isAbility) {
+					brick.addEventListener('click', () => this.model.triggerEvent('add-ability-point'));
+				}
+				if (this.isSkill) {
+					brick.addEventListener('click', () => this.model.triggerEvent('add-skill-point'));
+				}
 			}
 		}
 	}

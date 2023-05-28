@@ -47,6 +47,10 @@ export default class ModelNodeCollection extends ModelNode {
 		});
 	}
 
+	asArray() {
+		return this.children.asArray();
+	}
+
 	/**
 	 *
 	 * @param {ModelNode | any} child

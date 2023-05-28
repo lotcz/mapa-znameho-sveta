@@ -6,6 +6,7 @@ import ConsumptionStatsModel from "./ConsumptionStatsModel";
 import CombatStatsModel from "./CombatStatsModel";
 import AbilitiesStatsModel from "./AbilitiesStatsModel";
 import SkillsStatsModel from "./SkillsStatsModel";
+import EffectSourceModel, {EFFECT_SOURCE_RITUAL} from "../rituals/EffectSourceModel";
 
 export default class CharacterStatsModel extends ModelNode {
 
@@ -49,6 +50,16 @@ export default class CharacterStatsModel extends ModelNode {
 	 */
 	raceStatEffects;
 
+	/**
+	 * @type ModelNodeCollection<StatEffectDefinitionModel>
+	 */
+	temporaryLevelUpEffects;
+
+	/**
+	 * @type EffectSourceModel
+	 */
+	levelUpEffectSource;
+
 	constructor() {
 		super();
 
@@ -62,6 +73,11 @@ export default class CharacterStatsModel extends ModelNode {
 		this.inventoryStatEffects = this.addProperty('inventoryStatEffects', new ModelNodeCollection(null, false));
 		this.environmentStatEffects = this.addProperty('environmentStatEffects', new ModelNodeCollection(null, false));
 		this.raceStatEffects = this.addProperty('raceStatEffects', new ModelNodeCollection(null, false));
+
+		this.temporaryLevelUpEffects = this.addProperty('temporaryLevelUpEffects', new ModelNodeCollection(null, false));
+
+		this.levelUpEffectSource = new EffectSourceModel(EFFECT_SOURCE_RITUAL);
+		this.levelUpEffectSource.name.set('Level Up');
 	}
 
 }

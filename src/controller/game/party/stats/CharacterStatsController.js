@@ -37,6 +37,9 @@ export default class CharacterStatsController extends ControllerNode {
 		this.addChild(new StatController(this.game, this.model.consumption.hunger, this.model));
 		this.addChild(new TemperatureStatController(this.game, this.model.consumption.temperature, this.model));
 
+		this.addChild(new StatController(this.game, this.model.level.abilityPoints, this.model));
+		this.addChild(new StatController(this.game, this.model.level.skillPoints, this.model));
+
 		this.addChild(
 			new CollectionController(
 				this.game,
@@ -53,6 +56,58 @@ export default class CharacterStatsController extends ControllerNode {
 			)
 		);
 
+		this.addAutoEvent(
+			this.model,
+			'apply-ability-points',
+			() => this.applyAbilityPoints()
+		);
+
+		this.addAutoEvent(
+			this.model,
+			'apply-skill-points',
+			() => this.applySkillPoints()
+		);
+
+		this.addAutoEvent(
+			this.model,
+			'reset-level-points',
+			() => this.resetLevePoints()
+		);
+
+	}
+
+	resetLevePoints() {
+		this.model.temporaryLevelUpEffects.reset();
+	}
+
+	applyLevelPoints(levelStats) {
+		const applied = [];
+		this.model.temporaryLevelUpEffects.forEach(
+			(eff) => {
+				const stat = levelStats.find((s) => s.definitionId.equalsTo(eff.statId.get()));
+				if (!stat) {
+					console.warn(`stat ${eff.statId.get()} not found`);
+					return;
+				}
+				stat.baseValue.increase(eff.amount.get());
+				applied.push(eff);
+			}
+		);
+		applied.forEach((eff) => this.model.temporaryLevelUpEffects.remove(eff));
+	}
+
+	applyAbilityPoints() {
+		const levelStats = [];
+		levelStats.push(this.model.level.abilityPoints);
+		levelStats.push(...this.model.abilities.all.asArray());
+		this.applyLevelPoints(levelStats);
+	}
+
+	applySkillPoints() {
+		const levelStats = [];
+		levelStats.push(this.model.level.skillPoints);
+		levelStats.push(...this.model.skills.all.asArray());
+		this.applyLevelPoints(levelStats);
 	}
 
 }

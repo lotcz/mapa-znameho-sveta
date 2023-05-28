@@ -1107,7 +1107,7 @@ h4 {
 .inventory .inventory-stats .stat-skill .value .stat-brick.loss {
   background-color: rgba(200, 100, 100, 0.75);
 }
-.inventory .inventory-stats .stat-level .stat-bar div {
+.inventory .inventory-stats .level-progress .stat-bar div {
   height: 15px;
   background-color: #885f32;
 }

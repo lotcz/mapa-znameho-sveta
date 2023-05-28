@@ -49,6 +49,12 @@ export default class CharacterController extends ControllerWithSaveGame {
 		);
 
 		this.addAutoEvent(
+			this.model.stats.level,
+			'level-up',
+			(level) => (level === 1) ? this.gainFirstLevel() : null
+		);
+
+		this.addAutoEvent(
 			this.saveGame.time,
 			'time-passed',
 			(duration) => {
@@ -65,23 +71,6 @@ export default class CharacterController extends ControllerWithSaveGame {
 				}
 			}
 		);
-	}
-
-	updateInventoryEffects() {
-		const slots = [this.model.inventory.leftHand, this.model.inventory.rightHand, this.model.inventory.body, this.model.inventory.hips, this.model.inventory.feet, this.model.inventory.head];
-		const items = [];
-		slots.forEach((slot) => {
-			if (slot.item.isSet()) {
-				items.push(slot.item.get());
-			}
-		});
-		this.model.stats.inventoryStatEffects.reset();
-		items.forEach((item) => {
-			const def = this.game.resources.itemDefinitions.getById(item.definitionId.get());
-			if (def) {
-				def.statEffects.forEach((eff) => this.model.stats.inventoryStatEffects.add(eff));
-			}
-		});
 	}
 
 	activateInternal() {
@@ -101,6 +90,37 @@ export default class CharacterController extends ControllerWithSaveGame {
 		} else {
 			this.model.beardSlot.item.set(null);
 		}
-
 	}
+
+	updateInventoryEffects() {
+		const slots = [this.model.inventory.leftHand, this.model.inventory.rightHand, this.model.inventory.body, this.model.inventory.hips, this.model.inventory.feet, this.model.inventory.head];
+		const items = [];
+		slots.forEach((slot) => {
+			if (slot.item.isSet()) {
+				items.push(slot.item.get());
+			}
+		});
+		this.model.stats.inventoryStatEffects.reset();
+		items.forEach((item) => {
+			const def = this.game.resources.itemDefinitions.getById(item.definitionId.get());
+			if (def) {
+				def.statEffects.forEach((eff) => this.model.stats.inventoryStatEffects.add(eff));
+			}
+		});
+	}
+
+	gainFirstLevel() {
+		const race = this.model.race.get();
+		race.permanentEffects.forEach((eff) => {
+			this.model.stats.abilities.all.forEach((ability) => {
+				if (ability.definitionId.equalsTo(eff.statId.get()))
+				ability.baseValue.set(eff.amount.get());
+			});
+			this.model.stats.skills.all.forEach((skill) => {
+				if (skill.definitionId.equalsTo(eff.statId.get()))
+					skill.baseValue.set(eff.amount.get());
+			});
+		});
+	}
+
 }

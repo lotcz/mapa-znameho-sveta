@@ -3,6 +3,7 @@ import Pixies from "../../class/basic/Pixies";
 import NodeTableRenderer from "./NodeTableRenderer";
 import TableLookupRenderer from "./TableLookupRenderer";
 import CharacterStatsModel from "../../model/game/party/stats/CharacterStatsModel";
+import LevelStatsModel from "../../model/game/party/stats/LevelStatsModel";
 
 export default class NodeFormRenderer extends DomRenderer {
 
@@ -150,6 +151,29 @@ export default class NodeFormRenderer extends DomRenderer {
 					e.preventDefault();
 					const save = this.game.saveGame.get();
 					save.addCharacterToParty(this.model);
+				}
+			);
+
+			Pixies.createElement(
+				buttonsLeft,
+				'button',
+				'special',
+				'Level Up!',
+				(e) => {
+					e.preventDefault();
+					const exp = LevelStatsModel.getLevelExperienceRequirement(this.model.stats.level.currentLevel.get() + 1);
+					this.model.stats.level.gainExperience(exp - this.model.stats.level.experience.get() + 1);
+				}
+			);
+
+			Pixies.createElement(
+				buttonsLeft,
+				'button',
+				'special',
+				'Get 100 Exp',
+				(e) => {
+					e.preventDefault();
+					this.model.stats.level.gainExperience(100);
 				}
 			);
 

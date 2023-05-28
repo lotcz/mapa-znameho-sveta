@@ -1,7 +1,7 @@
 import ModelNode from "../../../basic/ModelNode";
 import IntValue from "../../../basic/IntValue";
 import StatModel from "./StatModel";
-import {STAT_LEVEL_PROGRESS} from "./StatDefinitionModel";
+import {STAT_ABILITY_POINTS, STAT_LEVEL_PROGRESS, STAT_SKILL_POINTS} from "./StatDefinitionModel";
 
 export default class LevelStatsModel extends ModelNode {
 
@@ -23,10 +23,15 @@ export default class LevelStatsModel extends ModelNode {
 	/**
 	 * @type IntValue
 	 */
+	experienceNextLevel;
+
+	/**
+	 * @type StatModel
+	 */
 	abilityPoints;
 
 	/**
-	 * @type IntValue
+	 * @type StatModel
 	 */
 	skillPoints;
 
@@ -34,44 +39,55 @@ export default class LevelStatsModel extends ModelNode {
 		super();
 
 		this.currentLevel = this.addProperty('currentLevel', new IntValue(0));
+
 		this.experience = this.addProperty('experience', new IntValue(0));
+		this.experienceNextLevel = this.addProperty('experienceNextLevel', new IntValue(0));
 
-		this.abilityPoints = this.addProperty('abilityPoints', new IntValue(0));
-		this.skillPoints = this.addProperty('skillPoints', new IntValue(0));
+		this.abilityPoints = this.addProperty('abilityPoints', new StatModel(STAT_ABILITY_POINTS, 0));
+		this.skillPoints = this.addProperty('skillPoints', new StatModel(STAT_SKILL_POINTS, 0));
 
-		this.levelProgress = this.addProperty('levelProgress', new StatModel(STAT_LEVEL_PROGRESS, 1, false));
+		this.levelProgress = this.addProperty('levelProgress', new StatModel(STAT_LEVEL_PROGRESS, 0, false));
+
 		this.experience.addOnChangeListener(() => this.updateLevelProgress());
+		this.currentLevel.addOnChangeListener(() => this.updateLevelProgress());
 	}
 
 	gainExperience(exp) {
 		this.experience.increase(exp);
-		if (this.levelProgress.getProgress() > 1) {
-			this.gainLevel(this.currentLevel.get() + 1);
-		}
 	}
 
 	gainLevel(level) {
 		this.currentLevel.set(level);
-		this.abilityPoints.increase(LevelStatsModel.getLevelAbilityPoints(level));
-		this.skillPoints.increase(LevelStatsModel.getLevelSkillPoints(level));
-		this.updateLevelProgress();
+		this.abilityPoints.baseValue.increase(LevelStatsModel.getLevelAbilityPoints(level));
+		this.skillPoints.baseValue.increase(LevelStatsModel.getLevelSkillPoints(level));
+		this.triggerEvent('level-up', level);
 	}
 
 	updateLevelProgress() {
-		if (this.currentLevel.equalsTo(0)) return;
+		if (this.currentLevel.equalsTo(0)) {
+			this.gainLevel(1);
+			return;
+		}
 		const currentReq = LevelStatsModel.getLevelExperienceRequirement(this.currentLevel.get());
 		const nextReq = LevelStatsModel.getLevelExperienceRequirement(this.currentLevel.get() + 1)
+		this.experienceNextLevel.set(nextReq);
+		//debugger;
 		const req = nextReq - currentReq;
 		const current = this.experience.get() - currentReq;
-		this.levelProgress.currentFloat.set(current/req);
+		this.levelProgress.baseValue.set(req);
+		this.levelProgress.currentFloat.set(current);
+		if (this.levelProgress.getProgress() >= 1) {
+			this.gainLevel(this.currentLevel.get() + 1);
+		}
 	}
 
 	static getLevelExperienceRequirement(level) {
-		return Math.pow(level, 2) * 500;
+		if (level <= 0) return 0;
+		return Math.pow(level - 1, 2) * 500;
 	}
 
 	static getLevelAbilityPoints(level) {
-		if (level === 1) return 6;
+		if (level === 1) return 3;
 		return (level % 5 === 0) ? 1 : 0;
 	}
 
