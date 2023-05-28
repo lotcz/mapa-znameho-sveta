@@ -47,7 +47,7 @@ export default class Sprite3dModel extends IdentifiedModelNode {
 
 		this.name = this.addProperty('name', new DirtyValue(`3D Sprite ${id}`));
 		this.modelId = this.addProperty('modelId', new IntValue());
-		this.coordinates = this.addProperty('startCoordinates', new Vector3());
+		this.coordinates = this.addProperty('coordinates', new Vector3());
 		this.scale = this.addProperty('scale', new Vector3(1,1,1));
 		this.primaryMaterialId = this.addProperty('primaryMaterialId', new IntValue());
 		this.secondaryMaterialId = this.addProperty('secondaryMaterialId', new IntValue());

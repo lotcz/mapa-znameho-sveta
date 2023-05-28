@@ -35,8 +35,9 @@ export default class ImageModel extends ModelNode {
 
 		this.url = this.addProperty('url', new StringValue());
 		this.opacity = this.addProperty('opacity', new FloatValue());
-		this.coordinates = this.addProperty('startCoordinates', new Vector2());
+		this.coordinates = this.addProperty('coordinates', new Vector2());
 		this.size = this.addProperty('size', new Vector2());
 		this.zoom = this.addProperty('startZoom', new FloatValue(1));
 	}
+
 }

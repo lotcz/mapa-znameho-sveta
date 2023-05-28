@@ -55,6 +55,10 @@ export default class Dictionary extends Node {
 		return element;
 	}
 
+	rename(key, newKey) {
+		this.add(newKey, this.remove(key));
+	}
+
 	reset() {
 		const keys = this.keys();
 		keys.forEach((key) => this.remove(key));
