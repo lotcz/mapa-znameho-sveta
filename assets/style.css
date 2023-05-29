@@ -986,6 +986,29 @@ h4 {
 .item-slot .inner img {
   width: 100%;
 }
+.inventory-slots-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 20px;
+}
+.inventory-slots-container .slot {
+  margin: 5px;
+}
+.inventory-slots-container .slot .inner {
+  box-shadow: #311a0a 0 0 40px;
+  width: 60px;
+  height: 60px;
+  padding: 0;
+  border-radius: 10px;
+}
+.inventory-slots-container .slot .inner img {
+  width: 100%;
+}
+.selected-item-slot {
+  position: absolute;
+  pointer-events: none;
+}
 .inventory .inventory-items .inventory-slots {
   display: flex;
   flex-direction: column;
@@ -995,10 +1018,13 @@ h4 {
   position: relative;
   display: block;
   margin: 20px;
-  background-image: url('../../../assets/img/ui/inventory-female.png');
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
+  background-image: url('../../../assets/img/ui/inventory-female.png');
+}
+.inventory .inventory-items .inventory-character.male {
+  background-image: url('../../../assets/img/ui/inventory-male.png');
 }
 .inventory .inventory-items .inventory-character .stats-consumption {
   position: absolute;
@@ -1031,54 +1057,31 @@ h4 {
   width: 100%;
 }
 .inventory .inventory-items .inventory-character .slot.head {
-  top: 0;
-  left: 40%;
+  top: 2%;
+  left: 38%;
 }
 .inventory .inventory-items .inventory-character .slot.leftHand {
-  top: 40%;
-  right: 10%;
+  top: 45%;
+  right: 4%;
 }
 .inventory .inventory-items .inventory-character .slot.rightHand {
-  top: 43%;
-  left: 10%;
+  top: 45%;
+  left: 4%;
 }
 .inventory .inventory-items .inventory-character .slot.body {
   top: 20%;
-  left: 34%;
+  left: 38%;
 }
 .inventory .inventory-items .inventory-character .slot.hips {
   top: 45%;
-  left: 40%;
+  left: 38%;
 }
 .inventory .inventory-items .inventory-character .slot.feet {
-  bottom: 0;
+  bottom: 4%;
   left: 38%;
 }
 .inventory .inventory-items .slot.drop .inner {
   background-color: rgba(200, 0, 0, 0.2);
-}
-.inventory-slots-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  padding: 20px;
-}
-.inventory-slots-container .slot {
-  margin: 5px;
-}
-.inventory-slots-container .slot .inner {
-  box-shadow: #311a0a 0 0 40px;
-  width: 60px;
-  height: 60px;
-  padding: 0;
-  border-radius: 10px;
-}
-.inventory-slots-container .slot .inner img {
-  width: 100%;
-}
-.selected-item-slot {
-  position: absolute;
-  pointer-events: none;
 }
 .inventory .inventory-stats .stat-skill {
   align-items: center;

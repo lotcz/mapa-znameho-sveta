@@ -92,10 +92,11 @@ export default class Pixies {
 		return element.classList.contains(css);
 	}
 
-	static toggleClass(element, css) {
-		if (Pixies.hasClass(element, css)) {
+	static toggleClass(element, css, classActive = null) {
+		const hasClass = Pixies.hasClass(element, css);
+		if (hasClass && classActive !== true) {
 			Pixies.removeClass(element, css);
-		} else {
+		} else if (classActive !== false && !hasClass) {
 			Pixies.addClass(element, css);
 		}
 	}

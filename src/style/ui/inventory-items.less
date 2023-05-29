@@ -1,110 +1,116 @@
 .item-slot {
-  .inner {
-	box-shadow: @dark-brown 0 0 40px;
-	width: @inventory-slot-size;
-	height: @inventory-slot-size;
-	padding: 0;
-	border-radius: 10px;
+	.inner {
+		box-shadow: @dark-brown 0 0 40px;
+		width: @inventory-slot-size;
+		height: @inventory-slot-size;
+		padding: 0;
+		border-radius: 10px;
 
-	img {
-	  width: 100%;
-	}
-  }
-}
-
-.inventory .inventory-items {
-
-  .inventory-slots {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-  }
-
-  .inventory-character {
-	position: relative;
-	display: block;
-	margin: 20px;
-	background-image: url('../../../assets/img/ui/inventory-female.png');
-	background-size: contain;
-	background-position: center;
-	background-repeat: no-repeat;
-
-	.stats-consumption {
-	  position: absolute;
-	  right: 0;
-	  top: 0;
-	  font-size: 75%;
-	  width: @inventory-slot-size;
-	  padding: @m-1;
-
-	  .stat-wrapper {
-		box-shadow: @dark-brown 0 0 10px;
-		border-radius: 5px;
-		padding: @m-1;
-		margin: @m-1 0;
-
-		.stat-bar div {
-		  height: 10px;
+		img {
+			width: 100%;
 		}
-	  }
 	}
-
-	.slot {
-	  .item-slot();
-	  position: absolute;
-	}
-
-	.slot.head {
-	  top: 0;
-	  left: 40%;
-	}
-
-	.slot.leftHand {
-	  top: 40%;
-	  right: 10%;
-	}
-
-	.slot.rightHand {
-	  top: 43%;
-	  left: 10%;
-	}
-
-	.slot.body {
-	  top: 20%;
-	  left: 34%;
-	}
-
-	.slot.hips {
-	  top: 45%;
-	  left: 40%;
-	}
-
-	.slot.feet {
-	  bottom: 0;
-	  left: 38%;
-	}
-  }
-
-  .slot.drop .inner {
-	background-color: rgba(200, 0, 0, 0.2);
-  }
 }
 
 .inventory-slots-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  padding: 20px;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	padding: 20px;
 
-  .slot {
-	.item-slot();
+	.slot {
+		.item-slot();
 
-	margin: @m-1;
-  }
+		margin: @m-1;
+	}
 
 }
 
 .selected-item-slot {
-  position: absolute;
-  pointer-events: none;
+	position: absolute;
+	pointer-events: none;
+}
+
+.inventory .inventory-items {
+	.inventory-slots {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
+
+	.inventory-character {
+		position: relative;
+		display: block;
+		margin: 20px;
+
+		background-size: contain;
+		background-position: center;
+		background-repeat: no-repeat;
+
+		background-image: url('../../../assets/img/ui/inventory-female.png');
+
+		&.male {
+			background-image: url('../../../assets/img/ui/inventory-male.png');
+		}
+
+		.stats-consumption {
+			position: absolute;
+			right: 0;
+			top: 0;
+			font-size: 75%;
+			width: @inventory-slot-size;
+			padding: @m-1;
+
+			.stat-wrapper {
+				box-shadow: @dark-brown 0 0 10px;
+				border-radius: 5px;
+				padding: @m-1;
+				margin: @m-1 0;
+
+				.stat-bar div {
+					height: 10px;
+				}
+			}
+		}
+
+		.slot {
+			.item-slot();
+			position: absolute;
+		}
+
+		.slot.head {
+			top: 2%;
+			left: 38%;
+		}
+
+		.slot.leftHand {
+			top: 45%;
+			right: 4%;
+		}
+
+		.slot.rightHand {
+			top: 45%;
+			left: 4%;
+		}
+
+		.slot.body {
+			top: 20%;
+			left: 38%;
+		}
+
+		.slot.hips {
+			top: 45%;
+			left: 38%;
+		}
+
+		.slot.feet {
+			bottom: 4%;
+			left: 38%;
+		}
+	}
+
+	.slot.drop .inner {
+		background-color: rgba(200, 0, 0, 0.2)
+	}
+
 }

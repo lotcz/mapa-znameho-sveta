@@ -23,6 +23,13 @@ export default class InventoryTabItemsRenderer extends DomRenderer {
 
 		this.model = model;
 		this.party = party;
+
+		this.addAutoEvent(
+			this.model.sex,
+			'change',
+			() => Pixies.toggleClass(this.inventoryCharacter, 'male', this.model.sex.get()),
+			true
+		);
 	}
 
 	activateInternal() {
