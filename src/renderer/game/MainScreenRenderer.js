@@ -73,7 +73,7 @@ export default class MainScreenRenderer extends DomRenderer {
 
 		this.addChild(new MainMenuRenderer(this.game, this.model, this.rightPanel));
 		this.addChild(new NullableNodeRenderer(this.game, this.model.conversation, (m) => new ConversationRenderer(this.game, m, this.conversationContainer, this.model)));
-		this.addChild(new NullableNodeRenderer(this.game, this.model.selectedInventorySlot, (m) => new SelectedSlotRenderer(this.game, m, this.container)));
+		this.addChild(new SelectedSlotRenderer(this.game, this.model.selectedItemSlot, this.container));
 		this.addChild(new PartyRenderer(this.game, this.model.party, this.partyPanel, this.topLayer));
 	}
 

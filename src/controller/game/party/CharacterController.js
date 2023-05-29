@@ -93,18 +93,25 @@ export default class CharacterController extends ControllerWithSaveGame {
 	}
 
 	updateInventoryEffects() {
+		this.model.stats.inventoryStatEffects.reset();
 		const slots = [this.model.inventory.leftHand, this.model.inventory.rightHand, this.model.inventory.body, this.model.inventory.hips, this.model.inventory.feet, this.model.inventory.head];
-		const items = [];
+
 		slots.forEach((slot) => {
 			if (slot.item.isSet()) {
-				items.push(slot.item.get());
-			}
-		});
-		this.model.stats.inventoryStatEffects.reset();
-		items.forEach((item) => {
-			const def = this.game.resources.itemDefinitions.getById(item.definitionId.get());
-			if (def) {
-				def.statEffects.forEach((eff) => this.model.stats.inventoryStatEffects.add(eff));
+				const item= slot.item.get();
+				if (!item) return;
+				const def = this.game.resources.itemDefinitions.getById(item.definitionId.get());
+				if (!def) {
+					console.error(`Stat definition ${item.definitionId.get()} not found`);
+					return;
+				}
+				let applyEffect = true;
+				if (slot.name === 'leftHand' || slot.name === 'rightHand') {
+					applyEffect = def.type.equalsTo('weapon');
+				}
+				if (applyEffect) {
+					def.statEffects.forEach((eff) => this.model.stats.inventoryStatEffects.add(eff));
+				}
 			}
 		});
 	}

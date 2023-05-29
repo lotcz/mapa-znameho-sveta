@@ -82,13 +82,28 @@ export default class PartyModel extends ModelNode {
 	}
 
 	findNextInLine(characterId) {
-		for (let i = 0, max = this.slots.count(); i < max; i++) {
+		for (let i = 0, max= this.slots.count(); i < max; i++) {
 			const slot = this.slots.get(i);
 			if (slot.characterId.equalsTo(characterId)) {
 				const nextSlot = this.slots.get((i + 1) % max);
 				if (nextSlot.characterId.equalsTo(this.selectedCharacterId.get())) return null;
 				return nextSlot.character.get();
 			}
+		}
+		return null;
+	}
+
+	findFreeItemSlot(accepts = null) {
+		if (this.selectedCharacter.isSet()) {
+			const selectedCharacter = this.selectedCharacter.get();
+			const slot = selectedCharacter.inventory.findFreeSlot(accepts);
+			if (slot) return slot;
+		}
+		for (let i = 0, max= this.slots.count(); i < max; i++) {
+			const character = this.slots.get(i).character.get();
+			if (!character) continue;
+			const slot = character.inventory.findFreeSlot(accepts);
+			if (slot) return slot;
 		}
 		return null;
 	}

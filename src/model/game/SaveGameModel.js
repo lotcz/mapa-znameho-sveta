@@ -13,6 +13,7 @@ import CompletedQuestsModel from "./quests/CompletedQuestsModel";
 import PartySlotModel from "./party/PartySlotModel";
 import TimeModel from "./environment/TimeModel";
 import TemperatureModel from "./environment/TemperatureModel";
+import ItemSlotModel from "./items/ItemSlotModel";
 
 export default class SaveGameModel extends ModelNode {
 
@@ -147,9 +148,14 @@ export default class SaveGameModel extends ModelNode {
 	conversation;
 
 	/**
+	 * @type ItemSlotModel
+	 */
+	selectedItemSlot;
+
+	/**
 	 * @type NullableNode<ItemSlotModel>
 	 */
-	selectedInventorySlot;
+	lastSelectedInventorySlot;
 
 	/**
 	 * @type CompletedQuestsModel
@@ -210,15 +216,14 @@ export default class SaveGameModel extends ModelNode {
 		this.currentBiotope = this.addProperty('currentBiotope', new NullableNode(null, false));
 		this.temperature = this.addProperty('temperature', new TemperatureModel());
 
-		this.conversation = this.addProperty('conversation', new NullableNode());
+		this.conversation = this.addProperty('conversation', new NullableNode(null));
 
-		this.selectedInventorySlot = this.addProperty('selectedInventorySlot', new NullableNode(null, false));
+		this.selectedItemSlot = this.addProperty('selectedItemSlot', new ItemSlotModel(['all']));
+		this.lastSelectedInventorySlot = this.addProperty('lastSelectedInventorySlot', new NullableNode(null, false));
 
 		this.completedStages = this.addProperty('completedStages', new CompletedQuestsModel());
 
 		this.animationSequence = this.addProperty('animationSequence', new NullableNode(null, false));
-
-
 	}
 
 	addCharacterToParty(character) {

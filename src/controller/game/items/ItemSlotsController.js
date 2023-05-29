@@ -17,32 +17,24 @@ export default class ItemSlotsController extends ControllerWithSaveGame {
 			this.model,
 			'item-slot-selected',
 			(slot) => {
-				const selectedSlot = this.saveGame.selectedInventorySlot;
+				this.pickUp(slot);
+			}
+		);
 
-				if (selectedSlot.equalsTo(slot)) {
-					selectedSlot.set(null);
-					return;
-				}
-
-				if (selectedSlot.isSet()) {
-					this.drop(slot);
-				} else {
-					this.pickUp(slot);
-				}
+		this.addAutoEvent(
+			this.model,
+			'drop-selected-item',
+			() => {
+				this.dropSelectedItemSomewhere();
 			}
 		);
 
 	}
 
 	drop(slot) {
-		const selectedSlot = this.saveGame.selectedInventorySlot.get();
-		if (!selectedSlot) {
-			return;
-		}
+		const selectedSlot = this.saveGame.selectedItemSlot;
 		const selectedItem = selectedSlot.item.get();
 		if (!selectedItem) {
-			this.saveGame.selectedInventorySlot.set(null);
-			console.error('empty item slot is selected!');
 			return;
 		}
 		const def = this.game.resources.itemDefinitions.getById(selectedItem.definitionId.get());
@@ -50,24 +42,11 @@ export default class ItemSlotsController extends ControllerWithSaveGame {
 			return;
 		}
 		const item = slot.item.get();
-		if (item) {
-			const def = this.game.resources.itemDefinitions.getById(item.definitionId.get());
-			if (!selectedSlot.accepts(def.type.get())) {
-				return;
-			}
-		} else {
-			this.saveGame.selectedInventorySlot.set(null);
-		}
 		selectedSlot.item.set(item);
-		if (slot.name === 'ground' && selectedSlot.name !== 'ground') {
+		if (slot.name === 'ground') {
 			this.dropToGround(selectedItem);
 			if (item) this.removeFromGround(item);
 		}
-		if (selectedSlot.name === 'ground' && slot.name !== 'ground') {
-			this.removeFromGround(selectedItem);
-			if (item) this.dropToGround(item);
-		}
-		//this.pickUp(slot);
 		if (slot.name === 'drop') {
 			this.dropToGround(selectedItem);
 			const battle = this.saveGame.currentBattle.get();
@@ -78,11 +57,22 @@ export default class ItemSlotsController extends ControllerWithSaveGame {
 	}
 
 	pickUp(slot) {
-		if (slot.name === 'drop' || slot.item.isEmpty()) {
-			this.saveGame.selectedInventorySlot.set(null);
+		const selectedSlot = this.saveGame.selectedItemSlot;
+		const selectedItem = selectedSlot.item.get();
+		if (selectedItem) {
+			this.drop(slot);
 			return;
 		}
-		this.saveGame.selectedInventorySlot.set(slot);
+		const item = slot.item.get();
+		if (slot.name === 'drop' || !item) {
+			return;
+		}
+		selectedSlot.item.set(item);
+		slot.item.set(null);
+		this.saveGame.lastSelectedInventorySlot.set(slot);
+		if (slot.name === 'ground') {
+			this.removeFromGround(item);
+		}
 	}
 
 	dropToGround(item) {
@@ -102,4 +92,31 @@ export default class ItemSlotsController extends ControllerWithSaveGame {
 		battle.items.remove(battleItem);
 	}
 
+	dropSelectedItemSomewhere() {
+		const selectedSlot = this.saveGame.selectedItemSlot;
+		const selectedItem = selectedSlot.item.get();
+		if (!selectedItem) return;
+
+		const def = this.game.resources.itemDefinitions.getById(selectedItem.definitionId.get());
+		const itemType = def.type.get();
+		const lastSlot = this.saveGame.lastSelectedInventorySlot.get();
+		if (lastSlot && lastSlot.name !== 'ground' && lastSlot.item.isEmpty() && lastSlot.accepts(itemType)) {
+			this.drop(lastSlot);
+			return
+		}
+		const partySlot = this.saveGame.party.findFreeItemSlot(itemType);
+		if (partySlot) {
+			this.drop(partySlot);
+			return;
+		}
+		const battle = this.saveGame.currentBattle.get();
+		if (battle) {
+			const groundSlot = battle.groundSlots.getFreeSlot();
+			if (groundSlot) {
+				this.drop(groundSlot);
+				return;
+			}
+		}
+		console.log('Nowhere to drop!');
+	}
 }

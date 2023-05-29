@@ -67,6 +67,12 @@ export default class InventoryModel extends ModelNode {
 		this.bodySlots.forEach((slot) => {
 			slot.addEventListener('item-changed', () => this.triggerEvent('item-changed'));
 		});
+
+		this.allSlots = [this.slot1, this.slot2, this.slot3, this.head, this.leftHand, this.rightHand, this.body, this.hips, this.feet];
+	}
+
+	findFreeSlot(accepts = null) {
+		return this.allSlots.find((slot) => slot.item.isEmpty() && (accepts === null || slot.accepts(accepts)));
 	}
 
 }

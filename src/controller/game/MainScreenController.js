@@ -112,12 +112,9 @@ export default class MainScreenController extends ControllerNode {
 			this.game.controls,
 			'right-click',
 			() => {
-				// drop item or deselect party character
-				if (this.model.selectedInventorySlot.isSet()) {
-					this.model.selectedInventorySlot.set(null);
-					return;
+				if (this.model.selectedItemSlot.item.isSet()) {
+					this.model.triggerEvent('drop-selected-item');
 				}
-				//this.model.party.isInventoryVisible.set(false);
 			}
 		);
 
