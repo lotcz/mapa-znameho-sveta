@@ -38,12 +38,12 @@ h1, h2, h3, h4 {
   flex-direction: row-reverse;
 }
 
-.column {
+.col, .column {
   display: flex;
   flex-direction: column;
 }
 
-.column-reverse {
+.col-rev, .column-reverse {
   display: flex;
   flex-direction: column-reverse;
 }
@@ -73,7 +73,11 @@ h1, h2, h3, h4 {
   align-content: center;
   justify-items: center;
   justify-content: center;
-  vertical-align: middle;
+}
+
+.center-vertical {
+	justify-content: center;
+	vertical-align: middle;
 }
 
 .left {

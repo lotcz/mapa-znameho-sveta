@@ -32,10 +32,12 @@ h4 {
   display: flex;
   flex-direction: row-reverse;
 }
+.col,
 .column {
   display: flex;
   flex-direction: column;
 }
+.col-rev,
 .column-reverse {
   display: flex;
   flex-direction: column-reverse;
@@ -60,6 +62,9 @@ h4 {
   align-items: center;
   align-content: center;
   justify-items: center;
+  justify-content: center;
+}
+.center-vertical {
   justify-content: center;
   vertical-align: middle;
 }
@@ -548,6 +553,9 @@ h4 {
   font-family: 'Fell', 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
   font-size: 22pt;
 }
+.savegame-layer h3 {
+  font-size: 18pt;
+}
 .savegame-layer .battle,
 .savegame-layer button,
 .savegame-layer a {
@@ -908,6 +916,7 @@ h4 {
 }
 .inventory .portrait {
   width: 235px;
+  height: 235px;
 }
 .inventory .tabs > .tab-header {
   border-width: 0;
@@ -1109,6 +1118,10 @@ h4 {
 }
 .inventory .inventory-stats .stat-skill .value .stat-brick.loss {
   background-color: rgba(200, 100, 100, 0.75);
+}
+.inventory .inventory-stats .level-progress {
+  box-shadow: #311a0a 0 0 4px;
+  padding: 3px;
 }
 .inventory .inventory-stats .level-progress .stat-bar div {
   height: 15px;

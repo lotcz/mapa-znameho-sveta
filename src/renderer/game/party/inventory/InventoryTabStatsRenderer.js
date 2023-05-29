@@ -30,14 +30,15 @@ export default class InventoryTabStatsRenderer extends DomRenderer {
 		this.container = this.addElement( 'div', 'inventory-stats scroll container p-1 m-1');
 
 		this.top = Pixies.createElement(this.container, 'div', 'row');
+
 		this.portrait = Pixies.createElement(this.top, 'div', 'portrait');
 		this.addChild(new ImageRenderer(this.game, this.model.portrait, this.portrait));
 
 		this.info = Pixies.createElement(this.top, 'div', 'info mx-2 flex-1 column');
-
-		this.race = Pixies.createElement(this.info, 'div', 'row stat-skill');
-		this.raceName = Pixies.createElement(this.race, 'div', 'name', 'Plemeno');
-		this.raceValue = Pixies.createElement(this.race, 'div');
+		this.inner = Pixies.createElement(this.info, 'div', 'col flex-1 space-between');
+		this.race = Pixies.createElement(this.inner, 'div');
+		this.raceName = Pixies.createElement(this.race, 'h3', 'name center', 'Plemeno');
+		this.raceValue = Pixies.createElement(this.race, 'div', 'center');
 
 		this.addChild(
 			new NullableNodeRenderer(
@@ -47,25 +48,20 @@ export default class InventoryTabStatsRenderer extends DomRenderer {
 			)
 		);
 
-		this.level = Pixies.createElement(this.info, 'div', 'row stat-skill stat-level');
-		Pixies.createElement(this.level, 'div', 'name', 'Úroveň');
+		this.level = Pixies.createElement(this.inner, 'div', 'col stat-level');
+		Pixies.createElement(this.level, 'h3', 'name center', 'Úroveň');
 		this.levelNumeric = Pixies.createElement(this.level, 'div');
 		this.addChild(new StatNumberRenderer(this.game, this.model.stats.level.currentLevel, this.levelNumeric));
-		this.experience = Pixies.createElement(this.info, 'div', 'row');
-		const currentExp = Pixies.createElement(this.experience, 'div');
+
+		Pixies.createElement(this.inner, 'h3', 'name center', 'Zkušenosti');
+
+		this.experience = Pixies.createElement(this.info, 'div', 'row mt-1 mx-1 level-progress');
+		const currentExp = Pixies.createElement(this.experience, 'div', 'mx-2');
 		this.addChild(new StatNumberRenderer(this.game, this.model.stats.level.experience, currentExp));
-		this.levelProgress = Pixies.createElement(this.experience, 'div', 'flex-1 level-progress');
+		this.levelProgress = Pixies.createElement(this.experience, 'div', 'col center-vertical flex-1');
 		this.addChild(new StatBarRenderer(this.game, this.model.stats.level.levelProgress, this.levelProgress));
-		const nextExp = Pixies.createElement(this.experience, 'div');
+		const nextExp = Pixies.createElement(this.experience, 'div', 'mx-2');
 		this.addChild(new StatNumberRenderer(this.game, this.model.stats.level.experienceNextLevel, nextExp));
-
-		this.temperature = Pixies.createElement(this.info, 'div', 'row stat-skill');
-		Pixies.createElement(this.temperature, 'div', 'name', 'Teplota');
-		this.temperatureInner = Pixies.createElement(this.temperature, 'div', 'row');
-		this.addChild(new StatNumberRenderer(this.game, this.model.stats.consumption.temperature.baseValue, this.temperatureInner));
-		this.addChild(new StatBarRenderer(this.game, this.model.stats.consumption.temperature, this.temperatureInner));
-		this.addChild(new StatNumberRenderer(this.game, this.model.stats.consumption.temperature.currentFloat, this.temperatureInner));
-
 
 		Pixies.createElement(this.container, 'h2', 'center my-3', 'Vlastnosti');
 

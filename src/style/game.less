@@ -49,75 +49,79 @@
 }
 
 .savegame-layer {
-  .default-cursor();
-  .normal-text();
-  color: @dark-brown;
-
-  h1, h2, h3, h4 {
-	.decor-text();
-  }
-
-  .battle, button, a {
 	.default-cursor();
-  }
+	.normal-text();
+	color: @dark-brown;
 
-  .battle.cursor-eye {
-	cursor: url('img/cursor/cursor-eye.png'), pointer;
-  }
-
-  .battle.cursor-walk {
-	cursor: url('img/cursor/cursor-walk.png'), pointer;
-  }
-
-  .battle.cursor-exit {
-	cursor: url('img/cursor/cursor-exit.png'), pointer;
-  }
-
-  .battle.cursor-talk {
-	cursor: url('img/cursor/cursor-mouth.png'), pointer;
-  }
-
-  .battle.cursor-attack {
-	cursor: url('img/cursor/cursor-dagger.png'), pointer;
-  }
-
-  .battle.cursor-switch-character {
-	cursor: url('img/cursor/cursor-character.png'), pointer;
-  }
-
-  .switch-container {
-	margin-top: @m-1;
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	padding-right: 4px;
-
-	.label-container {
-	  display: flex;
-	  flex-direction: column;
-	  justify-content: center;
+	h1, h2, h3, h4 {
+		.decor-text();
 	}
 
-	.switch-inner-container {
-	  display: flex;
-	  flex-direction: column;
-	  justify-content: center;
-
-	  .switch {
-		width: @m-3;
-		height: @m-3;
-		font-size: 15px;
-		font-family: Arial, sans-serif;
-		text-align: center;
-		vertical-align: middle;
-		background-color: @medium-brown;
-		box-shadow: @dark-brown 1px 1px 10px;
-		border-width: @gold;
-		border-radius: 4px;
-		color: @gold;
-	  }
+	h3 {
+		font-size: 18pt;
 	}
-  }
+
+	.battle, button, a {
+		.default-cursor();
+	}
+
+	.battle.cursor-eye {
+		cursor: url('img/cursor/cursor-eye.png'), pointer;
+	}
+
+	.battle.cursor-walk {
+		cursor: url('img/cursor/cursor-walk.png'), pointer;
+	}
+
+	.battle.cursor-exit {
+		cursor: url('img/cursor/cursor-exit.png'), pointer;
+	}
+
+	.battle.cursor-talk {
+		cursor: url('img/cursor/cursor-mouth.png'), pointer;
+	}
+
+	.battle.cursor-attack {
+		cursor: url('img/cursor/cursor-dagger.png'), pointer;
+	}
+
+	.battle.cursor-switch-character {
+		cursor: url('img/cursor/cursor-character.png'), pointer;
+	}
+
+	.switch-container {
+		margin-top: @m-1;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		padding-right: 4px;
+
+		.label-container {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+
+		.switch-inner-container {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+
+			.switch {
+				width: @m-3;
+				height: @m-3;
+				font-size: 15px;
+				font-family: Arial, sans-serif;
+				text-align: center;
+				vertical-align: middle;
+				background-color: @medium-brown;
+				box-shadow: @dark-brown 1px 1px 10px;
+				border-width: @gold;
+				border-radius: 4px;
+				color: @gold;
+			}
+		}
+	}
 
 }
 

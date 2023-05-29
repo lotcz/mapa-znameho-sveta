@@ -30,7 +30,7 @@ export default class ImageRenderer extends DomRenderer {
 		this.removeElement(this.container);
 		let portraitUri = this.model.get();
 		if (typeof portraitUri !== 'string' || portraitUri.length === 0) {
-			console.log(portraitUri);
+			console.error(portraitUri);
 			return;
 		}
 		this.game.assets.getAsset(portraitUri, (img) => {
