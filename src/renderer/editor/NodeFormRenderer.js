@@ -161,8 +161,13 @@ export default class NodeFormRenderer extends DomRenderer {
 				'Level Up!',
 				(e) => {
 					e.preventDefault();
-					const exp = LevelStatsModel.getLevelExperienceRequirement(this.model.stats.level.currentLevel.get() + 1);
-					this.model.stats.level.gainExperience(exp - this.model.stats.level.experience.get() + 1);
+					const level = this.model.stats.level.currentLevel.get();
+					if (level === 0) {
+						this.model.stats.level.gainLevel(1);
+					} else {
+						const exp = LevelStatsModel.getLevelExperienceRequirement(level+1);
+						this.model.stats.level.gainExperience(exp - this.model.stats.level.experience.get() + 1);
+					}
 				}
 			);
 

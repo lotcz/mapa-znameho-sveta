@@ -64,10 +64,6 @@ export default class LevelStatsModel extends ModelNode {
 	}
 
 	updateLevelProgress() {
-		if (this.currentLevel.equalsTo(0)) {
-			this.gainLevel(1);
-			return;
-		}
 		const currentReq = LevelStatsModel.getLevelExperienceRequirement(this.currentLevel.get());
 		const nextReq = LevelStatsModel.getLevelExperienceRequirement(this.currentLevel.get() + 1)
 		this.experienceNextLevel.set(nextReq);

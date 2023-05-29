@@ -57,8 +57,12 @@ export default class EditorRenderer extends DomRenderer {
 			() => {
 				if (this.model.isOptionsVisible.get()) {
 					Pixies.removeClass(this.dock, 'hidden');
+					Pixies.removeClass(this.buttonsLeft, 'hidden');
+					Pixies.removeClass(this.buttonsRight, 'hidden');
 				} else {
 					Pixies.addClass(this.dock, 'hidden');
+					Pixies.addClass(this.buttonsLeft, 'hidden');
+					Pixies.addClass(this.buttonsRight, 'hidden');
 				}
 			},
 			true
@@ -72,15 +76,16 @@ export default class EditorRenderer extends DomRenderer {
 		this.nav = Pixies.createElement(this.container, 'nav', 'bg row');
 
 		const buttons = Pixies.createElement(this.nav, 'div', 'buttons row');
-		const buttonsLeft = Pixies.createElement(buttons, 'div');
-		this.switch = Pixies.createElement(buttonsLeft,'input');
+		this.switch = Pixies.createElement(buttons,'input');
 		this.switch.setAttribute('type', 'checkbox');
 		this.switch.setAttribute('name', 'switch');
 		this.switch.setAttribute('checked', this.model.isOptionsVisible.get());
 		this.switch.addEventListener('change', () => this.model.triggerEvent('switch-options'));
 
+		this.buttonsLeft = Pixies.createElement(buttons, 'div');
+
 		Pixies.createElement(
-			buttonsLeft,
+			this.buttonsLeft,
 			'button',
 			'special',
 			'Save Resources',
@@ -88,7 +93,7 @@ export default class EditorRenderer extends DomRenderer {
 		);
 
 		Pixies.createElement(
-			buttonsLeft,
+			this.buttonsLeft,
 			'button',
 			'red',
 			'New Game',
