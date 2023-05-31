@@ -337,7 +337,7 @@ h4 {
   justify-content: start;
 }
 .editor-layer .editor .buttons input {
-  margin: 10px;
+  margin: 5px;
 }
 .editor-layer .editor button {
   background-color: gray;
@@ -345,7 +345,7 @@ h4 {
   border: 0;
   border-radius: 5px;
   cursor: pointer;
-  margin: 10px;
+  margin: 5px;
 }
 .editor-layer .editor button.active {
   background-color: black;
@@ -426,7 +426,7 @@ h4 {
   display: grid;
   grid-template-columns: 1fr 4fr;
   gap: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 .editor-layer .editor form .fields .row .field {
   display: flex;
