@@ -260,6 +260,10 @@ h4 {
   background-color: black;
   color: gray;
 }
+.table-lookup .buttons input,
+.table-lookup .buttons button {
+  margin: 0 !important;
+}
 .table-lookup .scroll {
   overflow-y: auto;
   overflow-x: hidden;

@@ -1,276 +1,281 @@
 .instant-editor {
-  display: block;
-  position: static;
-  padding: 1px;
-  margin: 1px;
-
-  input[type=text],
-  textarea {
 	display: block;
-	width: 100%;
-	margin: auto;
-  }
+	position: static;
+	padding: 1px;
+	margin: 1px;
+
+	input[type=text],
+	textarea {
+		display: block;
+		width: 100%;
+		margin: auto;
+	}
 }
 
 .table-lookup {
-  background-color: black;
-  color: gray;
+	background-color: black;
+	color: gray;
 
-  .scroll {
-	overflow-y: auto;
-	overflow-x: hidden;
-	max-height: 400px;
-  }
+	.buttons {
+		input, button {
+			margin: 0 !important;
+		}
+	}
 
-  .row {
-	display: flex !important;
-  }
+	.scroll {
+		overflow-y: auto;
+		overflow-x: hidden;
+		max-height: 400px;
+	}
 
-  tr.active {
-	color: white;
-  }
+	.row {
+		display: flex !important;
+	}
+
+	tr.active {
+		color: white;
+	}
 }
 
 .force-foreground {
-  position: fixed;
-  z-index: 9999999;
-  top: 20%;
-  left: 40%;
+	position: fixed;
+	z-index: 9999999;
+	top: 20%;
+	left: 40%;
 }
 
 .editor-section {
-  background-color: black;
-  color: gray;
+	background-color: black;
+	color: gray;
 
-  button {
-	background-color: gray !important;
-	color: black !important;
-	font-weight: normal !important;
-	box-shadow: none !important;
-	border-radius: 2px !important;
-	padding: 5px !important;
-	margin: 5px !important;
-  }
+	button {
+		background-color: gray !important;
+		color: black !important;
+		font-weight: normal !important;
+		box-shadow: none !important;
+		border-radius: 2px !important;
+		padding: 5px !important;
+		margin: 5px !important;
+	}
 }
 
 .editor-layer {
-  font-family: monospace;
-  position: absolute;
-  top: 0;
-  left: 0;
-  max-height: 100%;
-  overflow: hidden;
-  cursor: default;
+	font-family: monospace;
+	position: absolute;
+	top: 0;
+	left: 0;
+	max-height: 100%;
+	overflow: hidden;
+	cursor: default;
 
-  .editor {
-	background-color: transparent;
-	font-size: 10pt;
+	.editor {
+		background-color: transparent;
+		font-size: 10pt;
 
-	.bg {
-	  background-color: black;
-	  color: gray;
+		.bg {
+			background-color: black;
+			color: gray;
+		}
+
+		ul.menu {
+			padding: 0;
+			margin: 0;
+
+			a:hover {
+				color: lightblue;
+				cursor: pointer;
+			}
+			.active {
+				color: white;
+			}
+			li {
+				padding: 4px;
+				list-style: none;
+			}
+		}
+
+		.buttons {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+
+			& > div {
+				display: flex;
+				flex-direction: row;
+				justify-content: start;
+			}
+
+			input {
+				margin: 10px;
+			}
+		}
+
+		button {
+			background-color: gray;
+			color: black;
+			border: 0;
+			border-radius: 5px;
+			cursor: pointer;
+			margin: 10px;
+
+			&.active {
+				background-color: black;
+				color: white;
+				border: 1px white solid;
+				cursor: default;
+			}
+			&:hover {
+				background-color: lightblue;
+			}
+			&.special {
+				background-color: @light-brown;
+				color: @dark-brown;
+			}
+			&.red {
+				background-color: red;
+			}
+			&.blue {
+				background-color: lightblue;
+			}
+		}
+
+		.dock {
+			width: 100%;
+			display: flex;
+			flex-direction: row;
+			align-items: flex-start;
+			justify-content: space-between;
+		}
+
+		.table,
+		form,
+		.item-def {
+			border: 1px gray solid;
+			border-radius: 5px;
+			margin: 10px;
+			padding: 10px;
+		}
+
+		.grab-icon {
+			cursor: move;
+			opacity: 0.5;
+
+			&::after {
+			content: "■";
+			}
+		}
+
+		.table .scroll,
+		form .scroll {
+			display: block;
+			overflow-y: auto;
+			overflow-x: hidden;
+		}
+
+		.table .scroll {
+			max-height: 200px;
+			max-width: 700px;
+			overflow-x: auto;
+		}
+
+		form .scroll {
+			max-height: 563px;
+		}
+
+		table {
+			margin-right: 20px;
+		}
+
+		table td {
+			border-left: 1px gray solid;
+			white-space: nowrap;
+			max-height: 1em;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		table td:last-of-type {
+			border-right: 1px gray solid;
+		}
+
+		table tr:hover > td {
+			color: lightblue;
+			cursor: pointer;
+		}
+
+		table tr.active > td {
+			color: white;
+		}
+
+		form .fields .row {
+			display: grid;
+			grid-template-columns: 1fr 4fr;
+			gap: 10px;
+			margin-bottom: 10px;
+		}
+
+		form .fields .row .field {
+			display: flex;
+			align-content: stretch;
+			flex-direction: column;
+		}
+
+		form .fields .row .field.with-lookup {
+			flex-direction: row;
+			align-items: center;
+		}
+
+		form .fields .row .field.with-lookup .lookup-button {
+			margin: 0;
+		}
+
+		form .fields .row input {
+			display: block;
+			width: auto;
+			margin-right: 10px;
+		}
+
+		form .fields .row input[type=checkbox] {
+			align-self: start;
+		}
+
+		form .fields .row .vector {
+			flex-direction: row;
+		}
+
+		form .fields .row .vector input {
+			width: 100px;
+		}
+
+		.item-def .slot {
+			background-image: url('img/texture/paper.jpg');
+		}
+
+		.item-def .slot .inner {
+			display: flex;
+		}
+
+		.battle-menu {
+			position: fixed;
+			right: 20px;
+			top: 20px;
+			padding: @m-2;
+
+			input[type=text] {
+			width: 50px;
+			}
+
+			input[type=radio] {
+			margin: 0;
+			padding: @m-1;
+			display: inline-block;
+			}
+
+			label {
+			padding: @m-1;
+			display: inline-block;
+			}
+		}
+
 	}
-
-	ul.menu {
-	  padding: 0;
-	  margin: 0;
-
-	  a:hover {
-		color: lightblue;
-		cursor: pointer;
-	  }
-	  .active {
-		color: white;
-	  }
-	  li {
-		padding: 4px;
-		list-style: none;
-	  }
-	}
-
-	.buttons {
-	  display: flex;
-	  flex-direction: row;
-	  justify-content: space-between;
-
-	  & > div {
-		display: flex;
-		flex-direction: row;
-		justify-content: start;
-	  }
-
-	  input {
-		margin: 10px;
-	  }
-	}
-
-	button {
-	  background-color: gray;
-	  color: black;
-	  border: 0;
-	  border-radius: 5px;
-	  cursor: pointer;
-	  margin: 10px;
-
-	  &.active {
-		background-color: black;
-		color: white;
-		border: 1px white solid;
-		cursor: default;
-	  }
-	  &:hover {
-		background-color: lightblue;
-	  }
-	  &.special {
-		background-color: @light-brown;
-		color: @dark-brown;
-	  }
-	  &.red {
-		background-color: red;
-	  }
-	  &.blue {
-		background-color: lightblue;
-	  }
-	}
-
-	.dock {
-	  width: 100%;
-	  display: flex;
-	  flex-direction: row;
-	  align-items: flex-start;
-	  justify-content: space-between;
-	}
-
-	.table,
-	form,
-	.item-def {
-	  border: 1px gray solid;
-	  border-radius: 5px;
-	  margin: 10px;
-	  padding: 10px;
-	}
-
-	.grab-icon {
-	  cursor: move;
-	  opacity: 0.5;
-
-	  &::after {
-		content: "■";
-	  }
-	}
-
-	.table .scroll,
-	form .scroll {
-	  display: block;
-	  overflow-y: auto;
-	  overflow-x: hidden;
-	}
-
-	.table .scroll {
-	  max-height: 200px;
-	  max-width: 700px;
-	  overflow-x: auto;
-	}
-
-	form .scroll {
-	  max-height: 563px;
-	}
-
-	table {
-	  margin-right: 20px;
-	}
-
-	table td {
-	  border-left: 1px gray solid;
-	  white-space: nowrap;
-	  max-height: 1em;
-	  overflow: hidden;
-	  text-overflow: ellipsis;
-	}
-
-	table td:last-of-type {
-	  border-right: 1px gray solid;
-	}
-
-	table tr:hover > td {
-	  color: lightblue;
-	  cursor: pointer;
-	}
-
-	table tr.active > td {
-	  color: white;
-	}
-
-	form .fields .row {
-	  display: grid;
-	  grid-template-columns: 1fr 4fr;
-	  gap: 10px;
-	  margin-bottom: 10px;
-	}
-
-	form .fields .row .field {
-	  display: flex;
-	  align-content: stretch;
-	  flex-direction: column;
-	}
-
-	form .fields .row .field.with-lookup {
-	  flex-direction: row;
-	  align-items: center;
-	}
-
-	form .fields .row .field.with-lookup .lookup-button {
-	  margin: 0;
-	}
-
-	form .fields .row input {
-	  display: block;
-	  width: auto;
-	  margin-right: 10px;
-	}
-
-	form .fields .row input[type=checkbox] {
-	  align-self: start;
-	}
-
-	form .fields .row .vector {
-	  flex-direction: row;
-	}
-
-	form .fields .row .vector input {
-	  width: 100px;
-	}
-
-	.item-def .slot {
-	  background-image: url('img/texture/paper.jpg');
-	}
-
-	.item-def .slot .inner {
-	  display: flex;
-	}
-
-	.battle-menu {
-	  position: fixed;
-	  right: 20px;
-	  top: 20px;
-	  padding: @m-2;
-
-	  input[type=text] {
-		width: 50px;
-	  }
-
-	  input[type=radio] {
-		margin: 0;
-		padding: @m-1;
-		display: inline-block;
-	  }
-
-	  label {
-		padding: @m-1;
-		display: inline-block;
-	  }
-	}
-
-
-  }
 }

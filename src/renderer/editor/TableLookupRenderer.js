@@ -60,11 +60,12 @@ export default class TableLookupRenderer extends DomRenderer {
 		this.input = Pixies.createElement(this.buttons,'input', 'flex-1')
 		this.input.setAttribute('type', 'text');
 		this.input.addEventListener('input', () => this.renderItems());
-		Pixies.createElement(this.buttons,'button',null,'Reset',() => {
+		Pixies.createElement(this.buttons,'button',null,'Reset',(e) => {
+			e.preventDefault();
 			this.input.value = '';
 			this.renderItems();
 		});
-		Pixies.createElement(this.buttons,'button',null,'Close',() => this.model.triggerEvent('table-closed'));
+		Pixies.createElement(this.buttons,'button','ml-1','Close',() => this.model.triggerEvent('table-closed'));
 
 		this.scrollable = Pixies.createElement(this.container, 'div', 'scroll p-1');
 		this.table = Pixies.createElement(this.scrollable, 'table');
