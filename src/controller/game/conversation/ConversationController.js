@@ -54,9 +54,8 @@ export default class ConversationController extends ControllerWithSaveGame {
 		if (entry.givesItemId.isSet()) {
 			const item = new ItemModel();
 			item.definitionId.set(entry.givesItemId.get());
-			const slot = this.getFreeSlot();
-			slot.item.set(item);
-			this.saveGame.selectedInventorySlot.set(slot);
+			this.saveGame.triggerEvent('drop-selected-item');
+			this.saveGame.selectedItemSlot.item.set(item);
 		}
 
 		entry.lines.forEach((line) => {
@@ -83,9 +82,4 @@ export default class ConversationController extends ControllerWithSaveGame {
 		this.updateEntryParents();
 	}
 
-	getFreeSlot() {
-		const battle = this.saveGame.currentBattle.get();
-		if (battle) return battle.groundSlots.getFreeSlot();
-		return this.model.groundSlots.getFreeSlot;
-	}
 }

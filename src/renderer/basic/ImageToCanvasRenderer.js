@@ -42,7 +42,6 @@ export default class ImageToCanvasRenderer extends DomRenderer {
 
 	renderImage() {
 		if (!(this.image && this.context2d)) return;
-
 		this.context2d.clearRect(0, 0,this.model.size.x, this.model.size.y);
 		this.context2d.globalAlpha = this.model.opacity.get();
 		const imageSize = new Vector2(this.image.width, this.image.height);

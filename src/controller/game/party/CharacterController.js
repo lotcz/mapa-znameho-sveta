@@ -107,7 +107,7 @@ export default class CharacterController extends ControllerWithSaveGame {
 				}
 				let applyEffect = true;
 				if (slot.name === 'leftHand' || slot.name === 'rightHand') {
-					applyEffect = def.type.equalsTo('weapon');
+					applyEffect = ['weapon', 'item'].includes(def.type.get());
 				}
 				if (applyEffect) {
 					def.statEffects.forEach((eff) => this.model.stats.inventoryStatEffects.add(eff));
