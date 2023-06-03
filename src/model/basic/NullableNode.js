@@ -61,4 +61,10 @@ export default class NullableNode extends DirtyValue {
 		}
 	}
 
+	getResourcesForPreload() {
+		if (this.isSet()) {
+			return this.get().getResourcesForPreload();
+		}
+		return [];
+	}
 }

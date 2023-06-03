@@ -38,15 +38,7 @@ export default class SequenceRenderer extends DomRenderer {
 		this.renderText();
 		this.updateSize();
 
-		// preload images
-		const images = this.model.stepsBg.filter((step) => step.image.isSet()).map((step) => step.image.get());
-		const paths = Pixies.arrayUnique(images);
-		paths.forEach((path) => this.game.assets.getAsset(path));
-
-		// preload sounds
-		const sounds = this.model.stepsText.filter((step) => step.audioUrl.isSet()).map((step) => step.audioUrl.get());
-		const uris = Pixies.arrayUnique(sounds);
-		uris.forEach((uri) => this.game.assets.getAsset(uri));
+		this.game.assets.load(this.model.getResourcesForPreload());
 	}
 
 	deactivateInternal() {

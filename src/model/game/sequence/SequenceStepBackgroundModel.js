@@ -72,4 +72,8 @@ export default class SequenceStepBackgroundModel extends SequenceStepBaseModel {
 		this.endZoom.set(this.renderingImage.zoom.get());
 	}
 
+	getResourcesForPreload() {
+		return [this.image.get()];
+	}
+
 }

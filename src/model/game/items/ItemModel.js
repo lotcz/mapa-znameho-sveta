@@ -31,4 +31,10 @@ export default class ItemModel extends ModelNode {
 
 	}
 
+	getResourcesForPreloadInternal() {
+		return [
+			`itm/${this.definitionId.get()}`
+		];
+	}
+
 }

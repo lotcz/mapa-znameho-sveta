@@ -44,8 +44,20 @@ export default class GameRenderer extends DomRenderer {
 			)
 		);
 
-		this.updateLoadingHandler = () => this.updateLoading();
-		this.updateDebugMenuHandler = () => this.updateDebugMenu();
+		this.addAutoEvent(
+			this.model.assets,
+			'blocking-loaders-changed',
+			() => this.updateLoading(),
+			true
+		);
+
+		this.addAutoEvent(
+			this.model.isInDebugMode,
+			'change',
+			() => this.updateDebugMenu(),
+			true
+		);
+
 	}
 
 	activateInternal() {
@@ -56,25 +68,16 @@ export default class GameRenderer extends DomRenderer {
 		this.menuLayer = this.addElement('div', 'menu-layer');
 		this.editorLayer = this.addElement('div', 'editor-layer');
 
-		this.updateLoading();
-		this.model.assets.isLoading.addOnChangeListener(this.updateLoadingHandler);
-		this.model.assets.loaders.addEventListener('change', this.updateLoadingHandler);
-
-		this.updateDebugMenu();
-		this.model.isInDebugMode.addOnChangeListener(this.updateDebugMenuHandler);
-
+		this.model.assets.preload(this.model.getResourcesForPreload());
 	}
 
 	deactivateInternal() {
-		this.model.assets.isLoading.removeOnChangeListener(this.updateLoadingHandler);
-		this.model.assets.loaders.removeEventListener('change', this.updateLoadingHandler);
-		this.model.isInDebugMode.removeOnChangeListener(this.updateDebugMenuHandler);
 		this.removeElement(this.saveGameLayer);
 		this.removeElement(this.editorLayer);
 	}
 
 	updateLoading() {
-		const isLoading = this.model.assets.isLoading.get();
+		const isLoading = this.model.assets.blockingLoaders > 0;
 		if (this.loading && !isLoading) {
 			this.removeElement(this.loading);
 			this.loading = null;
@@ -90,10 +93,10 @@ export default class GameRenderer extends DomRenderer {
 				const progressWrapper = Pixies.createElement(content, 'div', 'progress-wrapper mt-2');
 				this.loadingProgress = Pixies.createElement(progressWrapper, 'div', 'stretch');
 			}
-			if (this.game.assets.loaders.count() > this.loadersCount) {
-				this.loadersCount = this.game.assets.loaders.count();
+			if (this.game.assets.blockingLoaders > this.loadersCount) {
+				this.loadersCount = this.game.assets.blockingLoaders;
 			}
-			const remaining = this.game.assets.loaders.count();
+			const remaining = this.game.assets.blockingLoaders;
 			const portion = 1 - (remaining / this.loadersCount);
 			this.loadingProgress.style.width = `${Math.round(portion*100)}%`;
 		}

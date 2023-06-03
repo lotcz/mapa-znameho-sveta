@@ -37,9 +37,9 @@ export default class LocationModel extends IdentifiedModelNode {
 
 		this.name = this.addProperty('name', new DirtyValue(`Location ${id}`));
 		this.coordinates = this.addProperty('coordinates', new Vector2());
-		this.battleMapId = this.addProperty('battleMapId', new IntValue(0));
+		this.battleMapId = this.addProperty('battleMapId', new IntValue());
 
-		this.biotopeId = this.addProperty('biotopeId', new IntValue(0));
+		this.biotopeId = this.addProperty('biotopeId', new IntValue());
 
 		this.connections = this.addProperty('connections', new ModelNodeCollection(null, false));
 	}

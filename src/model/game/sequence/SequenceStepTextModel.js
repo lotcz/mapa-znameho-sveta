@@ -21,4 +21,7 @@ export default class SequenceStepTextModel extends SequenceStepBaseModel {
 
 	}
 
+	getResourcesForPreload() {
+		return [this.audioUrl.get()];
+	}
 }

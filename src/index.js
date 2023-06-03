@@ -33,7 +33,7 @@ const updateLoop = function () {
 
 	if (delta < MAX_DELTA)
 	{
-		if (!game.assets.isLoading.get()) {
+		if (game.assets.blockingLoaders === 0) {
 			controller.update(delta);
 			renderer.render();
 		}
@@ -46,4 +46,4 @@ const updateLoop = function () {
 	requestAnimationFrame(updateLoop);
 }
 
-requestAnimationFrame(updateLoop);
+updateLoop();

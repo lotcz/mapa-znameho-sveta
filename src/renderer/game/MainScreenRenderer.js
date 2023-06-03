@@ -75,6 +75,9 @@ export default class MainScreenRenderer extends DomRenderer {
 		this.addChild(new NullableNodeRenderer(this.game, this.model.conversation, (m) => new ConversationRenderer(this.game, m, this.conversationContainer, this.model)));
 		this.addChild(new SelectedSlotRenderer(this.game, this.model.selectedItemSlot, this.container));
 		this.addChild(new PartyRenderer(this.game, this.model.party, this.partyPanel, this.topLayer));
+
+		// PRELOAD
+		this.game.assets.preload(this.model.party.getResourcesForPreload());
 	}
 
 	deactivateInternal() {

@@ -37,4 +37,12 @@ export default class ItemSlotModel extends ModelNode {
 		return this.acceptsTypes.includes(type);
 	}
 
+	getResourcesForPreload() {
+		if (['hair', 'eyes', 'beard'].includes(this.name)) {
+			return [];
+		} else {
+			return this.item.getResourcesForPreload();
+		}
+	}
+
 }

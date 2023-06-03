@@ -216,4 +216,11 @@ export default class ModelNodeCollection extends ModelNode {
 			this.children.add(child);
 		}
 	}
+
+	getResourcesForPreload() {
+		const result = super.getResourcesForPreload();
+		this.children.forEach((ch) => result.push(...ch.getResourcesForPreload()));
+		return Pixies.arrayUnique(result);
+	}
+
 }

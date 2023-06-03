@@ -1,5 +1,6 @@
 import Node from "../../class/basic/Node";
 import Dictionary from "../../class/basic/Dictionary";
+import Pixies from "../../class/basic/Pixies";
 
 export default class ModelNode extends Node {
 
@@ -144,6 +145,22 @@ export default class ModelNode extends Node {
 
 	removeOnDirtyListener(handler) {
 		this.removeEventListener('dirty', handler);
+	}
+
+	getResourcesForPreload() {
+		const result = this.getResourcesForPreloadInternal();
+		this.properties.forEach(
+			(name, child) => {
+				if (typeof child.getResourcesForPreload === 'function') {
+					result.push(...child.getResourcesForPreload());
+				}
+			}
+		);
+		return Pixies.arrayUnique(result).filter((uri) => uri !== null && uri !== '');
+	}
+
+	getResourcesForPreloadInternal() {
+		return [];
 	}
 
 }

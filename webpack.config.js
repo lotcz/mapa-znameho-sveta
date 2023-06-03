@@ -12,7 +12,7 @@ module.exports = {
 	devtool: 'inline-source-map',
 	devServer: {
 		contentBase: './dist',
-		port: 8090
+		port: 8040
 	},
 	plugins: [
 /*

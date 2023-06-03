@@ -140,9 +140,9 @@ export default class CharacterModel extends TemplateNode {
 
 		this.inventory = this.addProperty('inventory', new InventoryModel());
 
-		this.hairSlot =  this.addProperty('hairSlot', new ItemSlotModel(['head'], 'head', false));
-		this.eyesSlot =  this.addProperty('eyesSlot', new ItemSlotModel(['head'], 'head', false));
-		this.beardSlot =  this.addProperty('beardSlot', new ItemSlotModel(['head'], 'head', false));
+		this.hairSlot =  this.addProperty('hairSlot', new ItemSlotModel(['head'], 'hair', false));
+		this.eyesSlot =  this.addProperty('eyesSlot', new ItemSlotModel(['head'], 'eyes', false));
+		this.beardSlot =  this.addProperty('beardSlot', new ItemSlotModel(['head'], 'beard', false));
 		this.dropSlot =  this.addProperty('dropSlot', new ItemSlotModel(['all'], 'drop', false));
 
 		this.additionalItems = this.addProperty('additionalItems', new ModelNodeCollection(() => new AdditionalItemModel()));

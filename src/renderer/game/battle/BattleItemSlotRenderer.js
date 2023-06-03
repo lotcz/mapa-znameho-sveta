@@ -16,6 +16,12 @@ const BONES = {
 	rightDownLeg: 'mixamorigRightLeg'
 }
 
+const CONVERSIONS = {
+	hair: 'head',
+	eyes: 'head',
+	beard: 'head'
+}
+
 export default class BattleItemSlotRenderer extends RendererNode {
 
 	/**
@@ -55,7 +61,7 @@ export default class BattleItemSlotRenderer extends RendererNode {
 	}
 
 	activateInternal() {
-		const boneName = BONES[this.model.name];
+		const boneName = this.getBoneName(this.model.name);
 		this.bone = this.characterMesh.getObjectByName(boneName);
 		if (!this.bone) {
 			console.log('No bone found', this.model.name, boneName);
@@ -67,6 +73,12 @@ export default class BattleItemSlotRenderer extends RendererNode {
 	deactivateInternal() {
 		this.clearDefinitionListener();
 		this.destroyMesh();
+	}
+
+	getBoneName(name) {
+		const converted = CONVERSIONS[name];
+		if (converted) name = converted;
+		return BONES[name];
 	}
 
 	updateMesh() {

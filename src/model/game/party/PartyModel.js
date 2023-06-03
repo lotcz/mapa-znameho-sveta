@@ -108,4 +108,8 @@ export default class PartyModel extends ModelNode {
 		return null;
 	}
 
+	getResourcesForPreloadInternal() {
+		return ['img/ui/inventory-female.png', 'img/ui/inventory-male.png'];
+	}
+
 }

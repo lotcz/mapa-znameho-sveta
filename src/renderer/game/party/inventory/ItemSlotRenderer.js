@@ -44,7 +44,7 @@ export default class ItemSlotRenderer extends DomRendererWithSaveGame {
 				console.error(`Item definition ${defId} not found`);
 				return;
 			}
-			this.game.assets.getAsset(`itm/${itemDef.id.get()}`, (img) => {
+			this.game.assets.getAsset(`itm/${defId}`, (img) => {
 				this.img = img.cloneNode(true);
 				this.img.setAttribute('draggable', false);
 				Pixies.emptyElement(this.inner);

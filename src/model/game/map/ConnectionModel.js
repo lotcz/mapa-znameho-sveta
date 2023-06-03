@@ -32,7 +32,7 @@ export default class ConnectionModel extends ModelNode {
 
 		this.direction = this.addProperty('direction', new Vector2());
 		this.forward = this.addProperty('forward', new BoolValue(true));
-		this.pathId = this.addProperty('pathId', new IntValue(0));
+		this.pathId = this.addProperty('pathId', new IntValue());
 
 	}
 

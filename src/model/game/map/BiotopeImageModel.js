@@ -21,4 +21,9 @@ export default class BiotopeImageModel extends ModelNode {
 		this.time = this.addProperty('time', new FloatValue(0));
 	}
 
+	getResourcesForPreloadInternal() {
+		if (this.uri.isEmpty()) return [];
+		return [this.uri.get()];
+	}
+
 }

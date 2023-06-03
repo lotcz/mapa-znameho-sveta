@@ -1,5 +1,4 @@
 import Dictionary from "./basic/Dictionary";
-import DirtyValue from "../model/basic/DirtyValue";
 import Collection from "./basic/Collection";
 import ImageLoader from "./loaders/ImageLoader";
 import GlbLoader from "./loaders/GlbLoader";
@@ -11,6 +10,7 @@ import ItemModel3dLoader from "./loaders/ItemModel3dLoader";
 import SpriteLoader from "./loaders/SpriteLoader";
 import Sprite3dLoader from "./loaders/Sprite3dLoader";
 import AudioLoader from "./loaders/AudioLoader";
+import Node from "./basic/Node";
 
 const ASSET_TYPE_LOADERS = {
 	'aud': AudioLoader,
@@ -27,7 +27,7 @@ const ASSET_TYPE_LOADERS = {
 /**
  * Keeps cached raw resources like images, sounds and three models
  */
-export default class AssetCache {
+export default class AssetCache extends Node {
 
 	/**
 	 * @type Dictionary
@@ -40,22 +40,36 @@ export default class AssetCache {
 	loaders;
 
 	/**
-	 * Subscribe to onChange event here to be notified when resources are being loaded.
+	 * @type int
 	 */
-	isLoading;
+	totalLoaders = 0;
+
+	/**
+	 * @type int
+	 */
+	blockingLoaders = 0;
 
 	constructor(resources) {
+		super();
 		this.resources = resources;
 		this.cache = new Dictionary();
 		this.loaders = new Collection();
 		this.loaders.addOnAddListener(() => this.updateLoadingState());
 		this.loaders.addOnRemoveListener(() => this.updateLoadingState());
-		this.isLoading = new DirtyValue(false);
 
 	}
 
 	updateLoadingState() {
-		this.isLoading.set(!this.loaders.isEmpty());
+		const total = this.loaders.count();
+		if (this.totalLoaders !== total) {
+			this.totalLoaders = total;
+			this.triggerEvent('total-loaders-changed', total);
+		}
+		const blocking = this.loaders.filter((l) => l.isPreloading === false).length;
+		if (this.blockingLoaders !== blocking) {
+			this.blockingLoaders = blocking;
+			this.triggerEvent('blocking-loaders-changed', blocking);
+		}
 	}
 
 	resetCache(name = null) {
@@ -69,22 +83,22 @@ export default class AssetCache {
 	loaderFailed(loader, msg, onError) {
 		console.error(`Loading of asset '${loader.uri}' failed: ${msg}`);
 
-		this.loaders.remove(loader);
+		if (onError) onError(msg);
 
-		if (onError) {
-			onError(msg);
-		}
+		this.loaders.remove(loader);
 	}
 
 	loaderSucceeded(loader, resource, onLoaded) {
 		if (this.cache.exists(loader.uri)) {
 			this.cache.set(loader.uri, resource);
-			console.warn(`Resource ${loader.uri} was already present when loaded and replaced.`);
+			console.warn(`Resource ${loader.uri} was already present then loaded and replaced.`);
 		} else {
 			this.cache.add(loader.uri, resource);
 		}
-		this.loaders.remove(loader);
+
 		if (onLoaded) onLoaded(resource);
+
+		this.loaders.remove(loader);
 	}
 
 	getAsset(uri, onLoaded = null, onError = null) {
@@ -112,7 +126,7 @@ export default class AssetCache {
 			}
 
 			const loaderType = ASSET_TYPE_LOADERS[assetType];
-			const loader = new loaderType(this, uri);
+			const loader = new loaderType(this, uri, onLoaded === null);
 			this.loaders.add(loader);
 			loader.load(
 				(resource) => this.loaderSucceeded(loader, resource, onLoaded),
@@ -147,5 +161,15 @@ export default class AssetCache {
 
 	loadSprite(spriteId, onLoaded) {
 		this.getAsset(`spr/${spriteId}`, onLoaded);
+	}
+
+	preload(resources) {
+		console.log('Preloading:', resources);
+		resources.forEach((r) => this.getAsset(r));
+	}
+
+	load(resources) {
+		console.log('Loading:', resources);
+		resources.forEach((r) => this.getAsset(r, () => undefined));
 	}
 }

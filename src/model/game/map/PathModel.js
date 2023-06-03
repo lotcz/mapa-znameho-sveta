@@ -7,6 +7,7 @@ import Vector2 from "../../basic/Vector2";
 import BoolValue from "../../basic/BoolValue";
 import FloatValue from "../../basic/FloatValue";
 import DirtyValue from "../../basic/DirtyValue";
+import Pixies from "../../../class/basic/Pixies";
 
 export default class PathModel extends IdentifiedModelNode {
 
@@ -31,7 +32,7 @@ export default class PathModel extends IdentifiedModelNode {
 	startLocationId;
 
 	/**
-	 * @type NullableNode
+	 * @type NullableNode<LocationModel>
 	 */
 	startLocation;
 
@@ -41,7 +42,7 @@ export default class PathModel extends IdentifiedModelNode {
 	endLocationId;
 
 	/**
-	 * @type NullableNode
+	 * @type NullableNode<LocationModel>
 	 */
 	endLocation;
 
@@ -117,6 +118,19 @@ export default class PathModel extends IdentifiedModelNode {
 			const coords = prev.coordinates.add(last.coordinates).multiply(0.5);
 			last.coordinates.set(coords);
 		}
+	}
+
+	getBiotopeIds() {
+		const result = [this.biotopeId.get()];
+		const startLocation = this.startLocation.get();
+		if (startLocation && startLocation.biotopeId.isSet()) {
+			result.push(startLocation.biotopeId.get());
+		}
+		const endLocation = this.endLocation.get();
+		if (endLocation && endLocation.biotopeId.isSet()) {
+			result.push(endLocation.biotopeId.get());
+		}
+		return Pixies.arrayUnique(result);
 	}
 
 }

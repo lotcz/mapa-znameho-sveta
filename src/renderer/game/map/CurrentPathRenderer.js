@@ -2,6 +2,7 @@ import SvgRenderer from "../../basic/SvgRenderer";
 import Vector2 from "../../../model/basic/Vector2";
 import CollectionRenderer from "../../basic/CollectionRenderer";
 import WaypointRenderer from "./WaypointRenderer";
+import Pixies from "../../../class/basic/Pixies";
 
 export default class CurrentPathRenderer extends SvgRenderer {
 
@@ -43,6 +44,12 @@ export default class CurrentPathRenderer extends SvgRenderer {
 		this.groupFg = this.group.group();
 		this.renderPath();
 		this.renderMarker();
+
+		const biotopeIds = this.model.getBiotopeIds();
+		const biotopes = biotopeIds.map((id) => this.game.resources.map.biotopes.getById(id)).filter((b) => b !== null);
+		const resources = [];
+		biotopes.forEach((b) => resources.push(...b.getResourcesForPreload()));
+		this.game.assets.preload(Pixies.arrayUnique(resources));
 	}
 
 	deactivateInternal() {

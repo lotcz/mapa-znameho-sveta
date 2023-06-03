@@ -9,10 +9,11 @@ export default class AssetLoader extends Node {
 
 	assets;
 
-	constructor(assets, uri) {
+	constructor(assets, uri, preload = false) {
 		super();
 		this.assets = assets;
 		this.uri = uri;
+		this.isPreloading = preload;
 	}
 
 	load(onLoaded, onError = null) {
@@ -21,11 +22,10 @@ export default class AssetLoader extends Node {
 	}
 
 	/**
-	 * Override this and call finish()
+	 * Override this and then call this.finish(result) or this.fail(msg)
 	 */
 	loadInternal() {
 		// do something
-		// then call this.finish(result) or this.fail(msg)
 		this.fail('No loadInternal method override!');
 	}
 
