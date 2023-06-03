@@ -63,7 +63,7 @@ export default class BattleItemSlotRenderer extends RendererNode {
 	activateInternal() {
 		const boneName = this.getBoneName(this.model.name);
 		this.bone = this.characterMesh.getObjectByName(boneName);
-		if (!this.bone) {
+		if (this.game.isInDebugMode.get() && !this.bone) {
 			console.log('No bone found', this.model.name, boneName);
 			return;
 		}

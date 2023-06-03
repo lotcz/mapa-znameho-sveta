@@ -14,11 +14,18 @@ export default class MenuItemModel extends ModelNode {
 	 */
 	isActive;
 
-	constructor() {
-		super(false);
+	constructor(text = '', onClick = null, persistent = false) {
+		super(persistent);
 
-		this.text = this.addProperty('text', new StringValue());
+		this.text = this.addProperty('text', new StringValue(text));
 		this.isActive = this.addProperty('isActive', new BoolValue(false));
+
+		if (onClick) {
+			this.addEventListener(
+				'click',
+				onClick
+			);
+		}
 	}
 
 }

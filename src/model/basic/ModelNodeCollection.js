@@ -17,7 +17,7 @@ export default class ModelNodeCollection extends ModelNode {
 	 */
 	selectedNode;
 
-	constructor(nodeFactory, persistent = true) {
+	constructor(nodeFactory = null, persistent = true) {
 		super(persistent);
 
 		this.nodeFactory = nodeFactory;

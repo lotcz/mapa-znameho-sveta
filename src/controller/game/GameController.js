@@ -8,6 +8,7 @@ import SaveGameModel from "../../model/game/SaveGameModel";
 import ConditionalNodeController from "../basic/ConditionalNodeController";
 import {TIME_MORNING} from "../../model/game/environment/TimeModel";
 import MenuModel from "../../model/menu/MenuModel";
+import MenuItemModel from "../../model/menu/MenuItemModel";
 
 export default class GameController extends ControllerNode {
 
@@ -50,6 +51,12 @@ export default class GameController extends ControllerNode {
 		);
 
 		this.addAutoEvent(
+			this.model,
+			'show-main-menu',
+			() => this.showMainMenu()
+		);
+
+		this.addAutoEvent(
 			window,
 			'resize',
 			() => {
@@ -85,11 +92,6 @@ export default class GameController extends ControllerNode {
 		this.loadResourcesFromStorage().then(() => {
 			this.model.resources.addOnDirtyListener(() => this.isResourcesDirty = true);
 			this.showMainMenu();
-			/*
-			this.loadGameFromStorage().then(() => {
-				console.log('savegame loaded');
-			});
-			 */
 		});
 	}
 
@@ -172,16 +174,20 @@ export default class GameController extends ControllerNode {
 	}
 
 	showMainMenu() {
-		const options = [
-			{text: 'Začít novou hru', onClick: () => this.startNewGame()},
-			{text: 'Obnovit uloženou pozici', onClick: () => this.loadGameFromStorage()},
-			{text: 'Nastavení', onClick: () => this.loadGameFromStorage()}
-		];
+		const menu = new MenuModel('Menu');
+		menu.items.add(new MenuItemModel('Začít novou hru', () => this.startNewGame()));
+		menu.items.add(new MenuItemModel('Obnovit uloženou pozici', () => this.loadGameFromStorage()));
+		menu.items.add(new MenuItemModel('Nastavení', () => this.loadGameFromStorage()));
+
 		if (this.model.saveGame.isSet()) {
-			options.push({text: 'Pokračovat', onClick: () => this.startNewGame()});
+			menu.items.add(new MenuItemModel('Pokračovat', () => this.hideMenu()));
 		}
-		const menu = MenuModel.createMenu('Menu', options);
+
 		this.model.menu.set(menu);
+	}
+
+	hideMenu() {
+		this.model.menu.set(null);
 	}
 
 }

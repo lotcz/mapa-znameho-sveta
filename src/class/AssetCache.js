@@ -49,14 +49,45 @@ export default class AssetCache extends Node {
 	 */
 	blockingLoaders = 0;
 
+	/**
+	 * @type int
+	 */
+	sessionTotalLoaders = 0;
+
+	/**
+	 * @type int
+	 */
+	sessionFinishedLoaders = 0;
+
 	constructor(resources) {
 		super();
 		this.resources = resources;
 		this.cache = new Dictionary();
 		this.loaders = new Collection();
-		this.loaders.addOnAddListener(() => this.updateLoadingState());
-		this.loaders.addOnRemoveListener(() => this.updateLoadingState());
+		this.loaders.addOnAddListener((loader) => this.loaderAdded(loader));
+		this.loaders.addOnRemoveListener((loader) => this.loaderRemoved(loader));
 
+	}
+
+	loaderAdded(loader) {
+		this.updateLoadingState();
+		if (!loader.isPreloading) {
+			this.sessionTotalLoaders++;
+			this.triggerEvent('session-total-loaders-changed', this.sessionTotalLoaders);
+		}
+
+	}
+
+	loaderRemoved(loader) {
+		this.updateLoadingState();
+		if (!loader.isPreloading) {
+			this.sessionFinishedLoaders++;
+			if (this.blockingLoaders === 0) {
+				this.sessionFinishedLoaders = 0;
+				this.sessionTotalLoaders = 0;
+			}
+			this.triggerEvent('session-finished-loaders-changed', this.sessionFinishedLoaders);
+		}
 	}
 
 	updateLoadingState() {

@@ -44,9 +44,9 @@ export default class GameRenderer extends DomRenderer {
 			)
 		);
 
-		this.addAutoEvent(
+		this.addAutoEvents(
 			this.model.assets,
-			'blocking-loaders-changed',
+			['session-finished-loaders-changed', 'session-total-loaders-changed'],
 			() => this.updateLoading(),
 			true
 		);
@@ -65,6 +65,7 @@ export default class GameRenderer extends DomRenderer {
 		if (initLoading) Pixies.destroyElement(initLoading);
 
 		this.saveGameLayer = this.addElement('div', 'savegame-layer container container-host row');
+		this.loadingLayer = this.addElement('div', 'loading-layer');
 		this.menuLayer = this.addElement('div', 'menu-layer');
 		this.editorLayer = this.addElement('div', 'editor-layer');
 
@@ -84,21 +85,18 @@ export default class GameRenderer extends DomRenderer {
 		}
 		if (isLoading) {
 			if (!this.loading) {
-				this.loadersCount = 1;
-				this.loading = this.addElement('div', 'loading container');
-				const paper = Pixies.createElement(this.loading, 'div', 'paper');
+				this.loading = Pixies.createElement(this.loadingLayer, 'div', 'loading');
+				const paper = Pixies.createElement(this.loading, 'div');
 				const inner = Pixies.createElement(paper, 'div', 'inner p-3');
 				const content = Pixies.createElement(inner, 'div', 'm-3 p-3');
 				const label1 = Pixies.createElement(content, 'h2', null, 'Nahrávám');
+				this.label2 = Pixies.createElement(content, 'div', 'center');
 				const progressWrapper = Pixies.createElement(content, 'div', 'progress-wrapper mt-2');
 				this.loadingProgress = Pixies.createElement(progressWrapper, 'div', 'stretch');
 			}
-			if (this.game.assets.blockingLoaders > this.loadersCount) {
-				this.loadersCount = this.game.assets.blockingLoaders;
-			}
-			const remaining = this.game.assets.blockingLoaders;
-			const portion = 1 - (remaining / this.loadersCount);
-			this.loadingProgress.style.width = `${Math.round(portion*100)}%`;
+			const portion = this.game.assets.sessionFinishedLoaders / this.game.assets.sessionTotalLoaders;
+			this.loadingProgress.style.width = `${Math.round(portion * 100)}%`;
+			this.label2.innerText = `${this.game.assets.sessionFinishedLoaders}/${this.game.assets.sessionTotalLoaders}`;
 		}
 	}
 

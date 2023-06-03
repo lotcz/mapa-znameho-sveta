@@ -6,6 +6,7 @@ import LocationController from "./LocationController";
 import NullableNodeController from "../../basic/NullableNodeController";
 import CurrentLocationController from "./CurrentLocationController";
 import CurrentPathController from "./CurrentPathController";
+import {ImageHelper} from "../../../class/basic/ImageHelper";
 
 export default class MapController extends ControllerNode {
 
@@ -64,6 +65,36 @@ export default class MapController extends ControllerNode {
 			this.model.zoom,
 			'change',
 			() => this.updateCornerCoordinates()
+		);
+
+		this.addAutoEventMultiple(
+			[this.game.mainLayerSize, this.model.mapCenterCoordinates, this.model.zoom],
+			'change',
+			() => {
+				this.model.mapCenterCoordinates.set(
+					ImageHelper.sanitizeCenter(
+						this.model.mapSize,
+						this.game.mainLayerSize,
+						this.model.zoom.get(),
+						this.model.mapCenterCoordinates
+					)
+				);
+			}
+		);
+
+		this.addAutoEventMultiple(
+			[this.model.zoom, this.game.mainLayerSize],
+			'change',
+			() => {
+				this.model.zoom.set(
+					ImageHelper.sanitizeZoom(
+						this.model.mapSize,
+						this.game.mainLayerSize,
+						this.model.zoom.get(),
+						1.5
+					)
+				);
+			}
 		);
 
 		this.helperMouseOverHandler = (point) => this.focusedHelper.set(point);

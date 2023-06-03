@@ -156,11 +156,19 @@ export default class ActivatedTreeNode {
 		this.autoRegisterEvents.push({node: node, name:event, handler: handler, runOnActivate: runOnActivate});
 	}
 
+	addAutoEvents(node, events, handler, runOnActivate = false) {
+		events.forEach((event) => this.addAutoEvent(node, event, handler, runOnActivate));
+	}
+
 	addAutoEventMultiple(nodes, event, handler, runOnActivate = false) {
 		if (!Array.isArray(nodes)) {
 			console.error('Node array was not provided!');
 		}
 		nodes.forEach((n, i) => this.addAutoEvent(n, event, handler, i === 0 && runOnActivate));
+	}
+
+	addAutoEventsMultiple(nodes, events, handler, runOnActivate = false) {
+		events.forEach((event) => this.addAutoEventMultiple(nodes, event, handler, runOnActivate));
 	}
 
 	removeAutoEvent(node, name, handler) {

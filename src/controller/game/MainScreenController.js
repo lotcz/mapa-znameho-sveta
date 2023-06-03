@@ -3,7 +3,6 @@ import MapController from "./map/MapController";
 import BattleController from "./battle/BattleController";
 import ConversationController from "./conversation/ConversationController";
 import PartyController from "./party/PartyController";
-import {ImageHelper} from "../../class/basic/ImageHelper";
 import NullableNodeController from "../basic/NullableNodeController";
 import {TIME_HOUR} from "../../model/game/environment/TimeModel";
 import {STAT_TEMPERATURE} from "../../model/game/party/stats/StatDefinitionModel";
@@ -47,36 +46,6 @@ export default class MainScreenController extends ControllerNode {
 			)
 		);
 
-		this.addAutoEventMultiple(
-			[this.game.mainLayerSize, this.model.mapCenterCoordinates, this.model.zoom],
-			'change',
-			() => {
-				this.model.mapCenterCoordinates.set(
-					ImageHelper.sanitizeCenter(
-						this.model.mapSize,
-						this.game.mainLayerSize,
-						this.model.zoom.get(),
-						this.model.mapCenterCoordinates
-					)
-				);
-			}
-		);
-
-		this.addAutoEventMultiple(
-			[this.model.zoom, this.game.mainLayerSize],
-			'change',
-			() => {
-				this.model.zoom.set(
-					ImageHelper.sanitizeZoom(
-						this.model.mapSize,
-						this.game.mainLayerSize,
-						this.model.zoom.get(),
-						1.5
-					)
-				);
-			}
-		);
-
 		this.addAutoEvent(
 			this.model.conversation,
 			'change',
@@ -115,6 +84,14 @@ export default class MainScreenController extends ControllerNode {
 				if (this.model.selectedItemSlot.item.isSet()) {
 					this.model.triggerEvent('drop-selected-item');
 				}
+			}
+		);
+
+		this.addAutoEvent(
+			this.game.controls,
+			'esc-key',
+			() => {
+				this.game.triggerEvent('show-main-menu');
 			}
 		);
 

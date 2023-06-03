@@ -57,28 +57,4 @@ export default class ControlsModel extends ModelNode {
 		}
 	}
 
-	addOnLeftClickListener(listener) {
-		this.addEventListener('left-click', listener);
-	}
-
-	removeOnLeftClickListener(listener) {
-		this.removeEventListener('left-click', listener);
-	}
-
-	addOnRightClickListener(listener) {
-		this.addEventListener('right-click', listener);
-	}
-
-	removeOnRightClickListener(listener) {
-		this.removeEventListener('right-click', listener);
-	}
-
-	addOnDebugKeyListener(listener) {
-		this.addEventListener('debug-key', listener);
-	}
-
-	removeOnDebugKeyListener(listener) {
-		this.removeEventListener('debug-key', listener);
-	}
-
 }

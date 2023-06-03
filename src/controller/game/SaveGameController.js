@@ -135,6 +135,11 @@ export default class SaveGameController extends ControllerNode {
 		);
 	}
 
+	update(delta) {
+		if (this.game.menu.isSet() || this.model.conversation.isSet()) return;
+		super.update(delta);
+	}
+
 	startSequence(sequenceId) {
 		const sequence = this.game.resources.sequences.getById(sequenceId);
 		this.model.animationSequence.set(null);
