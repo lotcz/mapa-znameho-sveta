@@ -35,10 +35,11 @@ export default class ModelNodeTable extends ModelNodeCollection {
 	}
 
 	add(node) {
+		const id = this.nextId();
 		if (!node) {
-			node = this.nodeFactory();
+			node = this.nodeFactory(id);
 		}
-		node.id.set(this.nextId());
+		node.id.set(id);
 		super.add(node);
 		return node;
 	}

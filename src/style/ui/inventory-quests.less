@@ -5,3 +5,50 @@
 	opacity: 0.5;
   }
 }
+
+.completed-quest-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	align-items: flex-end;
+	pointer-events: none;
+
+	.completed-quest {
+		color: @white;
+		text-align: right;
+		text-shadow: -6px -8px 14px @transparent-black, 6px 8px 14px @transparent-black;
+		max-width: 500px;
+		margin-right: @m-3;
+		margin-bottom: @m-3;
+
+		.quest-title {
+			.decor-text();
+		}
+		.quest-text {
+			.normal-text();
+			font-size: @font-size-small;
+		}
+	}
+
+	&.is-chapter {
+		justify-content: center;
+		align-items: center;
+
+		.completed-quest {
+			text-align: center;
+			max-width: 100%;
+			margin-right: 0;
+			margin-bottom: 0;
+
+			.quest-title {
+				font-size: @font-size-extra-large;
+				margin: @m-3 0;
+				padding: @m-3 0;
+			}
+			.quest-text {
+				font-size: @font-size-large;
+				margin: @m-2 0;
+			}
+		}
+	}
+}

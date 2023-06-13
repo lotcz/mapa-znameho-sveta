@@ -6,8 +6,14 @@
 @gold: #e0b050;
 @red: darkred;
 @white: #e0e0e0;
-
+@black: rgb(0, 0, 0);
 @transparent-black: rgba(0, 0, 0, 0.7);
+
+@font-size-extra-small: 10pt;
+@font-size-small: 16pt;
+@font-size-medium: 22pt;
+@font-size-large: 32pt;
+@font-size-extra-large: 65pt;
 
 @font-face {
   font-family: 'Vollkorn';
@@ -32,13 +38,13 @@
 .normal-text {
   .no-text-select();
   font-family: 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
-  font-size: 16pt;
+  font-size: @font-size-small;
 }
 
 .decor-text {
   .no-text-select();
   font-family: 'Fell', 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
-  font-size: 22pt;
+  font-size: @font-size-medium;
 }
 
 .small-text {

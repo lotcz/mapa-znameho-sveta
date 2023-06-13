@@ -9,6 +9,10 @@ import Vector2 from "../../model/basic/Vector2";
 import Pixies from "../../class/basic/Pixies";
 import {SPECIAL_TYPE_SPAWN} from "../../model/game/battle/battlemap/BattleSpecialModel";
 import ItemSlotsController from "./items/ItemSlotsController";
+import QuestOverlayModel from "../../model/game/quests/QuestOverlayModel";
+import AnimationFloatController from "../basic/AnimationFloatController";
+import {EASING_QUAD_IN} from "../../class/animating/ProgressValue";
+import TimeoutController from "../basic/TimeoutController";
 
 export default class SaveGameController extends ControllerNode {
 
@@ -133,6 +137,15 @@ export default class SaveGameController extends ControllerNode {
 				this.runOnUpdate(() => this.sequenceFinished());
 			}
 		);
+
+		this.addAutoEvent(
+			this.model.completedQuests,
+			'quest-completed',
+			(id) => {
+				const quest = this.game.resources.quests.getById(id);
+				if (quest) this.questCompleted(quest);
+			}
+		);
 	}
 
 	update(delta) {
@@ -223,5 +236,39 @@ export default class SaveGameController extends ControllerNode {
 		}
 
 		return battle;
+	}
+
+	questCompleted(quest) {
+		const overlay = new QuestOverlayModel(quest);
+		this.model.completedQuestOverlay.set(overlay);
+		this.addChild(
+			new AnimationFloatController(
+				this.game,
+				overlay.opacity,
+				1,
+				3000,
+				EASING_QUAD_IN
+			).onFinished(() => {
+				this.addChild(
+					new TimeoutController(
+						this.game,
+						3000,
+						() => {
+							this.addChild(
+								new AnimationFloatController(
+									this.game,
+									overlay.opacity,
+									0,
+									3000,
+									EASING_QUAD_IN
+								).onFinished(() => {
+									this.model.completedQuestOverlay.set(null);
+								})
+							);
+						}
+					)
+				);
+			})
+		);
 	}
 }

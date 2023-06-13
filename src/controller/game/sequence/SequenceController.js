@@ -145,6 +145,9 @@ export default class SequenceController extends ControllerWithSaveGame {
 
 	finished() {
 		this.saveGame.triggerEvent('sequence-finished');
+		if (this.model.completesStageId.isSet()) {
+			this.saveGame.completedQuests.complete(this.model.completesStageId.get());
+		}
 	}
 
 }

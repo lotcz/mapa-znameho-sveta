@@ -22,6 +22,10 @@ export default class DirtyValue extends ModelNode {
 		return this.value;
 	}
 
+	toString() {
+		return this.isSet() ? this.get() : '';
+	}
+
 	isEmpty() {
 		return this.value === null || this.value === undefined;
 	}

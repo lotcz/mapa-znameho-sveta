@@ -1,11 +1,11 @@
-import ControllerNode from "./ControllerNode";
 import AnimatedValue from "../../class/animating/AnimatedValue";
 import {EASING_FLAT} from "../../class/animating/ProgressValue";
+import AnimationController from "./AnimationController";
 
-export default class AnimationFloatController extends ControllerNode {
+export default class AnimationFloatController extends AnimationController {
 
 	/**
-	 * @type DirtyValue
+	 * @type FloatValue
 	 */
 	model;
 
@@ -32,8 +32,7 @@ export default class AnimationFloatController extends ControllerNode {
 	updateInternal(delta) {
 		this.model.set(this.animated.get(delta));
 		if (this.animated.isFinished()) {
-			this.removeMyself();
-			this.model.triggerEvent('animation-finished');
+			this.finished();
 		}
 	}
 

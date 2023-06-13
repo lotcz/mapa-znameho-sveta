@@ -260,9 +260,17 @@ h4 {
   background-color: black;
   color: gray;
 }
-.table-lookup .buttons input,
+.table-lookup .buttons input {
+  margin: 2px !important;
+}
 .table-lookup .buttons button {
-  margin: 0 !important;
+  background-color: gray !important;
+  color: black !important;
+  font-weight: normal !important;
+  box-shadow: none !important;
+  border-radius: 2px !important;
+  padding: 2px !important;
+  margin: 2px !important;
 }
 .table-lookup .scroll {
   overflow-y: auto;
@@ -291,8 +299,8 @@ h4 {
   font-weight: normal !important;
   box-shadow: none !important;
   border-radius: 2px !important;
-  padding: 5px !important;
-  margin: 5px !important;
+  padding: 2px !important;
+  margin: 2px !important;
 }
 .editor-layer {
   font-family: monospace;
@@ -1151,6 +1159,62 @@ h4 {
 .inventory .inventory-quests .completed {
   color: black;
   opacity: 0.5;
+}
+.completed-quest-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  pointer-events: none;
+}
+.completed-quest-container .completed-quest {
+  color: #e0e0e0;
+  text-align: right;
+  text-shadow: -6px -8px 14px rgba(0, 0, 0, 0.7), 6px 8px 14px rgba(0, 0, 0, 0.7);
+  max-width: 500px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+.completed-quest-container .completed-quest .quest-title {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -ms-user-select: none;
+  font-family: 'Fell', 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
+  font-size: 22pt;
+}
+.completed-quest-container .completed-quest .quest-text {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -ms-user-select: none;
+  font-family: 'Vollkorn', 'Bookman Old Style', 'Times New Roman', serif;
+  font-size: 16pt;
+}
+.completed-quest-container.is-chapter {
+  justify-content: center;
+  align-items: center;
+}
+.completed-quest-container.is-chapter .completed-quest {
+  text-align: center;
+  max-width: 100%;
+  margin-right: 0;
+  margin-bottom: 0;
+}
+.completed-quest-container.is-chapter .completed-quest .quest-title {
+  font-size: 65pt;
+  margin: 20px 0;
+  padding: 20px 0;
+}
+.completed-quest-container.is-chapter .completed-quest .quest-text {
+  font-size: 32pt;
+  margin: 10px 0;
 }
 @keyframes fadeInAnim {
   from {

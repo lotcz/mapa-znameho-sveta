@@ -160,12 +160,17 @@ export default class SaveGameModel extends ModelNode {
 	/**
 	 * @type CompletedQuestsModel
 	 */
-	completedStages;
+	completedQuests;
 
 	/**
 	 * @type NullableNode<SequenceModel>
 	 */
 	animationSequence;
+
+	/**
+	 * @type NullableNode<QuestOverlayModel>
+	 */
+	completedQuestOverlay;
 
 	constructor() {
 		super();
@@ -221,9 +226,11 @@ export default class SaveGameModel extends ModelNode {
 		this.selectedItemSlot = this.addProperty('selectedItemSlot', new ItemSlotModel(['all']));
 		this.lastSelectedInventorySlot = this.addProperty('lastSelectedInventorySlot', new NullableNode(null, false));
 
-		this.completedStages = this.addProperty('completedStages', new CompletedQuestsModel());
+		this.completedQuests = this.addProperty('completedQuests', new CompletedQuestsModel());
 
 		this.animationSequence = this.addProperty('animationSequence', new NullableNode(null, false));
+
+		this.completedQuestOverlay = this.addProperty('completedQuestOverlay', new NullableNode(null, false));
 	}
 
 	addCharacterToParty(character) {

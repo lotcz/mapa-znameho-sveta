@@ -157,7 +157,7 @@ export default class InventoryRenderer extends DomRendererWithSaveGame {
 				this.game,
 				this.party.inventoryMode,
 				() => this.party.inventoryMode.equalsTo(INVENTORY_MODE_QUESTS),
-				() => new InventoryTabQuestsRenderer(this.game, this.saveGame.completedStages, this.content)
+				() => new InventoryTabQuestsRenderer(this.game, this.saveGame.completedQuests, this.content)
 			)
 		);
 

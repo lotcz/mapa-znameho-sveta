@@ -22,8 +22,8 @@ export default class InventoryTabQuestsRenderer extends DomRenderer {
 	}
 
 	activateInternal() {
-		this.container = this.addElement( 'div', 'inventory-quests column flex-1 p-1 m-1');
-		Pixies.createElement(this.container, 'h2', null, 'Úkoly');
+		this.container = this.addElement( 'div', 'inventory-quests container column flex-1 p-1 m-1');
+		Pixies.createElement(this.container, 'h2', 'pb-1', 'Úkoly');
 		this.quests = Pixies.createElement(this.container, 'div');
 	}
 
@@ -53,7 +53,7 @@ export default class InventoryTabQuestsRenderer extends DomRenderer {
 		});
 
 		if (completedQuests.length > 0) {
-			Pixies.createElement(completedGroup, 'h2', null, 'Dokončené');
+			Pixies.createElement(completedGroup, 'h2', 'mt-2 pb-1', 'Dokončené');
 		}
 
 		completedQuests.forEach((q) => {
@@ -63,8 +63,8 @@ export default class InventoryTabQuestsRenderer extends DomRenderer {
 	}
 
 	renderQuest(container, quest, stage) {
-		const title = Pixies.createElement(container, 'h3', null, quest.name.get());
-		const text =  Pixies.createElement(container, 'p', null, stage.text.get());
+		const title = Pixies.createElement(container, 'h3', 'mt-2', quest.name.get());
+		const text =  Pixies.createElement(container, 'span', null, stage.text.get());
 	}
 
 	getQuestActiveStage(quest) {

@@ -48,7 +48,7 @@ export default class ConversationController extends ControllerWithSaveGame {
 		entry.responseCharacter.set(character);
 
 		if (entry.completesStageId.isSet()) {
-			this.saveGame.completedStages.complete(entry.completesStageId.get());
+			this.saveGame.completedQuests.complete(entry.completesStageId.get());
 		}
 
 		if (entry.givesItemId.isSet()) {

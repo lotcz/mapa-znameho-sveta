@@ -8,6 +8,7 @@ import SelectedSlotRenderer from "./party/inventory/SelectedSlotRenderer";
 import Pixies from "../../class/basic/Pixies";
 import Vector2 from "../../model/basic/Vector2";
 import MainMenuRenderer from "./MainMenuRenderer";
+import QuestOverlayRenderer from "./quests/QuestOverlayRenderer";
 
 export default class MainScreenRenderer extends DomRenderer {
 
@@ -49,6 +50,7 @@ export default class MainScreenRenderer extends DomRenderer {
 
 		this.mainLayer = Pixies.createElement(bottomLayer, 'div', 'main stretch flex-1 container-host');
 		this.mainBottom = Pixies.createElement(this.mainLayer, 'div', 'container container-host');
+		this.completedQuestContainer = Pixies.createElement(this.mainLayer, 'div', 'completed-quest-container container-host');
 		this.conversationContainer = Pixies.createElement(this.mainLayer, 'div', 'conversation-container container-host');
 
 		this.mainLayer.addEventListener(
@@ -71,8 +73,23 @@ export default class MainScreenRenderer extends DomRenderer {
 			)
 		);
 
+		this.addChild(
+			new NullableNodeRenderer(
+				this.game,
+				this.model.conversation,
+				(m) => new ConversationRenderer(this.game, m, this.conversationContainer, this.model)
+			)
+		);
+
+		this.addChild(
+			new NullableNodeRenderer(
+				this.game,
+				this.model.completedQuestOverlay,
+				(m) => new QuestOverlayRenderer(this.game, m, this.completedQuestContainer)
+			)
+		);
+
 		this.addChild(new MainMenuRenderer(this.game, this.model, this.rightPanel));
-		this.addChild(new NullableNodeRenderer(this.game, this.model.conversation, (m) => new ConversationRenderer(this.game, m, this.conversationContainer, this.model)));
 		this.addChild(new SelectedSlotRenderer(this.game, this.model.selectedItemSlot, this.container));
 		this.addChild(new PartyRenderer(this.game, this.model.party, this.partyPanel, this.topLayer));
 

@@ -1,6 +1,7 @@
-import DirtyValue from "../../basic/DirtyValue";
 import IdentifiedModelNode from "../../basic/IdentifiedModelNode";
 import IntValue from "../../basic/IntValue";
+import StringValue from "../../basic/StringValue";
+import BoolValue from "../../basic/BoolValue";
 
 export default class QuestStageModel extends IdentifiedModelNode {
 
@@ -10,12 +11,17 @@ export default class QuestStageModel extends IdentifiedModelNode {
 	parentStageId;
 
 	/**
-	 * @type DirtyValue
+	 * @type BoolValue
+	 */
+	isChapter;
+
+	/**
+	 * @type StringValue
 	 */
 	name;
 
 	/**
-	 * @type DirtyValue
+	 * @type StringValue
 	 */
 	text;
 
@@ -28,8 +34,9 @@ export default class QuestStageModel extends IdentifiedModelNode {
 		super(id);
 
 		this.parentStageId = this.addProperty('parentStageId', new IntValue());
-		this.name = this.addProperty('name', new DirtyValue(`Quest ${id}`));
-		this.text = this.addProperty('text', new DirtyValue('text'));
+		this.isChapter = this.addProperty('isChapter', new BoolValue());
+		this.name = this.addProperty('name', new StringValue(`Quest ${id}`));
+		this.text = this.addProperty('text', new StringValue('text'));
 		this.experience = this.addProperty('experience', new IntValue(100));
 	}
 

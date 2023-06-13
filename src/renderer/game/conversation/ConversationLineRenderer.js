@@ -40,7 +40,7 @@ export default class ConversationLineRenderer extends DomRenderer {
 		this.text.innerHTML = Pixies.paragraphize(this.model.text.get());
 
 		if (this.game.isInDebugMode.get()) {
-			this.buttons = Pixies.createElement(this.container, 'div', 'buttons');
+			this.buttons = Pixies.createElement(this.container, 'div', 'buttons editor-section');
 
 			this.narrator = Pixies.createElement(this.buttons, 'input');
 			this.narrator.setAttribute('type', 'checkbox');

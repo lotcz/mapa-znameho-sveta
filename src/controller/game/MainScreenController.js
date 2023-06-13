@@ -122,6 +122,7 @@ export default class MainScreenController extends ControllerNode {
 			'change',
 			() => this.updateBiotope()
 		);
+
 	}
 
 	afterActivatedInternal() {

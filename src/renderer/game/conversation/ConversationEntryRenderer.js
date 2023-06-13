@@ -41,7 +41,7 @@ export default class ConversationEntryRenderer extends DomRenderer {
 		this.addChild(new CollectionRenderer(this.game, this.model.lines, (model) => new ConversationLineRenderer(this.game, model, this.lines, this.model)));
 
 		if (this.game.isInDebugMode.get()) {
-			const buttons = Pixies.createElement(this.container, 'div', 'buttons');
+			const buttons = Pixies.createElement(this.container, 'div', 'buttons editor-section');
 			const add = Pixies.createElement(buttons, 'button');
 			add.innerText = 'Add Line';
 			add.addEventListener('click', () => {
