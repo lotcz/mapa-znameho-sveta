@@ -70,8 +70,6 @@ export default class BattleCharacterController extends ControllerWithBattle {
 			this.model.characterId,
 			'change',
 			() => {
-				if (this.model.character.isSet() && this.model.character.get().id.equalsTo(this.model.characterId.get())) return;
-
 				const character = this.saveGame.characters.getById(this.model.characterId.get());
 				if (!character) {
 					console.error('Character not found', this.model.characterId.get());

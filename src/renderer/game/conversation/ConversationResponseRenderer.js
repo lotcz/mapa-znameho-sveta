@@ -98,6 +98,10 @@ export default class ConversationResponseRenderer extends DomRendererWithSaveGam
 				});
 				lookupRenderer.activate();
 			});
+			Pixies.createElement(this.editorSection, 'button', null, `joins:${this.model.joinsParty.toString()}`, (e) => {
+				e.preventDefault();
+				this.model.joinsParty.invert();
+			});
 		}
 	}
 

@@ -3,7 +3,6 @@ import DomRenderer from "../basic/DomRenderer";
 
 const FIELD_TABLE_MAPPINGS = {
 	raceId: 'races',
-	characterId: 'characters',
 	characterTemplateId: 'characterTemplates',
 	modelId: 'models3d',
 	male3dModelId: 'models3d',
@@ -50,6 +49,9 @@ export default class TableLookupRenderer extends DomRenderer {
 
 		this.model = model;
 		this.lookupTable = this.getTableByField(fieldName);
+		if (!this.lookupTable) {
+			console.error('Not found lookup table for field', fieldName);
+		}
 		this.container = null;
 	}
 

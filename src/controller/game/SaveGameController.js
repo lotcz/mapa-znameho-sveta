@@ -124,6 +124,14 @@ export default class SaveGameController extends ControllerNode {
 
 		this.addAutoEvent(
 			this.model,
+			'character-joins-party',
+			(character) => {
+				this.model.addCharacterToParty(character);
+			}
+		);
+
+		this.addAutoEvent(
+			this.model,
 			'start-sequence',
 			(sequenceId) => {
 				this.runOnUpdate(() => this.startSequence(sequenceId));

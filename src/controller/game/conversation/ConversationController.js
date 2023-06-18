@@ -14,6 +14,15 @@ export default class ConversationController extends ControllerWithSaveGame {
 		this.model = model;
 
 		this.addAutoEvent(
+			this.model.characterTemplateId,
+			'change',
+			() => {
+				this.model.character.set(this.saveGame.findOriginalCharacter(this.model.characterTemplateId.get()));
+			},
+			true
+		);
+
+		this.addAutoEvent(
 			this.model.currentEntry,
 			'change',
 			() => this.entrySelected(),
@@ -36,9 +45,6 @@ export default class ConversationController extends ControllerWithSaveGame {
 	}
 
 	activateInternal() {
-		if (this.model.character.isEmpty() && this.model.characterId.isSet()) {
-			this.model.character.set(this.game.resources.characterTemplates.getById(this.model.characterId.get()));
-		}
 		if (this.model.currentEntry.isEmpty()) {
 			this.restartConversation();
 		}
@@ -60,6 +66,11 @@ export default class ConversationController extends ControllerWithSaveGame {
 		const character = this.saveGame.party.selectedCharacter.get();
 
 		entry.responseCharacter.set(character);
+
+		if (entry.joinsParty.get() && this.model.character.isSet()) {
+			console.log('joining', this.model.character.get());
+			this.saveGame.triggerEvent('character-joins-party', this.model.character.get());
+		}
 
 		if (entry.completesStageId.isSet()) {
 			this.saveGame.completedQuests.complete(entry.completesStageId.get());

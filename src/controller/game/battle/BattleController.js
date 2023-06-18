@@ -23,6 +23,8 @@ import {
 	SPECIAL_TYPE_EXIT,
 	SPECIAL_TYPE_SEQUENCE
 } from "../../../model/game/battle/battlemap/BattleSpecialModel";
+import BattlePartyCharacterModel from "../../../model/game/battle/BattlePartyCharacterModel";
+import Pixies from "../../../class/basic/Pixies";
 
 const CURSOR_OFFSET = new Vector2(12, 12);
 
@@ -87,6 +89,30 @@ export default class BattleController extends ControllerWithSaveGame {
 				this.model.battleMap.set(this.game.resources.map.battleMaps.getById(this.model.battleMapId.get()));
 			},
 			true
+		);
+
+		this.addAutoEvent(
+			this.saveGame,
+			'character-joins-party',
+			(character) => {
+				let spawnPosition = this.model.groundPosition;
+				const npc = this.model.npcCharacters.find((npc) => npc.character.equalsTo(character));
+				if (npc) {
+					spawnPosition = npc.position;
+					this.model.npcCharacters.remove(npc);
+				}
+				console.log('joined pos', spawnPosition);
+				const bc = new BattlePartyCharacterModel();
+				bc.characterId.set(character.id.get());
+				const battleMap = this.model.battleMap.get();
+				const mapBlocks = battleMap.getBlocks();
+				let position = spawnPosition;
+				while (mapBlocks.some((b) => b.equalsTo(position))) {
+					position = spawnPosition.add(new Vector2(Pixies.random(-5, 5), Pixies.random(-5, 5))).round();
+				}
+				bc.position.set(position);
+				this.model.partyCharacters.add(bc);
+			}
 		);
 
 		this.addAutoEvent(

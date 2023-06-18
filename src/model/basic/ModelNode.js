@@ -163,4 +163,7 @@ export default class ModelNode extends Node {
 		return [];
 	}
 
+	equalsTo(ch) {
+		return this === ch;
+	}
 }
