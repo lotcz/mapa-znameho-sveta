@@ -106,7 +106,9 @@ export default class ConversationRenderer extends DomRenderer {
 			add.innerText = 'Add Response';
 			add.addEventListener('click', () => {
 				const currentEntry = this.model.currentEntry.get();
-				const newEntry = currentEntry.entries.add(new ConversationEntryModel());
+				const respo = new ConversationEntryModel();
+				respo.responseText.set('--response--');
+				const newEntry = currentEntry.entries.add(respo);
 			});
 		}
 

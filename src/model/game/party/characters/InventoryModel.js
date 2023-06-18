@@ -75,4 +75,14 @@ export default class InventoryModel extends ModelNode {
 		return this.allSlots.find((slot) => slot.item.isEmpty() && (accepts === null || slot.accepts(accepts)));
 	}
 
+	findItem(itemDefId) {
+		const slot = this.allSlots.find((slot) => slot.item.isSet() && slot.item.get().definitionId.equalsTo(itemDefId));
+		if (slot) return slot.item.get();
+		return null;
+	}
+
+	hasItem(itemDefId) {
+		return this.findItem(itemDefId) !== null;
+	}
+
 }

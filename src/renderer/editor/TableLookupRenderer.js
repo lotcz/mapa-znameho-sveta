@@ -14,6 +14,7 @@ const FIELD_TABLE_MAPPINGS = {
 	definitionId: 'itemDefinitions',
 	itemDefId: 'itemDefinitions',
 	givesItemId: 'itemDefinitions',
+	requiresItemId: 'itemDefinitions',
 	materialId: 'materials',
 	skinMaterialId: 'materials',
 	hairMaterialId: 'materials',
@@ -31,8 +32,8 @@ const FIELD_TABLE_MAPPINGS = {
 	parentStageId: 'quests',
 	requiresStageId: 'quests',
 	completesStageId: 'quests',
-	npcConversationId: 'conversations',
-	partyConversationId: 'conversations'
+	hiddenByStageId: 'quests',
+	conversationId: 'conversations'
 }
 
 const RENDER_FIELDS = ['id', 'name'];

@@ -13,24 +13,38 @@ export default class ConversationController extends ControllerWithSaveGame {
 
 		this.model = model;
 
-		this.onEntrySelected = () => this.entrySelected();
-		this.onRestart = () => this.restartConversation();
+		this.addAutoEvent(
+			this.model.currentEntry,
+			'change',
+			() => this.entrySelected(),
+			true
+		);
+
+		this.addAutoEvent(
+			this.model,
+			'restart',
+			() => this.restartConversation()
+		);
+
+		this.addAutoEvent(
+			this.saveGame.completedQuests,
+			'quest-completed',
+			() => this.processResponseAvailable(this.model.initialEntry),
+			true
+		);
+
 	}
 
 	activateInternal() {
-		this.model.currentEntry.addOnChangeListener(this.onEntrySelected);
 		if (this.model.character.isEmpty() && this.model.characterId.isSet()) {
 			this.model.character.set(this.game.resources.characterTemplates.getById(this.model.characterId.get()));
 		}
 		if (this.model.currentEntry.isEmpty()) {
 			this.restartConversation();
 		}
-		this.model.addEventListener('restart', this.onRestart);
 	}
 
 	deactivateInternal() {
-		this.model.currentEntry.removeOnChangeListener(this.onEntrySelected);
-		this.model.removeEventListener('restart', this.onRestart);
 		this.model.currentEntry.set(null);
 	}
 
@@ -80,6 +94,26 @@ export default class ConversationController extends ControllerWithSaveGame {
 		this.model.currentEntry.set(null);
 		this.model.currentEntry.set(this.model.initialEntry);
 		this.updateEntryParents();
+	}
+
+	processResponseAvailable(entry) {
+		let avail = true;
+		if (entry.requiresStageId.isSet()) {
+			avail = this.saveGame.completedQuests.isCompleted(entry.requiresStageId.get());
+		}
+		if (avail && entry.completesStageId.isSet()) {
+			avail = !this.saveGame.completedQuests.isCompleted(entry.completesStageId.get());
+		}
+		if (avail && entry.hiddenByStageId.isSet()) {
+			avail = !this.saveGame.completedQuests.isCompleted(entry.hiddenByStageId.get());
+		}
+		if (avail && entry.requiresItemId.isSet()) {
+			avail = this.saveGame.party.hasItem(entry.requiresItemId.get());
+		}
+		entry.isResponseAvailable.set(avail);
+		entry.entries.forEach((responseEntry) => {
+			this.processResponseAvailable(responseEntry);
+		});
 	}
 
 }

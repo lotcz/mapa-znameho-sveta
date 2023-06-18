@@ -26,13 +26,16 @@ export default class ConversationResponseRenderer extends DomRendererWithSaveGam
 	activateInternal() {
 		if (this.model === this.parentEntry) return;
 
-		this.container = this.addElement('div', 'response row');
-		this.link = Pixies.createElement(this.container, 'a');
-		this.link.innerText = this.model.responseText.get();
+		if (!(this.model.isResponseAvailable.get() || this.game.isInDebugMode.get())) return;
 
-		this.link.addEventListener('click', () => {
-			this.saveGame.conversation.get().currentEntry.set(this.model);
-		});
+		this.container = this.addElement('div', 'response column');
+		this.link = Pixies.createElement(
+			this.container,
+			'a',
+			null,
+			this.model.responseText.get(),
+			() => this.saveGame.conversation.get().currentEntry.set(this.model)
+		);
 
 		this.renderInternal();
 	}
@@ -42,6 +45,8 @@ export default class ConversationResponseRenderer extends DomRendererWithSaveGam
 	}
 
 	renderInternal() {
+
+		if (!(this.model.isResponseAvailable.get() || this.game.isInDebugMode.get())) return;
 
 		if (this.game.isInDebugMode.get()) {
 			if (!this.editorSection) {
@@ -69,10 +74,26 @@ export default class ConversationResponseRenderer extends DomRendererWithSaveGam
 				});
 				lookupRenderer.activate();
 			});
+			Pixies.createElement(this.editorSection, 'button', null, `hidden:${this.model.hiddenByStageId.toString()}`, (e) => {
+				e.preventDefault();
+				const lookupRenderer = new TableLookupRenderer(this.game, this.model.hiddenByStageId, this.container, 'hiddenByStageId');
+				this.model.hiddenByStageId.addEventListener('table-closed', () => {
+					lookupRenderer.deactivate();
+				});
+				lookupRenderer.activate();
+			});
 			Pixies.createElement(this.editorSection, 'button', null, `gives:${this.model.givesItemId.toString()}`, (e) => {
 				e.preventDefault();
 				const lookupRenderer = new TableLookupRenderer(this.game, this.model.givesItemId, this.container, 'givesItemId');
 				this.model.givesItemId.addEventListener('table-closed', () => {
+					lookupRenderer.deactivate();
+				});
+				lookupRenderer.activate();
+			});
+			Pixies.createElement(this.editorSection, 'button', null, `req item:${this.model.requiresItemId.toString()}`, (e) => {
+				e.preventDefault();
+				const lookupRenderer = new TableLookupRenderer(this.game, this.model.requiresItemId, this.container, 'requiresItemId');
+				this.model.requiresItemId.addEventListener('table-closed', () => {
 					lookupRenderer.deactivate();
 				});
 				lookupRenderer.activate();

@@ -108,6 +108,20 @@ export default class PartyModel extends ModelNode {
 		return null;
 	}
 
+	findItem(itemDefId) {
+		for (let i = 0, max= this.slots.count(); i < max; i++) {
+			const character = this.slots.get(i).character.get();
+			if (!character) continue;
+			const item = character.inventory.findItem(itemDefId);
+			if (item) return item;
+		}
+		return null;
+	}
+
+	hasItem(itemDefId) {
+		return this.findItem(itemDefId) !== null;
+	}
+
 	getResourcesForPreloadInternal() {
 		return ['img/ui/inventory-female.png', 'img/ui/inventory-male.png'];
 	}

@@ -7,15 +7,12 @@ import CharacterStatsModel from "../stats/CharacterStatsModel";
 import InventoryModel from "./InventoryModel";
 import ItemSlotModel from "../../items/ItemSlotModel";
 import ModelNodeCollection from "../../../basic/ModelNodeCollection";
-import AdditionalItemModel from "../../items/AdditionalItemModel";
 import ItemModel from "../../items/ItemModel";
 import NullableNode from "../../../basic/NullableNode";
 
 export default class CharacterModel extends TemplateNode {
 
-	/**
-	 * @type DirtyValue
-	 */
+	/** @type DirtyValue */
 	name;
 
 	/**
@@ -106,12 +103,7 @@ export default class CharacterModel extends TemplateNode {
 	/**
 	 * @type IntValue
 	 */
-	npcConversationId;
-
-	/**
-	 * @type IntValue
-	 */
-	partyConversationId;
+	conversationId;
 
 	constructor(id = 0) {
 		super(id);
@@ -133,8 +125,7 @@ export default class CharacterModel extends TemplateNode {
 
 		this.scale = this.addProperty('scale', new Vector3(1,1,1));
 
-		this.npcConversationId = this.addProperty('npcConversationId', new IntValue());
-		this.partyConversationId = this.addProperty('partyConversationId', new IntValue());
+		this.conversationId = this.addProperty('conversationId', new IntValue());
 
 		this.stats = this.addProperty('stats', new CharacterStatsModel());
 
@@ -145,10 +136,10 @@ export default class CharacterModel extends TemplateNode {
 		this.beardSlot =  this.addProperty('beardSlot', new ItemSlotModel(['head'], 'beard', false));
 		this.dropSlot =  this.addProperty('dropSlot', new ItemSlotModel(['all'], 'drop', false));
 
-		this.additionalItems = this.addProperty('additionalItems', new ModelNodeCollection(() => new AdditionalItemModel()));
+		//this.additionalItems = this.addProperty('additionalItems', new ModelNodeCollection(() => new AdditionalItemModel()));
 		this.additionalItemsSlots = this.addProperty('additionalItemsSlots', new ModelNodeCollection(null, false));
-		this.additionalItems.addOnAddListener((ai) => this.createAdditionalSlot(ai));
-		this.additionalItems.addOnRemoveListener((ai) => this.removeAdditionalSlot(ai));
+		//this.additionalItems.addOnAddListener((ai) => this.createAdditionalSlot(ai));
+		//this.additionalItems.addOnRemoveListener((ai) => this.removeAdditionalSlot(ai));
 	}
 
 	createAdditionalSlot(ai) {

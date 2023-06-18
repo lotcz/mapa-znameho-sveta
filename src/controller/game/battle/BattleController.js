@@ -326,7 +326,7 @@ export default class BattleController extends ControllerWithSaveGame {
 		const character = this.model.partyCharacters.selectedNode.get();
 		if (!character) return;
 
-		if (occupant && occupant.character.get().npcConversationId.isSet()) {
+		if (occupant && occupant.character.get().conversationId.isSet()) {
 			character.triggerEvent('talk-to', occupant);
 			return;
 		}
@@ -334,10 +334,9 @@ export default class BattleController extends ControllerWithSaveGame {
 		const special = this.model.hoveringSpecial.get();
 		if (special) {
 			character.triggerEvent('go-to', special.position);
-			return;
+		} else {
+			character.triggerEvent('go-to', this.model.mouseHoveringTile);
 		}
-
-		character.triggerEvent('go-to', this.model.mouseHoveringTile);
 		if (this.saveGame.party.battleFollowTheLeader.get()) {
 			character.triggerEvent('follow-me');
 		}
@@ -362,7 +361,7 @@ export default class BattleController extends ControllerWithSaveGame {
 					return CURSOR_TYPE_ATTACK;
 				} else {
 					const char = battleChar.character.get();
-					if (char.npcConversationId.isSet()) {
+					if (char.conversationId.isSet()) {
 						return CURSOR_TYPE_TALK;
 					}
 				}

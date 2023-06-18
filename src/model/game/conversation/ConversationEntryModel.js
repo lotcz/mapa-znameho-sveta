@@ -1,15 +1,15 @@
 import ModelNode from "../../basic/ModelNode";
-import DirtyValue from "../../basic/DirtyValue";
 import ModelNodeCollection from "../../basic/ModelNodeCollection";
 import ConversationLineModel from "./ConversationLineModel";
 import NullableNode from "../../basic/NullableNode";
 import IntValue from "../../basic/IntValue";
 import BoolValue from "../../basic/BoolValue";
+import StringValue from "../../basic/StringValue";
 
 export default class ConversationEntryModel extends ModelNode {
 
 	/**
-	 * @type DirtyValue
+	 * @type StringValue
 	 */
 	responseText;
 
@@ -31,7 +31,22 @@ export default class ConversationEntryModel extends ModelNode {
 	/**
 	 * @type IntValue
 	 */
+	requiresItemId;
+
+	/**
+	 * @type IntValue
+	 */
 	completesStageId;
+
+	/**
+	 * @type IntValue
+	 */
+	hiddenByStageId;
+
+	/**
+	 * @type BoolValue
+	 */
+	joinsParty;
 
 	/**
 	 * @type BoolValue
@@ -61,14 +76,18 @@ export default class ConversationEntryModel extends ModelNode {
 	constructor() {
 		super();
 
-		this.responseText = this.addProperty('responseText', new DirtyValue('Response Text'));
+		this.responseText = this.addProperty('responseText', new StringValue());
 		this.lines = this.addProperty('lines', new ModelNodeCollection(() => new ConversationLineModel()));
 		this.entries = this.addProperty('entries', new ModelNodeCollection(() => new ConversationEntryModel()));
 
 		this.requiresStageId = this.addProperty('requiresStageId', new IntValue());
 		this.completesStageId = this.addProperty('completesStageId', new IntValue());
+		this.hiddenByStageId = this.addProperty('hiddenByStageId', new IntValue());
 
+		this.requiresItemId = this.addProperty('requiresItemId', new IntValue());
 		this.givesItemId = this.addProperty('givesItemId', new IntValue());
+
+		this.joinsParty = this.addProperty('joinsParty', new BoolValue(false));
 
 		this.isExitAvailable = this.addProperty('isExitAvailable', new BoolValue(true));
 		this.showParentResponses = this.addProperty('showParentResponses', new IntValue(0));

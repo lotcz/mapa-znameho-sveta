@@ -241,18 +241,10 @@ export default class BattleCharacterController extends ControllerWithBattle {
 		}
 	}
 
-	follow() {
-		const battleCharacter = this.model.followBattleCharacter.get();
-		if (!battleCharacter) return false;
-
-		const position = battleCharacter.targetPosition.isSet() ? battleCharacter.targetPosition.get() : battleCharacter.position.round();
-		const free = this.battle.pathFinder.getFreeNeighborPositions(position, 1, this.model);
-		if (free.length > 0) {
-			const closest = this.model.position.getClosest(free);
-			return this.goTo(closest);
-		}
-
-		return false;
+	startFollowing(battleCharacter, steps = 1) {
+		this.model.followStepsRemaining.set(steps + 1);
+		this.model.followBattleCharacter.set(battleCharacter);
+		return this.updateFollowing();
 	}
 
 	updateFollowing() {
@@ -283,19 +275,30 @@ export default class BattleCharacterController extends ControllerWithBattle {
 		return this.follow();
 	}
 
-	startFollowing(battleCharacter, steps = 1) {
-		this.model.followStepsRemaining.set(steps + 1);
-		this.model.followBattleCharacter.set(battleCharacter);
-		return this.updateFollowing();
+	follow() {
+		const battleCharacter = this.model.followBattleCharacter.get();
+		if (!battleCharacter) return false;
+
+		const position = battleCharacter.targetPosition.isSet() ? battleCharacter.targetPosition.get() : battleCharacter.position.round();
+		const free = this.battle.pathFinder.getFreeNeighborPositions(position, 1, this.model);
+		if (free.length > 0) {
+			const closest = this.model.position.getClosest(free);
+			return this.goTo(closest);
+		}
+
+		return false;
 	}
 
+	/**
+	 * Makes rest of the party follow this character.
+	 */
 	followMe() {
 		const next = this.saveGame.party.findNextInLine(this.model.characterId.get());
 		if (next) {
 			const battleCharacter = this.battle.partyCharacters.find((bc) => bc.characterId.equalsTo(next.id.get()));
 			if (battleCharacter) {
 				this.runAfterTimeout(
-					450,
+					550,
 					() => battleCharacter.triggerEvent('follow', this.model)
 				);
 			}

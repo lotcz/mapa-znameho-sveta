@@ -74,7 +74,7 @@ export default class SelectedBattleCharacterController extends ControllerWithBat
 			(battleCharacter) => {
 				if (!battleCharacter) return;
 				const character = battleCharacter.character.get();
-				const conversation = this.game.resources.conversations.getById(character.npcConversationId.get());
+				const conversation = this.game.resources.conversations.getById(character.conversationId.get());
 				if (conversation) {
 					this.model.state.set(CHARACTER_STATE_IDLE);
 					this.model.position.set(this.model.position.round());
