@@ -1,5 +1,6 @@
 import ModelNode from "../../../basic/ModelNode";
 import ItemSlotModel from "../../items/ItemSlotModel";
+import ModelNodeCollection from "../../../basic/ModelNodeCollection";
 
 export default class InventoryModel extends ModelNode {
 
@@ -48,6 +49,17 @@ export default class InventoryModel extends ModelNode {
 	 */
 	slot3;
 
+	/**
+	 * @type ItemSlotModel
+	 */
+	hairSlot;
+
+	/**
+	 * @type ItemSlotModel
+	 */
+	dropSlot;
+
+
 	constructor() {
 		super();
 
@@ -68,15 +80,25 @@ export default class InventoryModel extends ModelNode {
 			slot.addEventListener('item-changed', () => this.triggerEvent('item-changed'));
 		});
 
-		this.allSlots = [this.slot1, this.slot2, this.slot3, this.head, this.leftHand, this.rightHand, this.body, this.hips, this.feet];
+		this.inventorySlots = this.bodySlots.concat([this.slot1, this.slot2, this.slot3]);
+
+		this.hairSlot = this.addProperty('hairSlot', new ItemSlotModel(['head'], 'hair', false));
+		this.eyesSlot = this.addProperty('eyesSlot', new ItemSlotModel(['head'], 'eyes', false));
+		this.beardSlot = this.addProperty('beardSlot', new ItemSlotModel(['head'], 'beard', false));
+		this.dropSlot = this.addProperty('dropSlot', new ItemSlotModel(['all'], 'drop', false));
+
+		this.specialSlots = [this.hairSlot, this.eyesSlot, this.beardSlot];
+
+		this.battleRenderingSlots = new ModelNodeCollection(null, false);
+		this.battleRenderingSlots.add(this.bodySlots.concat(this.specialSlots));
 	}
 
 	findFreeSlot(accepts = null) {
-		return this.allSlots.find((slot) => slot.item.isEmpty() && (accepts === null || slot.accepts(accepts)));
+		return this.inventorySlots.find((slot) => slot.item.isEmpty() && (accepts === null || slot.accepts(accepts)));
 	}
 
 	findItem(itemDefId) {
-		const slot = this.allSlots.find((slot) => slot.item.isSet() && slot.item.get().definitionId.equalsTo(itemDefId));
+		const slot = this.inventorySlots.find((slot) => slot.item.isSet() && slot.item.get().definitionId.equalsTo(itemDefId));
 		if (slot) return slot.item.get();
 		return null;
 	}

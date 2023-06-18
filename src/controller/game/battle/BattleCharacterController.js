@@ -2,8 +2,6 @@ import AnimatedVector2 from "../../../class/animating/AnimatedVector2";
 import {CHARACTER_STATE_IDLE, CHARACTER_STATE_RUN} from "../../../model/game/battle/BattleCharacterModel";
 import AnimatedRotation from "../../../class/animating/AnimatedRotation";
 import Pixies from "../../../class/basic/Pixies";
-import ItemModel from "../../../model/game/items/ItemModel";
-import BattleItemSlotController from "./BattleItemSlotController";
 import ControllerWithBattle from "../../basic/ControllerWithBattle";
 import {EASING_FLAT, EASING_QUAD_IN} from "../../../class/animating/ProgressValue";
 
@@ -35,8 +33,6 @@ export default class BattleCharacterController extends ControllerWithBattle {
 
 		this.positionAnimation = null;
 		this.rotationAnimation = null;
-
-		this.headGearChangedHandler = () => this.updateHair();
 
 		this.addAutoEvent(
 			this.model,
@@ -86,29 +82,6 @@ export default class BattleCharacterController extends ControllerWithBattle {
 			true
 		);
 
-		this.addAutoEvent(
-			this.model.character,
-			'change',
-			(param) => {
-				this.resetChildren();
-				const old = param ? param.oldValue : null;
-				if (old) {
-					old.inventory.head.item.removeOnChangeListener(this.headGearChangedHandler);
-				}
-				if (this.model.character.isSet()) {
-					const character = this.model.character.get();
-					character.inventory.head.item.addOnChangeListener(this.headGearChangedHandler);
-					this.updateHair();
-
-					// to update additional items
-					this.addChild(new BattleItemSlotController(this.game, character.inventory.body));
-					this.addChild(new BattleItemSlotController(this.game, character.inventory.hips));
-					this.addChild(new BattleItemSlotController(this.game, character.inventory.feet));
-				}
-			},
-			true
-		);
-
 	}
 
 	activateInternal() {
@@ -117,11 +90,6 @@ export default class BattleCharacterController extends ControllerWithBattle {
 	}
 
 	deactivateInternal() {
-		this.resetChildren();
-
-		const character = this.model.character.get();
-		if (character) character.inventory.head.item.removeOnChangeListener(this.headGearChangedHandler);
-
 		this.positionAnimation = null;
 		this.rotationAnimation = null;
 	}
@@ -145,20 +113,6 @@ export default class BattleCharacterController extends ControllerWithBattle {
 			}
 		}
 		this.model.makeDirty();
-	}
-
-	updateHair() {
-		const character = this.model.character.get();
-		if (character.inventory.head.item.isEmpty() && character.hairItemDefinitionId.isSet()) {
-			const item = new ItemModel();
-			item.definitionId.set(character.hairItemDefinitionId.get());
-			if (character.hairMaterialId.isSet()) {
-				item.primaryMaterialId.set(character.hairMaterialId.get());
-			}
-			character.hairSlot.item.set(item);
-		} else {
-			character.hairSlot.item.set(null);
-		}
 	}
 
 	goTo(position) {

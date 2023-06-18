@@ -51,12 +51,18 @@ export default class ModelNodeCollection extends ModelNode {
 		return this.children.asArray();
 	}
 
+	addMultipleAsArray(children) {
+		return children.map((ch) => this.add(ch));
+	}
+
 	/**
 	 *
-	 * @param {ModelNode | any} child
-	 * @returns {ModelNode | any}
+	 * @param {ModelNode | []} child
+	 * @returns {ModelNode | [] | any}
 	 */
 	add(child = null) {
+		if (Array.isArray(child)) return this.addMultipleAsArray(child);
+
 		if (!child) {
 			child = this.nodeFactory();
 		}

@@ -1,6 +1,7 @@
 import CharacterStatsController from "./stats/CharacterStatsController";
 import ControllerWithSaveGame from "../../basic/ControllerWithSaveGame";
 import ItemModel from "../../../model/game/items/ItemModel";
+import BattleItemSlotController from "../battle/BattleItemSlotController";
 
 export default class CharacterController extends ControllerWithSaveGame {
 
@@ -20,6 +21,11 @@ export default class CharacterController extends ControllerWithSaveGame {
 				this.model.stats
 			)
 		);
+
+		// to update additional items
+		this.addChild(new BattleItemSlotController(this.game, this.model.inventory.body));
+		this.addChild(new BattleItemSlotController(this.game, this.model.inventory.hips));
+		this.addChild(new BattleItemSlotController(this.game, this.model.inventory.feet));
 
 		this.addAutoEvent(
 			this.model.raceId,
@@ -55,6 +61,13 @@ export default class CharacterController extends ControllerWithSaveGame {
 		);
 
 		this.addAutoEvent(
+			this.model.inventory.head.item,
+			'change',
+			() => this.updateHair(),
+			true
+		);
+
+		this.addAutoEvent(
 			this.saveGame.time,
 			'time-passed',
 			(duration) => {
@@ -74,21 +87,42 @@ export default class CharacterController extends ControllerWithSaveGame {
 	}
 
 	activateInternal() {
+		this.updateEyes();
+		this.updateBeard();
+	}
+
+	updateEyes() {
 		if (this.model.eyesItemDefinitionId.isSet()) {
 			const item = new ItemModel();
 			item.definitionId.set(this.model.eyesItemDefinitionId.get());
 			item.primaryMaterialId.set(this.model.eyesMaterialId.get());
-			this.model.eyesSlot.item.set(item);
+			this.model.inventory.eyesSlot.item.set(item);
 		} else {
-			this.model.eyesSlot.item.set(null);
+			this.model.inventory.eyesSlot.item.set(null);
 		}
+	}
+
+	updateBeard() {
 		if (this.model.beardItemDefinitionId.isSet()) {
 			const item = new ItemModel();
 			item.definitionId.set(this.model.beardItemDefinitionId.get());
 			item.primaryMaterialId.set(this.model.beardMaterialId.get());
-			this.model.beardSlot.item.set(item);
+			this.model.inventory.beardSlot.item.set(item);
 		} else {
-			this.model.beardSlot.item.set(null);
+			this.model.inventory.beardSlot.item.set(null);
+		}
+	}
+
+	updateHair() {
+		if (this.model.inventory.head.item.isEmpty() && this.model.hairItemDefinitionId.isSet()) {
+			const item = new ItemModel();
+			item.definitionId.set(this.model.hairItemDefinitionId.get());
+			if (this.model.hairMaterialId.isSet()) {
+				item.primaryMaterialId.set(this.model.hairMaterialId.get());
+			}
+			this.model.inventory.hairSlot.item.set(item);
+		} else {
+			this.model.inventory.hairSlot.item.set(null);
 		}
 	}
 

@@ -59,7 +59,7 @@ export default class InventoryTabItemsRenderer extends DomRenderer {
 		this.addChild(new ItemSlotRenderer(this.game, this.model.inventory.slot3, this.inventorySlotsTop));
 
 		this.inventorySlotsBottom = Pixies.createElement(this.inventorySlots, 'div', 'inventory-slots-bottom inventory-slots-container row-reverse');
-		this.addChild(new ItemSlotRenderer(this.game, this.model.dropSlot, this.inventorySlotsBottom));
+		this.addChild(new ItemSlotRenderer(this.game, this.model.inventory.dropSlot, this.inventorySlotsBottom));
 
 		Pixies.createElement(this.inventorySlotsBottom, 'button', 'special', 'Add item', () => {
 			const slot = this.model.inventory.slot1;

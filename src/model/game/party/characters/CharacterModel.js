@@ -5,9 +5,6 @@ import BoolValue from "../../../basic/BoolValue";
 import Vector3 from "../../../basic/Vector3";
 import CharacterStatsModel from "../stats/CharacterStatsModel";
 import InventoryModel from "./InventoryModel";
-import ItemSlotModel from "../../items/ItemSlotModel";
-import ModelNodeCollection from "../../../basic/ModelNodeCollection";
-import ItemModel from "../../items/ItemModel";
 import NullableNode from "../../../basic/NullableNode";
 
 export default class CharacterModel extends TemplateNode {
@@ -81,26 +78,6 @@ export default class CharacterModel extends TemplateNode {
 	inventory;
 
 	/**
-	 * @type ItemSlotModel
-	 */
-	hairSlot;
-
-	/**
-	 * @type ItemSlotModel
-	 */
-	dropSlot;
-
-	/**
-	 * @type ModelNodeCollection<AdditionalItemModel>
-	 */
-	additionalItems;
-
-	/**
-	 * @type ModelNodeCollection<ItemSlotModel>
-	 */
-	additionalItemsSlots;
-
-	/**
 	 * @type IntValue
 	 */
 	conversationId;
@@ -131,33 +108,6 @@ export default class CharacterModel extends TemplateNode {
 
 		this.inventory = this.addProperty('inventory', new InventoryModel());
 
-		this.hairSlot =  this.addProperty('hairSlot', new ItemSlotModel(['head'], 'hair', false));
-		this.eyesSlot =  this.addProperty('eyesSlot', new ItemSlotModel(['head'], 'eyes', false));
-		this.beardSlot =  this.addProperty('beardSlot', new ItemSlotModel(['head'], 'beard', false));
-		this.dropSlot =  this.addProperty('dropSlot', new ItemSlotModel(['all'], 'drop', false));
-
-		//this.additionalItems = this.addProperty('additionalItems', new ModelNodeCollection(() => new AdditionalItemModel()));
-		this.additionalItemsSlots = this.addProperty('additionalItemsSlots', new ModelNodeCollection(null, false));
-		//this.additionalItems.addOnAddListener((ai) => this.createAdditionalSlot(ai));
-		//this.additionalItems.addOnRemoveListener((ai) => this.removeAdditionalSlot(ai));
-	}
-
-	createAdditionalSlot(ai) {
-		const item = new ItemModel();
-		item.definitionId.set(ai.definitionId.get());
-		const slot = new ItemSlotModel(['all'], ai.slotName.get());
-		slot.item.set(item);
-		this.additionalItemsSlots.add(slot);
-		return slot;
-	}
-
-	removeAdditionalSlot(ai) {
-		const slot = this.additionalItemsSlots.find((s) => ai.slotName.equalsTo(s.name) && ai.definitionId.equalsTo(s.item.definitionId));
-		if (!slot) {
-			console.warn(ai, 'slot not found, cannot remove');
-			return;
-		}
-		this.additionalItemsSlots.remove(slot);
 	}
 
 	clone() {
