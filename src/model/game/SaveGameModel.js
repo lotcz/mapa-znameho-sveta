@@ -234,24 +234,25 @@ export default class SaveGameModel extends ModelNode {
 	}
 
 	addCharacterToParty(character) {
-		let chr = character;
-		if (chr.isCloned()) {
-			chr = this.findCharacter(chr.id.get());
-		} else {
-			chr = chr.clone();
-			this.characters.add(chr);
-		}
+		const chr = this.addCharacter(character);
 		const slot = this.party.slots.add(new PartySlotModel());
 		slot.characterId.set(chr.id.get());
-		//this.party.selectedCharacterId.set(chr.id.get());
 		return chr;
 	}
 
-	findOriginalCharacter(characterTemplateId) {
-		return this.characters.find((ch) => ch.isOriginalId(characterTemplateId));
+	addCharacter(character) {
+		let chr = null;
+		if (character.isCloned()) {
+			chr = this.findCharacterById(character.id.get());
+		}
+		if (!chr) {
+			chr = character.clone();
+			this.characters.add(chr);
+		}
+		return chr;
 	}
 
-	findCharacter(characterId) {
+	findCharacterById(characterId) {
 		return this.characters.find((ch) => ch.id.equalsTo(characterId));
 	}
 }

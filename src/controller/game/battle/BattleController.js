@@ -95,13 +95,13 @@ export default class BattleController extends ControllerWithSaveGame {
 			this.saveGame,
 			'character-joins-party',
 			(character) => {
-				let spawnPosition = this.model.groundPosition;
+				let spawnPosition= this.model.groundPosition;
+
 				const npc = this.model.npcCharacters.find((npc) => npc.character.equalsTo(character));
 				if (npc) {
 					spawnPosition = npc.position;
 					this.model.npcCharacters.remove(npc);
 				}
-				console.log('joined pos', spawnPosition);
 				const bc = new BattlePartyCharacterModel();
 				bc.characterId.set(character.id.get());
 				const battleMap = this.model.battleMap.get();
@@ -112,6 +112,7 @@ export default class BattleController extends ControllerWithSaveGame {
 				}
 				bc.position.set(position);
 				this.model.partyCharacters.add(bc);
+				this.saveGame.party.selectedCharacterId.set(character.id.get());
 			}
 		);
 
@@ -121,7 +122,7 @@ export default class BattleController extends ControllerWithSaveGame {
 			(battleCharacter) => {
 				this.model.hoveringBattleCharacterRaycast.set(battleCharacter);
 			}
-		)
+		);
 
 		this.addAutoEventMultiple(
 			[this.game.mainLayerSize, this.model.coordinates, this.model.zoom],

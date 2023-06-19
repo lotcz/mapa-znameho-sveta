@@ -11,7 +11,7 @@ import {SPECIAL_TYPE_SPAWN} from "../../model/game/battle/battlemap/BattleSpecia
 import ItemSlotsController from "./items/ItemSlotsController";
 import QuestOverlayModel from "../../model/game/quests/QuestOverlayModel";
 import AnimationFloatController from "../basic/AnimationFloatController";
-import {EASING_QUAD_IN} from "../../class/animating/ProgressValue";
+import {EASING_FLAT, EASING_QUAD_IN} from "../../class/animating/ProgressValue";
 import TimeoutController from "../basic/TimeoutController";
 
 export default class SaveGameController extends ControllerNode {
@@ -255,7 +255,7 @@ export default class SaveGameController extends ControllerNode {
 				overlay.opacity,
 				1,
 				3000,
-				EASING_QUAD_IN
+				EASING_FLAT
 			).onFinished(() => {
 				this.addChild(
 					new TimeoutController(

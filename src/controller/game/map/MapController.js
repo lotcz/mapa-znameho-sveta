@@ -49,24 +49,6 @@ export default class MapController extends ControllerNode {
 		this.addChild(new NullableNodeController(this.game, this.model.currentPath, (m) => new CurrentPathController(this.game, m)));
 		this.addChild(new NullableNodeController(this.game, this.model.currentLocation, (m) => new CurrentLocationController(this.game, m)));
 
-		this.addAutoEvent(
-			this.game.mainLayerSize,
-			'change',
-			() => this.updateCornerCoordinates()
-		);
-
-		this.addAutoEvent(
-			this.model.mapCenterCoordinates,
-			'change',
-			() => this.updateCornerCoordinates()
-		);
-
-		this.addAutoEvent(
-			this.model.zoom,
-			'change',
-			() => this.updateCornerCoordinates()
-		);
-
 		this.addAutoEventMultiple(
 			[this.game.mainLayerSize, this.model.mapCenterCoordinates, this.model.zoom],
 			'change',
@@ -79,7 +61,9 @@ export default class MapController extends ControllerNode {
 						this.model.mapCenterCoordinates
 					)
 				);
-			}
+				this.updateCornerCoordinates();
+			},
+			true
 		);
 
 		this.addAutoEventMultiple(
@@ -94,42 +78,44 @@ export default class MapController extends ControllerNode {
 						1.5
 					)
 				);
+			},
+			true
+		);
+
+		this.addAutoEvent(
+			this.game,
+			'helperMouseOver',
+			(point) => this.focusedHelper.set(point)
+		);
+
+		this.addAutoEvent(
+			this.game,
+			'helperMouseOut',
+			(point) => {
+				if (this.focusedHelper.equalsTo(point)) {
+					this.focusedHelper.set(null);
+				}
 			}
 		);
 
-		this.helperMouseOverHandler = (point) => this.focusedHelper.set(point);
-		this.helperMouseOutHandler = (point) => {
-			if (this.focusedHelper.equalsTo(point)) {
-				this.focusedHelper.set(null);
-			}
-		};
+		this.addAutoEvent(
+			this.game.mainLayerMouseCoordinates,
+			'change',
+			() => this.onMouseMove()
+		);
 
-		this.mouseMoveHandler = () => this.runOnUpdate(() => this.onMouseMove());
-		this.zoomHandler = (param) => this.onZoom(param);
+		this.addAutoEvent(
+			this.game.controls,
+			'zoom',
+			(param) => this.onZoom(param)
+		);
 
-		this.resourcesChangedHandler = () => {
-			this.model.makeDirty();
-		};
-	}
+		this.addAutoEvent(
+			this.map,
+			'dirty',
+			() => this.model.makeDirty()
+		);
 
-	activateInternal() {
-		this.game.addEventListener('helperMouseOver', this.helperMouseOverHandler);
-		this.game.addEventListener('helperMouseOut', this.helperMouseOutHandler);
-
-		this.game.mainLayerMouseCoordinates.addOnChangeListener(this.mouseMoveHandler);
-		this.game.controls.addEventListener('zoom', this.zoomHandler);
-
-		this.map.addOnDirtyListener(this.resourcesChangedHandler);
-	}
-
-	deactivateInternal() {
-		this.game.removeEventListener('helperMouseOver', this.helperMouseOverHandler);
-		this.game.removeEventListener('helperMouseOut', this.helperMouseOutHandler);
-
-		this.game.mainLayerMouseCoordinates.removeOnChangeListener(this.mouseMoveHandler);
-		this.game.controls.removeEventListener('zoom', this.zoomHandler);
-
-		this.map.removeOnDirtyListener(this.resourcesChangedHandler);
 	}
 
 	updateInternal(delta) {

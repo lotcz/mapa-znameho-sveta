@@ -14,15 +14,6 @@ export default class ConversationController extends ControllerWithSaveGame {
 		this.model = model;
 
 		this.addAutoEvent(
-			this.model.characterTemplateId,
-			'change',
-			() => {
-				this.model.character.set(this.saveGame.findOriginalCharacter(this.model.characterTemplateId.get()));
-			},
-			true
-		);
-
-		this.addAutoEvent(
 			this.model.currentEntry,
 			'change',
 			() => this.entrySelected(),
@@ -67,8 +58,7 @@ export default class ConversationController extends ControllerWithSaveGame {
 
 		entry.responseCharacter.set(character);
 
-		if (entry.joinsParty.get() && this.model.character.isSet()) {
-			console.log('joining', this.model.character.get());
+		if (entry.joinsParty.get()) {
 			this.saveGame.triggerEvent('character-joins-party', this.model.character.get());
 		}
 

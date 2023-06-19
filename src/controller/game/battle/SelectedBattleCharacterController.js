@@ -78,6 +78,7 @@ export default class SelectedBattleCharacterController extends ControllerWithBat
 				if (conversation) {
 					this.model.state.set(CHARACTER_STATE_IDLE);
 					this.model.position.set(this.model.position.round());
+					conversation.character.set(battleCharacter.character.get());
 					this.saveGame.conversation.set(conversation);
 				}
 			}

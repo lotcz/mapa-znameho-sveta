@@ -161,8 +161,9 @@ export default class GameController extends ControllerNode {
 	startNewGame() {
 		const save = new SaveGameModel();
 		save.time.timeOfDay.set(TIME_MORNING);
-		const avelard = this.model.resources.characterTemplates.getById(1);
-		save.addCharacterToParty(avelard);
+		let avelard = this.model.resources.characterTemplates.getById(1);
+		avelard = save.addCharacterToParty(avelard);
+		save.party.selectedCharacterId.set(avelard.id.get());
 		const residence = this.model.resources.map.locations.getById(1);
 		save.currentLocationId.set(residence.id.get());
 		save.mapCenterCoordinates.set(residence.coordinates);
