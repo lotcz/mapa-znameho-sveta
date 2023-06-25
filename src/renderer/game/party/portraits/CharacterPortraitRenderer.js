@@ -22,6 +22,12 @@ export default class CharacterPortraitRenderer extends DomRendererWithSaveGame {
 	activateInternal() {
 		this.container = this.addElement('div', 'character column');
 		this.container.addEventListener('click', () => this.saveGame.party.triggerEvent('character-selected', this.model.id.get()));
+		this.container.addEventListener('mouseover', () => {
+			this.saveGame.triggerEvent('character-hover', this.model);
+		});
+		this.container.addEventListener('mouseout', () => {
+			this.saveGame.triggerEvent('character-hover', null);
+		});
 
 		this.top = Pixies.createElement(this.container, 'div', 'row');
 		this.portrait = Pixies.createElement(this.top, 'div', 'portrait');

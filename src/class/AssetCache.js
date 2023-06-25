@@ -11,6 +11,8 @@ import SpriteLoader from "./loaders/SpriteLoader";
 import Sprite3dLoader from "./loaders/Sprite3dLoader";
 import AudioLoader from "./loaders/AudioLoader";
 import Node from "./basic/Node";
+import CharacterPortraitLoader from "./loaders/CharacterPortraitLoader";
+import ConversationPortraitLoader from "./loaders/ConversationPortraitLoader";
 
 const ASSET_TYPE_LOADERS = {
 	'aud': AudioLoader,
@@ -21,13 +23,20 @@ const ASSET_TYPE_LOADERS = {
 	'it3': ItemModel3dLoader,
 	'itm': ItemImageLoader,
 	'spr': SpriteLoader,
-	'sp3': Sprite3dLoader
+	'sp3': Sprite3dLoader,
+	'chp': CharacterPortraitLoader,
+	'con': ConversationPortraitLoader
 }
 
 /**
  * Keeps cached raw resources like images, sounds and three models
  */
 export default class AssetCache extends Node {
+
+	/**
+	 * @type ResourcesModel
+	 */
+	resources ;
 
 	/**
 	 * @type Dictionary

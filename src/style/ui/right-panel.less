@@ -1,6 +1,6 @@
 @menu-content-width: 280px;
 
-.main-menu {
+.right-panel {
   	.paper();
 
 	display: flex;
@@ -20,10 +20,6 @@
 	border-radius: 0;
   }
 
-  .buttons {
-	padding: 20px;
-  }
-
   .art {
 	position: relative;
 	width: @menu-content-width;
@@ -40,8 +36,37 @@
 	}
   }
 
+	.buttons {
+		max-width: @menu-content-width;
+		flex-wrap: wrap;
+	}
+
+	.tooltip {
+		.ui-bg();
+		max-width: @menu-content-width;
+		margin-top: @m-2;
+		padding: 0;
+		box-shadow: -1px 1px 8px @dark-brown;
+		border-radius: @m-1;
+	}
+
+	.tooltip .top {
+		align-items: center;
+	}
+
+	.tooltip .bottom {
+		border-top: solid 1px @medium-brown;
+	}
+
+	.tooltip .portrait {
+		width: 60px;
+	}
+
+
   .inventory-slots-container {
 	max-width: @menu-content-width;
 	padding: 0;
   }
+
+
 }

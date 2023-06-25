@@ -18,6 +18,14 @@ export default class SelectedBattleCharacterController extends ControllerWithBat
 
 		this.model = model;
 
+		this.addAutoEvent(
+			this.model,
+			'go-to',
+			() => {
+				this.saveGame.party.isInventoryVisible.set(false);
+			}
+		);
+
 		this.addAutoEventMultiple(
 			[this.model.position, this.saveGame.party.battleScrollWhenMove],
 			'change',

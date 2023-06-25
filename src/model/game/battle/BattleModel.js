@@ -167,4 +167,14 @@ export default class BattleModel extends ModelNode {
 		this.hoveringBattleCharacter.set(this.hoveringBattleCharacterRaycast.isSet() ? this.hoveringBattleCharacterRaycast.get() : this.hoveringBattleCharacterTile.get());
 	}
 
+	getResourcesForPreloadInternal() {
+		return [
+			'img/cursor/cursor-eye.png',
+			'img/cursor/cursor-walk.png',
+			'img/cursor/cursor-exit.png',
+			'img/cursor/cursor-mouth.png',
+			'img/cursor/cursor-dagger.png',
+			'img/cursor/cursor-character.png'
+		];
+	}
 }

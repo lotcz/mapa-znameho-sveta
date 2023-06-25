@@ -178,9 +178,9 @@ export default class GameController extends ControllerNode {
 		const menu = new MenuModel('Menu');
 		menu.items.add(new MenuItemModel('Začít novou hru', () => this.startNewGame()));
 		menu.items.add(new MenuItemModel('Obnovit uloženou pozici', () => this.loadGameFromStorage()));
-		menu.items.add(new MenuItemModel('Nastavení', () => this.loadGameFromStorage()));
 
 		if (this.model.saveGame.isSet()) {
+			menu.items.add(new MenuItemModel('Uložit hru', () => this.saveGameToStorage().then(() => this.hideMenu())));
 			menu.items.add(new MenuItemModel('Pokračovat', () => this.hideMenu()));
 		}
 

@@ -21,4 +21,7 @@ export default class BattleNpcSpawnModel extends ModelNode {
 		this.characterTemplateId = this.addProperty('characterTemplateId', new IntValue());
 	}
 
+	getResourcesForPreload() {
+		return [`chp/${this.characterTemplateId.toString()}`];
+	}
 }

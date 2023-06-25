@@ -44,4 +44,11 @@ export default class BattleSpecialModel extends ModelNode {
 		this.data = this.addProperty('data', new StringValue());
 	}
 
+	getResourcesForPreload() {
+		if (this.type.equalsTo(SPECIAL_TYPE_CONVERSATION_LOC)) {
+			return [`con/${this.data.get()}`];
+		}
+		return [];
+	}
+
 }

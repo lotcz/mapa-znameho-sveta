@@ -17,7 +17,7 @@ export default class MapButtonsRenderer extends DomRendererWithSaveGame {
 	activateInternal() {
 		this.container = this.addElement('div', 'map-menu ');
 
-		this.buttons = Pixies.createElement(this.container, 'div', 'buttons column center');
+		this.buttons = Pixies.createElement(this.container, 'div', 'buttons row');
 
 		const start = Pixies.createElement(this.buttons, 'button', null, 'Start/Stop', () => {
 			this.model.partyTraveling.invert();

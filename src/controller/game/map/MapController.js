@@ -1,4 +1,3 @@
-import ControllerNode from "../../basic/ControllerNode";
 import DirtyValue from "../../../model/basic/DirtyValue";
 import CollectionController from "../../basic/CollectionController";
 import PathController from "./PathController";
@@ -7,8 +6,9 @@ import NullableNodeController from "../../basic/NullableNodeController";
 import CurrentLocationController from "./CurrentLocationController";
 import CurrentPathController from "./CurrentPathController";
 import {ImageHelper} from "../../../class/basic/ImageHelper";
+import ControllerWithSaveGame from "../../basic/ControllerWithSaveGame";
 
-export default class MapController extends ControllerNode {
+export default class MapController extends ControllerWithSaveGame {
 
 	/**
 	 * @type SaveGameModel
@@ -116,6 +116,10 @@ export default class MapController extends ControllerNode {
 			() => this.model.makeDirty()
 		);
 
+	}
+
+	activateInternal() {
+		this.saveGame.triggerEvent('exit-hover', null);
 	}
 
 	updateInternal(delta) {

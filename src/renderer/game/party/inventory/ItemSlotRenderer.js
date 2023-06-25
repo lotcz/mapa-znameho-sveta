@@ -19,6 +19,12 @@ export default class ItemSlotRenderer extends DomRendererWithSaveGame {
 		this.container.addEventListener('click', () => {
 			this.saveGame.triggerEvent('item-slot-selected', this.model);
 		});
+		this.container.addEventListener('mouseover', () => {
+			this.saveGame.triggerEvent('item-slot-hover', this.model);
+		});
+		this.container.addEventListener('mouseout', () => {
+			this.saveGame.triggerEvent('item-slot-hover', null);
+		});
 
 		this.inner = Pixies.createElement(this.container, 'div', 'inner');
 		this.renderItem();

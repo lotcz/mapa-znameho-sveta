@@ -1,28 +1,9 @@
-html,
-body {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  height: 100%;
-  min-height: 100%;
-  background-color: #000;
-}
-img {
-  -webkit-user-drag: none;
-  -khtml-user-drag: none;
-  -moz-user-drag: none;
-  -o-user-drag: none;
-  user-drag: none;
-}
-h1,
-h2,
-h3,
-h4 {
-  margin: 0;
-  padding: 0;
-}
+.d-none,
 .hidden {
   display: none !important;
+}
+.picture img {
+  display: block;
 }
 .row {
   display: flex;
@@ -494,6 +475,29 @@ h4 {
   font-family: 'Fell';
   src: url('font/IMFellEnglishSC-Regular.ttf') format('truetype');
 }
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100%;
+  min-height: 100%;
+  background-color: #000;
+}
+img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+}
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  padding: 0;
+}
 .no-text-select {
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -622,8 +626,12 @@ h4 {
   color: #e0b050;
 }
 .portrait img {
+  display: block;
   width: 100%;
   border-radius: 3px;
+}
+.ui-bg {
+  background-color: rgba(255, 255, 255, 0.05);
 }
 .paper {
   color: #311a0a;
@@ -679,39 +687,6 @@ h4 {
 .scroll::-webkit-scrollbar-track {
   cursor: url('img/cursor/cursor.png'), default;
   background: sandybrown;
-}
-.with-tooltip {
-  position: relative;
-  display: inline-block;
-}
-.with-tooltip .tooltip {
-  position: absolute;
-  z-index: 1;
-  visibility: hidden;
-  bottom: 125%;
-  left: 50%;
-  background-color: #101010;
-  color: #fff;
-  text-align: left;
-  padding: 5px;
-  border-radius: 5px;
-  font-weight: normal;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.with-tooltip .tooltip::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #101010 transparent transparent transparent;
-}
-.with-tooltip:hover .tooltip {
-  visibility: visible;
-  opacity: 1;
 }
 .sequence-container .sequence-background canvas {
   position: absolute;
@@ -830,7 +805,7 @@ h4 {
 .main-menu-layer .main-menu .item:hover {
   color: darkred;
 }
-.main-menu {
+.right-panel {
   color: #311a0a;
   background-color: #ad9475;
   background-image: url('img/texture/paper.jpg');
@@ -839,10 +814,10 @@ h4 {
   display: flex;
   text-align: center;
 }
-.main-menu .inner {
+.right-panel .inner {
   box-shadow: #311a0a 0 0 40px inset;
 }
-.main-menu button {
+.right-panel button {
   background-color: #885f32;
   color: sandybrown;
   box-shadow: #311a0a 1px 1px 10px;
@@ -852,14 +827,14 @@ h4 {
   padding: 6px 15px;
   margin: 6px;
 }
-.main-menu button:hover {
+.right-panel button:hover {
   color: #e0b050;
 }
-.main-menu button:active {
+.right-panel button:active {
   position: relative;
   top: 2px;
 }
-.main-menu button.close {
+.right-panel button.close {
   position: relative;
   top: -5px;
   right: -5px;
@@ -868,34 +843,52 @@ h4 {
   padding: 0;
   margin: 0;
 }
-.main-menu .title {
+.right-panel .title {
   margin-bottom: 10px;
   max-width: 280px;
   line-height: 1;
 }
-.main-menu > .inner {
+.right-panel > .inner {
   display: flex;
   flex: 1;
   flex-direction: column;
   border-radius: 0;
 }
-.main-menu .buttons {
-  padding: 20px;
-}
-.main-menu .art {
+.right-panel .art {
   position: relative;
   width: 280px;
 }
-.main-menu .art div.upper {
+.right-panel .art div.upper {
   position: absolute;
   top: 0;
   left: 0;
 }
-.main-menu .art img {
+.right-panel .art img {
   border-radius: 3px;
   width: 280px;
 }
-.main-menu .inventory-slots-container {
+.right-panel .buttons {
+  max-width: 280px;
+  flex-wrap: wrap;
+}
+.right-panel .tooltip {
+  background-color: rgba(255, 255, 255, 0.05);
+  max-width: 280px;
+  margin-top: 10px;
+  padding: 0;
+  box-shadow: -1px 1px 8px #311a0a;
+  border-radius: 5px;
+}
+.right-panel .tooltip .top {
+  align-items: center;
+}
+.right-panel .tooltip .bottom {
+  border-top: solid 1px #885f32;
+}
+.right-panel .tooltip .portrait {
+  width: 60px;
+}
+.right-panel .inventory-slots-container {
   max-width: 280px;
   padding: 0;
 }
@@ -1151,6 +1144,7 @@ h4 {
 .inventory .inventory-stats .level-progress {
   box-shadow: #311a0a 0 0 4px;
   padding: 3px;
+  border-radius: 5px;
 }
 .inventory .inventory-stats .level-progress .stat-bar div {
   height: 15px;
@@ -1234,9 +1228,9 @@ h4 {
   opacity: 0.6;
 }
 .conversation .panel {
-  width: 900px;
+  width: 1000px;
   max-width: 100%;
-  height: 600px;
+  height: 800px;
   max-height: 85%;
   border-radius: 10px;
   box-shadow: #311a0a 0 0 60px;

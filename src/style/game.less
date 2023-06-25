@@ -25,6 +25,28 @@
   src: url('font/IMFellEnglishSC-Regular.ttf') format('truetype');
 }
 
+html, body {
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	height: 100%;
+	min-height: 100%;
+	background-color: #000;
+}
+
+img {
+	-webkit-user-drag: none;
+	-khtml-user-drag: none;
+	-moz-user-drag: none;
+	-o-user-drag: none;
+	user-drag: none;
+}
+
+h1, h2, h3, h4 {
+	margin: 0;
+	padding: 0;
+}
+
 .no-text-select {
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -134,8 +156,13 @@
 }
 
 .portrait img {
-  width: 100%;
-  border-radius: 3px;
+	display: block;
+	width: 100%;
+	border-radius: 3px;
+}
+
+.ui-bg {
+	background-color: rgba(255, 255, 255, 0.05);
 }
 
 .paper {
@@ -201,43 +228,6 @@
 	.default-cursor();
 	background: @orange;
   }
-}
-
-.with-tooltip {
-  position: relative;
-  display: inline-block;
-}
-
-.with-tooltip .tooltip {
-  position: absolute;
-  z-index: 1;
-  visibility: hidden;
-  bottom: 125%;
-  left: 50%;
-  background-color: #101010;
-  color: #fff;
-  text-align: left;
-  padding: @m-1;
-  border-radius: @m-1;
-  font-weight: normal;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.with-tooltip .tooltip::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #101010 transparent transparent transparent;
-}
-
-.with-tooltip:hover .tooltip {
-  visibility: visible;
-  opacity: 1;
 }
 
 .sequence-container {

@@ -92,14 +92,6 @@ export default class EditorRenderer extends DomRenderer {
 			() => this.model.triggerEvent('save-resources')
 		);
 
-		Pixies.createElement(
-			this.buttonsLeft,
-			'button',
-			'red',
-			'New Game',
-			() => this.game.triggerEvent('new-game')
-		);
-
 		this.buttonsRight = Pixies.createElement(this.nav, 'div');
 
 		this.dock = Pixies.createElement(this.container, 'div', 'dock bg');

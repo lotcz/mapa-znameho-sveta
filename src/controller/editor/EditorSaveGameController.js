@@ -22,12 +22,6 @@ export default class EditorSaveGameController extends ControllerNode {
 			)
 		);
 
-		this.addAutoEvent(
-			this.model,
-			'save',
-			() => this.game.triggerEvent('save-ui')
-		);
-
 	}
 
 }

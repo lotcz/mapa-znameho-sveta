@@ -7,6 +7,9 @@ export default class AssetLoader extends Node {
 
 	uri;
 
+	/**
+	 * @type AssetCache
+	 */
 	assets;
 
 	constructor(assets, uri, preload = false) {

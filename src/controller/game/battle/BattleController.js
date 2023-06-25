@@ -124,6 +124,16 @@ export default class BattleController extends ControllerWithSaveGame {
 			}
 		);
 
+		this.addAutoEvent(
+			this.model.hoveringBattleCharacter,
+			'change',
+			() => {
+				const battleCharacter = this.model.hoveringBattleCharacter.get();
+				const character = battleCharacter ? battleCharacter.character.get() : null;
+				this.saveGame.hoveringCharacter.set(character);
+			}
+		);
+
 		this.addAutoEventMultiple(
 			[this.game.mainLayerSize, this.model.coordinates, this.model.zoom],
 			'change',
@@ -141,6 +151,27 @@ export default class BattleController extends ControllerWithSaveGame {
 				this.onMouseMove();
 			},
 			true
+		);
+
+		this.addAutoEvent(
+			this.model.hoveringSpecial,
+			'change',
+			() => {
+				const special = this.model.hoveringSpecial.get();
+				if (special && special.type.equalsTo(SPECIAL_TYPE_CONVERSATION_LOC)) {
+					const conversation = this.game.resources.conversations.getById(special.data.get());
+					if (conversation) {
+						this.saveGame.triggerEvent('conversation-hover', conversation);
+					}
+				} else {
+					this.saveGame.triggerEvent('conversation-hover', null);
+				}
+				if (special && special.type.equalsTo(SPECIAL_TYPE_EXIT)) {
+					this.saveGame.triggerEvent('exit-hover', special);
+				} else {
+					this.saveGame.triggerEvent('exit-hover', null);
+				}
+			}
 		);
 
 		this.addAutoEventMultiple(

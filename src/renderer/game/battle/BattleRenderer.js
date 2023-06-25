@@ -134,6 +134,8 @@ export default class BattleRenderer extends DomRenderer {
 	}
 
 	activateInternal() {
+		this.game.assets.preload(this.model.getResourcesForPreload());
+
 		this.container = this.addElement('div', 'battle container container-host');
 		this.container.addEventListener('mouseover', () => {
 			this.model.isMouseOver.set(true);

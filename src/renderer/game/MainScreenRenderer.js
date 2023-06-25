@@ -7,7 +7,7 @@ import PartyRenderer from "./party/PartyRenderer";
 import SelectedSlotRenderer from "./party/inventory/SelectedSlotRenderer";
 import Pixies from "../../class/basic/Pixies";
 import Vector2 from "../../model/basic/Vector2";
-import MainMenuRenderer from "./MainMenuRenderer";
+import RightPanelRenderer from "./RightPanelRenderer";
 import QuestOverlayRenderer from "./quests/QuestOverlayRenderer";
 
 export default class MainScreenRenderer extends DomRenderer {
@@ -89,7 +89,7 @@ export default class MainScreenRenderer extends DomRenderer {
 			)
 		);
 
-		this.addChild(new MainMenuRenderer(this.game, this.model, this.rightPanel));
+		this.addChild(new RightPanelRenderer(this.game, this.model, this.rightPanel));
 		this.addChild(new SelectedSlotRenderer(this.game, this.model.selectedItemSlot, this.container));
 		this.addChild(new PartyRenderer(this.game, this.model.party, this.partyPanel, this.topLayer));
 

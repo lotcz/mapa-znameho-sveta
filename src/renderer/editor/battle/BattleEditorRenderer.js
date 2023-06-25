@@ -28,6 +28,15 @@ export default class BattleEditorRenderer extends DomRendererWithSaveGame {
 		this.dom = dom;
 		this.container = null;
 
+		this.battle = this.saveGame.currentBattle.get();
+
+		this.addAutoEvent(
+			this.battle.zoom,
+			'change',
+			() => this.zoom.innerText = this.battle.zoom.get(),
+			true
+		);
+
 		this.addChild(
 			new ConditionalNodeRenderer(
 				this.game,
@@ -70,6 +79,7 @@ export default class BattleEditorRenderer extends DomRendererWithSaveGame {
 		this.container = Pixies.createElement(this.dom, 'div', 'battle-menu bg column');
 
 		this.top = Pixies.createElement(this.container, 'div');
+		this.zoom = Pixies.createElement(this.top, 'div');
 		this.menu = Pixies.createElement(this.top, 'div');
 		this.brushSize = Pixies.createElement(this.top, 'div');
 		this.modeAction = Pixies.createElement(this.top, 'div');

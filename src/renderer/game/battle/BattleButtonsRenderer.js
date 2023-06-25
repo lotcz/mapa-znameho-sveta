@@ -1,7 +1,5 @@
 import Pixies from "../../../class/basic/Pixies";
-import CollectionRenderer from "../../basic/CollectionRenderer";
 import DomRendererWithBattle from "../../basic/DomRendererWithBattle";
-import ItemSlotRenderer from "../party/inventory/ItemSlotRenderer";
 
 export default class BattleButtonsRenderer extends DomRendererWithBattle {
 
@@ -15,25 +13,17 @@ export default class BattleButtonsRenderer extends DomRendererWithBattle {
 
 		this.model = model;
 
-		this.addChild(
-			new CollectionRenderer(
-				this.game,
-				this.battle.groundSlots.slots,
-				(m) => new ItemSlotRenderer(this.game, m, this.items)
-			)
-		);
 	}
 
 	activateInternal() {
 		this.container = this.addElement('div', 'map-menu column');
 
-		this.buttons = Pixies.createElement(this.container, 'div', 'buttons column center');
+		this.buttons = Pixies.createElement(this.container, 'div', 'buttons row');
 
 		const start = Pixies.createElement(this.buttons, 'button', null, 'battle button', () => {
 			this.model.partyTraveling.invert();
 		});
 
-		this.items = Pixies.createElement(this.container, 'div', 'inventory-slots-container');
 	}
 
 	deactivateInternal() {

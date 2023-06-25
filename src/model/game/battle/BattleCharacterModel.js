@@ -71,5 +71,4 @@ export default class BattleCharacterModel extends ModelNode {
 		this.followBattleCharacter = this.addProperty('followBattleCharacter', new NullableNode(null, false));
 		this.followStepsRemaining = this.addProperty('followStepsRemaining', new IntValue(0, false));
 	}
-
 }

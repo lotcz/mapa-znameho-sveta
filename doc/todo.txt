@@ -1,23 +1,24 @@
 ITEMS:
 
-- special additional cursor slot (remember last selected slot)
 - items pop up in conversation's ground slots
 - drop to ground when conversation finishes
 - items stay bound to location (on map - location without battle)
 - warn before leaving items on ground (on map - random path point or campsite)
 
-HINTS/POP-UPS:
-
-- show pop-ups inside topmost layer
-
 BIOTOPE
 - fix time images to dawn, day, dusk, night
+- change temperature in time
 
-Temperature/Hunger/Thirst
+Cold/Hot/Hungry/Thirsty
  - must create effect on character
 
 LEVELING
 
+- start/end distribution buttons
+- switch layout
+
 CAMPING
 
+
 FIGHTING
+

@@ -1,7 +1,7 @@
 import ModelNode from "../../../basic/ModelNode";
 import IntValue from "../../../basic/IntValue";
 import StatModel from "./StatModel";
-import {STAT_ABILITY_POINTS, STAT_LEVEL_PROGRESS, STAT_SKILL_POINTS} from "./StatDefinitionModel";
+import {STAT_ABILITY_POINTS, STAT_EXPERIENCE, STAT_LEVEL_PROGRESS, STAT_SKILL_POINTS} from "./StatDefinitionModel";
 
 export default class LevelStatsModel extends ModelNode {
 
@@ -16,7 +16,7 @@ export default class LevelStatsModel extends ModelNode {
 	levelProgress;
 
 	/**
-	 * @type IntValue
+	 * @type StatModel
 	 */
 	experience;
 
@@ -40,7 +40,7 @@ export default class LevelStatsModel extends ModelNode {
 
 		this.currentLevel = this.addProperty('currentLevel', new IntValue(0));
 
-		this.experience = this.addProperty('experience', new IntValue(0));
+		this.experience = this.addProperty('experience', new StatModel(STAT_EXPERIENCE, 0));
 		this.experienceNextLevel = this.addProperty('experienceNextLevel', new IntValue(0));
 
 		this.abilityPoints = this.addProperty('abilityPoints', new StatModel(STAT_ABILITY_POINTS, 0));
@@ -48,12 +48,12 @@ export default class LevelStatsModel extends ModelNode {
 
 		this.levelProgress = this.addProperty('levelProgress', new StatModel(STAT_LEVEL_PROGRESS, 0, false));
 
-		this.experience.addOnChangeListener(() => this.updateLevelProgress());
+		this.experience.current.addOnChangeListener(() => this.updateLevelProgress());
 		this.currentLevel.addOnChangeListener(() => this.updateLevelProgress());
 	}
 
 	gainExperience(exp) {
-		this.experience.increase(exp);
+		this.experience.current.increase(exp);
 	}
 
 	gainLevel(level) {
@@ -69,7 +69,7 @@ export default class LevelStatsModel extends ModelNode {
 		this.experienceNextLevel.set(nextReq);
 		//debugger;
 		const req = nextReq - currentReq;
-		const current = this.experience.get() - currentReq;
+		const current = this.experience.current.get() - currentReq;
 		this.levelProgress.baseValue.set(req);
 		this.levelProgress.currentFloat.set(current);
 		if (this.levelProgress.getProgress() >= 1) {

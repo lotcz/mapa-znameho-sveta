@@ -1,5 +1,5 @@
 import DomRenderer from "../../../basic/DomRenderer";
-import TooltipRenderer from "../../../basic/TooltipRenderer";
+import DirtyValueRenderer from "../../../basic/DirtyValueRenderer";
 
 export default class StatNameRenderer extends DomRenderer {
 
@@ -13,7 +13,7 @@ export default class StatNameRenderer extends DomRenderer {
 
 		this.model = model;
 
-		this.addChild(new TooltipRenderer(this.game, this.model.name, this.model.description, this.dom));
+		this.addChild(new DirtyValueRenderer(this.game, this.model.name, this.dom));
 	}
 
 }

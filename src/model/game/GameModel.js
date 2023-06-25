@@ -107,6 +107,6 @@ export default class GameModel extends ModelNode {
 	}
 
 	getResourcesForPreload() {
-		return ['img/world-map.jpg', 'img/loading.jpg'];
+		return ['img/world-map.jpg', 'img/loading.jpg', 'img/cursor/cursor.png'];
 	}
 }

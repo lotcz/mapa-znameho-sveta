@@ -1,10 +1,10 @@
-import DomRenderer from "../../../basic/DomRenderer";
 import Pixies from "../../../../class/basic/Pixies";
 import StatNumberRenderer from "./StatNumberRenderer";
 import StatNameRenderer from "./StatNameRenderer";
 import NullableNodeRenderer from "../../../basic/NullableNodeRenderer";
+import DomRendererWithSaveGame from "../../../basic/DomRendererWithSaveGame";
 
-export default class StatCombatRenderer extends DomRenderer {
+export default class StatCombatRenderer extends DomRendererWithSaveGame {
 
 	/**
 	 * @type StatModel
@@ -19,6 +19,12 @@ export default class StatCombatRenderer extends DomRenderer {
 
 	activateInternal() {
 		this.container = this.addElement('div', 'stat-wrapper column flex-1 p-1');
+		this.container.addEventListener('mouseover', () => {
+			this.saveGame.triggerEvent('stat-hover', this.model);
+		});
+		this.container.addEventListener('mouseout', () => {
+			this.saveGame.triggerEvent('stat-hover', null);
+		});
 
 		this.name = Pixies.createElement(this.container, 'div', 'stat-name center mb-1');
 		this.addChild(

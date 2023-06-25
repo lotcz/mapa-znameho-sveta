@@ -46,7 +46,7 @@ export default class EditorSaveGameRenderer extends DomRenderer {
 			'button',
 			null,
 			'Save',
-			() => this.model.triggerEvent('save')
+			() => this.game.triggerEvent('save-ui')
 		);
 	}
 

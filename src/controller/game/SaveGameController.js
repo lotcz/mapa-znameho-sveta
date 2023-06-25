@@ -154,6 +154,67 @@ export default class SaveGameController extends ControllerNode {
 				if (quest) this.questCompleted(quest);
 			}
 		);
+
+		this.addAutoEvent(
+			this.model,
+			'item-slot-hover',
+			(slot) => {
+				this.runOnUpdate(() => {
+					const item = slot && slot.item.isSet() ? slot.item.get() : null;
+					this.model.hoveringItem.set(item);
+				});
+			}
+		);
+
+		this.addAutoEvent(
+			this.model,
+			'character-hover',
+			(chr) => {
+				this.runOnUpdate(() => {
+					this.model.hoveringCharacter.set(chr);
+				});
+			}
+		);
+
+		this.addAutoEvent(
+			this.model,
+			'stat-hover',
+			(st) => {
+				this.runOnUpdate(() => {
+					this.model.hoveringStat.set(st);
+				});
+			}
+		);
+
+		this.addAutoEvent(
+			this.model,
+			'race-hover',
+			(r) => {
+				this.runOnUpdate(() => {
+					this.model.hoveringRace.set(r);
+				});
+			}
+		);
+
+		this.addAutoEvent(
+			this.model,
+			'conversation-hover',
+			(c) => {
+				this.runOnUpdate(() => {
+					this.model.hoveringConversation.set(c);
+				});
+			}
+		);
+
+		this.addAutoEvent(
+			this.model,
+			'exit-hover',
+			(s) => {
+				this.runOnUpdate(() => {
+					this.model.hoveringExit.set(s);
+				});
+			}
+		);
 	}
 
 	update(delta) {

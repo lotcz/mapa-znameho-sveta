@@ -172,6 +172,36 @@ export default class SaveGameModel extends ModelNode {
 	 */
 	completedQuestOverlay;
 
+	/**
+	 * NullableNode<ItemSlotModel>
+	 */
+	hoveringItem;
+
+	/**
+	 * NullableNode<CharacterModel>
+	 */
+	hoveringCharacter;
+
+	/**
+	 * NullableNode<StatModel>
+	 */
+	hoveringStat;
+
+	/**
+	 * NullableNode<RaceModel>
+	 */
+	hoveringRace;
+
+	/**
+	 * NullableNode<ConversationModel>
+	 */
+	hoveringConversation;
+
+	/**
+	 * NullableNode<BattleSpecialModel>
+	 */
+	hoveringExit;
+
 	constructor() {
 		super();
 
@@ -231,6 +261,13 @@ export default class SaveGameModel extends ModelNode {
 		this.animationSequence = this.addProperty('animationSequence', new NullableNode(null, false));
 
 		this.completedQuestOverlay = this.addProperty('completedQuestOverlay', new NullableNode(null, false));
+
+		this.hoveringItem = this.addProperty('hoveringItem', new NullableNode(null, false));
+		this.hoveringCharacter = this.addProperty('hoveringCharacter', new NullableNode(null, false));
+		this.hoveringStat = this.addProperty('hoveringStat', new NullableNode(null, false));
+		this.hoveringRace = this.addProperty('hoveringRace', new NullableNode(null, false));
+		this.hoveringConversation = this.addProperty('hoveringConversation', new NullableNode(null, false));
+		this.hoveringExit = this.addProperty('hoveringExit', new NullableNode(null, false));
 	}
 
 	addCharacterToParty(character) {
