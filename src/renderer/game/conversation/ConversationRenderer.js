@@ -37,32 +37,34 @@ export default class ConversationRenderer extends DomRenderer {
 		Pixies.addClass(this.dom, 'container');
 
 		this.container = this.addElement('div', 'conversation container container-host');
-		//this.container.addEventListener('mousemove', this.onContainerEvent);
 		this.container.addEventListener('click', this.onContainerEvent);
 		this.container.addEventListener('wheel', this.onContainerEvent);
 
 		this.overlay = Pixies.createElement(this.container, 'div', 'overlay container');
 
 		this.panelWrapper = Pixies.createElement(this.container, 'div', 'container column center p-3');
-		this.panel = Pixies.createElement(this.panelWrapper, 'div', 'panel paper left');
-		this.inner = Pixies.createElement(this.panel, 'div', 'inner');
+		this.panel = Pixies.createElement(this.panelWrapper, 'div', 'panel paper row stretch overflow-hidden left');
+		this.inner = Pixies.createElement(this.panel, 'div', 'inner col overflow-hidden');
 
 		const header = Pixies.createElement(this.inner, 'div', 'header');
 		const title = Pixies.createElement(header, 'div', 'row');
 		const titleText = Pixies.createElement(title, 'h2', 'title');
 		titleText.innerText = this.model.name.get();
 
-		const info = Pixies.createElement(header, 'div', 'info row');
+		const cols = Pixies.createElement(this.inner, 'div', 'row flex-1 stretch overflow-hidden');
+		const left = Pixies.createElement(cols, 'div', 'col');
+		const right = Pixies.createElement(cols, 'div', 'col flex-1 scroll');
+		this.scroll = right;
 
 		const portraitUrl = this.model.portrait.get();
 		if (portraitUrl) {
-			this.portrait = Pixies.createElement(info, 'div', 'portrait');
+			const portrait = Pixies.createElement(left, 'div', 'portrait');
 			this.game.assets.getAsset(portraitUrl, (image) => {
-				this.portrait.appendChild(image);
+				portrait.appendChild(image.cloneNode());
 			});
 		}
 
-		const description = Pixies.createElement(info, 'div', 'description text flex-1');
+		const description = Pixies.createElement(right, 'div', 'description text');
 		description.innerHTML = Pixies.paragraphize(this.model.description.get());
 
 		if (this.game.isInDebugMode.get()) {
@@ -93,15 +95,19 @@ export default class ConversationRenderer extends DomRenderer {
 			});
 		}
 
-		this.entries = Pixies.createElement(this.inner, 'div', ['entries', 'scroll']);
-		this.entriesRenderer = new CollectionRenderer(this.game, this.model.pastEntries, (model) => new ConversationEntryRenderer(this.game, model, this.entries));
+		this.entries = Pixies.createElement(right, 'div', 'entries');
+		this.entriesRenderer = new CollectionRenderer(
+			this.game,
+			this.model.pastEntries,
+			(model) => new ConversationEntryRenderer(this.game, model, this.entries)
+		);
 		this.addChild(this.entriesRenderer);
 
 		this.entries.addEventListener('wheel', this.onScroll);
 
-		this.responses = Pixies.createElement(this.inner, 'div', ['responses', 'scroll']);
+		this.responses = Pixies.createElement(right, 'div', 'responses');
 		if (this.game.isInDebugMode.get()) {
-			const buttons = Pixies.createElement(this.inner, 'div', 'editor-section buttons');
+			const buttons = Pixies.createElement(this.responses, 'div', 'editor-section buttons');
 			const add = Pixies.createElement(buttons, 'button');
 			add.innerText = 'Add Response';
 			add.addEventListener('click', () => {
@@ -112,7 +118,7 @@ export default class ConversationRenderer extends DomRenderer {
 			});
 		}
 
-		this.bottom = Pixies.createElement(this.inner, 'div', 'row center');
+		this.bottom = Pixies.createElement(right, 'div', 'row center');
 		this.exit = Pixies.createElement(
 			this.bottom,
 			'button',
@@ -133,6 +139,8 @@ export default class ConversationRenderer extends DomRenderer {
 		this.resetChildren();
 		this.removeElement(this.container);
 		Pixies.removeClass(this.dom, 'container');
+		this.container = null;
+		this.responses = null;
 	}
 
 	updateResponses() {
@@ -164,12 +172,12 @@ export default class ConversationRenderer extends DomRenderer {
 	scrollDown() {
 		this.clearTimer();
 		let scrollLastTime = performance.now();
-		const scrollAnimation = new AnimatedValue(this.entries.scrollTop, this.entries.scrollHeight, 3000);
+		const scrollAnimation = new AnimatedValue(this.scroll.scrollTop, this.scroll.scrollHeight, 3000);
 		this.scrollTimer = setInterval(
 			() => {
 				const time = performance.now();
 				const delta = time - scrollLastTime;
-				this.entries.scrollTop = scrollAnimation.get(delta);
+				this.scroll.scrollTop = scrollAnimation.get(delta);
 				scrollLastTime = time;
 				if (scrollAnimation.isFinished()) {
 					this.clearTimer();

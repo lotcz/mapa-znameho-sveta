@@ -83,13 +83,13 @@ export default class LevelStatsModel extends ModelNode {
 	}
 
 	static getLevelAbilityPoints(level) {
-		if (level === 1) return 3;
+		if (level === 1) return 5;
 		return (level % 5 === 0) ? 1 : 0;
 	}
 
 	static getLevelSkillPoints(level) {
 		if (level === 1) return 3;
-		return Math.ceil(level / 5);
+		return 1;
 	}
 
 }

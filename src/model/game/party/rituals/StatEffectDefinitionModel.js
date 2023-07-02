@@ -19,12 +19,12 @@ export default class StatEffectDefinitionModel extends ModelNode {
 	 */
 	amount;
 
-	constructor(source) {
+	constructor(source, statId = Number.NaN, amount = 1) {
 		super();
 
 		this.effectSource = this.addProperty('effectSource', source);
-		this.statId = this.addProperty('statId', new IntValue());
-		this.amount = this.addProperty('amount', new FloatValue(1));
+		this.statId = this.addProperty('statId', new IntValue(statId));
+		this.amount = this.addProperty('amount', new FloatValue(amount));
 	}
 
 }

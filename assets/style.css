@@ -30,6 +30,9 @@
 .flex-1 {
   flex: 1;
 }
+.overflow-hidden {
+  overflow: hidden;
+}
 .space-between {
   justify-content: space-between;
   align-content: space-between;
@@ -1248,22 +1251,16 @@ h4 {
 .conversation .title {
   margin-bottom: 10px;
 }
-.conversation .info .portrait {
+.conversation .portrait {
   margin-right: 20px;
 }
-.conversation .info .portrait img {
+.conversation .portrait img {
   max-width: 320px;
   max-height: 200px;
 }
 .conversation .text p {
   margin-top: 0;
   margin-bottom: 10px;
-}
-.conversation .entries {
-  flex: 1 2;
-}
-.conversation .responses {
-  height: 100px;
 }
 .conversation a {
   color: saddlebrown;

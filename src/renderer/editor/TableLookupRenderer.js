@@ -101,6 +101,16 @@ export default class TableLookupRenderer extends DomRenderer {
 		return Object.keys(FIELD_TABLE_MAPPINGS).includes(name);
 	}
 
+	getPreview() {
+		const element = this.lookupTable.getById(this.model.get());
+		if (element) {
+			if (typeof element.name === 'object' && typeof element.name.get === 'function') {
+				return element.name.get();
+			}
+			return this.model.get();
+		}
+	}
+
 	renderItems() {
 		Pixies.emptyElement(this.tbody);
 		const search = this.input.value.toLowerCase();

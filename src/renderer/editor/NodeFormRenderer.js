@@ -4,6 +4,8 @@ import NodeTableRenderer from "./NodeTableRenderer";
 import TableLookupRenderer from "./TableLookupRenderer";
 import CharacterStatsModel from "../../model/game/party/stats/CharacterStatsModel";
 import LevelStatsModel from "../../model/game/party/stats/LevelStatsModel";
+import {STAT_STRENGTH, STAT_TEMPERATURE, STAT_WILLPOWER} from "../../model/game/party/stats/StatDefinitionModel";
+import StatEffectDefinitionModel from "../../model/game/party/rituals/StatEffectDefinitionModel";
 
 export default class NodeFormRenderer extends DomRenderer {
 
@@ -124,6 +126,27 @@ export default class NodeFormRenderer extends DomRenderer {
 			});
 		}
 
+		if (this.model.constructor.name === 'RaceModel') {
+			Pixies.createElement(
+				buttonsLeft,
+				'button',
+				'special',
+				'Init stats',
+				(e) => {
+					e.preventDefault();
+					this.model.statEffects.reset();
+					const temperature = new StatEffectDefinitionModel(this.model.effectSource, STAT_TEMPERATURE, 5);
+					this.model.statEffects.add(temperature);
+
+					this.model.permanentEffects.reset();
+					for (let i = STAT_STRENGTH; i <= STAT_WILLPOWER; i++) {
+						const ability = new StatEffectDefinitionModel(this.model.effectSource, i, 4);
+						this.model.permanentEffects.add(ability);
+					}
+				}
+			);
+		}
+
 		if (this.model.constructor.name === 'CharacterModel') {
 			if (this.model.originalId.isSet()) {
 				Pixies.createElement(
@@ -166,7 +189,7 @@ export default class NodeFormRenderer extends DomRenderer {
 						this.model.stats.level.gainLevel(1);
 					} else {
 						const exp = LevelStatsModel.getLevelExperienceRequirement(level+1);
-						this.model.stats.level.gainExperience(exp - this.model.stats.level.experience.get() + 1);
+						this.model.stats.level.gainExperience(exp - this.model.stats.level.experience.current.get() + 1);
 					}
 				}
 			);
@@ -179,6 +202,17 @@ export default class NodeFormRenderer extends DomRenderer {
 				(e) => {
 					e.preventDefault();
 					this.model.stats.level.gainExperience(100);
+				}
+			);
+
+			Pixies.createElement(
+				buttonsLeft,
+				'button',
+				'special',
+				'Get 1000 Exp',
+				(e) => {
+					e.preventDefault();
+					this.model.stats.level.gainExperience(1000);
 				}
 			);
 
@@ -293,6 +327,8 @@ export default class NodeFormRenderer extends DomRenderer {
 			this.renderInput(container, name, value.value);
 			if (value.constructor.name === 'IntValue' && TableLookupRenderer.isTableLookupField(name)) {
 				Pixies.addClass(container, 'with-lookup');
+				const lookupRenderer = new TableLookupRenderer(this.game, value, container, name);
+				Pixies.createElement(container, 'div', 'pr-1', lookupRenderer.getPreview());
 				Pixies.createElement(
 					container,
 					'button',
@@ -300,7 +336,6 @@ export default class NodeFormRenderer extends DomRenderer {
 					'Select...',
 					(e) => {
 						e.preventDefault();
-						const lookupRenderer = new TableLookupRenderer(this.game, value, container, name);
 						value.addEventListener('table-closed', () => {
 							lookupRenderer.deactivate();
 						});
