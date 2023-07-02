@@ -37,6 +37,7 @@ export default class CharacterStatsController extends ControllerNode {
 		this.addChild(new StatController(this.game, this.model.consumption.hunger, this.model));
 		this.addChild(new TemperatureStatController(this.game, this.model.consumption.temperature, this.model));
 
+		this.addChild(new StatController(this.game, this.model.level.experience, this.model));
 		this.addChild(new StatController(this.game, this.model.level.abilityPoints, this.model));
 		this.addChild(new StatController(this.game, this.model.level.skillPoints, this.model));
 

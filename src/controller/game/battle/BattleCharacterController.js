@@ -123,6 +123,7 @@ export default class BattleCharacterController extends ControllerWithBattle {
 		}
 		if (path.length === 0) {
 			console.log('Already there');
+			this.model.triggerEvent('arrived-idle');
 			return false;
 		}
 

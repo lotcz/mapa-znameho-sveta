@@ -38,6 +38,7 @@ export const STAT_VODAN = 112;
 export const STAT_ZIVA = 113;
 export const STAT_MORANA = 114;
 export const STAT_SCIENTIA = 115;
+export const STAT_OHNAN = 116;
 
 // other
 export const STAT_LEVEL_PROGRESS = 1001;

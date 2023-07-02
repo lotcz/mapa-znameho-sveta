@@ -49,7 +49,8 @@ export default class SelectedBattleCharacterController extends ControllerWithBat
 		this.addAutoEvent(
 			this.model,
 			'arrived-idle',
-			(position) => {
+			() => {
+				const position = this.model.position;
 				const specials = this.battleMap.specials.filter((s) => s.position.equalsTo(position));
 				if (specials.length === 0) return;
 				const exit = specials.find((s) => s.type.equalsTo(SPECIAL_TYPE_EXIT));

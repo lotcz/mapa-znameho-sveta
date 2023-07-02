@@ -53,7 +53,7 @@ export default class LevelStatsModel extends ModelNode {
 	}
 
 	gainExperience(exp) {
-		this.experience.current.increase(exp);
+		this.experience.baseValue.increase(exp);
 	}
 
 	gainLevel(level) {
@@ -83,7 +83,7 @@ export default class LevelStatsModel extends ModelNode {
 	}
 
 	static getLevelAbilityPoints(level) {
-		if (level === 1) return 5;
+		if (level === 1) return 3;
 		return (level % 5 === 0) ? 1 : 0;
 	}
 

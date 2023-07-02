@@ -135,7 +135,7 @@ export default class NodeFormRenderer extends DomRenderer {
 				(e) => {
 					e.preventDefault();
 					this.model.statEffects.reset();
-					const temperature = new StatEffectDefinitionModel(this.model.effectSource, STAT_TEMPERATURE, 5);
+					const temperature = new StatEffectDefinitionModel(this.model.effectSource, STAT_TEMPERATURE, 2);
 					this.model.statEffects.add(temperature);
 
 					this.model.permanentEffects.reset();
