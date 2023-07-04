@@ -35,6 +35,20 @@ export default class BattleCharacterController extends ControllerWithBattle {
 		this.rotationAnimation = null;
 
 		this.addAutoEvent(
+			this.model.characterId,
+			'change',
+			() => {
+				const character = this.saveGame.characters.getById(this.model.characterId.get());
+				if (!character) {
+					console.error('Character not found', this.model.characterId.get());
+					return;
+				}
+				this.model.character.set(character);
+			},
+			true
+		);
+
+		this.addAutoEvent(
 			this.model,
 			'go-to',
 			(p) => {
@@ -66,24 +80,13 @@ export default class BattleCharacterController extends ControllerWithBattle {
 			() => this.followMe()
 		);
 
-		this.addAutoEvent(
-			this.model.characterId,
-			'change',
-			() => {
-				const character = this.saveGame.characters.getById(this.model.characterId.get());
-				if (!character) {
-					console.error('Character not found', this.model.characterId.get());
-					return;
-				}
-				this.model.character.set(character);
-			},
-			true
-		);
-
 	}
 
 	activateInternal() {
 		this.model.state.set(CHARACTER_STATE_IDLE);
+	}
+
+	afterActivatedInternal() {
 		this.checkBlocks();
 	}
 

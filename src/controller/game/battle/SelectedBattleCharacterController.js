@@ -53,7 +53,7 @@ export default class SelectedBattleCharacterController extends ControllerWithBat
 				const position = this.model.position;
 				const specials = this.battleMap.specials.filter((s) => s.position.equalsTo(position));
 				if (specials.length === 0) return;
-				const exit = specials.find((s) => s.type.equalsTo(SPECIAL_TYPE_EXIT));
+				const exit= specials.find((s) => s.type.equalsTo(SPECIAL_TYPE_EXIT));
 				if (exit) {
 					if (exit.data.isSet()) {
 						this.saveGame.triggerEvent('to-battle', exit.data.get());
@@ -62,13 +62,13 @@ export default class SelectedBattleCharacterController extends ControllerWithBat
 					}
 					return;
 				}
-				const con = specials.find((s) => s.type.equalsTo(SPECIAL_TYPE_CONVERSATION_LOC));
+				const con= specials.find((s) => s.type.equalsTo(SPECIAL_TYPE_CONVERSATION_LOC));
 				if (con) {
 					const conversationId = con.data.get();
 					const conversation = this.game.resources.conversations.getById(conversationId);
 					this.saveGame.conversation.set(conversation);
 				}
-				const seq = specials.find((s) => s.type.equalsTo(SPECIAL_TYPE_SEQUENCE));
+				const seq= specials.find((s) => s.type.equalsTo(SPECIAL_TYPE_SEQUENCE));
 				if (seq) {
 					const sequenceId = seq.data.get();
 					const sequence = this.game.resources.sequences.getById(sequenceId);

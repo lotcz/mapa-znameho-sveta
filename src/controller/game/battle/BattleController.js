@@ -54,7 +54,7 @@ export default class BattleController extends ControllerWithSaveGame {
 			new CollectionController(
 				this.game,
 				this.model.npcCharacters,
-				(m) => new BattleCharacterController(game, m)
+				(m) => new NpcBattleCharacterController(game, m)
 			)
 		);
 
@@ -62,7 +62,7 @@ export default class BattleController extends ControllerWithSaveGame {
 			new CollectionController(
 				this.game,
 				this.model.npcCharacters,
-				(m) => new NpcBattleCharacterController(game, m)
+				(m) => new BattleCharacterController(game, m)
 			)
 		);
 

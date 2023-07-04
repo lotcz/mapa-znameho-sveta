@@ -30,16 +30,19 @@ export default class CharacterController extends ControllerWithSaveGame {
 		this.addAutoEvent(
 			this.model.raceId,
 			'change',
-			() => this.model.race.set(this.game.resources.races.getById(this.model.raceId.get())),
+			() => {
+				this.model.race.set(this.game.resources.races.getById(this.model.raceId.get()))
+			},
 			true
 		);
 
 		this.addAutoEvent(
 			this.model.race,
 			'change',
-			() =>{
-				const race = this.model.race.get();
+			() => {
 				this.model.stats.raceStatEffects.reset();
+				const race = this.model.race.get();
+				if (!race) return;
 				race.statEffects.forEach((eff) => {
 					this.model.stats.raceStatEffects.add(eff);
 				});
