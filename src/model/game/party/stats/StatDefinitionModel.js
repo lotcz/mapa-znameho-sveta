@@ -48,6 +48,8 @@ export const STAT_SKILL_POINTS = 1004;
 
 export const STAT_ITEM_CONDITION = 2000;
 
+export const SYMPATHY_TOWARDS_PARTY = 3001;
+
 export default class StatDefinitionModel extends IdentifiedModelNode {
 
 	/**

@@ -4,6 +4,7 @@ import DirtyValue from "../../basic/DirtyValue";
 import IdentifiedModelNode from "../../basic/IdentifiedModelNode";
 import StatEffectDefinitionModel from "../party/rituals/StatEffectDefinitionModel";
 import EffectSourceModel, {EFFECT_SOURCE_WEATHER} from "../party/rituals/EffectSourceModel";
+import StringValue from "../../basic/StringValue";
 
 export default class BiotopeModel extends IdentifiedModelNode {
 
@@ -22,6 +23,11 @@ export default class BiotopeModel extends IdentifiedModelNode {
 	 */
 	statEffects;
 
+	/**
+	 * @type StringValue
+	 */
+	musicUrlNormal;
+
 	constructor(id) {
 		super(id);
 
@@ -35,6 +41,8 @@ export default class BiotopeModel extends IdentifiedModelNode {
 		this.name.addOnChangeListener(() => this.effectSource.name.set(this.name.get()));
 
 		this.statEffects = this.addProperty('statEffects', new ModelNodeCollection(() => new StatEffectDefinitionModel(this.effectSource)));
+
+		this.musicUrlNormal = this.addProperty('musicUrlNormal', new StringValue());
 
 	}
 

@@ -110,6 +110,9 @@ export default class CharacterModel extends TemplateNode {
 
 	}
 
+	/**
+	 * @return CharacterModel
+	 */
 	clone() {
 		const ch = new CharacterModel();
 		ch.restoreState(this.getState());

@@ -202,6 +202,11 @@ export default class SaveGameModel extends ModelNode {
 	 */
 	hoveringExit;
 
+	/**
+	 * NullableNode<DirtyValue>
+	 */
+	hoveringSimple;
+
 	constructor() {
 		super();
 
@@ -268,6 +273,7 @@ export default class SaveGameModel extends ModelNode {
 		this.hoveringRace = this.addProperty('hoveringRace', new NullableNode(null, false));
 		this.hoveringConversation = this.addProperty('hoveringConversation', new NullableNode(null, false));
 		this.hoveringExit = this.addProperty('hoveringExit', new NullableNode(null, false));
+		this.hoveringSimple = this.addProperty('hoveringSimple', new NullableNode(null, false));
 	}
 
 	addCharacterToParty(character) {

@@ -7,8 +7,21 @@ import CombatStatsModel from "./CombatStatsModel";
 import AbilitiesStatsModel from "./AbilitiesStatsModel";
 import SkillsStatsModel from "./SkillsStatsModel";
 import EffectSourceModel, {EFFECT_SOURCE_RITUAL} from "../rituals/EffectSourceModel";
+import StatModel from "./StatModel";
+import {SYMPATHY_TOWARDS_PARTY} from "./StatDefinitionModel";
+import BoolValue from "../../../basic/BoolValue";
 
 export default class CharacterStatsModel extends ModelNode {
+
+	/**
+	 * @type StatModel
+	 */
+	sympathyTowardsParty;
+
+	/**
+	 * @type BoolValue
+	 */
+	isAggressive;
 
 	/**
 	 * @type LevelStatsModel
@@ -63,6 +76,10 @@ export default class CharacterStatsModel extends ModelNode {
 	constructor() {
 		super();
 
+		this.sympathyTowardsParty = this.addProperty('sympathyTowardsParty', new StatModel(SYMPATHY_TOWARDS_PARTY, 0.5));
+		this.isAggressive = this.addProperty('isAggressive', new BoolValue(false));
+		this.sympathyTowardsParty.addEventListener('change', () => this.isAggressive.set(this.sympathyTowardsParty.currentFloat.get() < 0.5));
+
 		this.level = this.addProperty('level', new LevelStatsModel());
 		this.basic = this.addProperty('basic', new BasicStatsModel());
 		this.consumption = this.addProperty('consumption', new ConsumptionStatsModel());
@@ -77,7 +94,7 @@ export default class CharacterStatsModel extends ModelNode {
 		this.temporaryLevelUpEffects = this.addProperty('temporaryLevelUpEffects', new ModelNodeCollection(null, false));
 
 		this.levelUpEffectSource = new EffectSourceModel(EFFECT_SOURCE_RITUAL);
-		this.levelUpEffectSource.name.set('Level Up');
+		this.levelUpEffectSource.name.set('Toto se můžeš naučit');
 	}
 
 }

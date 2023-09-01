@@ -13,6 +13,7 @@ import StatTooltipRenderer from "./tooltip/StatTooltipRenderer";
 import RaceTooltipRenderer from "./tooltip/RaceTooltipRenderer";
 import ConversationTooltipRenderer from "./tooltip/ConversationTooltipRenderer";
 import ExitTooltipRenderer from "./tooltip/ExitTooltipRenderer";
+import SimpleTooltipRenderer from "./tooltip/SimpleTooltipRenderer";
 
 export default class RightPanelRenderer extends DomRendererWithSaveGame {
 
@@ -77,32 +78,37 @@ export default class RightPanelRenderer extends DomRendererWithSaveGame {
 			)
 		);
 
-		// tooltip
+		// tooltips
 		this.addChild(
 			new NullableNodeRenderer(
 				this.game,
 				this.model.hoveringCharacter,
-				(m) => new CharacterTooltipRenderer(this.game, m, this.tooltip),
-				() => new NullableNodeRenderer(
+				(m)=> new CharacterTooltipRenderer(this.game, m, this.tooltip),
+				()=> new NullableNodeRenderer(
 					this.game,
 					this.model.hoveringItem,
-					(m) => new ItemTooltipRenderer(this.game, m, this.tooltip),
-					() => new NullableNodeRenderer(
+					(m)=> new ItemTooltipRenderer(this.game, m, this.tooltip),
+					()=> new NullableNodeRenderer(
 						this.game,
 						this.model.hoveringStat,
-						(m) => new StatTooltipRenderer(this.game, m, this.tooltip),
-						() => new NullableNodeRenderer(
+						(m)=> new StatTooltipRenderer(this.game, m, this.tooltip),
+						()=> new NullableNodeRenderer(
 							this.game,
 							this.model.hoveringRace,
-							(m) => new RaceTooltipRenderer(this.game, m, this.tooltip),
-							() => new NullableNodeRenderer(
+							(m)=> new RaceTooltipRenderer(this.game, m, this.tooltip),
+							()=> new NullableNodeRenderer(
 								this.game,
 								this.model.hoveringConversation,
 								(m) => new ConversationTooltipRenderer(this.game, m, this.tooltip),
-								() => new NullableNodeRenderer(
+								()=> new NullableNodeRenderer(
 									this.game,
 									this.model.hoveringExit,
-									(m) => new ExitTooltipRenderer(this.game, m, this.tooltip),
+									(m)=> new ExitTooltipRenderer(this.game, m, this.tooltip),
+									()=> new NullableNodeRenderer(
+										this.game,
+										this.model.hoveringSimple,
+										(m)=> new SimpleTooltipRenderer(this.game, m, this.tooltip),
+									)
 								)
 							)
 						)

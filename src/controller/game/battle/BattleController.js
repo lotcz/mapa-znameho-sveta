@@ -415,13 +415,12 @@ export default class BattleController extends ControllerWithSaveGame {
 				const isSelected = this.model.partyCharacters.selectedNode.equalsTo(battleChar);
 				return isSelected ? CURSOR_TYPE_DEFAULT : CURSOR_TYPE_SWITCH_CHARACTER;
 			} else {
-				if (battleChar.isAggressive.get()) {
+				const char = battleChar.character.get();
+				if (char.stats.isAggressive.get()) {
 					return CURSOR_TYPE_ATTACK;
-				} else {
-					const char = battleChar.character.get();
-					if (char.conversationId.isSet()) {
-						return CURSOR_TYPE_TALK;
-					}
+				}
+				if (char.conversationId.isSet()) {
+					return CURSOR_TYPE_TALK;
 				}
 			}
 		}

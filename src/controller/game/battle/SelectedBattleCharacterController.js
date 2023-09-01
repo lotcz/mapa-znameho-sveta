@@ -82,6 +82,7 @@ export default class SelectedBattleCharacterController extends ControllerWithBat
 			'caught-up',
 			(battleCharacter) => {
 				if (!battleCharacter) return;
+				if (this.saveGame.party.containsCharacter(battleCharacter.characterId.get())) return;
 				const character = battleCharacter.character.get();
 				const conversation = this.game.resources.conversations.getById(character.conversationId.get());
 				if (conversation) {

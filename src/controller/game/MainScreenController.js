@@ -6,6 +6,7 @@ import PartyController from "./party/PartyController";
 import NullableNodeController from "../basic/NullableNodeController";
 import {TIME_HOUR} from "../../model/game/environment/TimeModel";
 import {STAT_TEMPERATURE} from "../../model/game/party/stats/StatDefinitionModel";
+import BiotopeController from "./map/BiotopeController";
 
 const REST_SPEED = 2 * TIME_HOUR; // portion of day per second
 
@@ -43,6 +44,14 @@ export default class MainScreenController extends ControllerNode {
 				this.model.currentBattle,
 				(m) => new BattleController(this.game, m, this.model),
 				() => new MapController(this.game, this.model)
+			)
+		);
+
+		this.addChild(
+			new NullableNodeController(
+				this.game,
+				this.model.currentBiotope,
+				(m) => new BiotopeController(this.game, m),
 			)
 		);
 

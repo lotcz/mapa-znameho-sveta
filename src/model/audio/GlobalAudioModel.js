@@ -80,4 +80,9 @@ export default class GlobalAudioModel extends ModelNode {
 	removeSound(audio) {
 		this.sounds.remove(audio);
 	}
+
+	changeMusic(audio) {
+		this.music.reset();
+		this.music.add(audio);
+	}
 }

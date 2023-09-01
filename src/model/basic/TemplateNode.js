@@ -14,12 +14,6 @@ export default class TemplateNode extends IdentifiedModelNode {
 		this.originalId = this.addProperty('originalId', new IntValue());
 	}
 
-	equalsTo(ch) {
-		if (super.equalsTo(ch)) return true;
-		if (typeof ch.getOriginalId !== 'function') return false;
-		return (this.getOriginalId() === ch.getOriginalId());
-	}
-
 	isCloned() {
 		return this.originalId.isSet();
 	}
@@ -30,7 +24,22 @@ export default class TemplateNode extends IdentifiedModelNode {
 	}
 
 	isOriginalId(id) {
-		if (this.originalId.isSet()) return this.originalId.equalsTo(id);
-		return this.id.equalsTo(id);
+		return this.getOriginalId() === id;
+	}
+
+	isFromSameOrigin(tn) {
+		if (typeof tn.getOriginalId !== 'function') return false;
+		return this.isOriginalId(tn.getOriginalId());
+	}
+
+	/**
+	 * @return TemplateNode
+	 */
+	clone() {
+		throw new Error('Clone function not defined!');
+		//const ch = new CharacterModel();
+		//ch.restoreState(this.getState());
+		//ch.originalId.set(this.id.get());
+		//return ch;
 	}
 }

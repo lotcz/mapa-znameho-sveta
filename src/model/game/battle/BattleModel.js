@@ -126,9 +126,15 @@ export default class BattleModel extends ModelNode {
 	groundPosition;
 
 	/**
-	 * @type ModelNodeCollection<ItemSlotModel>
+	 * @type BoolValue
 	 */
-	groundItems;
+	isFighting;
+
+	/**
+	 *
+	 * @type CachedPathFinder
+	 */
+ 	pathFinder;
 
 	constructor() {
 		super();
@@ -158,6 +164,8 @@ export default class BattleModel extends ModelNode {
 
 		this.groundPosition = this.addProperty('groundPosition', new Vector2(0, 0, false));
 		this.groundSlots = this.addProperty('groundSlots', new GroundSlotsModel());
+
+		this.isFighting = this.addProperty('isFighting', new BoolValue(false));
 
 		this.pathFinder = new CachedPathFinder();
 

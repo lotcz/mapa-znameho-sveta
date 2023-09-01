@@ -38,8 +38,8 @@ export default class GlobalAudioRenderer extends RendererNode {
 		this.addChild(
 			new ConditionalNodeRenderer(
 				this.game,
-				this.model.musicOn,
-				() => this.model.musicOn.get(),
+				this.model.soundsOn,
+				() => this.model.soundsOn.get(),
 				() => {
 					return new CollectionRenderer(
 						this.game,

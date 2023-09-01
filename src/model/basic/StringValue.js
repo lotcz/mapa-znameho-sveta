@@ -1,6 +1,7 @@
 import DirtyValue from "./DirtyValue";
 
 export default class StringValue extends DirtyValue {
+
 	set(value) {
 		if (typeof value === 'string') {
 			super.set(value);
