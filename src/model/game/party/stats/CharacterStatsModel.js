@@ -76,9 +76,9 @@ export default class CharacterStatsModel extends ModelNode {
 	constructor() {
 		super();
 
-		this.sympathyTowardsParty = this.addProperty('sympathyTowardsParty', new StatModel(SYMPATHY_TOWARDS_PARTY, 0.5));
+		this.sympathyTowardsParty = this.addProperty('sympathyTowardsParty', new StatModel(SYMPATHY_TOWARDS_PARTY, 1));
 		this.isAggressive = this.addProperty('isAggressive', new BoolValue(false));
-		this.sympathyTowardsParty.addEventListener('change', () => this.isAggressive.set(this.sympathyTowardsParty.currentFloat.get() < 0.5));
+		this.sympathyTowardsParty.currentFloat.addEventListener('change', () => this.isAggressive.set(this.sympathyTowardsParty.currentFloat.get() < 0.5));
 
 		this.level = this.addProperty('level', new LevelStatsModel());
 		this.basic = this.addProperty('basic', new BasicStatsModel());

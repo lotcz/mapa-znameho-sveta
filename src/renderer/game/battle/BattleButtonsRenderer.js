@@ -1,5 +1,7 @@
-import Pixies from "../../../class/basic/Pixies";
 import DomRendererWithBattle from "../../basic/DomRendererWithBattle";
+import ConditionalNodeRenderer from "../../basic/ConditionalNodeRenderer";
+import BattleFightingMenuRenderer from "./BattleFightingMenuRenderer";
+import BattleExploringMenuRenderer from "./BattleExploringMenuRenderer";
 
 export default class BattleButtonsRenderer extends DomRendererWithBattle {
 
@@ -13,17 +15,20 @@ export default class BattleButtonsRenderer extends DomRendererWithBattle {
 
 		this.model = model;
 
+		this.addChild(
+			new ConditionalNodeRenderer(
+				this.game,
+				this.battle.isFighting,
+				() => this.battle.isFighting.get(),
+				() => new BattleFightingMenuRenderer(this.game, model, this.container),
+				() => new BattleExploringMenuRenderer(this.game, model, this.container)
+			)
+		);
+
 	}
 
 	activateInternal() {
-		this.container = this.addElement('div', 'map-menu column');
-
-		this.buttons = Pixies.createElement(this.container, 'div', 'buttons row');
-
-		const start = Pixies.createElement(this.buttons, 'button', null, 'battle button', () => {
-			this.model.partyTraveling.invert();
-		});
-
+		this.container = this.addElement('div', 'battle-buttons map-menu column');
 	}
 
 	deactivateInternal() {

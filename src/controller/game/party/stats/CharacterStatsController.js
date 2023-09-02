@@ -22,6 +22,8 @@ export default class CharacterStatsController extends ControllerNode {
 
 		this.model = model;
 
+		this.addChild(new StatController(this.game, this.model.sympathyTowardsParty, this.model));
+
 		this.addChild(new HealthStatController(this.game, this.model.basic.health, this.model));
 		this.addChild(new StaminaStatController(this.game, this.model.basic.stamina, this.model));
 

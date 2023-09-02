@@ -24,6 +24,14 @@ export default class NpcBattleCharacterWithCharacterController extends Controlle
 
 		this.idleTimeout = Math.random() * IDLE_ACTION_TIMEOUT;
 
+		this.addAutoEvent(
+			this.character.stats.isAggressive,
+			'change',
+			() => {
+				this.battle.triggerEvent('check-fighting');
+			},
+			true
+		);
 
 	}
 

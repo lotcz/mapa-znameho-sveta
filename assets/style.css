@@ -882,6 +882,10 @@ h4 {
   box-shadow: -1px 1px 8px #311a0a;
   border-radius: 5px;
 }
+.right-panel .tooltip .stat-bar div {
+  height: 15px;
+  background-color: #885f32;
+}
 .right-panel .tooltip .top {
   align-items: center;
 }

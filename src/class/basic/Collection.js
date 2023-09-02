@@ -121,6 +121,10 @@ export default class Collection extends Node {
 		return this.items.find(func);
 	}
 
+	exists(func) {
+		return (this.find(func) !== undefined);
+	}
+
 	map(transform) {
 		return this.items.map(transform);
 	}

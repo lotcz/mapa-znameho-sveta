@@ -118,6 +118,15 @@ export default class BattleController extends ControllerWithSaveGame {
 
 		this.addAutoEvent(
 			this.model,
+			'check-fighting',
+			() => {
+				this.model.isFighting.set(this.model.npcCharacters.exists((npc) => npc.character.isSet() && npc.character.get().stats.isAggressive.get()));
+			},
+			true
+		);
+
+		this.addAutoEvent(
+			this.model,
 			'raycast-character',
 			(battleCharacter) => {
 				this.model.hoveringBattleCharacterRaycast.set(battleCharacter);
