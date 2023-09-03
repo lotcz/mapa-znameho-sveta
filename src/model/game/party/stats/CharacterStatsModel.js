@@ -73,6 +73,11 @@ export default class CharacterStatsModel extends ModelNode {
 	 */
 	levelUpEffectSource;
 
+	/**
+	 * @type ModelNodeCollection<StatEffectDefinitionModel>[]
+	 */
+	effectSources;
+
 	constructor() {
 		super();
 
@@ -95,6 +100,8 @@ export default class CharacterStatsModel extends ModelNode {
 
 		this.levelUpEffectSource = new EffectSourceModel(EFFECT_SOURCE_RITUAL);
 		this.levelUpEffectSource.name.set('Toto se můžeš naučit');
+
+		this.effectSources = [this.inventoryStatEffects, this.environmentStatEffects, this.raceStatEffects, this.temporaryLevelUpEffects];
 	}
 
 }

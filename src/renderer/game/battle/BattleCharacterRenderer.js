@@ -46,11 +46,8 @@ export default class BattleCharacterRenderer extends RendererNode {
 			return;
 		}
 
-		if (this.useSkinMaterial && !this.skinMaterial) {
-			return;
-		}
-
-		if (this.skinMaterial) {
+		if (this.useSkinMaterial){
+			if (!this.skinMaterial) return;
 			this.animation.mesh.traverse((mesh) => {
 				if (mesh.material && mesh.material.name === "SkinMaterial" && mesh.geometry) {
 					mesh.material.dispose();
@@ -108,7 +105,6 @@ export default class BattleCharacterRenderer extends RendererNode {
 				this.resourceLoaded();
 			}
 		);
-
 
 		if (!this.useSkinMaterial) {
 			return;

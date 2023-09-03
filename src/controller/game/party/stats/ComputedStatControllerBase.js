@@ -22,8 +22,8 @@ export default class ComputedStatControllerBase extends StatController {
 		});
 	}
 
-	activateInternal() {
-		super.activateInternal();
+	afterActivatedInternal() {
+		super.afterActivatedInternal();
 		this.updateBase();
 	}
 

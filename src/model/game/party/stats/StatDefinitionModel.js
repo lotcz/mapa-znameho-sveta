@@ -65,6 +65,16 @@ export default class StatDefinitionModel extends IdentifiedModelNode {
 	/**
 	 * @type IntValue
 	 */
+	base;
+
+	/**
+	 * @type IntValue
+	 */
+	min;
+
+	/**
+	 * @type IntValue
+	 */
 	max;
 
 	constructor(id) {
@@ -72,7 +82,9 @@ export default class StatDefinitionModel extends IdentifiedModelNode {
 
 		this.name = this.addProperty('name', new StringValue(`Stat ${id}`));
 		this.description = this.addProperty('description', new StringValue('description'));
-		this.max = this.addProperty('max', new IntValue(10));
+		this.base = this.addProperty('base', new IntValue());
+		this.min = this.addProperty('min', new IntValue(0));
+		this.max = this.addProperty('max', new IntValue());
 	}
 
 }

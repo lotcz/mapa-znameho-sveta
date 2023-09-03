@@ -22,7 +22,6 @@ export default class StatController extends ControllerNode {
 		this.stats = stats;
 
 		this.cache = new Collection();
-		this.sources = [this.stats.inventoryStatEffects, this.stats.environmentStatEffects, this.stats.raceStatEffects, this.stats.temporaryLevelUpEffects];
 
 		this.addEffectHandler = (eff) => {
 			if (eff.statId.equalsTo(this.model.definitionId.get())) {
@@ -36,6 +35,13 @@ export default class StatController extends ControllerNode {
 		};
 
 		this.addAutoEvent(
+			this.model.definitionId,
+			'change',
+			() => this.model.definition.set(this.game.resources.statDefinitions.getById(this.model.definitionId.get())),
+			true
+		);
+
+		this.addAutoEvent(
 			this.cache,
 			'change',
 			() => this.updateCurrent()
@@ -45,13 +51,6 @@ export default class StatController extends ControllerNode {
 			this.model.baseValue,
 			'change',
 			() => this.updateCurrent(),
-			true
-		);
-
-		this.addAutoEvent(
-			this.model.definitionId,
-			'change',
-			() => this.model.definition.set(this.game.resources.statDefinitions.getById(this.model.definitionId.get())),
 			true
 		);
 
@@ -89,7 +88,7 @@ export default class StatController extends ControllerNode {
 	}
 
 	activateInternal() {
-		this.sources.forEach((effects) => {
+		this.stats.effectSources.forEach((effects) => {
 			effects.forEach(this.addEffectHandler);
 			effects.addOnAddListener(this.addEffectHandler);
 			effects.addOnRemoveListener(this.removeEffectHandler);
@@ -97,7 +96,7 @@ export default class StatController extends ControllerNode {
 	}
 
 	deactivateInternal() {
-		this.sources.forEach((effects) => {
+		this.stats.effectSources.forEach((effects) => {
 			effects.removeOnAddListener(this.addEffectHandler);
 			effects.removeOnRemoveListener(this.removeEffectHandler);
 		});

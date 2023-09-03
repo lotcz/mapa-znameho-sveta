@@ -27,10 +27,10 @@ export class ImageHelper {
 	static sanitizeCenter(size, viewBoxSize, zoom, coordinates) {
 		const result = new Vector2(coordinates);
 		const vbs = viewBoxSize.multiply((1 / zoom) * 0.5);
-		result.x = (result.x < vbs.x) ? vbs.x : result.x;
-		result.x = (result.x > (size.x - vbs.x)) ? (size.x - vbs.x) : result.x;
-		result.y = (result.y < vbs.y) ? vbs.y : result.y;
-		result.y = (result.y > (size.y - vbs.y)) ? (size.y - vbs.y) : result.y;
+		result.x = Math.max(vbs.x, result.x);
+		result.x = Math.min(size.x - vbs.x, result.x);
+		result.y = Math.max(vbs.y, result.y);
+		result.y = Math.min(size.y - vbs.y, result.y);
 		return result;
 	}
 

@@ -12,8 +12,9 @@ import {SVG} from "@svgdotjs/svg.js";
 import NullableNodeRenderer from "../../basic/NullableNodeRenderer";
 import BattleMapRenderer from "./BattleMapRenderer";
 import BattleItemRenderer from "./BattleItemRenderer";
-import BattleRingRenderer from "./BattleRingRenderer";
 import {CURSOR_TYPES} from "../../../model/game/battle/BattleModel";
+import BattleCharacterHoverRenderer from "./BattleCharacterHoverRenderer";
+import BattleSelectedCharacterRingsRenderer from "./BattleSelectedCharacterRingsRenderer";
 
 export default class BattleRenderer extends DomRenderer {
 
@@ -40,19 +41,15 @@ export default class BattleRenderer extends DomRenderer {
 			new NullableNodeRenderer(
 				this.game,
 				this.model.partyCharacters.selectedNode,
-				(m) => new BattleRingRenderer(this.game, m.position, this.drawForeground, 'white', 'radial')
+				(m) => new BattleSelectedCharacterRingsRenderer(this.game, m, this.drawForeground)
 			)
 		);
 
 		this.addChild(
 			new NullableNodeRenderer(
 				this.game,
-				this.model.partyCharacters.selectedNode,
-				(m) => new NullableNodeRenderer(
-					this.game,
-					m.targetPosition,
-					(v) => new BattleRingRenderer(this.game, v, this.drawForeground, 'red')
-				)
+				this.model.hoveringBattleCharacter,
+				(m) => new BattleCharacterHoverRenderer(this.game,	m, this.drawForeground)
 			)
 		);
 
@@ -92,18 +89,6 @@ export default class BattleRenderer extends DomRenderer {
 						this.drawBackground
 					);
 				}
-			)
-		);
-
-		this.addChild(
-			new NullableNodeRenderer(
-				this.game,
-				this.model.hoveringBattleCharacter,
-				(m) => new BattleRingRenderer(
-					this.game,
-					m.position,
-					this.drawForeground
-				)
 			)
 		);
 

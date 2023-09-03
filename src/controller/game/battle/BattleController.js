@@ -5,7 +5,6 @@ import BattleMapController from "./BattleMapController";
 import AnimationVector2Controller from "../../basic/AnimationVector2Controller";
 import SelectedBattleCharacterController from "./SelectedBattleCharacterController";
 import {ImageHelper} from "../../../class/basic/ImageHelper";
-import ControllerWithSaveGame from "../../basic/ControllerWithSaveGame";
 import NpcBattleCharacterController from "./NpcBattleCharacterController";
 import Vector2 from "../../../model/basic/Vector2";
 import {
@@ -25,18 +24,19 @@ import {
 } from "../../../model/game/battle/battlemap/BattleSpecialModel";
 import BattlePartyCharacterModel from "../../../model/game/battle/BattlePartyCharacterModel";
 import Pixies from "../../../class/basic/Pixies";
+import ControllerWithBattle from "../../basic/ControllerWithBattle";
 
 const CURSOR_OFFSET = new Vector2(12, 12);
 
-export default class BattleController extends ControllerWithSaveGame {
+export default class BattleController extends ControllerWithBattle {
 
 	/**
 	 * @type BattleModel
 	 */
 	model;
 
-	constructor(game, model, saveGame) {
-		super(game, model, saveGame);
+	constructor(game, model) {
+		super(game, model, model);
 
 		this.model = model;
 		this.dragging = false;
@@ -82,11 +82,37 @@ export default class BattleController extends ControllerWithSaveGame {
 			)
 		);
 
-		this.addAutoEvent(
-			this.model.battleMapId,
+		this.addAutoEventMultiple(
+			[this.game.mainLayerSize, this.model.coordinates, this.model.zoom],
 			'change',
 			() => {
-				this.model.battleMap.set(this.game.resources.map.battleMaps.getById(this.model.battleMapId.get()));
+				this.model.coordinates.set(
+					ImageHelper.sanitizeCenter(
+						this.battleMap.size,
+						this.game.mainLayerSize,
+						this.model.zoom.get(),
+						this.model.coordinates
+					)
+				);
+				const halfScreenSize = this.game.mainLayerSize.multiply(0.5 / this.model.zoom.get());
+				this.model.cornerCoordinates.set(this.model.coordinates.subtract(halfScreenSize));
+				this.onMouseMove();
+			},
+			true
+		);
+
+		this.addAutoEventMultiple(
+			[this.model.zoom, this.game.mainLayerSize],
+			'change',
+			() => {
+				this.model.zoom.set(
+					ImageHelper.sanitizeZoom(
+						this.battleMap.size,
+						this.game.mainLayerSize,
+						this.model.zoom.get(),
+						5
+					)
+				);
 			},
 			true
 		);
@@ -143,25 +169,6 @@ export default class BattleController extends ControllerWithSaveGame {
 			}
 		);
 
-		this.addAutoEventMultiple(
-			[this.game.mainLayerSize, this.model.coordinates, this.model.zoom],
-			'change',
-			() => {
-				this.model.coordinates.set(
-					ImageHelper.sanitizeCenter(
-						this.model.battleMap.get().size,
-						this.game.mainLayerSize,
-						this.model.zoom.get(),
-						this.model.coordinates
-					)
-				);
-				const halfScreenSize = this.game.mainLayerSize.multiply(0.5 / this.model.zoom.get());
-				this.model.cornerCoordinates.set(this.model.coordinates.subtract(halfScreenSize));
-				this.onMouseMove();
-			},
-			true
-		);
-
 		this.addAutoEvent(
 			this.model.hoveringSpecial,
 			'change',
@@ -187,22 +194,6 @@ export default class BattleController extends ControllerWithSaveGame {
 			[this.model.isHoveringNoGo, this.model.hoveringSpecial, this.model.hoveringBattleCharacter, this.model.partyCharacters.selectedNode],
 			'change',
 			() => this.updateCursorType(),
-			true
-		);
-
-		this.addAutoEventMultiple(
-			[this.model.zoom, this.game.mainLayerSize],
-			'change',
-			() => {
-				this.model.zoom.set(
-					ImageHelper.sanitizeZoom(
-						this.model.battleMap.get().size,
-						this.game.mainLayerSize,
-						this.model.zoom.get(),
-						5
-					)
-				);
-			},
 			true
 		);
 
