@@ -162,7 +162,7 @@ export default class AssetCache extends Node {
 
 			const assetType = Pixies.extractId(uri, 0);
 			if (ASSET_TYPE_LOADERS[assetType] === undefined) {
-				console.error(`Valid resource type could not be inferred from URI ${uri}`);
+				console.error(`Valid resource type could not be inferred from URI '${uri}'!`);
 			}
 
 			const loaderType = ASSET_TYPE_LOADERS[assetType];

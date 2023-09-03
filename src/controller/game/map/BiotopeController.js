@@ -18,7 +18,7 @@ export default class BiotopeController extends ControllerNode {
 
 	updateMusic() {
 		console.log('activated', this.model.musicUrlNormal.get());
-		//if (this.model.musicUrlNormal.isEmpty()) return;
+		if (this.model.musicUrlNormal.isEmpty()) return;
 		const music = new AudioModel(false);
 		music.url.set(this.model.musicUrlNormal.get());
 		music.loop.set(true);
