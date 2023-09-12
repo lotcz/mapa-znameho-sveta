@@ -26,7 +26,7 @@ import BattlePartyCharacterModel from "../../../model/game/battle/BattlePartyCha
 import Pixies from "../../../class/basic/Pixies";
 import ControllerWithBattle from "../../basic/ControllerWithBattle";
 import AnimationFloatController from "../../basic/AnimationFloatController";
-import {EASING_QUAD_IN, EASING_QUAD_IN_OUT} from "../../../class/animating/ProgressValue";
+import {EASING_QUAD_IN_OUT} from "../../../class/animating/ProgressValue";
 
 const CURSOR_OFFSET = new Vector2(12, 12);
 
@@ -51,6 +51,7 @@ export default class BattleController extends ControllerWithBattle {
 		super(game, model, model);
 
 		this.model = model;
+		this.scrolling = false;
 
 		this.addChild(
 			new NullableNodeController(
@@ -280,6 +281,9 @@ export default class BattleController extends ControllerWithBattle {
 
 	updateInternal(delta) {
 		this.model.pathFinder.resetDynamicBlocksCache();
+		if (!this.game.controls.mouseDownRight.get()) {
+			this.scrolling = false;
+		}
 		this.mouseMoved = false;
 	}
 
@@ -304,7 +308,7 @@ export default class BattleController extends ControllerWithBattle {
 			this.zoomAnimation = null;
 		}
 		if (this.zoomAnimation) return;
-		this.zoomAnimation = new AnimationFloatController(this.game, this.model.zoom, zoom, duration, EASING_QUAD_IN);
+		this.zoomAnimation = new AnimationFloatController(this.game, this.model.zoom, zoom, duration, EASING_QUAD_IN_OUT);
 		this.zoomAnimation.onFinished(() => this.zoomAnimation = null);
 		this.addChild(this.zoomAnimation);
 	}
@@ -376,7 +380,7 @@ export default class BattleController extends ControllerWithBattle {
 	}
 
 	onZoom(param = 0) {
-		let newZoom = this.model.zoom.get() - (param * this.model.zoom.get() * 0.2);
+		let newZoom = this.model.zoom.get() - (param * this.model.zoom.get() * 0.4);
 		newZoom = ImageHelper.sanitizeZoom(
 			this.battleMap.size,
 			this.game.mainLayerSize,
