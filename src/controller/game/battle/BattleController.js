@@ -51,8 +51,6 @@ export default class BattleController extends ControllerWithBattle {
 		super(game, model, model);
 
 		this.model = model;
-		this.dragging = false;
-		this.scrolling = false;
 
 		this.addChild(
 			new NullableNodeController(
@@ -282,14 +280,6 @@ export default class BattleController extends ControllerWithBattle {
 
 	updateInternal(delta) {
 		this.model.pathFinder.resetDynamicBlocksCache();
-
-		// dragging and scrolling
-		if (!this.game.controls.mouseDownLeft.get()) {
-			this.dragging = false;
-		}
-		if (!this.game.controls.mouseDownRight.get()) {
-			this.scrolling = false;
-		}
 		this.mouseMoved = false;
 	}
 
