@@ -75,6 +75,7 @@ export default class MapController extends ControllerWithSaveGame {
 						this.model.mapSize,
 						this.game.mainLayerSize,
 						this.model.zoom.get(),
+						0.0,
 						1.5
 					)
 				);

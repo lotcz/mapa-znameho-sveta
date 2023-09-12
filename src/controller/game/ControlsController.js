@@ -72,7 +72,7 @@ export default class ControlsController extends ControllerNode {
 		this.model.mouseDownRight.set(false);
 	}
 
-	onContextMenu(e) {
+	onContextMenu(e){
 		if (!(e.ctrlKey && this.game.isInDebugMode.get())) {
 			e.preventDefault();
 		}
@@ -81,8 +81,8 @@ export default class ControlsController extends ControllerNode {
 	}
 
 	updateMouseButtons(e) {
-		const left = ((e.buttons === 1) || (e.buttons === 3));
-		const right = (e.buttons === 2);
+		const left= ((e.buttons === 1) || (e.buttons === 3));
+		const right= (e.buttons === 2);
 		this.model.mouseDownLeft.set(left);
 		this.model.mouseDownRight.set(right);
 	}

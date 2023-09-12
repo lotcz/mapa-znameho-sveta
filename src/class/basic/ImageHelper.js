@@ -11,17 +11,14 @@ export class ImageHelper {
 	 * @param max
 	 * @returns {number}
 	 */
-	static sanitizeZoom(size, viewBoxSize, zoom = 0.0, max = Number.MAX_VALUE) {
-		if (zoom > max) {
-			return max;
-		}
-
+	static sanitizeZoom(size, viewBoxSize, zoom = 0.0, min = 0, max = Number.MAX_VALUE) {
 		if (size.x === 0 || size.y === 0) return 1;
 
 		const minZoomX = viewBoxSize.x / size.x;
 		const minZoomY = viewBoxSize.y / size.y;
 
-		return Pixies.between(Math.max(minZoomX, minZoomY), max, zoom);
+		min = Math.max(min, minZoomX, minZoomY);
+		return Pixies.between(min, max, zoom);
 	}
 
 	static sanitizeCenter(size, viewBoxSize, zoom, coordinates) {

@@ -8,8 +8,8 @@ export default class IdentifiedModelNode extends ModelNode {
 	 */
 	id;
 
-	constructor(id = 0) {
-		super();
+	constructor(id = 0, persistent = true) {
+		super(persistent);
 
 		this.id = this.addProperty('id', new IntValue(id));
 	}

@@ -25,6 +25,8 @@ import {
 import BattlePartyCharacterModel from "../../../model/game/battle/BattlePartyCharacterModel";
 import Pixies from "../../../class/basic/Pixies";
 import ControllerWithBattle from "../../basic/ControllerWithBattle";
+import AnimationFloatController from "../../basic/AnimationFloatController";
+import {EASING_QUAD_IN, EASING_QUAD_IN_OUT} from "../../../class/animating/ProgressValue";
 
 const CURSOR_OFFSET = new Vector2(12, 12);
 
@@ -34,6 +36,16 @@ export default class BattleController extends ControllerWithBattle {
 	 * @type BattleModel
 	 */
 	model;
+
+	/**
+	 * @type AnimationVector2Controller
+	 */
+	coordsAnimation;
+
+	/**
+	 * @type AnimationFloatController
+	 */
+	zoomAnimation;
 
 	constructor(game, model) {
 		super(game, model, model);
@@ -101,19 +113,10 @@ export default class BattleController extends ControllerWithBattle {
 			true
 		);
 
-		this.addAutoEventMultiple(
-			[this.model.zoom, this.game.mainLayerSize],
+		this.addAutoEvent(
+			this.game.mainLayerSize,
 			'change',
-			() => {
-				this.model.zoom.set(
-					ImageHelper.sanitizeZoom(
-						this.battleMap.size,
-						this.game.mainLayerSize,
-						this.model.zoom.get(),
-						5
-					)
-				);
-			},
+			() => this.onZoom(),
 			true
 		);
 
@@ -242,9 +245,8 @@ export default class BattleController extends ControllerWithBattle {
 			() => {
 				const character = this.model.partyCharacters.selectedNode.get();
 				if (character) {
-					const battleMap = this.model.battleMap.get();
-					const coords = battleMap.positionToScreenCoords(character.position);
-					this.addChild(new AnimationVector2Controller(this.game, this.model.coordinates, coords, 500));
+					const coords = this.battleMap.positionToScreenCoords(character.position);
+					this.animateToCoords(coords);
 				}
 			},
 			true
@@ -295,6 +297,28 @@ export default class BattleController extends ControllerWithBattle {
 		this.model.hoveringBattleCharacter.set(null);
 	}
 
+	animateToCoords(coords, duration = 500, force = false) {
+		if (this.coordsAnimation && force) {
+			this.coordsAnimation.removeMyself();
+			this.coordsAnimation = null;
+		}
+		if (this.coordsAnimation) return;
+		this.coordsAnimation = new AnimationVector2Controller(this.game, this.model.coordinates, coords, duration, EASING_QUAD_IN_OUT);
+		this.coordsAnimation.onFinished(() => this.coordsAnimation = null);
+		this.addChild(this.coordsAnimation);
+	}
+
+	animateToZoom(zoom, duration = 500, force = false) {
+		if (this.zoomAnimation && force) {
+			this.zoomAnimation.removeMyself();
+			this.zoomAnimation = null;
+		}
+		if (this.zoomAnimation) return;
+		this.zoomAnimation = new AnimationFloatController(this.game, this.model.zoom, zoom, duration, EASING_QUAD_IN);
+		this.zoomAnimation.onFinished(() => this.zoomAnimation = null);
+		this.addChild(this.zoomAnimation);
+	}
+
 	onMouseMove() {
 		if (this.mouseMoved) return;
 		this.runOnUpdate( () => {
@@ -306,8 +330,7 @@ export default class BattleController extends ControllerWithBattle {
 	}
 
 	onMouseCoordinatesChanged() {
-		const battleMap = this.model.battleMap.get();
-		const tile = battleMap.screenCoordsToTile(this.model.mouseCoordinates);
+		const tile = this.battleMap.screenCoordsToTile(this.model.mouseCoordinates);
 		this.model.mouseHoveringTile.set(tile);
 
 		if (this.game.controls.mouseDownRight.get()) {
@@ -323,12 +346,11 @@ export default class BattleController extends ControllerWithBattle {
 	}
 
 	onHoveringTileChanged() {
-		const battleMap = this.model.battleMap.get();
 		const tile = this.model.mouseHoveringTile;
 		const blocked = this.model.pathFinder.isBlockedStatic(tile);
 		this.model.isHoveringNoGo.set(blocked);
 
-		let special = battleMap.specials.find((s) => s.position.equalsTo(tile));
+		let special = this.battleMap.specials.find((s) => s.position.equalsTo(tile));
 		if (special) {
 			if (special.data.isSet()) {
 				const linked = this.extractLinkedSpecial(special.data.get());
@@ -352,20 +374,28 @@ export default class BattleController extends ControllerWithBattle {
 	}
 
 	extractLinkedSpecial(data) {
-		const battleMap = this.model.battleMap.get();
 		const arr = data.split(':');
 		if (arr.length > 1 && arr[0] === 'link') {
 			const arr2 = arr[1].split(',');
 			if (arr2.length > 1) {
 				const pos = new Vector2(arr2[0], arr2[1]);
-				return battleMap.specials.find((s) => s.position.equalsTo(pos));
+				return this.battleMap.specials.find((s) => s.position.equalsTo(pos));
 			}
 		}
 		return null;
 	}
 
-	onZoom(param) {
-		this.model.zoom.set(Math.max(this.model.zoom.get() + (param * -0.1), 0));
+	onZoom(param = 0) {
+		let newZoom = this.model.zoom.get() - (param * this.model.zoom.get() * 0.2);
+		newZoom = ImageHelper.sanitizeZoom(
+			this.battleMap.size,
+			this.game.mainLayerSize,
+			newZoom,
+			this.battleMap.minZoom.get(),
+			this.battleMap.maxZoom.get()
+		);
+
+		this.animateToZoom(newZoom)
 	}
 
 	onClick() {

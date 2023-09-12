@@ -1,8 +1,8 @@
-import ControllerNode from "./ControllerNode";
 import AnimatedVector2 from "../../class/animating/AnimatedVector2";
 import {EASING_FLAT} from "../../class/animating/ProgressValue";
+import AnimationController from "./AnimationController";
 
-export default class AnimationVector2Controller extends ControllerNode {
+export default class AnimationVector2Controller extends AnimationController {
 
 	/**
 	 * @type AnimatedVector2
@@ -32,8 +32,7 @@ export default class AnimationVector2Controller extends ControllerNode {
 	updateInternal(delta) {
 		this.model.set(this.animatedVector.get(delta));
 		if (this.animatedVector.isFinished()) {
-			this.removeMyself();
-			this.model.triggerEvent('animation-finished');
+			this.finished();
 		}
 	}
 

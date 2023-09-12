@@ -5,9 +5,9 @@ import ModelNodeCollection from "../../../basic/ModelNodeCollection";
 import BattleSpriteModel from "./BattleSpriteModel";
 import BattleSpecialModel, {SPECIAL_TYPE_BLOCK} from "./BattleSpecialModel";
 import BattleSprite3dModel from "./BattleSprite3dModel";
-import BoolValue from "../../../basic/BoolValue";
 import BattleNpcSpawnModel from "./BattleNpcSpawnModel";
 import IdentifiedModelNodeWithResources from "../../../basic/IdentifiedModelNodeWithResources";
+import FloatValue from "../../../basic/FloatValue";
 
 export default class BattleMapModel extends IdentifiedModelNodeWithResources {
 
@@ -15,11 +15,6 @@ export default class BattleMapModel extends IdentifiedModelNodeWithResources {
 	 * @type DirtyValue
 	 */
 	name;
-
-	/**
-	 * @type BoolValue
-	 */
-	isPersistent;
 
 	/**
 	 * @type DirtyValue
@@ -59,11 +54,25 @@ export default class BattleMapModel extends IdentifiedModelNodeWithResources {
 	 */
 	npcSpawns;
 
+	/**
+	 * @type FloatValue
+	 */
+	minZoom;
+
+	/**
+	 * @type FloatValue
+	 */
+	maxZoom;
+
+	/**
+	 * @type FloatValue
+	 */
+	defaultZoom;
+
 	constructor(resources, id) {
 		super(resources, id);
 
 		this.name = this.addProperty('name', new DirtyValue(`Battle Map ${id}`));
-		this.isPersistent = this.addProperty('isPersistent', new BoolValue(true));
 		this.backgroundImage = this.addProperty('backgroundImage', new DirtyValue('img/camp.jpg'));
 
 		this.tileWidthHalf = 1;
@@ -110,6 +119,10 @@ export default class BattleMapModel extends IdentifiedModelNodeWithResources {
 		);
 
 		this.npcSpawns = this.addProperty('npcSpawns', new ModelNodeCollection(() => new BattleNpcSpawnModel()));
+
+		this.minZoom = this.addProperty('minZoom', new FloatValue(0));
+		this.maxZoom = this.addProperty('maxZoom', new FloatValue(Number.MAX_VALUE));
+		this.defaultZoom = this.addProperty('defaultZoom', new FloatValue(1));
 	}
 
 	/**

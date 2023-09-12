@@ -7,8 +7,8 @@ export default class IdentifiedModelNodeWithResources extends IdentifiedModelNod
 	 */
 	resources;
 
-	constructor(resources, id) {
-		super(id);
+	constructor(resources, id, persistent = true) {
+		super(id, persistent);
 
 		this.resources = resources;
 	}
